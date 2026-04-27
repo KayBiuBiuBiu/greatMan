@@ -1,0 +1,37 @@
+<view class="page idx">
+  <view class="idx-hero">
+    <view class="idx-title">宠伴日常</view>
+    <view class="idx-sub">宠物喂养助手</view>
+  </view>
+
+  <view class="idx-sec">
+    <view class="idx-h2">今日养护待办</view>
+    <view class="idx-empty" wx:if="{{!todos.length}}">今天暂无未完成的养护提醒，可在「提醒」页添加。</view>
+    <view class="idx-todo" wx:for="{{todos}}" wx:key="id" bindtap="onToggleTodo" data-mid="{{item.mid}}" data-rid="{{item.rid}}">
+      <view class="idx-todo-c {{item.done ? 'on' : ''}}"></view>
+      <view class="idx-todo-t">
+        <text class="st">{{item.title}}</text>
+        <text class="sdesc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="idx-sec">
+    <view class="idx-h2">我的宠物</view>
+    <view class="idx-empty" wx:if="{{!pets.length}}">尚未添加档案，去「宠物」页新增。</view>
+    <view class="idx-pets">
+      <pet-card wx:for="{{pets}}" wx:key="_id" pet="{{item}}" bind:open="onOpenPet" />
+    </view>
+  </view>
+
+  <view class="idx-sec">
+    <view class="idx-h2">快捷操作</view>
+    <view class="idx-actions">
+      <button class="btn-ghost a2" size="mini" data-kind="feed" bindtap="onQuick">快速记录喂食</button>
+      <button class="btn-ghost a2" size="mini" data-kind="water" bindtap="onQuick">快速记录饮水</button>
+      <button class="btn-ghost a2" size="mini" bindtap="onGoReminder">添加养护提醒</button>
+    </view>
+  </view>
+
+  <view class="safe-hint">仅用于个人养宠日常记录，无陌生社交、无线上竞技。非医疗建议。</view>
+</view>

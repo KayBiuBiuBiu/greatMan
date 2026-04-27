@@ -1,0 +1,161 @@
+.page.rec {
+  padding: 20rpx 24rpx 120rpx;
+}
+.rec-fil {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+.rec-pill {
+  background: #fff;
+  padding: 10rpx 20rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  border: 1rpx solid #e5d5c0;
+}
+.rec-tog {
+  text-align: center;
+  color: #8a7a6a;
+  font-size: 24rpx;
+  margin-bottom: 16rpx;
+}
+.rec-tog .on {
+  color: #8a3a0a;
+  font-weight: 800;
+}
+.rec-item {
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+.rec-i-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rec-kt {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #3d3428;
+}
+.rec-tt {
+  font-size: 22rpx;
+  color: #9a8a78;
+}
+.rec-d {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #5a4a3a;
+  line-height: 1.5;
+}
+.rec-op {
+  margin-top: 8rpx;
+  text-align: right;
+  font-size: 24rpx;
+  color: #b48a5a;
+}
+.rec-add {
+  position: fixed;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 24rpx;
+  z-index: 2;
+  width: auto !important;
+}
+.rec-tl {
+  padding: 0 0 0 8rpx;
+  border-left: 4rpx solid #e8d4bc;
+  margin-left: 12rpx;
+}
+.rec-ti {
+  position: relative;
+  padding: 0 0 20rpx 20rpx;
+}
+.rec-ti .dot {
+  position: absolute;
+  left: -18rpx;
+  top: 0;
+  width: 20rpx;
+  height: 20rpx;
+  background: #c4a574;
+  border-radius: 50%;
+  margin-top: 6rpx;
+}
+.rec-tx {
+  font-size: 26rpx;
+}
+.rec-tx .s {
+  font-size: 24rpx;
+  color: #6a5a4a;
+  margin-top: 4rpx;
+}
+.rec-empty {
+  color: #9a8a78;
+  font-size: 26rpx;
+  text-align: center;
+  margin: 40rpx 0;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+.modal-b {
+  position: relative;
+  width: 100%;
+  max-height: 88vh;
+  background: #fff8f0;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 28rpx 28rpx 40rpx;
+  box-sizing: border-box;
+}
+.m-t {
+  font-size: 32rpx;
+  font-weight: 800;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+.f-row {
+  display: flex;
+  margin-bottom: 16rpx;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.f-col {
+  flex-direction: column;
+  align-items: stretch;
+}
+.f-l {
+  width: 150rpx;
+  font-size: 26rpx;
+  color: #5a4a3a;
+}
+.f-pv,
+.f-inp,
+.f-ta {
+  background: #fff;
+  border: 1rpx solid #e5d5c0;
+  border-radius: 12rpx;
+  padding: 12rpx;
+  flex: 1;
+  min-width: 0;
+}
+.f-ta {
+  min-height: 120rpx;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8rpx;
+}

@@ -1,0 +1,125 @@
+.index-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.join-btn {
+  height: 68rpx;
+  line-height: 68rpx;
+  margin-top: 28rpx;
+  padding: 0;
+}
+
+/* flex 子项里 scroll-view 不收缩时高度会变成内容高度，整页无法滚；须限制高度以启用 scroll-y */
+.activity-panel {
+  flex: 1 1 0;
+  min-height: 0;
+  box-sizing: border-box;
+  margin-top: 24rpx;
+  border-radius: 36rpx;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: inset 0 0 0 2rpx rgba(255, 255, 255, 0.75);
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 22rpx;
+  padding-bottom: 56rpx;
+}
+
+.item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 314rpx;
+  min-height: 310rpx;
+  margin-bottom: 22rpx;
+  padding: 28rpx 22rpx 22rpx;
+  border-radius: 36rpx;
+  background: #ffffff;
+  box-shadow: 0 14rpx 36rpx rgba(138, 58, 10, 0.10);
+  text-align: center;
+}
+
+.icon-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 32rpx;
+  background: #fff4e8;
+  color: #8a3a0a;
+  font-size: 42rpx;
+  font-weight: 900;
+}
+
+.hero-sub {
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #6b5a4a;
+  font-weight: 600;
+}
+
+.item-name {
+  margin-top: 18rpx;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.item-desc {
+  align-self: stretch;
+  min-height: 72rpx;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 14rpx;
+  color: #7b7280;
+  font-size: 24rpx;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.card-actions {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 20rpx;
+  width: 100%;
+}
+
+/* 基础库：button:not([size=mini]){ width:184px; margin-left/right:auto } 会压过单 class，用元素+多 class + !important 覆盖 */
+.index-page .item-card button.start-btn.btn {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  height: 68rpx;
+  line-height: 68rpx;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.index-page .hero button.join-btn.btn {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  height: 68rpx;
+  line-height: 68rpx;
+  margin-top: 28rpx;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.item-card:active {
+  transform: scale(0.99);
+}

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "social-heat-crawler"
+version = "0.1.0"
+description = "Playwright-based heat ranking + local export; semi-manual publish"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "playwright>=1.40.0",
+  "python-dotenv>=1.0.0",
+  "pydantic>=2.0.0",
+  "pydantic-settings>=2.0.0",
+  "httpx>=0.25.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff", "mypy"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+# optional: sht-crawl = "scripts.run_crawl:main"  # if we add main()

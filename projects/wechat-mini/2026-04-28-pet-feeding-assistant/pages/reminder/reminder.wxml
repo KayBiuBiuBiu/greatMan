@@ -1,0 +1,49 @@
+<view class="page rem">
+  <view class="rem-list">
+    <view class="rem-empty" wx:if="{{!list.length}}">暂无提醒，可新增一条养护时间。</view>
+    <view class="rem-i card" wx:for="{{list}}" wx:key="_id">
+      <view class="rem-h">
+        <text class="t">{{item.titleL}}</text>
+        <switch checked="{{item.enabled}}" data-id="{{item._id}}" bindchange="onToggle" />
+      </view>
+      <view class="rem-b">{{item.sub}}</view>
+      <view class="rem-op">
+        <text class="a" data-id="{{item._id}}" bindtap="onDel">删除</text>
+      </view>
+    </view>
+  </view>
+  <button class="btn-primary rec-add" bindtap="onOpen">新增提醒</button>
+  <view class="rem-sub" bindtap="onRequestSub">了解订阅消息（仅用于到点养护提示）</view>
+
+  <view class="modal" wx:if="{{show}}">
+    <view class="modal-bg" catchtap="onClose" />
+    <view class="modal-b">
+      <view class="m-t">新增养护提醒</view>
+      <view class="f-row">
+        <text class="f-l">内容</text>
+        <input class="f-inp" placeholder="如 晨间喂食" value="{{form.title}}" bindinput="onFt" data-k="title" />
+      </view>
+      <view class="f-row">
+        <text class="f-l">宠物</text>
+        <picker range="{{petNames}}" value="{{fPetIdx}}" bindchange="onPickPet">
+          <view class="f-pv">{{petNames[fPetIdx] || '选'}}</view>
+        </picker>
+      </view>
+      <view class="f-row">
+        <text class="f-l">时间</text>
+        <picker mode="time" value="{{form.t}}" bindchange="onTime">
+          <view class="f-pv">{{form.t || '点选'}}</view>
+        </picker>
+      </view>
+      <view class="f-row">
+        <text class="f-l">重复</text>
+        <picker range="{{reps}}" value="{{fRepIdx}}" bindchange="onRep">
+          <view class="f-pv">{{reps[fRepIdx]}}</view>
+        </picker>
+      </view>
+      <button class="btn-primary" bindtap="onSave">保存</button>
+      <button class="btn-ghost" bindtap="onClose">取消</button>
+    </view>
+  </view>
+  <view class="safe-hint">无提醒奖励、无连签福利。订阅消息不发送与养护无关的推送（需在模板中配置）。</view>
+</view>

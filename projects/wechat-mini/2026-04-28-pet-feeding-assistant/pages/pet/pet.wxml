@@ -1,0 +1,83 @@
+<view class="page pet" wx:if="{{view==='list'}}">
+  <view class="pet-top">
+    <button class="btn-primary addb" bindtap="onAdd">新增宠物</button>
+  </view>
+  <view class="pet-tabs">
+    <text class="pt {{cat==='all'?'on':''}}" data-c="all" bindtap="onCat">全部</text>
+    <text class="pt {{cat==='cat'?'on':''}}" data-c="cat" bindtap="onCat">猫</text>
+    <text class="pt {{cat==='dog'?'on':''}}" data-c="dog" bindtap="onCat">狗</text>
+    <text class="pt {{cat==='other'?'on':''}}" data-c="other" bindtap="onCat">异宠</text>
+  </view>
+  <view class="pet-empty" wx:if="{{!filtered.length}}">暂无档案，请新增宠物信息。</view>
+  <view class="pet-list">
+    <pet-card wx:for="{{filtered}}" wx:key="_id" pet="{{item}}" bind:open="onOpen" />
+  </view>
+  <view class="safe-hint">本页为个人宠物档案与饲养管理，无养成、无装扮、无排名。</view>
+</view>
+
+<view class="page pet-form" wx:elif="{{view==='form'}}">
+  <view class="f-row">
+    <text class="f-l">照片</text>
+    <button size="mini" class="btn-ghost" bindtap="onChoosePhoto">相册/拍照</button>
+  </view>
+  <view class="f-row">
+    <text class="f-l">昵称</text>
+    <input class="f-inp" value="{{form.name}}" placeholder="如何称呼" bindinput="onF" data-k="name" />
+  </view>
+  <view class="f-row">
+    <text class="f-l">类型</text>
+    <picker range="{{['猫','狗','异宠']}}" value="{{formCatIdx}}" bindchange="onPickCat">
+      <view class="f-pv">{{formCatLabel}}</view>
+    </picker>
+  </view>
+  <view class="f-row">
+    <text class="f-l">品种</text>
+    <picker range="{{breedOptions}}" value="{{formBreedIdx}}" bindchange="onPickBreed">
+      <view class="f-pv">{{form.breed || '选择品种'}}</view>
+    </picker>
+  </view>
+  <view class="f-row">
+    <text class="f-l">生日</text>
+    <input class="f-inp" value="{{form.birthday}}" placeholder="如 2022-01-01" bindinput="onF" data-k="birthday" />
+  </view>
+  <view class="f-row">
+    <text class="f-l">性别</text>
+    <picker range="{{['未知','公','母']}}" value="{{formGenIdx}}" bindchange="onPickGen">
+      <view class="f-pv">{{form.gender || '未知'}}</view>
+    </picker>
+  </view>
+  <view class="f-row">
+    <text class="f-l">体重(kg)</text>
+    <input class="f-inp" type="digit" value="{{form.weight}}" placeholder="选填" bindinput="onF" data-k="weight" />
+  </view>
+  <view class="f-row">
+    <text class="f-l">绝育</text>
+    <switch checked="{{form.neutered}}" bindchange="onNeu" />
+  </view>
+  <view class="f-row f-col">
+    <text class="f-l">备注</text>
+    <textarea class="f-ta" value="{{form.note}}" placeholder="选填" bindinput="onF" data-k="note" />
+  </view>
+  <button class="btn-primary save" bindtap="onSave">保存档案</button>
+  <button class="btn-ghost canc" bindtap="onBackList">返回</button>
+</view>
+
+<view class="page pet-det" wx:else>
+  <view class="card d-card" wx:if="{{cur}}">
+    <image wx:if="{{cur.photo}}" class="d-face" src="{{cur.photo}}" mode="aspectFill" />
+    <view wx:else class="d-av">🐾</view>
+    <view class="d-name">{{cur.name}}</view>
+    <view class="d-line">类型：{{curType}} · 品种：{{cur.breed || '—'}}</view>
+    <view class="d-line">生日：{{cur.birthday || '—'}} · 性别：{{cur.gender || '—'}}</view>
+    <view class="d-line">体重：{{cur.weight ? cur.weight + ' kg' : '—'}}</view>
+    <view class="d-line">绝育：{{cur.neutered ? '是' : '否'}}</view>
+    <view class="d-note" wx:if="{{cur.note}}">备注：{{cur.note}}</view>
+  </view>
+  <view class="d-btns">
+    <button class="btn-ghost" size="mini" bindtap="onEdit">编辑档案</button>
+    <button class="btn-ghost" size="mini" bindtap="onArchive">归档</button>
+    <button class="btn-ghost" size="mini" bindtap="onDel">删除</button>
+  </view>
+  <button class="btn-ghost canc" bindtap="onBackList">返回列表</button>
+  <view class="safe-hint">单只宠物信息仅供个人管理，无对比、无排名。</view>
+</view>

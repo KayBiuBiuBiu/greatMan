@@ -1,0 +1,9 @@
+<view class="pcard" bindtap="onTap">
+  <image wx:if="{{pet.photo}}" class="pcard-face" src="{{pet.photo}}" mode="aspectFill" />
+  <view wx:else class="pcard-av">{{iconText}}</view>
+  <view class="pcard-body">
+    <view class="pcard-name">{{pet.name || '未命名'}}</view>
+    <view class="pcard-sub">{{typeLabel}} · {{pet.breed || '—'}}</view>
+    <view class="pcard-w" wx:if="{{pet.weight}}">当前体重：{{pet.weight}} kg</view>
+  </view>
+</view>

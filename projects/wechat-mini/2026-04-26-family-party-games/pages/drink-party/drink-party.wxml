@@ -1,0 +1,169 @@
+<view class="page" wx:if="{{!roomId}}">
+  <view class="hero">
+    <view class="hero-title">趣味抽签</view>
+    <view class="hero-subtitle">线下聚会随机抽签工具，生成唱歌、跳舞、讲笑话、真心话、小表演等趣味小任务，活跃气氛。仅同场亲友、6 位口令近距离加入，无陌生匹配。</view>
+  </view>
+  <view class="card setup-card">
+    <view class="label">昵称</view>
+    <input
+      class="dp-inp"
+      placeholder="输入昵称"
+      value="{{nick}}"
+      bindinput="onNick"
+    />
+    <button
+      class="btn btn-primary main-btn"
+      bindtap="doCreate"
+      disabled="{{opBusy}}"
+    >创建聚会组</button>
+  </view>
+  <view class="card setup-card">
+    <view class="label">已有口令</view>
+    <input
+      class="dp-inp"
+      type="number"
+      maxlength="6"
+      placeholder="6 位数字"
+      value="{{joinCode}}"
+      bindinput="onCode"
+    />
+    <button
+      class="btn btn-primary main-btn"
+      bindtap="doJoin"
+      disabled="{{opBusy}}"
+    >加入互动组</button>
+  </view>
+</view>
+
+<view class="page" wx:else>
+  <view class="hero">
+    <view class="hero-title">趣味抽签</view>
+    <view class="hero-subtitle" wx:if="{{state}}">
+      {{state.roomName || '聚会组'}} · 第{{roundDisp}}轮
+    </view>
+    <view class="hero-subtitle" wx:else>加载中…</view>
+  </view>
+
+  <view class="card setup-card" wx:if="{{state}}">
+    <view class="dp-code-row">
+      <text>口令 <text class="dp-code-num">{{state.roomCode}}</text></text>
+      <text class="dp-link" bindtap="onCopy">复制口令</text>
+    </view>
+    <view wx:if="{{isHost}}">
+      <view class="label" style="margin-top: 16rpx">组名（仅组长）</view>
+      <input
+        class="dp-inp"
+        value="{{roomNameEdit}}"
+        bindinput="onRoomName"
+        confirm-type="done"
+      />
+      <view class="dp-ghost" bindtap="onSaveRoomName">保存组名</view>
+    </view>
+  </view>
+
+  <view class="card setup-card" wx:if="{{state && state.publicPlayers}}">
+    <view class="section-title">成员 <text class="dp-muted">共 {{state.publicPlayers.length}} 人</text>
+    </view>
+    <view class="player-row">
+      <view
+        class="pill"
+        wx:for="{{state.publicPlayers}}"
+        wx:key="openId"
+      >{{item.nickName}}<text class="dp-tag" wx:if="{{item.isHost}}">组长</text>
+      </view>
+    </view>
+  </view>
+
+  <view
+    class="card setup-card"
+    wx:if="{{state && state.phase==='waiting' && !isHost}}"
+  >
+    <view class="sub-tip">等待组长点击「开始本轮」</view>
+  </view>
+
+  <button
+    class="btn btn-primary main-btn"
+    wx:if="{{isHost && state && state.phase==='waiting'}}"
+    bindtap="onStart"
+    disabled="{{opBusy}}"
+  >开始本轮</button>
+
+  <button
+    class="btn btn-secondary main-btn"
+    wx:if="{{isHost && state && state.phase==='voting' && (state.voteProgress.cast < state.voteProgress.need)}}"
+    bindtap="onForceEnd"
+    disabled="{{opBusy}}"
+  >强制出结果</button>
+
+  <button
+    class="btn btn-primary main-btn"
+    wx:if="{{isHost && state && state.phase==='result'}}"
+    bindtap="onNextRound"
+    disabled="{{opBusy}}"
+  >下一轮</button>
+
+  <view
+    class="card setup-card"
+    wx:if="{{state && state.phase==='countdown'}}"
+  >
+    <view class="bell-stage">
+      <view class="bell-big">{{cdLabel}}</view>
+      <view class="section-title" style="text-align: center; margin: 0">结束后随机一名参与者本机短震提示</view>
+    </view>
+  </view>
+
+  <view
+    class="card setup-card"
+    wx:if="{{state && state.phase==='voting'}}"
+  >
+    <view class="section-title">{{state.targetNick || '—'}} 的手机「响了」</view>
+    <view class="sub-tip">30 秒内每人选 1 人。投给响铃者：响铃者记票、自己无需小任务；投给非响铃者：自领 1 次趣味小任务。可弃权。</view>
+    <view class="ringer-hint" wx:if="{{iAmRinger}}">你是响铃者，本机已短震</view>
+    <view class="dp-timer" wx:if="{{state.voteProgress}}">
+      已选 {{state.voteProgress.cast}} / {{state.voteProgress.need}} · 剩余约
+      <text class="em">{{deadLeftS}}</text>s
+    </view>
+    <party-vote-sel
+      wx:if="{{!voteDone && state && state.publicPlayers}}"
+      players="{{ state.publicPlayers }}"
+      pick="{{ pick }}"
+      disabled="{{ voteDone }}"
+      bind:pick="onCompPick"
+    />
+    <view wx:if="{{!voteDone}}">
+      <view class="row">
+        <button
+          class="btn btn-primary half"
+          style="min-height: 82rpx; margin-top: 12rpx"
+          bindtap="onSubmitVote"
+          disabled="{{!pick || opBusy}}"
+        >投 TA</button>
+        <button
+          class="btn btn-secondary half"
+          style="min-height: 82rpx; margin-top: 12rpx"
+          bindtap="onAbstain"
+          disabled="{{opBusy}}"
+        >弃权</button>
+      </view>
+    </view>
+    <view wx:else class="sub-tip">你已完成选择（本轮不可改）</view>
+  </view>
+
+  <view
+    class="card setup-card"
+    wx:if="{{state && state.phase==='result' && state.result}}"
+  >
+    <view class="result-line">
+      响铃者：<text class="em">{{state.result.targetNick}}</text> 得
+      <text class="em">{{state.result.targetSips}}</text> 票，需完成
+      <text class="dp-bignum">{{state.result.targetSips}}</text> 次趣味小任务
+    </view>
+    <view class="result-wrong" wx:if="{{state.result.wrongVoters && state.result.wrongVoters.length}}">
+      投错需小任务：{{ wrongNames }}
+    </view>
+    <view
+      class="result-wrong"
+      wx:else
+    >无投错，无人因「投错」多领 1 次小任务</view>
+  </view>
+</view>

@@ -1,0 +1,29 @@
+<view class="page index-page">
+  <view class="hero">
+    <view class="hero-title">家庭聚会助手</view>
+    <view class="hero-sub">线下互动工具</view>
+    <view class="hero-subtitle">
+      <view class="hero-subtitle-line">进同一场地亲友面对面使用</view>
+      <view class="hero-subtitle-line">近距离口令，无陌生匹配</view>
+    </view>
+    <button class="join-btn btn btn-secondary" bindtap="joinRoom">输入口令</button>
+  </view>
+
+  <scroll-view class="activity-panel" scroll-y enhanced show-scrollbar>
+    <view class="card-grid">
+      <view class="item-card card" wx:for="{{games}}" wx:key="title">
+        <view class="icon-bubble">{{item.icon}}</view>
+        <view class="item-name">{{item.displayTitle}}</view>
+        <view class="item-desc">{{item.displaySummary}}</view>
+        <view class="card-actions">
+          <button
+            class="start-btn btn btn-primary"
+            bindtap="startGame"
+            data-title="{{item.title}}"
+            data-screen="{{item.screen}}"
+          >开始互动</button>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,211 @@
+<view class="page">
+  <view class="title" style="font-size: 40rpx; margin: 8rpx 0 16rpx">🎭 秘密身份推理（聚会版）</view>
+  <view class="muted" style="font-size: 24rpx; margin-bottom: 12rpx">线下多人身份推理助手，无恐怖元素，家庭亲子友好。仅同场亲友、近距离口令，无陌生匹配。</view>
+  <view wx:if="{{!roomId}}" class="panel">
+    <view class="muted">同场同步需云开发。先写昵称，再创建或 6 位进聚会组。</view>
+    <input
+      class="input"
+      value="{{nick}}"
+      bindinput="onNickIn"
+      bindblur="saveNick"
+      placeholder="本机昵称"
+    />
+    <view class="row" style="margin-top: 24rpx">
+      <button
+        class="btn btn-primary"
+        bindtap="doCreate"
+        disabled="{{opBusy}}"
+      >创建聚会组</button>
+    </view>
+    <view class="muted" style="margin-top: 20rpx">或输入 6 位加入互动组</view>
+    <input
+      class="input"
+      value="{{joinCode}}"
+      bindinput="onCodeIn"
+      type="number"
+      placeholder="6位数字"
+    />
+    <view class="row" style="margin-top: 12rpx">
+      <button
+        class="btn btn-ghost"
+        bindtap="doJoin"
+        disabled="{{opBusy}}"
+      >加入互动组</button>
+    </view>
+  </view>
+  <block wx:else>
+    <view class="panel" style="margin-bottom: 0">
+      <view class="row">
+        <view class="title">聚会组口令 {{roomCode || (pub && pub.roomCode) || '—'}}</view>
+      </view>
+      <view class="muted" wx:if="{{!pub}}">正在同步…</view>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{pub && pub.status === 'ended' || pub && pub.currentPhase === 'end'}}"
+    >
+      <view class="end-banner">本环节结束</view>
+      <view class="muted" style="margin-top: 12rpx; text-align: center"
+      >{{pub && pub.winSide === 'good' ? '村民侧' : pub && pub.winSide === 'wolf' ? '暗位侧' : '—'}} 本环节收束 ·
+        {{pub && pub.gameEnd}}
+      </view>
+    </view>
+    <view
+      class="panel"
+      wx:elif="{{pub && pub.status !== 'ended' && pub && pub.currentPhase !== 'end'}}"
+    >
+      <view class="row">
+        <view class="pill">阶段：{{pzh || pub && pub.currentPhase || '—'}}</view>
+        <view class="pill" wx:if="{{pub && pub.day}}">第 {{pub.day}} 天</view>
+        <view class="pill" wx:if="{{view && view.isHost}}">主持</view>
+      </view>
+      <view
+        class="priv"
+        wx:if="{{pub && pub.status === 'playing' || pub && pub.currentPhase === 'end' || pub && pub.status === 'ended'}}"
+      >
+        <view>你本机：{{rzh || '发牌中'}}</view>
+        <view
+          wx:if="{{view && view.myRole === 'werewolf' && wolfMatesLine}}"
+          style="margin-top: 8rpx"
+        >同组暗位：{{wolfMatesLine}}</view>
+        <view
+          wx:if="{{seerLine}}"
+          style="margin-top: 8rpx"
+        >本夜线索：{{seerLine}}
+        </view>
+      </view>
+      <view
+        class="muted"
+        wx:if="{{pub && pub.status === 'waiting'}}"
+        style="margin-top: 12rpx"
+      >等人齐。主持在下方设人数、再发牌开始互动。</view>
+    </view>
+    <view class="panel" wx:if="{{pub && pub.status === 'waiting' && view && view.isHost}}">
+      <view class="muted">人数</view>
+      <picker
+        class="row"
+        mode="selector"
+        range="{{maxList}}"
+        value="{{maxIndex}}"
+        bindchange="onMaxChange"
+      >
+        <view class="pill">点选：{{maxList[maxIndex]}} 人</view>
+      </picker>
+      <view class="row" style="margin-top: 8rpx">
+        <button class="btn btn-small btn-ghost" bindtap="doSetSize">应用人数</button>
+      </view>
+      <button
+        class="btn btn-primary"
+        style="margin-top: 16rpx"
+        bindtap="doStart"
+      >发牌并开始</button>
+    </view>
+    <view class="panel" wx:if="{{pub && pub.status === 'playing'}}">
+      <view class="p-list" wx:if="{{playerList && playerList.length}}">
+        <view
+          class="p-item {{!item.isAlive ? 'away' : ''}}"
+          wx:for="{{playerList}}"
+          wx:for-item="item"
+          wx:key="openId"
+        >
+          <text>{{item.nickName}}</text>
+          <text>{{!item.isAlive ? ' 暂离' : ' 在场'}}</text>
+        </view>
+      </view>
+      <view style="margin-top: 8rpx" wx:if="{{view && view.isHost && allRolesList && allRolesList.length}}">
+        <view class="muted" style="font-size: 24rpx">看牌（勿外泄）：</view>
+        <view
+          class="muted"
+          style="font-size: 24rpx"
+          wx:for="{{allRolesList}}"
+          wx:for-item="hr"
+          wx:key="o"
+        >{{hr.n}}：{{hr.r}}
+        </view>
+      </view>
+      <view
+        class="log-box"
+        wx:if="{{publicLogText}}"
+      >{{publicLogText}}</view>
+      <view
+        class="log-box"
+        style="max-height: 180rpx"
+        wx:if="{{lastNightText}}"
+      >昨夜：{{lastNightText}}
+      </view>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{pub && pub.currentPhase === 'night' && pub && pub.status === 'playing' && view && view.myRole === 'werewolf' && view && view.iAmAlive}}"
+    >
+      <view class="title">夜间·暗位</view>
+      <button class="btn btn-primary" bindtap="wWolfTap">选择夜间关注对象</button>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{pub && pub.currentPhase === 'night' && view && view.myRole === 'seer' && view && view.iAmAlive}}"
+    >
+      <view class="title">夜间·线索员</view>
+      <button class="btn btn-ghost" bindtap="wSeerTap">查看一人线索</button>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{pub && pub.currentPhase === 'night' && view && view.myRole === 'witch' && view && view.iAmAlive}}"
+    >
+      <view class="title">夜间·治愈者</view>
+      <view
+        class="muted"
+        wx:if="{{view && view.night && view.night.wkill}}"
+      >夜间关注对象已同步</view>
+      <button
+        class="btn btn-ghost"
+        style="margin-top: 12rpx"
+        bindtap="wWitchSave"
+        wx:if="{{view && view.night && view.night.wwitch && view.night.wwitch.saveLeft}}"
+      >为关注对象缓解</button>
+      <button
+        class="btn btn-ghost"
+        style="margin-top: 12rpx"
+        bindtap="wWitchPoison"
+        wx:if="{{view && view.night && view.night.wwitch && view.night.wwitch.poisonLeft}}"
+      >使用备用提醒（一位暂离）</button>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{pub && pub.currentPhase === 'vote' && pub && pub.voteOpen && view && view.iAmAlive}}"
+    >
+      <view class="title">投票</view>
+      <button class="btn btn-primary" bindtap="doVote">投票离场</button>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{pub && pub.currentPhase === 'hunter' && pub.pendingHunter && view && view.myOpenId && view.myOpenId === pub.pendingHunter && view.myRole === 'hunter'}}"
+    >
+      <view class="title">协定者</view>
+      <button class="btn btn-primary" bindtap="hunterTap">邀请一人同步暂离</button>
+    </view>
+    <view
+      class="panel"
+      wx:if="{{view && view.isHost && pub && pub.status === 'playing' && pub && pub.currentPhase !== 'hunter' && pub && pub.currentPhase !== 'end'}}"
+    >
+      <view class="title">主持</view>
+      <view class="host-btns" wx:if="{{pub && pub.currentPhase === 'night'}}">
+        <button class="btn btn-small btn-primary" bindtap="hostResolveNight">结夜 / 天亮了</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub && pub.currentPhase === 'day_announce'}}">
+        <button class="btn btn-small btn-ghost" bindtap="hostDawn">进发言</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub && pub.currentPhase === 'speak'}}">
+        <button class="btn btn-small btn-ghost" bindtap="hostNext">下一位发言</button>
+        <button
+          class="btn btn-small btn-primary"
+          style="margin-left: 8rpx"
+          bindtap="hostVote"
+        >开投票</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub && pub.currentPhase === 'vote'}}">
+        <button class="btn btn-small btn-primary" bindtap="hostResolveVote">计票</button>
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,58 @@
+.setup-card {
+  margin-top: 28rpx;
+  padding: 34rpx;
+}
+
+.label {
+  color: #8a3a0a;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.big-number {
+  margin: 28rpx 0;
+  color: #FF7A2F;
+  font-size: 72rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.row,
+.role-row {
+  display: flex;
+  gap: 20rpx;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 不用 line-height 顶高度：基础库对 button 有额外行盒，易偏上 */
+  min-height: 76rpx;
+  padding: 0;
+  line-height: normal;
+}
+
+.role-box {
+  margin-top: 42rpx;
+}
+
+.role-row {
+  margin: 22rpx 0;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.hint {
+  margin-top: 18rpx;
+  color: #7b7280;
+  font-size: 24rpx;
+}
+
+.main-btn {
+  margin-top: 28rpx;
+  min-height: 88rpx;
+}

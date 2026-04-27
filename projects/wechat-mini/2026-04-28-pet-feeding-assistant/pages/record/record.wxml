@@ -1,0 +1,68 @@
+<view class="page rec">
+  <view class="rec-fil">
+    <picker range="{{typeNames}}" value="{{typeIdx}}" bindchange="onTypeF">
+      <view class="rec-pill">{{typeNames[typeIdx]}}</view>
+    </picker>
+    <picker range="{{rangeNames}}" value="{{rangeIdx}}" bindchange="onRangeF">
+      <view class="rec-pill">{{rangeNames[rangeIdx]}}</view>
+    </picker>
+  </view>
+  <view class="rec-tog" bindtap="onViewSwitch">
+    <text class="{{!timeline?'on':''}}">列表</text> / <text class="{{timeline?'on':''}}">时间线</text>
+  </view>
+
+  <view wx:if="{{!timeline}}">
+    <view class="rec-empty" wx:if="{{!list.length}}">暂无记录，可点击下方新增。</view>
+    <view class="rec-item card" wx:for="{{list}}" wx:key="_id">
+      <view class="rec-i-h">
+        <text class="rec-kt">{{item.kLabel}}</text>
+        <text class="rec-tt">{{item.timeL}}</text>
+      </view>
+      <view class="rec-d">{{item.title}} {{item.detail}}</view>
+      <view class="rec-op">
+        <text class="l" bindtap="onDel" data-id="{{item._id}}">删除</text>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="rec-tl">
+    <view class="rec-ti" wx:for="{{list}}" wx:key="_id">
+      <view class="dot" />
+      <view class="rec-tx">
+        <view>{{item.timeL}} · {{item.kLabel}}</view>
+        <view class="s">{{item.title}} {{item.detail}}</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn-primary rec-add" bindtap="onOpenAdd">新增记录</button>
+
+  <view class="modal" wx:if="{{showAdd}}">
+    <view class="modal-bg" catchtap="onCloseAdd" />
+    <view class="modal-b">
+      <view class="m-t">新增养护记录</view>
+      <view class="f-row">
+        <text class="f-l">类型</text>
+        <picker range="{{addKinds}}" value="{{addKindIdx}}" bindchange="onAddKind">
+          <view class="f-pv">{{addKinds[addKindIdx]}}</view>
+        </picker>
+      </view>
+      <view class="f-row">
+        <text class="f-l">对应宠物</text>
+        <picker range="{{petNames}}" value="{{addPetIdx}}" bindchange="onAddPetP">
+          <view class="f-pv">{{petNames[addPetIdx] || '选择'}}</view>
+        </picker>
+      </view>
+      <view class="f-row f-col">
+        <text class="f-l">摘要</text>
+        <input class="f-inp" placeholder="如 主食 30g" value="{{addTitle}}" bindinput="onAddTitle" />
+      </view>
+      <view class="f-row f-col">
+        <text class="f-l">备注</text>
+        <textarea class="f-ta" value="{{addDet}}" bindinput="onAddDet" />
+      </view>
+      <button class="btn-primary" bindtap="onSubmitAdd">保存</button>
+      <button class="btn-ghost" bindtap="onCloseAdd">取消</button>
+    </view>
+  </view>
+  <view class="safe-hint">本页为个人健康台账，非医疗诊断。无积分、无排名。</view>
+</view>

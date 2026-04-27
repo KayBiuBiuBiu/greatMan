@@ -1,0 +1,107 @@
+.page.kn {
+  padding: 20rpx 24rpx 40rpx;
+}
+.kn-inp {
+  width: 100%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  border: 1rpx solid #e5d5c0;
+}
+.kn-cat {
+  margin: 20rpx 0;
+  white-space: nowrap;
+}
+.kc {
+  display: inline-block;
+  margin-right: 12rpx;
+  padding: 8rpx 20rpx;
+  background: #f5ebe0;
+  color: #6a5a4a;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+}
+.kc.on {
+  background: #d4a574;
+  color: #fff;
+  font-weight: 700;
+}
+.kn-item {
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+.k-tag {
+  font-size: 20rpx;
+  color: #8a3a0a;
+  background: #fff0e0;
+  display: inline-block;
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
+}
+.k-ti {
+  margin-top: 8rpx;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #3d3428;
+}
+.k-su {
+  margin-top: 6rpx;
+  font-size: 26rpx;
+  color: #5a4a3a;
+  line-height: 1.4;
+}
+.kn-empty {
+  text-align: center;
+  color: #9a8a78;
+  margin: 40rpx 0;
+}
+.k-dis {
+  font-size: 20rpx;
+  color: #8a7a6a;
+  line-height: 1.4;
+  margin-top: 24rpx;
+}
+.k-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+.k-mbg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+.k-mc {
+  position: relative;
+  z-index: 1;
+  background: #fff8f0;
+  border-radius: 24rpx;
+  max-height: 70vh;
+  width: 100%;
+  max-width: 600rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+.k-mh {
+  font-size: 32rpx;
+  font-weight: 800;
+  margin-bottom: 12rpx;
+}
+.k-mb {
+  color: #3d3428;
+  margin-bottom: 20rpx;
+}

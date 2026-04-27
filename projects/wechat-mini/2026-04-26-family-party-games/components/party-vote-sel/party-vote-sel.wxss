@@ -1,0 +1,25 @@
+/* 与全站 .pill 风格一致 */
+.pv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 12rpx;
+}
+.pv-pill {
+  min-width: 150rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 999rpx;
+  text-align: center;
+  background: #ffedd5;
+  border: 2rpx solid #ffd4a8;
+  color: #8a3a0a;
+  font-size: 28rpx;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+.pv-pill.on {
+  background: #ff7a2f;
+  border-color: #ff7a2f;
+  color: #fff;
+  font-weight: 900;
+}

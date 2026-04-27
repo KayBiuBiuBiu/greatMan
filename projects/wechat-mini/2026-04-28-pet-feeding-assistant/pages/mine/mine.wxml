@@ -1,0 +1,19 @@
+<view class="page m">
+  <view class="m-box card">
+    <view class="m-tt">宠伴日常</view>
+    <view class="m-sub">本小程序为纯养宠辅助工具：无交易、无医疗诊断、无陌生社交、无游戏化内容。仅个人饲养管理与时间提醒，无积分与等级体系。</view>
+  </view>
+  <view class="m-mu card" bindtap="goK">
+    <text>养宠知识库</text>
+    <text class="ar">›</text>
+  </view>
+  <view class="m-mu card" bindtap="onPrv">
+    <text>关于本地数据与隐私</text>
+    <text class="ar">›</text>
+  </view>
+  <view class="m-mu card" bindtap="onCache">
+    <text>清理本地缓存</text>
+    <text class="ar">›</text>
+  </view>
+  <view class="safe-hint">如使用云开发，请在上传云函数前检查隐私合规设置；不收集手机号等敏感信息。</view>
+</view>

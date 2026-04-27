@@ -1,0 +1,10 @@
+<view class="pv row">
+  <view
+    class="pv-pill {{ pick === item.openId ? 'on' : '' }}"
+    wx:for="{{ players }}"
+    wx:key="openId"
+    data-oid="{{ item.openId }}"
+    bindtap="onTap"
+  >{{ item.nickName }}
+  </view>
+</view>

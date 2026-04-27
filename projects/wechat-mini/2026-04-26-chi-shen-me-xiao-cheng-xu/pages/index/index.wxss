@@ -1,0 +1,131 @@
+.page {
+  min-height: 100vh;
+  padding: 40rpx 28rpx 48rpx;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #fff7ec 0%, #ffe9d6 100%);
+}
+
+.header {
+  margin-bottom: 28rpx;
+}
+
+.title {
+  font-size: 54rpx;
+  font-weight: 700;
+  color: #7a2e00;
+}
+
+.subtitle {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #a85520;
+}
+
+.mode-tip {
+  margin-top: 12rpx;
+  display: inline-block;
+  font-size: 22rpx;
+  color: #7f4b1f;
+  background: #ffe4c7;
+  border: 1rpx solid #ffca92;
+  border-radius: 999rpx;
+  padding: 8rpx 16rpx;
+}
+
+.button-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.period-btn {
+  width: calc(50% - 10rpx);
+  margin-bottom: 20rpx;
+  border-radius: 20rpx;
+  border: none;
+  background: #ffb05c;
+  color: #552500;
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 24rpx 0;
+  line-height: 1.2;
+}
+
+.period-btn::after {
+  border: none;
+}
+
+.period-btn--active {
+  background: #ff8a00;
+  color: #fff;
+}
+
+.result-card {
+  margin-top: 28rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 12rpx 24rpx rgba(255, 138, 0, 0.12);
+}
+
+.result-label {
+  font-size: 24rpx;
+  color: #a8713f;
+}
+
+.result-name {
+  margin-top: 10rpx;
+  font-size: 46rpx;
+  font-weight: 700;
+  color: #622300;
+}
+
+.result-period {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #8f5421;
+}
+
+.zodiac-tip {
+  margin-top: 14rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx dashed #f3c08d;
+  font-size: 26rpx;
+  color: #b25100;
+}
+
+.retry-btn {
+  margin-top: 24rpx;
+  border-radius: 20rpx;
+  border: none;
+  background: #ff7b2f;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.retry-btn::after {
+  border: none;
+}
+
+.zodiac-panel {
+  margin-top: 24rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 22rpx;
+}
+
+.zodiac-title {
+  font-size: 24rpx;
+  color: #9b5b2b;
+  margin-bottom: 12rpx;
+}
+
+.zodiac-picker {
+  background: #fff2e6;
+  border: 1rpx solid #ffc58f;
+  border-radius: 14rpx;
+  padding: 18rpx 20rpx;
+  font-size: 30rpx;
+  color: #6d2f00;
+}

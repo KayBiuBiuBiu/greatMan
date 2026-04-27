@@ -1,0 +1,94 @@
+<view class="page">
+  <view class="h1" wx:if="{{!roomId}}">🎵 疯狂猜歌</view>
+  <view class="hint hint-top" wx:if="{{!roomId}}">因开发无预算购买曲库，故未在小程序里统一放歌，改由当轮主持用本机音乐 App 外放。</view>
+  <view class="hint" wx:if="{{!roomId}}">6 位聚会组。每题随机一名「主持」用本机外放，其他人听并抢答。也可从首页输入 6 位（按顺序试卧底、身份推理等聚会组后再试猜歌）。仅同场亲友。</view>
+  <view class="card" wx:if="{{!roomId}}">
+    <view class="lab">本机昵称</view>
+    <input class="inp" placeholder="用于排行榜" value="{{nick}}" bindinput="onNick" />
+    <button class="btn primary" bindtap="doCreate">创建房间</button>
+    <view class="mt">或 6 位进组</view>
+    <input class="inp" type="number" value="{{joinCode}}" bindinput="onCode" />
+    <button class="btn" bindtap="doJoin">加入</button>
+  </view>
+  <block wx:else>
+    <view class="card top">
+      <view class="strong">房号 {{roomCode || (state && state.roomCode) || '—'}}</view>
+    </view>
+    <view class="card" wx:if="{{state && state.status === 'waiting'}}">
+      <view class="h2">成员</view>
+      <view class="mem-list" wx:if="{{state && state.publicPlayers && state.publicPlayers.length}}">
+        <view class="mem" wx:for="{{state.publicPlayers}}" wx:key="openId">{{item.nickName}} · {{item.score}} 分</view>
+      </view>
+    </view>
+    <view class="card" wx:if="{{state && state.status === 'waiting' && view && view.isHost}}">
+      <view class="lab">本局题数</view>
+      <picker range="{{roundLabels}}" value="{{roundIndex}}" bindchange="onRoundChange">
+        <view class="pill">已选：{{roundLabels[roundIndex] || '5 题'}}</view>
+      </picker>
+      <button class="btn primary" style="margin-top: 20rpx" bindtap="doSetRounds">保存题数</button>
+      <button class="btn primary" style="margin-top: 20rpx" bindtap="doStart">开始互动</button>
+    </view>
+    <view class="card" wx:if="{{state && state.status === 'waiting' && view && !view.isHost}}">
+      <view class="wait-hint">等待组长开始</view>
+    </view>
+    <view class="card" wx:if="{{state && state.status === 'playing'}}">
+      <view class="row" style="margin-bottom: 8rpx" wx:if="{{view && view.myScore != null}}">
+        <view class="lab" style="margin:0">我的分数</view>
+        <view class="pill">{{view.myScore}} 分</view>
+      </view>
+      <view class="row" wx:if="{{(state && state.currentIndex) >= 0 || roundNum > 0}}">
+        <view class="strong" style="font-size: 34rpx">第 {{roundNum || 1}} / {{state.totalRounds || 0}} 题</view>
+        <view class="pill">⏱ {{timeLeft}}s</view>
+      </view>
+      <view class="host-line" wx:if="{{state && state.status === 'playing' && state.roundHostNickName}}">
+        本轮主持：<text class="em">{{state.roundHostNickName}}</text>（用 ta 手机外放，大家听）</view>
+      <view class="round-hits" wx:if="{{hasRoundHits}}">
+        <view class="lab">本轮答中</view>
+        <view wx:for="{{state && state.roundHits}}" wx:for-item="rh" wx:for-index="hidx" wx:key="openId">{{rh.nickName}} +{{rh.points}}</view>
+      </view>
+    </view>
+    <view class="card host-card" wx:if="{{view && view.isRoundHost && state && state.status === 'playing' && state.phase === 'round_playing'}}">
+      <view class="h2">本轮由你主持</view>
+      <view class="song-title" wx:if="{{view.hostPlayTitle}}">《{{view.hostPlayTitle}}》</view>
+      <view class="hint">用本机音乐/视频 App 搜索并外放该歌的一小段，其他人听并抢答；你不可抢答本首。</view>
+      <view class="alias-line" wx:if="{{view.hostPlayAliases && view.hostPlayAliases.length}}">别名：{{view.hostPlayAliasesString}}</view>
+    </view>
+    <view
+      class="card"
+      wx:if="{{state && state.status === 'playing' && state.phase === 'round_playing' && view && !view.isRoundHost}}"
+    >
+      <view class="wait-hint" style="text-align:left">听上面对话里「主持」外放，在下方抢答</view>
+    </view>
+    <view class="card" wx:if="{{state && state.status === 'playing' && state.phase === 'round_playing' && view && !view.isRoundHost}}">
+      <view class="inp-wrap" wx:if="{{!view.hasAnswered}}">
+        <input class="inp" value="{{inputAnswer}}" bindinput="onInputAns" placeholder="输入歌名" />
+        <button class="btn primary" size="mini" bindtap="doSubmit">提交</button>
+      </view>
+      <view class="ok" wx:if="{{view && view.hasAnswered}}">本首已答</view>
+    </view>
+    <view
+      class="card"
+      wx:if="{{view && view.isHost && state && state.status === 'playing' && state.phase === 'round_playing'}}"
+    >
+      <view class="lab" style="margin-bottom: 12rpx">房主控场</view>
+      <button class="btn" bindtap="doNext">下一题 / 结束本局</button>
+    </view>
+    <view
+      class="card"
+      wx:if="{{(state && state.status === 'finished') || (state && state.phase === 'finished')}}"
+    >
+      <view class="h2">最终排名</view>
+      <view
+        class="rank"
+        wx:for="{{(state && state.publicPlayers) || (view && view.publicPlayers) || []}}"
+        wx:for-item="u"
+        wx:for-index="ri"
+        wx:key="openId"
+      >{{ri + 1}}. {{u.nickName}} — {{u.score}} 分</view>
+    </view>
+    <view class="card log" wx:if="{{showLog}}">
+      <view class="h2">记录</view>
+      <view class="log-line" wx:for="{{state && state.publicLog}}" wx:key="*this">{{item}}</view>
+    </view>
+  </block>
+</view>

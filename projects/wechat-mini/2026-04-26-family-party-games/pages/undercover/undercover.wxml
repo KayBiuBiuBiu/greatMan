@@ -1,0 +1,216 @@
+<view class="page ucv2">
+  <view class="h1">谁是卧底 · 同场同步</view>
+  <view class="uc-muted" wx:if="{{!roomId}}">线下团建类纸笔辅助，趣味描述互动，无线上竞技。仅同场亲友、6 位近距离口令，无陌生匹配。每人本机看词、本机投票；与首页「输入口令」一致。</view>
+  <view wx:if="{{!roomId}}" class="uc-panel">
+    <input
+      class="uc-inp"
+      placeholder="本机昵称"
+      value="{{nick}}"
+      bindinput="onNick"
+    />
+    <button
+      class="uc-btn uc-primary"
+      bindtap="doCreate"
+      disabled="{{opBusy}}"
+    >创建聚会组</button>
+    <view class="uc-muted" style="margin-top: 24rpx">或输入 6 位进房</view>
+    <input
+      class="uc-inp"
+      type="number"
+      value="{{joinCode}}"
+      bindinput="onCode"
+    />
+    <button
+      class="uc-btn uc-ghost"
+      bindtap="doJoin"
+      disabled="{{opBusy}}"
+    >加入互动组</button>
+  </view>
+  <block wx:else>
+    <view class="uc-panel">
+      <view class="uc-h2">聚会组口令 {{roomCode || state && state.roomCode}}</view>
+      <view class="uc-row" wx:if="{{state && state.currentPhase === 'waiting'}}">等待 — 人齐后组长发牌</view>
+      <view
+        class="uc-row"
+        wx:if="{{state && state.currentPhase && state.currentPhase !== 'waiting'}}"
+      >阶段：{{state.currentPhase}} · 第 {{state.currentRound || 0}} 轮
+      </view>
+      <view
+        class="uc-muted"
+        wx:if="{{view && !view.isHost && state && state.currentPhase === 'waiting'}}"
+      >等待组长开始</view>
+      <view
+        class="uc-muted"
+        wx:if="{{view && view.isHost && state && state.currentPhase === 'waiting'}}"
+      >你是组长：设人数后等人齐，再「发牌开始」
+      </view>
+      <picker
+        wx:if="{{view && view.isHost && state && state.currentPhase === 'waiting'}}"
+        mode="selector"
+        range="{{sizeList}}"
+        value="{{sizeIndex}}"
+        bindchange="onSizeCh"
+      >
+        <view class="uc-pill">点选人数：{{sizeList[sizeIndex]}}</view>
+      </picker>
+      <button
+        wx:if="{{view && view.isHost && state && state.currentPhase === 'waiting'}}"
+        class="uc-btn uc-ghost"
+        size="mini"
+        bindtap="doSetConfig"
+        style="margin-top: 12rpx"
+      >保存人数
+      </button>
+      <button
+        wx:if="{{view && view.isHost && state && state.currentPhase === 'waiting'}}"
+        class="uc-btn uc-primary"
+        style="margin-top: 20rpx"
+        bindtap="doStart"
+      >发牌开始
+      </button>
+      <view
+        class="uc-members"
+        wx:if="{{state && state.publicPlayers && state.publicPlayers.length}}"
+      >成员
+        <view
+          class="uc-mi"
+          wx:for="{{state.publicPlayers}}"
+          wx:for-item="p"
+          wx:key="openId"
+        >{{p.nickName}}{{p.isHost ? '（组长）' : ''}} {{!p.isAlive ? ' 已暂离' : ''}} · 发词: {{p.wordAck ? '是' : '否'}}
+        </view>
+      </view>
+      <view
+        class="uc-muted"
+        wx:if="{{view && view.isHost && state && state.currentPhase === 'word' && view.wordProgress}}"
+      >发词已读：{{view.wordProgress.acked}} / {{view.wordProgress.need}}
+      </view>
+      <button
+        class="uc-btn uc-ghost"
+        wx:if="{{view && !view.isAlive && state && state.currentPhase && state.currentPhase !== 'ended'}}"
+        >你已暂离本环节，可旁观日志</button>
+    </view>
+    <view class="uc-panel" wx:if="{{state && state.currentPhase === 'word'}}">
+      <button
+        class="uc-btn uc-primary"
+        wx:if="{{view && view.isAlive && view && view.myWord}}"
+        bindtap="openMyWord"
+      >看本机词</button>
+    </view>
+    <view class="uc-panel" wx:if="{{inDiscuss && view && view.isAlive}}">
+      <view
+        class="uc-h2"
+        wx:if="{{view && view.amSpeaking}}"
+        style="color: #b45309"
+      >轮到你描述</view>
+      <view class="uc-muted" wx:elif="{{state && state.speakOrder && state.speakOrder.length}}">本侧描述：下一位等组长切</view>
+    </view>
+    <view class="uc-panel" wx:if="{{view && view.isHost && state && state.currentPhase === 'word'}}">
+      <button
+        class="uc-btn uc-primary"
+        bindtap="hDiscuss"
+        wx:if="{{view && view.wordProgress && view.wordProgress.acked === view.wordProgress.need}}"
+      >进入讨论
+      </button>
+    </view>
+    <view
+      class="uc-panel"
+      wx:if="{{view && view.isHost && state && state.currentPhase === 'discuss'}}"
+    >
+      <button class="uc-btn uc-primary" bindtap="hNext" style="margin-top: 8rpx"
+      >下一位发言
+      </button>
+      <button
+        class="uc-btn uc-ghost"
+        style="margin-top: 8rpx"
+        bindtap="hStartVote"
+      >发起投票
+      </button>
+    </view>
+    <view
+      class="uc-panel"
+      wx:if="{{inVote}}">
+      <view class="uc-h2">投票</view>
+      <view class="uc-muted" wx:if="{{state && state.voteProgress}}">已投 {{state.voteProgress.cast}} / {{state.voteProgress.need}}
+      </view>
+      <view
+        wx:if="{{view && view.isAlive && !view.hasVoted && voteList && voteList.length}}">
+        <button
+          class="uc-mopt"
+          wx:for="{{voteList}}"
+          wx:for-item="t"
+          wx:key="openId"
+          data-oid="{{t.openId}}"
+          bindtap="onVotePick"
+        >{{t.nickName}}
+        </button>
+        <button
+          class="uc-btn uc-primary"
+          style="margin-top: 8rpx"
+          bindtap="submitMyVote"
+        >确定投票
+        </button>
+      </view>
+      <view
+        class="uc-muted"
+        wx:if="{{view && view.hasVoted && view.isAlive}}"
+      >你已完成投票</view>
+    </view>
+    <view
+      class="uc-panel"
+      wx:if="{{view && view.isHost && inVote}}"
+    >
+      <button class="uc-btn uc-primary" bindtap="hEndVote" wx:if="{{state && state.voteProgress && state.voteProgress.cast === state.voteProgress.need && state.voteProgress.need > 0}}"
+      >结票
+      </button>
+      <button
+        class="uc-btn uc-ghost"
+        wx:if="{{inVoteTie && view && view.isHost }}"
+        style="margin-top: 8rpx"
+        bindtap="hTieRetry"
+      >清票重投（同平票时）
+      </button>
+    </view>
+    <view class="uc-panel" wx:if="{{state && state.currentPhase === 'ended'}}">
+      <view class="uc-end" wx:if="{{state && state.winSide === 'good'}}">本环节：普通词侧描述收束</view>
+      <view
+        class="uc-end"
+        wx:elif="{{state && state.winSide === 'bad'}}"
+      >本环节：持不同词侧收束</view>
+    </view>
+    <view class="uc-log" wx:if="{{logText}}">
+      <view class="uc-h2" style="font-size: 28rpx">日志</view>
+      <text>{{logText}}</text>
+    </view>
+    <view
+      class="uc-panel"
+      wx:if="{{view && view.isHost && state && state.currentPhase && state.currentPhase !== 'waiting' && state.currentPhase !== 'word'}}"
+    >
+      <block wx:if="{{hostRoles && hostRoles.length}}">
+        <view
+          class="uc-h2"
+          style="font-size: 24rpx"
+        >看牌（仅组长）</view>
+        <view
+          class="uc-muted"
+          style="font-size: 24rpx"
+          wx:for="{{hostRoles}}"
+          wx:for-item="g"
+          wx:key="o"
+        >{{g.n}}: {{g.r === 'undercover' ? '卧底' : '平民'}}{{!g.dead ? '' : ' 出局'}}
+        </view>
+      </block>
+    </view>
+  </block>
+  <view class="uc-mask" wx:if="{{showWord && view && view.myWord}}" catchtouchmove="onMask">
+    <view class="uc-modal">
+      <view class="uc-h2">本机词</view>
+      <view class="uc-secr">{{rzh || (view && view.myRole)}}</view>
+      <view class="uc-secr">{{(view && view.myWord) || '—'}}
+      </view>
+      <button class="uc-btn uc-primary" bindtap="doAckWord" style="margin-top: 24rpx"
+      >我知道了
+      </button>
+    </view>
+  </view>
+</view>

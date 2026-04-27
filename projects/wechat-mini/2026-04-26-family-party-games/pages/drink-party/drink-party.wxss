@@ -1,0 +1,160 @@
+/* 与全站 app.wxss、setup 页：浅底、橙主色、白卡片 + setup-card 内边距 */
+.label {
+  color: #8a3a0a;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+.card.setup-card {
+  margin-top: 28rpx;
+  padding: 34rpx;
+  box-sizing: border-box;
+}
+.page .card.setup-card .section-title {
+  margin: 0 0 12rpx 0;
+  font-size: 34rpx;
+  color: #23212a;
+}
+
+.dp-inp {
+  width: 100%;
+  min-height: 80rpx;
+  padding: 0 24rpx;
+  margin: 12rpx 0 0;
+  border-radius: 20rpx;
+  background: #f3f0f5;
+  box-sizing: border-box;
+  font-size: 30rpx;
+  color: #23212a;
+}
+.dp-inp::placeholder {
+  color: #9ca3af;
+}
+.dp-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.dp-code-num {
+  font-size: 40rpx;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #ff7a2f;
+}
+.dp-link {
+  color: #8a3a0a;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+.dp-ghost {
+  text-align: center;
+  color: #8a3a0a;
+  font-size: 28rpx;
+  font-weight: 800;
+  margin-top: 16rpx;
+  padding: 8rpx;
+}
+.sub-tip {
+  margin-top: 0;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #fff4e8;
+  color: #7b7280;
+  font-size: 28rpx;
+  line-height: 1.55;
+  font-weight: 600;
+}
+.ringer-hint {
+  margin: 16rpx 0 8rpx;
+  text-align: center;
+  color: #ff7a2f;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+.player-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+.player-row .pill {
+  min-width: 140rpx;
+  text-align: center;
+  font-size: 28rpx;
+  padding: 10rpx 20rpx;
+  font-weight: 800;
+}
+.dp-tag {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: #c2410c;
+  margin-top: 4rpx;
+}
+.dp-muted {
+  color: #7b7280;
+  font-size: 26rpx;
+  font-weight: 600;
+}
+.em {
+  color: #c2410c;
+  font-weight: 800;
+}
+.bell-stage {
+  margin: 24rpx 0 8rpx;
+  min-height: 200rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.bell-big {
+  font-size: 110rpx;
+  font-weight: 900;
+  color: #ff7a2f;
+  line-height: 1.1;
+  text-shadow: 0 8rpx 28rpx rgba(255, 122, 47, 0.22);
+}
+.dp-timer {
+  margin: 8rpx 0 4rpx;
+  font-size: 26rpx;
+  color: #5f5966;
+  font-weight: 700;
+}
+.result-line {
+  font-size: 32rpx;
+  color: #23212a;
+  line-height: 1.55;
+  font-weight: 700;
+}
+.dp-bignum {
+  color: #ff7a2f;
+  font-size: 44rpx;
+  font-weight: 900;
+  margin: 0 4rpx;
+}
+.result-wrong {
+  margin-top: 20rpx;
+  font-size: 30rpx;
+  color: #5f5966;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  gap: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8rpx;
+}
+.half {
+  flex: 1;
+  min-height: 82rpx;
+}
+
+/* 在成员卡片外的全宽主按钮，与上一块留间距，避免顶到白卡片 */
+view.page > button.btn.main-btn {
+  margin-top: 28rpx;
+}

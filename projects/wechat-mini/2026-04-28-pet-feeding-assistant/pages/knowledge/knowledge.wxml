@@ -1,0 +1,24 @@
+<view class="page kn">
+  <view class="kn-search">
+    <input class="kn-inp" placeholder="搜索标题或摘要" value="{{q}}" bindinput="onQ" confirm-type="search" />
+  </view>
+  <scroll-view class="kn-cat" scroll-x>
+    <text class="kc {{cIdx===i?'on':''}}" wx:for="{{categories}}" wx:key="*this" data-i="{{index}}" bindtap="onC">{{item}}</text>
+  </scroll-view>
+  <view class="kn-empty" wx:if="{{!display.length}}">无匹配内容</view>
+  <view class="kn-item card" wx:for="{{display}}" wx:key="id" bindtap="onOpen" data-id="{{item.id}}">
+    <view class="k-tag">{{item.cat}}</view>
+    <view class="k-ti">{{item.title}}</view>
+    <view class="k-su">{{item.summary}}</view>
+  </view>
+  <view class="k-dis">以上内容仅供日常科普参考，不能替代专业兽医的面对面判断。</view>
+</view>
+
+<view class="k-modal" wx:if="{{cur}}">
+  <view class="k-mbg" catchtap="onClose" />
+  <view class="k-mc">
+    <view class="k-mh">{{cur.title}}</view>
+    <view class="k-mb">{{cur.body}}</view>
+    <button class="btn-ghost" bindtap="onClose">关闭</button>
+  </view>
+</view>

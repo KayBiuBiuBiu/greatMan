@@ -1,0 +1,105 @@
+page {
+  min-height: 100%;
+  background: #FEF8F0;
+  color: #23212a;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 28rpx;
+}
+
+.hero {
+  padding: 44rpx 34rpx;
+  border-radius: 44rpx;
+  background: linear-gradient(135deg, #ffb86b, #ffd166);
+  box-shadow: 0 18rpx 44rpx rgba(255, 122, 47, 0.18);
+  text-align: center;
+}
+
+.hero-title {
+  font-size: 48rpx;
+  font-weight: 900;
+}
+
+.hero-subtitle {
+  margin-top: 16rpx;
+  color: #8a3a0a;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.hero-subtitle .hero-subtitle-line + .hero-subtitle-line {
+  margin-top: 10rpx;
+}
+
+.card {
+  border-radius: 36rpx;
+  background: #fff;
+  box-shadow: 0 14rpx 36rpx rgba(138, 58, 10, 0.10);
+}
+
+.btn {
+  display: block;
+  box-sizing: border-box;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.btn::after {
+  border: none;
+}
+
+/* 主操作按钮用 flex 居中，避免基础库用 line-height 时文字视觉上偏上 */
+/* min-height/width：未在单页再写 .main-btn 时（如 drink-party）也保证高度，避免成一条细线 */
+button.btn.main-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 88rpx;
+  width: 100%;
+  padding: 0 28rpx;
+  line-height: 1.35;
+}
+
+.btn-primary {
+  color: #fff;
+  background: #FF7A2F;
+}
+
+.btn-secondary {
+  color: #8a3a0a;
+  background: #ffedd5;
+}
+
+.muted {
+  color: #7b7280;
+}
+
+.section-title {
+  margin: 34rpx 0 18rpx;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  color: #8a3a0a;
+  background: #ffedd5;
+  font-size: 24rpx;
+  font-weight: 800;
+}

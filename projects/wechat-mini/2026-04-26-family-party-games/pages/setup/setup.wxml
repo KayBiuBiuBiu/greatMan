@@ -1,0 +1,43 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">{{title}}</view>
+    <view class="hero-subtitle">{{screen==='undercover' ? '6 位进聚会组。人到齐后在同场用云功能发牌、看词、讨论与投票。仅线下亲友同场地，无陌生匹配。' : screen==='werewolf' ? '6 位进聚会组；人齐后主持在组内选人数与板子。把口令发给身边朋友，无线上对战。' : screen==='songGuess' ? '6 位进聚会组。因未购曲库未做小程序内统播，每题随机一名主持本机外放，他人抢答。' : screen==='drinkParty' ? '6 位进聚会组。倒计时、随机响铃、投票与趣味小任务记数，同场同步。' : screen==='drawGuess' ? '6 位进聚会组。一人用本机画画，大家同场同步看画布猜词。' : '先设置人数，再生成口令开始互动'}}</view>
+  </view>
+
+  <view class="card setup-card" wx:if="{{screen === 'songGuess'}}">
+    <view class="hint" style="line-height:1.6">创建后得到 6 位口令。每题随机一名「主持」在 ta 手机上看歌名（开发未购曲库，故由本机外放），其他人只抢答、不看到答案。</view>
+  </view>
+
+  <view class="card setup-card" wx:if="{{screen === 'drawGuess'}}">
+    <view class="hint" style="line-height:1.6">创建 6 位后把口令发给朋友；进组后组长可设总轮数与词库分类。绘画者仅自己可见题面。</view>
+  </view>
+
+  <view class="card setup-card" wx:if="{{screen==='drinkParty'}}">
+    <view class="hint" style="line-height:1.6">创建 6 位后把口令发给同座；进组可改组名（组长）。线下聚会随机趣味小任务，活跃气氛。</view>
+  </view>
+
+  <view
+    class="card setup-card"
+    wx:if="{{screen !== 'songGuess' && screen !== 'drawGuess' && screen!=='drinkParty'}}"
+  >
+    <view class="label">本环节人数</view>
+    <view class="big-number">{{playerCount}} 人</view>
+    <view class="row" wx:if="{{screen !== 'werewolf'}}">
+      <button class="btn btn-secondary half" data-delta="-1" bindtap="changePlayers">- 人</button>
+      <button class="btn btn-secondary half" data-delta="1" bindtap="changePlayers">+ 人</button>
+    </view>
+    <view class="row" wx:else>
+      <button class="btn btn-secondary half" data-delta="-1" bindtap="changePlayersWolf"
+      >-</button>
+      <button class="btn btn-secondary half" data-delta="1" bindtap="changePlayersWolf"
+      >+</button>
+    </view>
+
+    <view wx:if="{{screen === 'undercover'}}" class="role-box">
+      <view class="hint">同场 v2：每环节 1 个不同词。人数 4–12 在组内由组长定。</view>
+    </view>
+  </view>
+
+  <button class="btn btn-primary main-btn" bindtap="createRoom">{{screen==='werewolf' || screen==='undercover' || screen==='songGuess' || screen==='drawGuess' || screen==='drinkParty' ? '创建聚会组并进入' : '生成口令并进入'}}</button>
+  <button wx:if="{{screen !== 'undercover' && screen !== 'werewolf' && screen !== 'songGuess' && screen !== 'drawGuess' && screen!=='drinkParty'}}" class="btn btn-secondary main-btn" bindtap="startLocal">本机直接开始互动</button>
+</view>

@@ -1,0 +1,41 @@
+<view class="page">
+  <view class="header">
+    <view class="title">今天吃什么</view>
+    <view class="subtitle">随机美食推荐，告别选择困难</view>
+    <view class="mode-tip" wx:if="{{useMockFood}}">
+      当前为本地预览模式（使用内置演示数据）
+    </view>
+  </view>
+
+  <view class="button-grid">
+    <block wx:for="{{periodButtons}}" wx:key="value">
+      <button
+        class="period-btn {{activePeriodLabel === item.label ? 'period-btn--active' : ''}}"
+        data-period="{{item.value}}"
+        data-label="{{item.label}}"
+        bindtap="onPickPeriod"
+        loading="{{isLoading && activePeriodLabel === item.label}}"
+      >
+        {{item.label}}
+      </button>
+    </block>
+  </view>
+
+  <view class="result-card" wx:if="{{resultFood}}">
+    <view class="result-label">推荐菜品</view>
+    <view class="result-name">{{resultFood.name}}</view>
+    <view class="result-period">适合时段：{{resultFood.period}}</view>
+    <view class="zodiac-tip">✨ {{zodiacs[zodiacIndex]}}今天吃这个，幸运加倍～</view>
+  </view>
+
+  <button class="retry-btn" bindtap="onPickAnother" disabled="{{isLoading || !hasTried}}">
+    换一个
+  </button>
+
+  <view class="zodiac-panel">
+    <view class="zodiac-title">星座好运加成（仅文案）</view>
+    <picker mode="selector" range="{{zodiacs}}" value="{{zodiacIndex}}" bindchange="onZodiacChange">
+      <view class="zodiac-picker">{{zodiacs[zodiacIndex]}}</view>
+    </picker>
+  </view>
+</view>

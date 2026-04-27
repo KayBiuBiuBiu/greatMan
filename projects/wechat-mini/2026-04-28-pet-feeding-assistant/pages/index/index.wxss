@@ -1,0 +1,88 @@
+.page.idx {
+  padding: 0 0 40rpx;
+  min-height: 100%;
+}
+.idx-hero {
+  padding: 32rpx 32rpx 8rpx;
+  text-align: center;
+}
+.idx-title {
+  font-size: 44rpx;
+  font-weight: 900;
+  color: #3d3428;
+}
+.idx-sub {
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #7a6a58;
+}
+.idx-sec {
+  margin: 20rpx 24rpx 0;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 6rpx 24rpx rgba(139, 115, 85, 0.08);
+}
+.idx-h2 {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #5a4a3a;
+  margin-bottom: 16rpx;
+}
+.idx-empty {
+  font-size: 26rpx;
+  color: #9a8a78;
+  line-height: 1.5;
+}
+.idx-todo {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0e8df;
+}
+.idx-todo:last-child {
+  border-bottom: none;
+}
+.idx-todo-c {
+  width: 40rpx;
+  height: 40rpx;
+  border: 2rpx solid #d4b896;
+  border-radius: 10rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+.idx-todo-c.on {
+  background: #c4a574;
+  border-color: #c4a574;
+}
+.idx-todo-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.st {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #3d3428;
+}
+.sdesc {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #8a7a6a;
+}
+.idx-pets {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.idx-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.idx-actions .a2 {
+  width: 100% !important;
+  line-height: 1.4;
+  padding: 20rpx;
+}
