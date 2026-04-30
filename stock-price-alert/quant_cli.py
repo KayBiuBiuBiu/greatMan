@@ -5,12 +5,16 @@ import argparse
 import json
 from pathlib import Path
 
+from app_logging import emit_select_tool_line, setup_app_logging
 from quant_core.backtest import run_backtest_pack
 from quant_core.selector import run_daily_selector, save_daily_selector_result
 
 
 def _load_cfg(cfg_path: Path) -> dict:
-    return json.loads(cfg_path.read_text(encoding="utf-8"))
+    raw = json.loads(cfg_path.read_text(encoding="utf-8"))
+    from run_alert import merge_full_config
+
+    return merge_full_config(raw)
 
 
 def main() -> int:
@@ -30,20 +34,34 @@ def main() -> int:
 
     args = ap.parse_args()
     cfg = _load_cfg(args.config)
+    root = Path(__file__).resolve().parent
+    setup_app_logging(cfg, root=root)
 
     if args.cmd == "daily-select":
         result = run_daily_selector(cfg, limit=args.limit, top_n_per_strategy=args.top)
         save_daily_selector_result(result, args.output)
-        print(f"[ok] daily picks saved: {args.output}")
+        emit_select_tool_line(
+            f"[ok] daily picks saved: {args.output}",
+            event="quant_cli_daily_select_done",
+            section="quant_cli",
+        )
         for k, rows in (result.get("strategies") or {}).items():
-            print(f"  - {k}: {len(rows)}")
+            emit_select_tool_line(
+                f"  - {k}: {len(rows)}",
+                event="quant_cli_strategy_counts",
+                section="quant_cli",
+            )
         return 0
 
     if args.cmd == "backtest":
         years = [int(x.strip()) for x in str(args.years).split(",") if x.strip()]
         report = run_backtest_pack(args.code, years_list=years)
         args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"[ok] backtest report saved: {args.output}")
+        emit_select_tool_line(
+            f"[ok] backtest report saved: {args.output}",
+            event="quant_cli_backtest_done",
+            section="quant_cli",
+        )
         return 0
 
     return 1

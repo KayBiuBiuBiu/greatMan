@@ -21,6 +21,9 @@ from typing import Any, Iterator
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "a_share_names.json"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from utils import get_requests_verify
 
 # 东财 A 股聚合；URL 与 stock_scanner 一致（部分环境 https 易失败）
 CLIST_URLS = (
@@ -66,7 +69,7 @@ def _clist_get_json(url: str, params: dict[str, Any]) -> dict[str, Any]:
             "Accept": "application/json,text/plain,*/*",
         },
         timeout=45,
-        verify=False,
+        verify=get_requests_verify(),
     )
     r2.raise_for_status()
     return r2.json()

@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/stock-price-alert/config-merged",
+  "title": "stock-price-alert merged config (post merge_full_config)",
+  "$comment": "与 run_alert.merge_full_config 输出保持同步：新增默认节或字段时，请在此补 properties/required。根 additionalProperties=true 允许未知顶层键（不做类型校验）；各已知节内已列字段会做类型校验，未列子键仍允许（节上 additionalProperties=true）。含 data_health、logging、trend_slippage_alert.atr_tiers（P1-6/P2-3/P1-2）。",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "legal": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "disclaimer_suffix": { "type": "string", "minLength": 1 }
+      }
+    },
+    "poll_interval_seconds": {
+      "type": ["integer", "number"],
+      "minimum": 1
+    },
+    "trading_closed_interval": {
+      "type": ["integer", "number"],
+      "minimum": 1
+    },
+    "alert_cooldown_minutes": {
+      "type": ["integer", "number"],
+      "minimum": 0
+    },
+    "alert_price_buffer": {
+      "type": ["integer", "number"],
+      "minimum": 0
+    },
+    "run_only_in_trading_hours": { "type": "boolean" },
+    "scan_pool_max": {
+      "type": ["integer", "number"],
+      "minimum": 1
+    },
+    "daily_pick_count": {
+      "type": ["integer", "number"],
+      "minimum": 1
+    },
+    "capital": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["total", "max_total_position_ratio", "max_single_stock_ratio"],
+      "properties": {
+        "total": { "type": ["integer", "number"], "minimum": 0 },
+        "max_total_position_ratio": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 },
+        "max_single_stock_ratio": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 }
+      }
+    },
+    "buy_rule": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "base_position",
+        "add_1_ratio",
+        "add_1_money",
+        "add_2_ratio",
+        "add_2_money",
+        "forbid_add_ratio"
+      ],
+      "properties": {
+        "base_position": { "type": ["integer", "number"] },
+        "add_1_ratio": { "type": ["integer", "number"] },
+        "add_1_money": { "type": ["integer", "number"] },
+        "add_2_ratio": { "type": ["integer", "number"] },
+        "add_2_money": { "type": ["integer", "number"] },
+        "forbid_add_ratio": { "type": ["integer", "number"] }
+      }
+    },
+    "risk_rule": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["stop_loss_ratio", "take_profit_short", "take_profit_wave"],
+      "properties": {
+        "stop_loss_ratio": { "type": ["integer", "number"] },
+        "take_profit_short": { "type": ["integer", "number"] },
+        "take_profit_wave": { "type": ["integer", "number"] }
+      }
+    },
+    "drawdown_alert": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["enabled", "warn_1_ratio", "warn_2_ratio"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "warn_1_ratio": { "type": ["integer", "number"] },
+        "warn_2_ratio": { "type": ["integer", "number"] },
+        "warn_3_ratio": { "type": ["integer", "number", "null"] }
+      }
+    },
+    "trend_slippage_alert": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "enabled",
+        "min_pillars_weak",
+        "stock_min_weak_dims",
+        "sector_min_weak_dims",
+        "index_weak_mult_max",
+        "index_5d_ret_weak",
+        "volume_spike_vs_ma20",
+        "near_high_20_ratio",
+        "atr_tiers"
+      ],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "min_pillars_weak": { "type": ["integer", "number"], "minimum": 1 },
+        "stock_min_weak_dims": { "type": ["integer", "number"], "minimum": 1 },
+        "sector_min_weak_dims": { "type": ["integer", "number"], "minimum": 1 },
+        "index_weak_mult_max": { "type": ["integer", "number"] },
+        "index_5d_ret_weak": { "type": ["integer", "number"] },
+        "volume_spike_vs_ma20": { "type": ["integer", "number"], "minimum": 0 },
+        "near_high_20_ratio": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 },
+        "require_resolved_bk": { "type": "boolean" },
+        "verbose_trend_alert": { "type": "boolean" },
+        "min_price": { "type": ["integer", "number"], "minimum": 0 },
+        "min_float_mv_yi": { "type": ["integer", "number"], "minimum": 0 },
+        "min_volume_ratio": { "type": ["integer", "number"], "minimum": 0 },
+        "alert_ignore_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "require_consecutive_trade_days": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "description": "趋势下滑需连续 N 个交易日柱走弱才推送（>1 时写 SQLite streak，与 kline_store 同库）"
+        },
+        "atr_tiers": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["enabled", "lookback", "tiers"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "method": {
+              "type": "string",
+              "description": "wilder（默认）或 simple_ma / sma / simple"
+            },
+            "lookback": { "type": ["integer", "number"], "minimum": 2 },
+            "tiers": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "required": [
+                  "stock_min_weak_dims",
+                  "sector_min_weak_dims",
+                  "min_pillars_weak"
+                ],
+                "properties": {
+                  "max_close_atr_pct": { "type": ["integer", "number", "null"] },
+                  "stock_min_weak_dims": { "type": ["integer", "number"], "minimum": 1 },
+                  "sector_min_weak_dims": { "type": ["integer", "number"], "minimum": 1 },
+                  "min_pillars_weak": { "type": ["integer", "number"], "minimum": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "sector_index_overrides": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "kline_cache_ttl_sec",
+        "sector_kline_cache_ttl_sec",
+        "index_kline_cache_ttl_sec",
+        "enable_parallel_fetch",
+        "fetch_max_workers",
+        "fetch_max_concurrency"
+      ],
+      "properties": {
+        "kline_cache_ttl_sec": { "type": ["integer", "number"] },
+        "sector_kline_cache_ttl_sec": { "type": ["integer", "number"] },
+        "index_kline_cache_ttl_sec": { "type": ["integer", "number"] },
+        "enable_parallel_fetch": { "type": "boolean" },
+        "fetch_max_workers": { "type": ["integer", "number"], "minimum": 1 },
+        "fetch_max_concurrency": { "type": ["integer", "number"], "minimum": 1 },
+        "request_min_interval_sec": { "type": ["integer", "number"], "minimum": 0 },
+        "hub_poll_start_offset_sec": { "type": ["integer", "number"], "minimum": 0 },
+        "hub_warm_timeout_sec": { "type": ["integer", "number"], "minimum": 0 },
+        "hub_warm_min_fraction": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 }
+      }
+    },
+    "notifications": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "aggregate_interval_alerts": { "type": "boolean" },
+        "aggregate_max_items": { "type": ["integer", "number"], "minimum": 1 },
+        "aggregate_trend_alerts": { "type": "boolean" },
+        "aggregate_trend_max_items": { "type": ["integer", "number"], "minimum": 1 }
+      }
+    },
+    "kline_store": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "db_path": { "type": "string" },
+        "fresh_hours_after_sync": { "type": ["integer", "number"], "minimum": 0 },
+        "divergence_warn_price_pct": { "type": ["integer", "number", "null"], "minimum": 0 }
+      }
+    },
+    "alert_log": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "share_kline_db": { "type": "boolean" },
+        "db_path": { "type": "string" },
+        "bearish_hit_threshold_pct_1d": { "type": ["integer", "number"] },
+        "bearish_hit_threshold_pct_3d": { "type": ["integer", "number"] },
+        "bearish_hit_threshold_pct_5d": { "type": ["integer", "number"] }
+      }
+    },
+    "ml_filter": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "model_path": { "type": "string" },
+        "apply_to_alert_types": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "bearish_prob_threshold": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "ops_automation": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "preopen_enabled": { "type": "boolean" },
+        "preopen_cutoff_hhmm": { "type": "string" },
+        "after_close_enabled": { "type": "boolean" },
+        "after_close_hhmm": { "type": "string" },
+        "friday_weekly_enabled": { "type": "boolean" },
+        "backtest_since_days": { "type": ["integer", "number"], "minimum": 1 },
+        "auto_tune_apply": { "type": "boolean" },
+        "auto_tune_email": { "type": "boolean" },
+        "ml_train_weekly": { "type": "boolean" },
+        "ml_train_days": { "type": ["integer", "number"], "minimum": 30 },
+        "ml_train_min_samples": { "type": ["integer", "number"], "minimum": 10 }
+      }
+    },
+    "email_command_bot": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "use_shared_mail_config": { "type": "boolean" },
+        "imap_server": { "type": "string" },
+        "imap_port": { "type": ["integer", "number"], "minimum": 1 },
+        "imap_username": { "type": "string" },
+        "imap_password": { "type": "string" },
+        "imap_folder": { "type": "string" },
+        "trusted_senders": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "poll_interval_sec": { "type": ["integer", "number"], "minimum": 10 },
+        "mark_seen": { "type": "boolean" }
+      }
+    },
+    "realtime_hub": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "poll_interval_sec": { "type": ["integer", "number"], "minimum": 0.1 },
+        "ws_enabled": { "type": "boolean" }
+      }
+    },
+    "sector_em": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "api_hosts",
+        "industry_clist_fs",
+        "cache_filename",
+        "industry_map_ttl_sec"
+      ],
+      "properties": {
+        "api_host": { "type": "string" },
+        "api_hosts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "industry_clist_fs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cache_filename": { "type": "string" },
+        "industry_map_ttl_sec": { "type": ["integer", "number"], "minimum": 0 }
+      }
+    },
+    "scan_rule": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "min_price",
+        "max_price",
+        "min_amount",
+        "min_daily_amount_wan",
+        "min_float_mv_yi",
+        "max_float_mv_yi",
+        "full_scan_interval_days",
+        "max_turnover"
+      ],
+      "properties": {
+        "min_price": { "type": ["integer", "number"] },
+        "max_price": { "type": ["integer", "number"] },
+        "min_amount": { "type": ["integer", "number"] },
+        "min_daily_amount_wan": { "type": ["integer", "number"] },
+        "min_float_mv_yi": { "type": ["integer", "number"] },
+        "max_float_mv_yi": { "type": ["integer", "number"] },
+        "full_scan_interval_days": { "type": ["integer", "number"], "minimum": 0 },
+        "max_turnover": { "type": ["integer", "number"] },
+        "watchlist_note": { "type": "string" }
+      }
+    },
+    "scan_meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "last_full_scan_iso": { "type": ["string", "null"] },
+        "last_scan_pool_count": { "type": ["integer", "number"], "minimum": 0 }
+      }
+    },
+    "macro_risk": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "index_mood_mult_override": { "type": ["integer", "number"] }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "eastmoney_ut": { "type": "string" },
+        "ssl_verify": { "type": ["boolean", "string"] },
+        "ssl_ca_bundle": { "type": ["string", "null"] }
+      }
+    },
+    "data_health": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "host_consecutive_fail_threshold": { "type": ["integer", "number"], "minimum": 1 },
+        "backoff_cap_sec": { "type": ["integer", "number"], "minimum": 0 },
+        "backoff_base_sec": { "type": ["integer", "number"], "minimum": 0 },
+        "full_outage_consecutive_notify_threshold": { "type": ["integer", "number"], "minimum": 0 },
+        "full_outage_email_enabled": { "type": "boolean" },
+        "recovery_notify_enabled": { "type": "boolean" },
+        "suppress_trend_rounds_after_full_outage": { "type": ["integer", "number"], "minimum": 0 }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "file": { "type": "string" },
+        "max_bytes": { "type": ["integer", "number"], "minimum": 1000 },
+        "backup_count": { "type": ["integer", "number"], "minimum": 1 },
+        "level": { "type": "string" },
+        "console_mirror": { "type": "boolean" }
+      }
+    },
+    "watchlist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["code", "market", "enabled"],
+        "properties": {
+          "name": { "type": "string" },
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          },
+          "market": {
+            "type": "string",
+            "pattern": "^(sh|sz|bj|SH|SZ|BJ)$"
+          },
+          "enabled": { "type": "boolean" },
+          "cost_price": {
+            "type": ["null", "integer", "number"]
+          },
+          "hold_shares": {
+            "type": ["null", "integer", "number"],
+            "minimum": 0
+          },
+          "alert_mode": {
+            "type": "string",
+            "pattern": "^(breach|band|BREACH|BAND)$"
+          },
+          "alert_below": { "type": ["integer", "number", "null"] },
+          "alert_above": { "type": ["integer", "number", "null"] },
+          "note": { "type": "string" },
+          "tags": { "type": "string" },
+          "industry": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": [
+    "poll_interval_seconds",
+    "trading_closed_interval",
+    "alert_cooldown_minutes",
+    "alert_price_buffer",
+    "run_only_in_trading_hours",
+    "scan_pool_max",
+    "daily_pick_count",
+    "capital",
+    "buy_rule",
+    "risk_rule",
+    "drawdown_alert",
+    "trend_slippage_alert",
+    "sector_index_overrides",
+    "performance",
+    "kline_store",
+    "realtime_hub",
+    "ml_filter",
+    "ops_automation",
+    "email_command_bot",
+    "sector_em",
+    "scan_rule",
+    "scan_meta",
+    "macro_risk",
+    "sources",
+    "data_health",
+    "logging",
+    "watchlist"
+  ]
+}

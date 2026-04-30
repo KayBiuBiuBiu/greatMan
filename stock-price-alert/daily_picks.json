@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-29T14:06:19",
-  "scan_total": 4591,
+  "generated_at": "2026-04-30T14:02:09",
+  "scan_total": 4592,
   "scan_used": 800,
   "thresholds": {
     "score_min": 5.5,
@@ -36,14 +36,66 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000722",
-      "name": "湖南发展",
+      "code": "000546",
+      "name": "金圆股份",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 5.24,
+          "win": 66.7,
+          "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -6.76,
+          "win": 33.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -14.76,
+          "win": 27.3,
+          "trades": 11,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000628",
+      "name": "高新发展",
       "score": 7.1,
       "backtest": {
         "1y": {
           "profit": 12.0,
           "win": 66.7,
           "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 10.03,
+          "win": 50.0,
+          "trades": 8,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 12.03,
+          "win": 46.7,
+          "trades": 15,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000722",
+      "name": "湖南发展",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
           "note": "OK"
         },
         "3y": {
@@ -56,58 +108,6 @@
           "profit": 9.55,
           "win": 38.5,
           "trades": 13,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000810",
-      "name": "创维数字",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 3.52,
-          "win": 83.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 11.52,
-          "win": 70.0,
-          "trades": 10,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 7.52,
-          "win": 57.1,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000989",
-      "name": "九芝堂",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 2.08,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 5.65,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 28.75,
-          "win": 58.3,
-          "trades": 12,
           "note": "OK"
         }
       },
@@ -171,19 +171,19 @@
       "score": 7.1,
       "backtest": {
         "1y": {
-          "profit": 14.1,
+          "profit": 15.01,
           "win": 80.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 2.1,
+          "profit": 3.01,
           "win": 45.5,
           "trades": 11,
           "note": "OK"
         },
         "5y": {
-          "profit": -4.77,
+          "profit": -3.86,
           "win": 37.5,
           "trades": 16,
           "note": "OK"
@@ -212,84 +212,6 @@
           "profit": -12.0,
           "win": 25.0,
           "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "002214",
-      "name": "*ST大立",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 1.04,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -6.96,
-          "win": 28.6,
-          "trades": 7,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -2.96,
-          "win": 33.3,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000026",
-      "name": "飞亚达",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 6.13,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 6.74,
-          "win": 50.0,
-          "trades": 8,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 18.14,
-          "win": 53.8,
-          "trades": 13,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000037",
-      "name": "深南电A",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 36.0,
-          "win": 66.7,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 36.0,
-          "win": 53.3,
-          "trades": 15,
           "note": "OK"
         }
       },
@@ -374,32 +296,6 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000546",
-      "name": "金圆股份",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 5.24,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -6.76,
-          "win": 33.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -14.76,
-          "win": 27.3,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
       "code": "000552",
       "name": "甘肃能化",
       "score": 6.4,
@@ -426,26 +322,78 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000628",
-      "name": "高新发展",
+      "code": "000593",
+      "name": "德龙汇能",
       "score": 6.4,
       "backtest": {
         "1y": {
+          "profit": 4.9,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 14.45,
+          "win": 66.7,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 9.66,
+          "win": 50.0,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000688",
+      "name": "国城矿业",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 4.0,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "5y": {
           "profit": 12.0,
+          "win": 41.7,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000739",
+      "name": "普洛药业",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 11.03,
           "win": 66.7,
           "trades": 3,
           "note": "OK"
         },
         "3y": {
-          "profit": 10.03,
-          "win": 50.0,
-          "trades": 8,
+          "profit": 13.88,
+          "win": 57.1,
+          "trades": 7,
           "note": "OK"
         },
         "5y": {
-          "profit": 12.03,
-          "win": 46.7,
-          "trades": 15,
+          "profit": 5.88,
+          "win": 41.7,
+          "trades": 12,
           "note": "OK"
         }
       },
@@ -495,9 +443,35 @@
           "note": "OK"
         },
         "5y": {
-          "profit": 2.19,
-          "win": 38.5,
-          "trades": 13,
+          "profit": -1.81,
+          "win": 35.7,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000810",
+      "name": "创维数字",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 2.81,
+          "win": 83.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 10.81,
+          "win": 70.0,
+          "trades": 10,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 6.81,
+          "win": 57.1,
+          "trades": 14,
           "note": "OK"
         }
       },
@@ -528,30 +502,108 @@
         }
       },
       "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000889",
+      "name": "中嘉博创",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 21.59,
+          "win": 55.6,
+          "trades": 9,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 25.59,
+          "win": 50.0,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
     }
   ],
   "观察股": [
+    {
+      "code": "001317",
+      "name": "三羊马",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": -1.97,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 16.96,
+          "win": 60.0,
+          "trades": 10,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 16.96,
+          "win": 53.8,
+          "trades": 13,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
     {
       "code": "001366",
       "name": "播恩集团",
       "score": 7.1,
       "backtest": {
         "1y": {
-          "profit": 0.32,
-          "win": 50.0,
+          "profit": 1.98,
+          "win": 75.0,
           "trades": 4,
           "note": "OK"
         },
         "3y": {
-          "profit": -10.96,
-          "win": 33.3,
+          "profit": -9.3,
+          "win": 44.4,
           "trades": 9,
           "note": "OK"
         },
         "5y": {
-          "profit": -10.96,
-          "win": 33.3,
+          "profit": -9.3,
+          "win": 44.4,
           "trades": 9,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "002201",
+      "name": "九鼎新材",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 8.0,
+          "win": 36.4,
+          "trades": 11,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 2.95,
+          "win": 31.2,
+          "trades": 16,
           "note": "OK"
         }
       },
@@ -563,21 +615,73 @@
       "score": 6.4,
       "backtest": {
         "1y": {
-          "profit": -0.32,
+          "profit": -1.21,
           "win": 40.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 7.68,
+          "profit": 6.79,
           "win": 44.4,
           "trades": 9,
           "note": "OK"
         },
         "5y": {
-          "profit": 23.68,
+          "profit": 22.79,
           "win": 54.5,
           "trades": 11,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "001219",
+      "name": "青岛食品",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": -0.06,
+          "win": 60.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 3.45,
+          "win": 55.6,
+          "trades": 9,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 3.45,
+          "win": 50.0,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000716",
+      "name": "黑芝麻",
+      "score": 6.1,
+      "backtest": {
+        "1y": {
+          "profit": 4.92,
+          "win": 66.7,
+          "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -11.08,
+          "win": 28.6,
+          "trades": 7,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -16.21,
+          "win": 28.6,
+          "trades": 14,
           "note": "OK"
         }
       },
@@ -610,50 +714,24 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000573",
-      "name": "粤宏远Ａ",
-      "score": 5.8,
-      "backtest": {
-        "1y": {
-          "profit": 3.65,
-          "win": 40.0,
-          "trades": 5,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 4.41,
-          "win": 44.4,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 18.64,
-          "win": 50.0,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
       "code": "002107",
       "name": "沃华医药",
       "score": 5.8,
       "backtest": {
         "1y": {
-          "profit": 6.92,
+          "profit": 7.82,
           "win": 40.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 14.93,
+          "profit": 15.83,
           "win": 45.5,
           "trades": 11,
           "note": "OK"
         },
         "5y": {
-          "profit": 14.93,
+          "profit": 15.83,
           "win": 41.2,
           "trades": 17,
           "note": "OK"
@@ -688,8 +766,34 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
+      "code": "000009",
+      "name": "中国宝安",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 2.14,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 10.14,
+          "win": 44.4,
+          "trades": 9,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
       "code": "000016",
-      "name": "深康佳Ａ",
+      "name": "*ST康佳A",
       "score": 5.4,
       "backtest": {
         "1y": {
@@ -766,6 +870,32 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
+      "code": "000031",
+      "name": "大悦城",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 0.0,
+          "win": 33.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 0.52,
+          "win": 33.3,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
       "code": "000036",
       "name": "华联控股",
       "score": 5.4,
@@ -792,26 +922,78 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000059",
-      "name": "华锦股份",
+      "code": "000039",
+      "name": "中集集团",
       "score": 5.4,
       "backtest": {
         "1y": {
-          "profit": 4.57,
-          "win": 66.7,
-          "trades": 3,
+          "profit": 2.34,
+          "win": 50.0,
+          "trades": 2,
           "note": "OK"
         },
         "3y": {
-          "profit": -3.43,
-          "win": 37.5,
-          "trades": 8,
+          "profit": 10.37,
+          "win": 66.7,
+          "trades": 6,
           "note": "OK"
         },
         "5y": {
-          "profit": 0.57,
-          "win": 37.5,
-          "trades": 16,
+          "profit": -1.26,
+          "win": 38.5,
+          "trades": 13,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000060",
+      "name": "中金岭南",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": 16.0,
+          "win": 100.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 24.0,
+          "win": 66.7,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -0.39,
+          "win": 35.7,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000061",
+      "name": "农 产 品",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": -2.07,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -6.25,
+          "win": 50.0,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 5.57,
+          "win": 54.5,
+          "trades": 11,
           "note": "OK"
         }
       },
@@ -829,9 +1011,9 @@
           "note": "OK"
         },
         "3y": {
-          "profit": 8.0,
-          "win": 42.9,
-          "trades": 7,
+          "profit": 16.0,
+          "win": 50.0,
+          "trades": 8,
           "note": "OK"
         },
         "5y": {
@@ -868,188 +1050,6 @@
         }
       },
       "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000630",
-      "name": "铜陵有色",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 4.0,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -10.38,
-          "win": 33.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -6.38,
-          "win": 36.4,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000637",
-      "name": "茂化实华",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 8.0,
-          "win": 50.0,
-          "trades": 4,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 10.52,
-          "win": 40.0,
-          "trades": 10,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 19.83,
-          "win": 46.7,
-          "trades": 15,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000663",
-      "name": "永安林业",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 8.0,
-          "win": 42.9,
-          "trades": 7,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 7.58,
-          "win": 45.5,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000665",
-      "name": "湖北广电",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 4.0,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 4.0,
-          "win": 37.5,
-          "trades": 8,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 4.0,
-          "win": 35.7,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000679",
-      "name": "大连友谊",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 4.0,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 12.08,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 36.08,
-          "win": 58.3,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000680",
-      "name": "山推股份",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 15.23,
-          "win": 44.4,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 23.68,
-          "win": 53.3,
-          "trades": 15,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000686",
-      "name": "东北证券",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 8.0,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 11.05,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 4.0,
-          "win": 41.7,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
     }
   ],
   "淘汰股": [
@@ -1078,6 +1078,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000429",
+      "name": "粤高速Ａ",
+      "score": 3.1,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000513",
       "name": "丽珠集团",
       "score": 3.1,
@@ -1096,8 +1102,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000792",
-      "name": "盐湖股份",
+      "code": "000895",
+      "name": "双汇发展",
       "score": 3.1,
       "reason": "当前因子偏弱"
     },
@@ -1110,6 +1116,12 @@
     {
       "code": "001391",
       "name": "国货航",
+      "score": 3.1,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "001872",
+      "name": "招商港口",
       "score": 3.1,
       "reason": "当前因子偏弱"
     },
@@ -1132,12 +1144,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000009",
-      "name": "中国宝安",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000011",
       "name": "深物业A",
       "score": 3.8,
@@ -1146,6 +1152,12 @@
     {
       "code": "000028",
       "name": "国药一致",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000032",
+      "name": "深桑达Ａ",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1168,26 +1180,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000069",
-      "name": "华侨城Ａ",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000070",
       "name": "特发信息",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000090",
-      "name": "天健集团",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000100",
-      "name": "TCL科技",
+      "code": "000096",
+      "name": "广聚能源",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1198,32 +1198,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000166",
-      "name": "申万宏源",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000402",
-      "name": "金 融 街",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000403",
       "name": "派林生物",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000425",
-      "name": "徐工机械",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000498",
-      "name": "山东路桥",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1242,12 +1218,6 @@
     {
       "code": "000516",
       "name": "国际医学",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000517",
-      "name": "荣安地产",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1294,8 +1264,20 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000590",
+      "name": "古汉医药",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000592",
       "name": "平潭发展",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000601",
+      "name": "韶能股份",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1312,6 +1294,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000625",
+      "name": "长安汽车",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000638",
       "name": "*ST万方",
       "score": 3.8,
@@ -1319,7 +1307,7 @@
     },
     {
       "code": "000639",
-      "name": "西王食品",
+      "name": "ST西王",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1360,26 +1348,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000708",
-      "name": "中信特钢",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000709",
-      "name": "河钢股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000710",
       "name": "贝瑞基因",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000718",
-      "name": "苏宁环球",
+      "code": "000719",
+      "name": "中原传媒",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1408,12 +1384,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000750",
-      "name": "国海证券",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000756",
       "name": "新华制药",
       "score": 3.8,
@@ -1422,18 +1392,6 @@
     {
       "code": "000761",
       "name": "本钢板材",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000778",
-      "name": "新兴铸管",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000786",
-      "name": "北新建材",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1468,12 +1426,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000812",
-      "name": "陕西金叶",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000815",
       "name": "美利云",
       "score": 3.8,
@@ -1492,26 +1444,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000825",
-      "name": "太钢不锈",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000826",
-      "name": "启迪环境",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000831",
-      "name": "中国稀土",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000860",
-      "name": "顺鑫农业",
+      "name": "*ST启环",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1528,12 +1462,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000898",
-      "name": "鞍钢股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000899",
       "name": "赣能股份",
       "score": 3.8,
@@ -1546,26 +1474,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000920",
-      "name": "沃顿科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000926",
-      "name": "福星股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000927",
       "name": "中国铁物",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000930",
-      "name": "中粮科技",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1578,12 +1488,6 @@
     {
       "code": "000962",
       "name": "东方钽业",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000965",
-      "name": "天保基建",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1612,12 +1516,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001201",
-      "name": "东瑞股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001206",
       "name": "依依股份",
       "score": 3.8,
@@ -1636,14 +1534,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001239",
-      "name": "永达股份",
+      "code": "001269",
+      "name": "欧晶科技",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001269",
-      "name": "欧晶科技",
+      "code": "001270",
+      "name": "*ST铖昌",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1656,6 +1554,12 @@
     {
       "code": "001285",
       "name": "瑞立科密",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "001299",
+      "name": "美能能源",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1696,12 +1600,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001338",
-      "name": "永顺泰",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001356",
       "name": "富岭股份",
       "score": 3.8,
@@ -1726,12 +1624,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001380",
-      "name": "华纬科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001382",
       "name": "新亚电缆",
       "score": 3.8,
@@ -1746,12 +1638,6 @@
     {
       "code": "001390",
       "name": "古麒绒材",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001396",
-      "name": "誉帆科技",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1792,12 +1678,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002024",
-      "name": "ST易购",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002025",
       "name": "航天电器",
       "score": 3.8,
@@ -1810,20 +1690,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002036",
-      "name": "联创电子",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002038",
       "name": "双鹭药业",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002041",
-      "name": "登海种业",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1834,50 +1702,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002050",
-      "name": "三花智控",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002059",
       "name": "云南旅游",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002060",
-      "name": "广东建工",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002061",
-      "name": "浙江交科",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002068",
-      "name": "黑猫股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002072",
       "name": "凯瑞德",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002075",
-      "name": "沙钢股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002078",
-      "name": "太阳纸业",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1894,8 +1726,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002086",
-      "name": "东方海洋",
+      "code": "002088",
+      "name": "鲁阳节能",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1924,14 +1756,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002123",
-      "name": "梦网科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002126",
-      "name": "银轮股份",
+      "code": "002124",
+      "name": "天邦食品",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1942,8 +1768,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002145",
-      "name": "钛能化学",
+      "code": "002144",
+      "name": "宏达高科",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1960,20 +1786,20 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002157",
-      "name": "正邦科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002159",
       "name": "三特索道",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002179",
-      "name": "中航光电",
+      "code": "002164",
+      "name": "宁波东力",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "002169",
+      "name": "智光电气",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -1986,12 +1812,6 @@
     {
       "code": "002196",
       "name": "方正电机",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002221",
-      "name": "东华能源",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -2056,8 +1876,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001227",
-      "name": "兰州银行",
+      "code": "000598",
+      "name": "兴蓉环境",
+      "score": 4.1,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000778",
+      "name": "新兴铸管",
       "score": 4.1,
       "reason": "当前因子偏弱"
     },
@@ -2069,7 +1895,7 @@
     },
     {
       "code": "000010",
-      "name": "美丽生态",
+      "name": "*ST美丽",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2104,32 +1930,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000031",
-      "name": "大悦城",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000032",
-      "name": "深桑达Ａ",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000039",
-      "name": "中集集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000045",
       "name": "深纺织Ａ",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000061",
-      "name": "农 产 品",
+      "code": "000056",
+      "name": "*ST皇庭",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2142,6 +1950,12 @@
     {
       "code": "000078",
       "name": "海王生物",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000090",
+      "name": "天健集团",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2164,26 +1978,20 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000409",
+      "name": "云鼎科技",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000411",
       "name": "英特集团",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000417",
-      "name": "合百集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000419",
       "name": "通程控股",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000426",
-      "name": "兴业银锡",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2202,12 +2010,6 @@
     {
       "code": "000501",
       "name": "武商集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000503",
-      "name": "国新健康",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2278,20 +2080,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000545",
-      "name": "金浦钛业",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000547",
       "name": "航天发展",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000548",
-      "name": "湖南投资",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2314,12 +2104,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000557",
-      "name": "西部创业",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000558",
       "name": "天府文旅",
       "score": 4.4,
@@ -2328,12 +2112,6 @@
     {
       "code": "000559",
       "name": "万向钱潮",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000560",
-      "name": "我爱我家",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2374,12 +2152,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000590",
-      "name": "古汉医药",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000591",
       "name": "太阳能",
       "score": 4.4,
@@ -2398,20 +2170,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000599",
-      "name": "青岛双星",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000603",
       "name": "盛达资源",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000607",
-      "name": "华媒控股",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2428,18 +2188,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000620",
-      "name": "盈新发展",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000625",
-      "name": "长安汽车",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000631",
       "name": "顺发恒能",
       "score": 4.4,
@@ -2447,19 +2195,7 @@
     },
     {
       "code": "000632",
-      "name": "三木集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000633",
-      "name": "合金投资",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000635",
-      "name": "英 力 特",
+      "name": "ST三木",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2476,6 +2212,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000665",
+      "name": "湖北广电",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000677",
       "name": "恒天海龙",
       "score": 4.4,
@@ -2484,12 +2226,6 @@
     {
       "code": "000678",
       "name": "襄阳轴承",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000681",
-      "name": "视觉中国",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2530,14 +2266,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000735",
-      "name": "罗 牛 山",
+      "code": "000733",
+      "name": "振华科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000737",
-      "name": "北方铜业",
+      "code": "000735",
+      "name": "罗 牛 山",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2560,14 +2296,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000790",
-      "name": "华神科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000795",
-      "name": "英洛华",
+      "code": "000798",
+      "name": "中水渔业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2578,26 +2308,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000803",
-      "name": "山高环能",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000816",
       "name": "智慧农业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000822",
-      "name": "山东海化",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000837",
-      "name": "秦川机床",
+      "code": "000825",
+      "name": "太钢不锈",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2632,26 +2350,26 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000860",
+      "name": "顺鑫农业",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000863",
       "name": "三湘印象",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000882",
-      "name": "华联股份",
+      "code": "000880",
+      "name": "潍柴重机",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
       "code": "000888",
       "name": "峨眉山Ａ",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000901",
-      "name": "航天科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2668,8 +2386,14 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000910",
+      "name": "大亚圣象",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000911",
-      "name": "广农糖业",
+      "name": "*ST广糖",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2692,14 +2416,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000923",
-      "name": "河钢资源",
+      "code": "000928",
+      "name": "中钢国际",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000928",
-      "name": "中钢国际",
+      "code": "000930",
+      "name": "中粮科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2728,32 +2452,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000959",
-      "name": "首钢股份",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000963",
-      "name": "华东医药",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000968",
       "name": "蓝焰控股",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000969",
-      "name": "安泰科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000970",
-      "name": "中科三环",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2776,12 +2476,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000980",
-      "name": "众泰汽车",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000993",
       "name": "闽东电力",
       "score": 4.4,
@@ -2790,12 +2484,6 @@
     {
       "code": "000997",
       "name": "新 大 陆",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001202",
-      "name": "炬申股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2824,26 +2512,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001223",
-      "name": "欧克科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001225",
-      "name": "和泰机电",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001228",
       "name": "永泰运",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001236",
-      "name": "弘业期货",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2872,12 +2542,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001296",
-      "name": "长江材料",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001311",
       "name": "多利科技",
       "score": 4.4,
@@ -2896,14 +2560,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001337",
-      "name": "四川黄金",
+      "code": "001338",
+      "name": "永顺泰",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001360",
-      "name": "南矿集团",
+      "code": "001380",
+      "name": "华纬科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2938,12 +2602,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002011",
-      "name": "盾安环境",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002016",
       "name": "世荣兆业",
       "score": 4.4,
@@ -2962,14 +2620,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002026",
-      "name": "山东威达",
+      "code": "002024",
+      "name": "ST易购",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002027",
-      "name": "分众传媒",
+      "code": "002026",
+      "name": "山东威达",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -2986,14 +2644,20 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "002034",
+      "name": "旺能环境",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "002035",
       "name": "华帝股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002037",
-      "name": "保利联合",
+      "code": "002036",
+      "name": "联创电子",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3004,8 +2668,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002043",
-      "name": "兔 宝 宝",
+      "code": "002041",
+      "name": "登海种业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3034,18 +2698,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002056",
-      "name": "横店东磁",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002057",
-      "name": "中钢天源",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002063",
       "name": "远光软件",
       "score": 4.4,
@@ -3064,8 +2716,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002077",
-      "name": "大港股份",
+      "code": "002074",
+      "name": "国轩高科",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "002075",
+      "name": "沙钢股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3076,20 +2734,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002090",
-      "name": "金智科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002094",
       "name": "青岛金王",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002095",
-      "name": "生 意 宝",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3100,14 +2746,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002100",
-      "name": "天康生物",
+      "code": "002099",
+      "name": "海翔药业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
       "code": "002102",
-      "name": "能特科技",
+      "name": "ST能特",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3130,14 +2776,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002111",
-      "name": "威海广泰",
+      "code": "002123",
+      "name": "梦网科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002124",
-      "name": "天邦食品",
+      "code": "002130",
+      "name": "沃尔核材",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3148,38 +2794,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002133",
-      "name": "广宇集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002137",
-      "name": "实益达",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002140",
-      "name": "东华科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002141",
       "name": "贤丰控股",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002144",
-      "name": "宏达高科",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002148",
-      "name": "北纬科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3226,12 +2842,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002169",
-      "name": "智光电气",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002171",
       "name": "楚江新材",
       "score": 4.4,
@@ -3246,12 +2856,6 @@
     {
       "code": "002173",
       "name": "创新医疗",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002174",
-      "name": "游族网络",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3322,12 +2926,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002225",
-      "name": "濮耐股份",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002226",
       "name": "江南化工",
       "score": 4.4,
@@ -3352,6 +2950,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "002244",
+      "name": "滨江集团",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "002249",
       "name": "大洋电机",
       "score": 4.4,
@@ -3364,20 +2968,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002259",
-      "name": "升达林业",
+      "code": "002253",
+      "name": "*ST智胜",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
       "code": "002261",
       "name": "拓维信息",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002264",
-      "name": "新 华 都",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3394,26 +2992,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002275",
-      "name": "桂林三金",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002277",
-      "name": "友阿股份",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002279",
       "name": "久其软件",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002282",
-      "name": "博深股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -3436,46 +3016,46 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000096",
-      "name": "广聚能源",
-      "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
-      "code": "000301",
-      "name": "东方盛虹",
+      "code": "000069",
+      "name": "华侨城Ａ",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000415",
-      "name": "渤海租赁",
+      "code": "000100",
+      "name": "TCL科技",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000166",
+      "name": "申万宏源",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000402",
+      "name": "金 融 街",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000567",
-      "name": "海德股份",
+      "code": "000425",
+      "name": "徐工机械",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000596",
-      "name": "古井贡酒",
+      "code": "000498",
+      "name": "山东路桥",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000598",
-      "name": "兴蓉环境",
+      "code": "000517",
+      "name": "荣安地产",
       "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
-      "code": "000600",
-      "name": "建投能源",
-      "score": 4.8,
-      "reason": "历史回测不达标"
+      "reason": "短期胜率过低"
     },
     {
       "code": "000612",
@@ -3492,6 +3072,12 @@
     {
       "code": "000657",
       "name": "中钨高新",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000680",
+      "name": "山推股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -3514,26 +3100,20 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000713",
-      "name": "国投丰乐",
-      "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
       "code": "000717",
       "name": "中南股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000725",
-      "name": "京东方Ａ",
+      "code": "000718",
+      "name": "苏宁环球",
       "score": 4.8,
-      "reason": "历史回测不达标"
+      "reason": "短期胜率过低"
     },
     {
-      "code": "000733",
-      "name": "振华科技",
+      "code": "000725",
+      "name": "京东方Ａ",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -3544,16 +3124,16 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "000750",
+      "name": "国海证券",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000752",
       "name": "*ST西发",
       "score": 4.8,
       "reason": "历史回测不达标"
-    },
-    {
-      "code": "000766",
-      "name": "通化金马",
-      "score": 4.8,
-      "reason": "短期胜率过低"
     },
     {
       "code": "000783",
@@ -3568,20 +3148,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000786",
+      "name": "北新建材",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000809",
       "name": "和展能源",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000823",
-      "name": "超声电子",
+      "code": "000828",
+      "name": "东莞控股",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000828",
-      "name": "东莞控股",
+      "code": "000831",
+      "name": "中国稀土",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -3616,20 +3202,20 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000900",
-      "name": "现代投资",
-      "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
-      "code": "000910",
-      "name": "大亚圣象",
+      "code": "000898",
+      "name": "鞍钢股份",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000922",
-      "name": "佳电股份",
+      "code": "000920",
+      "name": "沃顿科技",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000926",
+      "name": "福星股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -3646,14 +3232,32 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000983",
-      "name": "山西焦煤",
+      "code": "000965",
+      "name": "天保基建",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000969",
+      "name": "安泰科技",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000980",
+      "name": "众泰汽车",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
       "code": "000985",
       "name": "大庆华科",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "001201",
+      "name": "东瑞股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -3670,6 +3274,12 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "001227",
+      "name": "兰州银行",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "001231",
       "name": "农心科技",
       "score": 4.8,
@@ -3682,6 +3292,24 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "001239",
+      "name": "永达股份",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001289",
+      "name": "龙源电力",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "001337",
+      "name": "四川黄金",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "001368",
       "name": "通达创智",
       "score": 4.8,
@@ -3692,12 +3320,6 @@
       "name": "德冠新材",
       "score": 4.8,
       "reason": "历史回测不达标"
-    },
-    {
-      "code": "001387",
-      "name": "雪祺电气",
-      "score": 4.8,
-      "reason": "短期胜率过低"
     },
     {
       "code": "001914",
@@ -3724,16 +3346,52 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002043",
+      "name": "兔 宝 宝",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002050",
+      "name": "三花智控",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002055",
       "name": "ST得润",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "002088",
-      "name": "鲁阳节能",
+      "code": "002060",
+      "name": "广东建工",
       "score": 4.8,
       "reason": "历史回测不达标"
+    },
+    {
+      "code": "002061",
+      "name": "浙江交科",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002068",
+      "name": "黑猫股份",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002078",
+      "name": "太阳纸业",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002114",
+      "name": "罗平锌电",
+      "score": 4.8,
+      "reason": "短期胜率过低"
     },
     {
       "code": "002138",
@@ -3742,16 +3400,16 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "002164",
-      "name": "宁波东力",
+      "code": "002140",
+      "name": "东华科技",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "002167",
-      "name": "东方锆业",
+      "code": "002157",
+      "name": "正邦科技",
       "score": 4.8,
-      "reason": "历史回测不达标"
+      "reason": "短期胜率过低"
     },
     {
       "code": "002170",
@@ -3772,6 +3430,12 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "002188",
+      "name": "中天服务",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "002202",
       "name": "金风科技",
       "score": 4.8,
@@ -3784,8 +3448,20 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "002221",
+      "name": "东华能源",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "002234",
       "name": "民和股份",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002235",
+      "name": "安妮股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -3796,50 +3472,14 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "002248",
-      "name": "华东数控",
-      "score": 4.8,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002255",
-      "name": "海陆重工",
+      "code": "002254",
+      "name": "泰和新材",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000068",
-      "name": "华控赛格",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000151",
-      "name": "中成股份",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000541",
-      "name": "佛山照明",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
       "code": "000582",
       "name": "北部湾港",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000759",
-      "name": "中百集团",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000779",
-      "name": "甘咨询",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
@@ -3874,14 +3514,20 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000963",
+      "name": "华东医药",
+      "score": 5.1,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "001298",
       "name": "好上好",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
     {
-      "code": "001379",
-      "name": "腾达科技",
+      "code": "002011",
+      "name": "盾安环境",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
@@ -3898,8 +3544,20 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002095",
+      "name": "生 意 宝",
+      "score": 5.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002098",
       "name": "浔兴股份",
+      "score": 5.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002225",
+      "name": "濮耐股份",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
@@ -3916,8 +3574,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000056",
-      "name": "*ST皇庭",
+      "code": "000058",
+      "name": "深 赛 格",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -3934,14 +3592,38 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000514",
-      "name": "渝 开 发",
+      "code": "000301",
+      "name": "东方盛虹",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000523",
-      "name": "红棉股份",
+      "code": "000415",
+      "name": "渤海租赁",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000417",
+      "name": "合百集团",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000426",
+      "name": "兴业银锡",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000503",
+      "name": "国新健康",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000514",
+      "name": "渝 开 发",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -3958,14 +3640,32 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000560",
+      "name": "我爱我家",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000605",
       "name": "渤海股份",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
+      "code": "000607",
+      "name": "华媒控股",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000619",
       "name": "海螺新材",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000633",
+      "name": "合金投资",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -3982,6 +3682,12 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000709",
+      "name": "河钢股份",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000731",
       "name": "四川美丰",
       "score": 5.4,
@@ -3994,8 +3700,26 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000830",
-      "name": "鲁西化工",
+      "code": "000795",
+      "name": "英洛华",
+      "score": 5.4,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000812",
+      "name": "陕西金叶",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000822",
+      "name": "山东海化",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000837",
+      "name": "秦川机床",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4018,8 +3742,20 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "000901",
+      "name": "航天科技",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000921",
       "name": "海信家电",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000983",
+      "name": "山西焦煤",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4030,14 +3766,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001266",
-      "name": "宏英智能",
+      "code": "001236",
+      "name": "弘业期货",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "001277",
-      "name": "速达股份",
+      "code": "001266",
+      "name": "宏英智能",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4054,8 +3790,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "001330",
+      "name": "博纳影业",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001387",
+      "name": "雪祺电气",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "001395",
       "name": "亚联机械",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001396",
+      "name": "誉帆科技",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4066,8 +3820,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002023",
-      "name": "海特高新",
+      "code": "002037",
+      "name": "保利联合",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4090,18 +3844,6 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002105",
-      "name": "信隆健康",
-      "score": 5.4,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002114",
-      "name": "罗平锌电",
-      "score": 5.4,
-      "reason": "短期胜率过低"
-    },
-    {
       "code": "002122",
       "name": "ST汇洲",
       "score": 5.4,
@@ -4114,20 +3856,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002133",
+      "name": "广宇集团",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002134",
       "name": "天津普林",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "002189",
-      "name": "中光学",
+      "code": "002145",
+      "name": "钛能化学",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "002193",
-      "name": "如意集团",
+      "code": "002189",
+      "name": "中光学",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4144,20 +3892,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002242",
-      "name": "九阳股份",
+      "code": "002248",
+      "name": "华东数控",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
       "code": "002262",
       "name": "恩华药业",
-      "score": 5.4,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002274",
-      "name": "华昌化工",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -4192,8 +3934,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000719",
-      "name": "中原传媒",
+      "code": "000766",
+      "name": "通化金马",
       "score": 5.8,
       "reason": "短期胜率过低"
     },
@@ -4212,18 +3954,6 @@
     {
       "code": "000949",
       "name": "新乡化纤",
-      "score": 5.8,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000977",
-      "name": "浪潮信息",
-      "score": 5.8,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "001270",
-      "name": "*ST铖昌",
       "score": 5.8,
       "reason": "短期胜率过低"
     },
@@ -4248,6 +3978,12 @@
     {
       "code": "002128",
       "name": "电投能源",
+      "score": 5.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002179",
+      "name": "中航光电",
       "score": 5.8,
       "reason": "短期胜率过低"
     },
@@ -4282,8 +4018,20 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000058",
-      "name": "深 赛 格",
+      "code": "000068",
+      "name": "华控赛格",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000151",
+      "name": "中成股份",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000523",
+      "name": "红棉股份",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -4294,10 +4042,22 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000541",
+      "name": "佛山照明",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000589",
       "name": "贵州轮胎",
       "score": 6.1,
       "reason": "历史回测不达标"
+    },
+    {
+      "code": "000599",
+      "name": "青岛双星",
+      "score": 6.1,
+      "reason": "短期胜率过低"
     },
     {
       "code": "000715",
@@ -4306,8 +4066,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000759",
+      "name": "中百集团",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000779",
+      "name": "甘咨询",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000813",
       "name": "德展健康",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000830",
+      "name": "鲁西化工",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -4324,14 +4102,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001215",
-      "name": "千味央厨",
-      "score": 6.1,
-      "reason": "历史回测不达标"
-    },
-    {
       "code": "001260",
       "name": "坤泰股份",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001277",
+      "name": "速达股份",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -4342,16 +4120,22 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001330",
-      "name": "博纳影业",
-      "score": 6.1,
-      "reason": "短期胜率过低"
-    },
-    {
       "code": "001358",
       "name": "兴欣新材",
       "score": 6.1,
       "reason": "历史回测不达标"
+    },
+    {
+      "code": "001379",
+      "name": "腾达科技",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002090",
+      "name": "金智科技",
+      "score": 6.1,
+      "reason": "短期胜率过低"
     },
     {
       "code": "002092",
@@ -4360,8 +4144,32 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002105",
+      "name": "信隆健康",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002111",
+      "name": "威海广泰",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002148",
+      "name": "北纬科技",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002154",
       "name": "报 喜 鸟",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002193",
+      "name": "如意集团",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -4386,6 +4194,12 @@
     {
       "code": "002241",
       "name": "歌尔股份",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002274",
+      "name": "华昌化工",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -4420,8 +4234,8 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000601",
-      "name": "韶能股份",
+      "code": "000790",
+      "name": "华神科技",
       "score": 6.4,
       "reason": "短期胜率过低"
     },
@@ -4444,6 +4258,12 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002023",
+      "name": "海特高新",
+      "score": 6.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002039",
       "name": "黔源电力",
       "score": 6.4,
@@ -4456,8 +4276,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002074",
-      "name": "国轩高科",
+      "code": "002100",
+      "name": "天康生物",
+      "score": 6.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002108",
+      "name": "沧州明珠",
       "score": 6.4,
       "reason": "短期胜率过低"
     },
@@ -4480,8 +4306,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002253",
-      "name": "*ST智胜",
+      "code": "002242",
+      "name": "九阳股份",
       "score": 6.4,
       "reason": "短期胜率过低"
     },
@@ -4510,20 +4336,20 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001317",
-      "name": "三羊马",
+      "code": "001215",
+      "name": "千味央厨",
+      "score": 7.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001234",
+      "name": "泰慕士",
       "score": 7.1,
       "reason": "短期胜率过低"
     },
     {
       "code": "002081",
       "name": "金 螳 螂",
-      "score": 7.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002108",
-      "name": "沧州明珠",
       "score": 7.1,
       "reason": "短期胜率过低"
     },
@@ -4562,14 +4388,66 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000722",
-      "name": "湖南发展",
+      "code": "000546",
+      "name": "金圆股份",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 5.24,
+          "win": 66.7,
+          "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -6.76,
+          "win": 33.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -14.76,
+          "win": 27.3,
+          "trades": 11,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000628",
+      "name": "高新发展",
       "score": 7.1,
       "backtest": {
         "1y": {
           "profit": 12.0,
           "win": 66.7,
           "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 10.03,
+          "win": 50.0,
+          "trades": 8,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 12.03,
+          "win": 46.7,
+          "trades": 15,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000722",
+      "name": "湖南发展",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
           "note": "OK"
         },
         "3y": {
@@ -4582,58 +4460,6 @@
           "profit": 9.55,
           "win": 38.5,
           "trades": 13,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000810",
-      "name": "创维数字",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 3.52,
-          "win": 83.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 11.52,
-          "win": 70.0,
-          "trades": 10,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 7.52,
-          "win": 57.1,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000989",
-      "name": "九芝堂",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 2.08,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 5.65,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 28.75,
-          "win": 58.3,
-          "trades": 12,
           "note": "OK"
         }
       },
@@ -4697,19 +4523,19 @@
       "score": 7.1,
       "backtest": {
         "1y": {
-          "profit": 14.1,
+          "profit": 15.01,
           "win": 80.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 2.1,
+          "profit": 3.01,
           "win": 45.5,
           "trades": 11,
           "note": "OK"
         },
         "5y": {
-          "profit": -4.77,
+          "profit": -3.86,
           "win": 37.5,
           "trades": 16,
           "note": "OK"
@@ -4738,84 +4564,6 @@
           "profit": -12.0,
           "win": 25.0,
           "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "002214",
-      "name": "*ST大立",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 1.04,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -6.96,
-          "win": 28.6,
-          "trades": 7,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -2.96,
-          "win": 33.3,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000026",
-      "name": "飞亚达",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 6.13,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 6.74,
-          "win": 50.0,
-          "trades": 8,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 18.14,
-          "win": 53.8,
-          "trades": 13,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000037",
-      "name": "深南电A",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 36.0,
-          "win": 66.7,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 36.0,
-          "win": 53.3,
-          "trades": 15,
           "note": "OK"
         }
       },
@@ -4900,32 +4648,6 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000546",
-      "name": "金圆股份",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 5.24,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -6.76,
-          "win": 33.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -14.76,
-          "win": 27.3,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
       "code": "000552",
       "name": "甘肃能化",
       "score": 6.4,
@@ -4952,26 +4674,78 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000628",
-      "name": "高新发展",
+      "code": "000593",
+      "name": "德龙汇能",
       "score": 6.4,
       "backtest": {
         "1y": {
+          "profit": 4.9,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 14.45,
+          "win": 66.7,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 9.66,
+          "win": 50.0,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000688",
+      "name": "国城矿业",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 4.0,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "5y": {
           "profit": 12.0,
+          "win": 41.7,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000739",
+      "name": "普洛药业",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 11.03,
           "win": 66.7,
           "trades": 3,
           "note": "OK"
         },
         "3y": {
-          "profit": 10.03,
-          "win": 50.0,
-          "trades": 8,
+          "profit": 13.88,
+          "win": 57.1,
+          "trades": 7,
           "note": "OK"
         },
         "5y": {
-          "profit": 12.03,
-          "win": 46.7,
-          "trades": 15,
+          "profit": 5.88,
+          "win": 41.7,
+          "trades": 12,
           "note": "OK"
         }
       },
@@ -5021,9 +4795,35 @@
           "note": "OK"
         },
         "5y": {
-          "profit": 2.19,
-          "win": 38.5,
-          "trades": 13,
+          "profit": -1.81,
+          "win": 35.7,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000810",
+      "name": "创维数字",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 2.81,
+          "win": 83.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 10.81,
+          "win": 70.0,
+          "trades": 10,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 6.81,
+          "win": 57.1,
+          "trades": 14,
           "note": "OK"
         }
       },
@@ -5054,30 +4854,108 @@
         }
       },
       "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000889",
+      "name": "中嘉博创",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 21.59,
+          "win": 55.6,
+          "trades": 9,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 25.59,
+          "win": 50.0,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
     }
   ],
   "观察标的": [
+    {
+      "code": "001317",
+      "name": "三羊马",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": -1.97,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 16.96,
+          "win": 60.0,
+          "trades": 10,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 16.96,
+          "win": 53.8,
+          "trades": 13,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
     {
       "code": "001366",
       "name": "播恩集团",
       "score": 7.1,
       "backtest": {
         "1y": {
-          "profit": 0.32,
-          "win": 50.0,
+          "profit": 1.98,
+          "win": 75.0,
           "trades": 4,
           "note": "OK"
         },
         "3y": {
-          "profit": -10.96,
-          "win": 33.3,
+          "profit": -9.3,
+          "win": 44.4,
           "trades": 9,
           "note": "OK"
         },
         "5y": {
-          "profit": -10.96,
-          "win": 33.3,
+          "profit": -9.3,
+          "win": 44.4,
           "trades": 9,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "002201",
+      "name": "九鼎新材",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 8.0,
+          "win": 36.4,
+          "trades": 11,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 2.95,
+          "win": 31.2,
+          "trades": 16,
           "note": "OK"
         }
       },
@@ -5089,21 +4967,73 @@
       "score": 6.4,
       "backtest": {
         "1y": {
-          "profit": -0.32,
+          "profit": -1.21,
           "win": 40.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 7.68,
+          "profit": 6.79,
           "win": 44.4,
           "trades": 9,
           "note": "OK"
         },
         "5y": {
-          "profit": 23.68,
+          "profit": 22.79,
           "win": 54.5,
           "trades": 11,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "001219",
+      "name": "青岛食品",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": -0.06,
+          "win": 60.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 3.45,
+          "win": 55.6,
+          "trades": 9,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 3.45,
+          "win": 50.0,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000716",
+      "name": "黑芝麻",
+      "score": 6.1,
+      "backtest": {
+        "1y": {
+          "profit": 4.92,
+          "win": 66.7,
+          "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -11.08,
+          "win": 28.6,
+          "trades": 7,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -16.21,
+          "win": 28.6,
+          "trades": 14,
           "note": "OK"
         }
       },
@@ -5136,50 +5066,24 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000573",
-      "name": "粤宏远Ａ",
-      "score": 5.8,
-      "backtest": {
-        "1y": {
-          "profit": 3.65,
-          "win": 40.0,
-          "trades": 5,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 4.41,
-          "win": 44.4,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 18.64,
-          "win": 50.0,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
       "code": "002107",
       "name": "沃华医药",
       "score": 5.8,
       "backtest": {
         "1y": {
-          "profit": 6.92,
+          "profit": 7.82,
           "win": 40.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 14.93,
+          "profit": 15.83,
           "win": 45.5,
           "trades": 11,
           "note": "OK"
         },
         "5y": {
-          "profit": 14.93,
+          "profit": 15.83,
           "win": 41.2,
           "trades": 17,
           "note": "OK"
@@ -5214,8 +5118,34 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
+      "code": "000009",
+      "name": "中国宝安",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 2.14,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 10.14,
+          "win": 44.4,
+          "trades": 9,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
       "code": "000016",
-      "name": "深康佳Ａ",
+      "name": "*ST康佳A",
       "score": 5.4,
       "backtest": {
         "1y": {
@@ -5292,6 +5222,32 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
+      "code": "000031",
+      "name": "大悦城",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 0.0,
+          "win": 33.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 0.52,
+          "win": 33.3,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
       "code": "000036",
       "name": "华联控股",
       "score": 5.4,
@@ -5318,26 +5274,78 @@
       "reason": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000059",
-      "name": "华锦股份",
+      "code": "000039",
+      "name": "中集集团",
       "score": 5.4,
       "backtest": {
         "1y": {
-          "profit": 4.57,
-          "win": 66.7,
-          "trades": 3,
+          "profit": 2.34,
+          "win": 50.0,
+          "trades": 2,
           "note": "OK"
         },
         "3y": {
-          "profit": -3.43,
-          "win": 37.5,
-          "trades": 8,
+          "profit": 10.37,
+          "win": 66.7,
+          "trades": 6,
           "note": "OK"
         },
         "5y": {
-          "profit": 0.57,
-          "win": 37.5,
-          "trades": 16,
+          "profit": -1.26,
+          "win": 38.5,
+          "trades": 13,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000060",
+      "name": "中金岭南",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": 16.0,
+          "win": 100.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 24.0,
+          "win": 66.7,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -0.39,
+          "win": 35.7,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000061",
+      "name": "农 产 品",
+      "score": 5.4,
+      "backtest": {
+        "1y": {
+          "profit": -2.07,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -6.25,
+          "win": 50.0,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 5.57,
+          "win": 54.5,
+          "trades": 11,
           "note": "OK"
         }
       },
@@ -5355,9 +5363,9 @@
           "note": "OK"
         },
         "3y": {
-          "profit": 8.0,
-          "win": 42.9,
-          "trades": 7,
+          "profit": 16.0,
+          "win": 50.0,
+          "trades": 8,
           "note": "OK"
         },
         "5y": {
@@ -5394,188 +5402,6 @@
         }
       },
       "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000630",
-      "name": "铜陵有色",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 4.0,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -10.38,
-          "win": 33.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -6.38,
-          "win": 36.4,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000637",
-      "name": "茂化实华",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 8.0,
-          "win": 50.0,
-          "trades": 4,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 10.52,
-          "win": 40.0,
-          "trades": 10,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 19.83,
-          "win": 46.7,
-          "trades": 15,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000663",
-      "name": "永安林业",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 8.0,
-          "win": 42.9,
-          "trades": 7,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 7.58,
-          "win": 45.5,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000665",
-      "name": "湖北广电",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 4.0,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 4.0,
-          "win": 37.5,
-          "trades": 8,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 4.0,
-          "win": 35.7,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000679",
-      "name": "大连友谊",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 4.0,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 12.08,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 36.08,
-          "win": 58.3,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000680",
-      "name": "山推股份",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 15.23,
-          "win": 44.4,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 23.68,
-          "win": 53.3,
-          "trades": 15,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000686",
-      "name": "东北证券",
-      "score": 5.4,
-      "backtest": {
-        "1y": {
-          "profit": 8.0,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 11.05,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 4.0,
-          "win": 41.7,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "基本达标，建议继续跟踪"
     }
   ],
   "淘汰标的": [
@@ -5604,6 +5430,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000429",
+      "name": "粤高速Ａ",
+      "score": 3.1,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000513",
       "name": "丽珠集团",
       "score": 3.1,
@@ -5622,8 +5454,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000792",
-      "name": "盐湖股份",
+      "code": "000895",
+      "name": "双汇发展",
       "score": 3.1,
       "reason": "当前因子偏弱"
     },
@@ -5636,6 +5468,12 @@
     {
       "code": "001391",
       "name": "国货航",
+      "score": 3.1,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "001872",
+      "name": "招商港口",
       "score": 3.1,
       "reason": "当前因子偏弱"
     },
@@ -5658,12 +5496,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000009",
-      "name": "中国宝安",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000011",
       "name": "深物业A",
       "score": 3.8,
@@ -5672,6 +5504,12 @@
     {
       "code": "000028",
       "name": "国药一致",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000032",
+      "name": "深桑达Ａ",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5694,26 +5532,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000069",
-      "name": "华侨城Ａ",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000070",
       "name": "特发信息",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000090",
-      "name": "天健集团",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000100",
-      "name": "TCL科技",
+      "code": "000096",
+      "name": "广聚能源",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5724,32 +5550,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000166",
-      "name": "申万宏源",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000402",
-      "name": "金 融 街",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000403",
       "name": "派林生物",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000425",
-      "name": "徐工机械",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000498",
-      "name": "山东路桥",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5768,12 +5570,6 @@
     {
       "code": "000516",
       "name": "国际医学",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000517",
-      "name": "荣安地产",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5820,8 +5616,20 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000590",
+      "name": "古汉医药",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000592",
       "name": "平潭发展",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000601",
+      "name": "韶能股份",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5838,6 +5646,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000625",
+      "name": "长安汽车",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000638",
       "name": "*ST万方",
       "score": 3.8,
@@ -5845,7 +5659,7 @@
     },
     {
       "code": "000639",
-      "name": "西王食品",
+      "name": "ST西王",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5886,26 +5700,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000708",
-      "name": "中信特钢",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000709",
-      "name": "河钢股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000710",
       "name": "贝瑞基因",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000718",
-      "name": "苏宁环球",
+      "code": "000719",
+      "name": "中原传媒",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5934,12 +5736,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000750",
-      "name": "国海证券",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000756",
       "name": "新华制药",
       "score": 3.8,
@@ -5948,18 +5744,6 @@
     {
       "code": "000761",
       "name": "本钢板材",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000778",
-      "name": "新兴铸管",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000786",
-      "name": "北新建材",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -5994,12 +5778,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000812",
-      "name": "陕西金叶",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000815",
       "name": "美利云",
       "score": 3.8,
@@ -6018,26 +5796,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000825",
-      "name": "太钢不锈",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000826",
-      "name": "启迪环境",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000831",
-      "name": "中国稀土",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000860",
-      "name": "顺鑫农业",
+      "name": "*ST启环",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6054,12 +5814,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000898",
-      "name": "鞍钢股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000899",
       "name": "赣能股份",
       "score": 3.8,
@@ -6072,26 +5826,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000920",
-      "name": "沃顿科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000926",
-      "name": "福星股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000927",
       "name": "中国铁物",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000930",
-      "name": "中粮科技",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6104,12 +5840,6 @@
     {
       "code": "000962",
       "name": "东方钽业",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000965",
-      "name": "天保基建",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6138,12 +5868,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001201",
-      "name": "东瑞股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001206",
       "name": "依依股份",
       "score": 3.8,
@@ -6162,14 +5886,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001239",
-      "name": "永达股份",
+      "code": "001269",
+      "name": "欧晶科技",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001269",
-      "name": "欧晶科技",
+      "code": "001270",
+      "name": "*ST铖昌",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6182,6 +5906,12 @@
     {
       "code": "001285",
       "name": "瑞立科密",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "001299",
+      "name": "美能能源",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6222,12 +5952,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001338",
-      "name": "永顺泰",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001356",
       "name": "富岭股份",
       "score": 3.8,
@@ -6252,12 +5976,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001380",
-      "name": "华纬科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001382",
       "name": "新亚电缆",
       "score": 3.8,
@@ -6272,12 +5990,6 @@
     {
       "code": "001390",
       "name": "古麒绒材",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001396",
-      "name": "誉帆科技",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6318,12 +6030,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002024",
-      "name": "ST易购",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002025",
       "name": "航天电器",
       "score": 3.8,
@@ -6336,20 +6042,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002036",
-      "name": "联创电子",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002038",
       "name": "双鹭药业",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002041",
-      "name": "登海种业",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6360,50 +6054,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002050",
-      "name": "三花智控",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002059",
       "name": "云南旅游",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002060",
-      "name": "广东建工",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002061",
-      "name": "浙江交科",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002068",
-      "name": "黑猫股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002072",
       "name": "凯瑞德",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002075",
-      "name": "沙钢股份",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002078",
-      "name": "太阳纸业",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6420,8 +6078,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002086",
-      "name": "东方海洋",
+      "code": "002088",
+      "name": "鲁阳节能",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6450,14 +6108,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002123",
-      "name": "梦网科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002126",
-      "name": "银轮股份",
+      "code": "002124",
+      "name": "天邦食品",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6468,8 +6120,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002145",
-      "name": "钛能化学",
+      "code": "002144",
+      "name": "宏达高科",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6486,20 +6138,20 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002157",
-      "name": "正邦科技",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002159",
       "name": "三特索道",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002179",
-      "name": "中航光电",
+      "code": "002164",
+      "name": "宁波东力",
+      "score": 3.8,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "002169",
+      "name": "智光电气",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6512,12 +6164,6 @@
     {
       "code": "002196",
       "name": "方正电机",
-      "score": 3.8,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002221",
-      "name": "东华能源",
       "score": 3.8,
       "reason": "当前因子偏弱"
     },
@@ -6582,8 +6228,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001227",
-      "name": "兰州银行",
+      "code": "000598",
+      "name": "兴蓉环境",
+      "score": 4.1,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000778",
+      "name": "新兴铸管",
       "score": 4.1,
       "reason": "当前因子偏弱"
     },
@@ -6595,7 +6247,7 @@
     },
     {
       "code": "000010",
-      "name": "美丽生态",
+      "name": "*ST美丽",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6630,32 +6282,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000031",
-      "name": "大悦城",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000032",
-      "name": "深桑达Ａ",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000039",
-      "name": "中集集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000045",
       "name": "深纺织Ａ",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000061",
-      "name": "农 产 品",
+      "code": "000056",
+      "name": "*ST皇庭",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6668,6 +6302,12 @@
     {
       "code": "000078",
       "name": "海王生物",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "000090",
+      "name": "天健集团",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6690,26 +6330,20 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000409",
+      "name": "云鼎科技",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000411",
       "name": "英特集团",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000417",
-      "name": "合百集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000419",
       "name": "通程控股",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000426",
-      "name": "兴业银锡",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6728,12 +6362,6 @@
     {
       "code": "000501",
       "name": "武商集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000503",
-      "name": "国新健康",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6804,20 +6432,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000545",
-      "name": "金浦钛业",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000547",
       "name": "航天发展",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000548",
-      "name": "湖南投资",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6840,12 +6456,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000557",
-      "name": "西部创业",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000558",
       "name": "天府文旅",
       "score": 4.4,
@@ -6854,12 +6464,6 @@
     {
       "code": "000559",
       "name": "万向钱潮",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000560",
-      "name": "我爱我家",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6900,12 +6504,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000590",
-      "name": "古汉医药",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000591",
       "name": "太阳能",
       "score": 4.4,
@@ -6924,20 +6522,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000599",
-      "name": "青岛双星",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000603",
       "name": "盛达资源",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000607",
-      "name": "华媒控股",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -6954,18 +6540,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000620",
-      "name": "盈新发展",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000625",
-      "name": "长安汽车",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000631",
       "name": "顺发恒能",
       "score": 4.4,
@@ -6973,19 +6547,7 @@
     },
     {
       "code": "000632",
-      "name": "三木集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000633",
-      "name": "合金投资",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000635",
-      "name": "英 力 特",
+      "name": "ST三木",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7002,6 +6564,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000665",
+      "name": "湖北广电",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000677",
       "name": "恒天海龙",
       "score": 4.4,
@@ -7010,12 +6578,6 @@
     {
       "code": "000678",
       "name": "襄阳轴承",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000681",
-      "name": "视觉中国",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7056,14 +6618,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000735",
-      "name": "罗 牛 山",
+      "code": "000733",
+      "name": "振华科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000737",
-      "name": "北方铜业",
+      "code": "000735",
+      "name": "罗 牛 山",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7086,14 +6648,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000790",
-      "name": "华神科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000795",
-      "name": "英洛华",
+      "code": "000798",
+      "name": "中水渔业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7104,26 +6660,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000803",
-      "name": "山高环能",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000816",
       "name": "智慧农业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000822",
-      "name": "山东海化",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000837",
-      "name": "秦川机床",
+      "code": "000825",
+      "name": "太钢不锈",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7158,26 +6702,26 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000860",
+      "name": "顺鑫农业",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000863",
       "name": "三湘印象",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000882",
-      "name": "华联股份",
+      "code": "000880",
+      "name": "潍柴重机",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
       "code": "000888",
       "name": "峨眉山Ａ",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000901",
-      "name": "航天科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7194,8 +6738,14 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "000910",
+      "name": "大亚圣象",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "000911",
-      "name": "广农糖业",
+      "name": "*ST广糖",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7218,14 +6768,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000923",
-      "name": "河钢资源",
+      "code": "000928",
+      "name": "中钢国际",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000928",
-      "name": "中钢国际",
+      "code": "000930",
+      "name": "中粮科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7254,32 +6804,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000959",
-      "name": "首钢股份",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000963",
-      "name": "华东医药",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000968",
       "name": "蓝焰控股",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000969",
-      "name": "安泰科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "000970",
-      "name": "中科三环",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7302,12 +6828,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "000980",
-      "name": "众泰汽车",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "000993",
       "name": "闽东电力",
       "score": 4.4,
@@ -7316,12 +6836,6 @@
     {
       "code": "000997",
       "name": "新 大 陆",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001202",
-      "name": "炬申股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7350,26 +6864,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001223",
-      "name": "欧克科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001225",
-      "name": "和泰机电",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001228",
       "name": "永泰运",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "001236",
-      "name": "弘业期货",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7398,12 +6894,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001296",
-      "name": "长江材料",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "001311",
       "name": "多利科技",
       "score": 4.4,
@@ -7422,14 +6912,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001337",
-      "name": "四川黄金",
+      "code": "001338",
+      "name": "永顺泰",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "001360",
-      "name": "南矿集团",
+      "code": "001380",
+      "name": "华纬科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7464,12 +6954,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002011",
-      "name": "盾安环境",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002016",
       "name": "世荣兆业",
       "score": 4.4,
@@ -7488,14 +6972,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002026",
-      "name": "山东威达",
+      "code": "002024",
+      "name": "ST易购",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002027",
-      "name": "分众传媒",
+      "code": "002026",
+      "name": "山东威达",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7512,14 +6996,20 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "002034",
+      "name": "旺能环境",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "002035",
       "name": "华帝股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002037",
-      "name": "保利联合",
+      "code": "002036",
+      "name": "联创电子",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7530,8 +7020,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002043",
-      "name": "兔 宝 宝",
+      "code": "002041",
+      "name": "登海种业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7560,18 +7050,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002056",
-      "name": "横店东磁",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002057",
-      "name": "中钢天源",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002063",
       "name": "远光软件",
       "score": 4.4,
@@ -7590,8 +7068,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002077",
-      "name": "大港股份",
+      "code": "002074",
+      "name": "国轩高科",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
+      "code": "002075",
+      "name": "沙钢股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7602,20 +7086,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002090",
-      "name": "金智科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002094",
       "name": "青岛金王",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002095",
-      "name": "生 意 宝",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7626,14 +7098,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002100",
-      "name": "天康生物",
+      "code": "002099",
+      "name": "海翔药业",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
       "code": "002102",
-      "name": "能特科技",
+      "name": "ST能特",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7656,14 +7128,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002111",
-      "name": "威海广泰",
+      "code": "002123",
+      "name": "梦网科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002124",
-      "name": "天邦食品",
+      "code": "002130",
+      "name": "沃尔核材",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7674,38 +7146,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002133",
-      "name": "广宇集团",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002137",
-      "name": "实益达",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002140",
-      "name": "东华科技",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002141",
       "name": "贤丰控股",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002144",
-      "name": "宏达高科",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002148",
-      "name": "北纬科技",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7752,12 +7194,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002169",
-      "name": "智光电气",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002171",
       "name": "楚江新材",
       "score": 4.4,
@@ -7772,12 +7208,6 @@
     {
       "code": "002173",
       "name": "创新医疗",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002174",
-      "name": "游族网络",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7848,12 +7278,6 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002225",
-      "name": "濮耐股份",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002226",
       "name": "江南化工",
       "score": 4.4,
@@ -7878,6 +7302,12 @@
       "reason": "当前因子偏弱"
     },
     {
+      "code": "002244",
+      "name": "滨江集团",
+      "score": 4.4,
+      "reason": "当前因子偏弱"
+    },
+    {
       "code": "002249",
       "name": "大洋电机",
       "score": 4.4,
@@ -7890,20 +7320,14 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002259",
-      "name": "升达林业",
+      "code": "002253",
+      "name": "*ST智胜",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
     {
       "code": "002261",
       "name": "拓维信息",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002264",
-      "name": "新 华 都",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7920,26 +7344,8 @@
       "reason": "当前因子偏弱"
     },
     {
-      "code": "002275",
-      "name": "桂林三金",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002277",
-      "name": "友阿股份",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
       "code": "002279",
       "name": "久其软件",
-      "score": 4.4,
-      "reason": "当前因子偏弱"
-    },
-    {
-      "code": "002282",
-      "name": "博深股份",
       "score": 4.4,
       "reason": "当前因子偏弱"
     },
@@ -7962,46 +7368,46 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000096",
-      "name": "广聚能源",
-      "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
-      "code": "000301",
-      "name": "东方盛虹",
+      "code": "000069",
+      "name": "华侨城Ａ",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000415",
-      "name": "渤海租赁",
+      "code": "000100",
+      "name": "TCL科技",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000166",
+      "name": "申万宏源",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000402",
+      "name": "金 融 街",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000567",
-      "name": "海德股份",
+      "code": "000425",
+      "name": "徐工机械",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000596",
-      "name": "古井贡酒",
+      "code": "000498",
+      "name": "山东路桥",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000598",
-      "name": "兴蓉环境",
+      "code": "000517",
+      "name": "荣安地产",
       "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
-      "code": "000600",
-      "name": "建投能源",
-      "score": 4.8,
-      "reason": "历史回测不达标"
+      "reason": "短期胜率过低"
     },
     {
       "code": "000612",
@@ -8018,6 +7424,12 @@
     {
       "code": "000657",
       "name": "中钨高新",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000680",
+      "name": "山推股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -8040,26 +7452,20 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000713",
-      "name": "国投丰乐",
-      "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
       "code": "000717",
       "name": "中南股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000725",
-      "name": "京东方Ａ",
+      "code": "000718",
+      "name": "苏宁环球",
       "score": 4.8,
-      "reason": "历史回测不达标"
+      "reason": "短期胜率过低"
     },
     {
-      "code": "000733",
-      "name": "振华科技",
+      "code": "000725",
+      "name": "京东方Ａ",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -8070,16 +7476,16 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "000750",
+      "name": "国海证券",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000752",
       "name": "*ST西发",
       "score": 4.8,
       "reason": "历史回测不达标"
-    },
-    {
-      "code": "000766",
-      "name": "通化金马",
-      "score": 4.8,
-      "reason": "短期胜率过低"
     },
     {
       "code": "000783",
@@ -8094,20 +7500,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000786",
+      "name": "北新建材",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000809",
       "name": "和展能源",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000823",
-      "name": "超声电子",
+      "code": "000828",
+      "name": "东莞控股",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000828",
-      "name": "东莞控股",
+      "code": "000831",
+      "name": "中国稀土",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -8142,20 +7554,20 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000900",
-      "name": "现代投资",
-      "score": 4.8,
-      "reason": "历史回测不达标"
-    },
-    {
-      "code": "000910",
-      "name": "大亚圣象",
+      "code": "000898",
+      "name": "鞍钢股份",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000922",
-      "name": "佳电股份",
+      "code": "000920",
+      "name": "沃顿科技",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000926",
+      "name": "福星股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -8172,14 +7584,32 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000983",
-      "name": "山西焦煤",
+      "code": "000965",
+      "name": "天保基建",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000969",
+      "name": "安泰科技",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000980",
+      "name": "众泰汽车",
       "score": 4.8,
       "reason": "短期胜率过低"
     },
     {
       "code": "000985",
       "name": "大庆华科",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "001201",
+      "name": "东瑞股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -8196,6 +7626,12 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "001227",
+      "name": "兰州银行",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "001231",
       "name": "农心科技",
       "score": 4.8,
@@ -8208,6 +7644,24 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "001239",
+      "name": "永达股份",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001289",
+      "name": "龙源电力",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "001337",
+      "name": "四川黄金",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "001368",
       "name": "通达创智",
       "score": 4.8,
@@ -8218,12 +7672,6 @@
       "name": "德冠新材",
       "score": 4.8,
       "reason": "历史回测不达标"
-    },
-    {
-      "code": "001387",
-      "name": "雪祺电气",
-      "score": 4.8,
-      "reason": "短期胜率过低"
     },
     {
       "code": "001914",
@@ -8250,16 +7698,52 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002043",
+      "name": "兔 宝 宝",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002050",
+      "name": "三花智控",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002055",
       "name": "ST得润",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "002088",
-      "name": "鲁阳节能",
+      "code": "002060",
+      "name": "广东建工",
       "score": 4.8,
       "reason": "历史回测不达标"
+    },
+    {
+      "code": "002061",
+      "name": "浙江交科",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002068",
+      "name": "黑猫股份",
+      "score": 4.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002078",
+      "name": "太阳纸业",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002114",
+      "name": "罗平锌电",
+      "score": 4.8,
+      "reason": "短期胜率过低"
     },
     {
       "code": "002138",
@@ -8268,16 +7752,16 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "002164",
-      "name": "宁波东力",
+      "code": "002140",
+      "name": "东华科技",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "002167",
-      "name": "东方锆业",
+      "code": "002157",
+      "name": "正邦科技",
       "score": 4.8,
-      "reason": "历史回测不达标"
+      "reason": "短期胜率过低"
     },
     {
       "code": "002170",
@@ -8298,6 +7782,12 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "002188",
+      "name": "中天服务",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "002202",
       "name": "金风科技",
       "score": 4.8,
@@ -8310,8 +7800,20 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "002221",
+      "name": "东华能源",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "002234",
       "name": "民和股份",
+      "score": 4.8,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "002235",
+      "name": "安妮股份",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
@@ -8322,50 +7824,14 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "002248",
-      "name": "华东数控",
-      "score": 4.8,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002255",
-      "name": "海陆重工",
+      "code": "002254",
+      "name": "泰和新材",
       "score": 4.8,
       "reason": "历史回测不达标"
     },
     {
-      "code": "000068",
-      "name": "华控赛格",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000151",
-      "name": "中成股份",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000541",
-      "name": "佛山照明",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
       "code": "000582",
       "name": "北部湾港",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000759",
-      "name": "中百集团",
-      "score": 5.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000779",
-      "name": "甘咨询",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
@@ -8400,14 +7866,20 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000963",
+      "name": "华东医药",
+      "score": 5.1,
+      "reason": "历史回测不达标"
+    },
+    {
       "code": "001298",
       "name": "好上好",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
     {
-      "code": "001379",
-      "name": "腾达科技",
+      "code": "002011",
+      "name": "盾安环境",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
@@ -8424,8 +7896,20 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002095",
+      "name": "生 意 宝",
+      "score": 5.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002098",
       "name": "浔兴股份",
+      "score": 5.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002225",
+      "name": "濮耐股份",
       "score": 5.1,
       "reason": "短期胜率过低"
     },
@@ -8442,8 +7926,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000056",
-      "name": "*ST皇庭",
+      "code": "000058",
+      "name": "深 赛 格",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8460,14 +7944,38 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000514",
-      "name": "渝 开 发",
+      "code": "000301",
+      "name": "东方盛虹",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "000523",
-      "name": "红棉股份",
+      "code": "000415",
+      "name": "渤海租赁",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000417",
+      "name": "合百集团",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000426",
+      "name": "兴业银锡",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000503",
+      "name": "国新健康",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000514",
+      "name": "渝 开 发",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8484,14 +7992,32 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000560",
+      "name": "我爱我家",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000605",
       "name": "渤海股份",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
+      "code": "000607",
+      "name": "华媒控股",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000619",
       "name": "海螺新材",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000633",
+      "name": "合金投资",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8508,6 +8034,12 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000709",
+      "name": "河钢股份",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000731",
       "name": "四川美丰",
       "score": 5.4,
@@ -8520,8 +8052,26 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000830",
-      "name": "鲁西化工",
+      "code": "000795",
+      "name": "英洛华",
+      "score": 5.4,
+      "reason": "历史回测不达标"
+    },
+    {
+      "code": "000812",
+      "name": "陕西金叶",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000822",
+      "name": "山东海化",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000837",
+      "name": "秦川机床",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8544,8 +8094,20 @@
       "reason": "历史回测不达标"
     },
     {
+      "code": "000901",
+      "name": "航天科技",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000921",
       "name": "海信家电",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000983",
+      "name": "山西焦煤",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8556,14 +8118,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001266",
-      "name": "宏英智能",
+      "code": "001236",
+      "name": "弘业期货",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "001277",
-      "name": "速达股份",
+      "code": "001266",
+      "name": "宏英智能",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8580,8 +8142,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "001330",
+      "name": "博纳影业",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001387",
+      "name": "雪祺电气",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "001395",
       "name": "亚联机械",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001396",
+      "name": "誉帆科技",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8592,8 +8172,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002023",
-      "name": "海特高新",
+      "code": "002037",
+      "name": "保利联合",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8616,18 +8196,6 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002105",
-      "name": "信隆健康",
-      "score": 5.4,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002114",
-      "name": "罗平锌电",
-      "score": 5.4,
-      "reason": "短期胜率过低"
-    },
-    {
       "code": "002122",
       "name": "ST汇洲",
       "score": 5.4,
@@ -8640,20 +8208,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002133",
+      "name": "广宇集团",
+      "score": 5.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002134",
       "name": "天津普林",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "002189",
-      "name": "中光学",
+      "code": "002145",
+      "name": "钛能化学",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
-      "code": "002193",
-      "name": "如意集团",
+      "code": "002189",
+      "name": "中光学",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8670,20 +8244,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002242",
-      "name": "九阳股份",
+      "code": "002248",
+      "name": "华东数控",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
     {
       "code": "002262",
       "name": "恩华药业",
-      "score": 5.4,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002274",
-      "name": "华昌化工",
       "score": 5.4,
       "reason": "短期胜率过低"
     },
@@ -8718,8 +8286,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000719",
-      "name": "中原传媒",
+      "code": "000766",
+      "name": "通化金马",
       "score": 5.8,
       "reason": "短期胜率过低"
     },
@@ -8738,18 +8306,6 @@
     {
       "code": "000949",
       "name": "新乡化纤",
-      "score": 5.8,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "000977",
-      "name": "浪潮信息",
-      "score": 5.8,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "001270",
-      "name": "*ST铖昌",
       "score": 5.8,
       "reason": "短期胜率过低"
     },
@@ -8774,6 +8330,12 @@
     {
       "code": "002128",
       "name": "电投能源",
+      "score": 5.8,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002179",
+      "name": "中航光电",
       "score": 5.8,
       "reason": "短期胜率过低"
     },
@@ -8808,8 +8370,20 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "000058",
-      "name": "深 赛 格",
+      "code": "000068",
+      "name": "华控赛格",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000151",
+      "name": "中成股份",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000523",
+      "name": "红棉股份",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -8820,10 +8394,22 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000541",
+      "name": "佛山照明",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000589",
       "name": "贵州轮胎",
       "score": 6.1,
       "reason": "历史回测不达标"
+    },
+    {
+      "code": "000599",
+      "name": "青岛双星",
+      "score": 6.1,
+      "reason": "短期胜率过低"
     },
     {
       "code": "000715",
@@ -8832,8 +8418,26 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "000759",
+      "name": "中百集团",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000779",
+      "name": "甘咨询",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "000813",
       "name": "德展健康",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "000830",
+      "name": "鲁西化工",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -8850,14 +8454,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001215",
-      "name": "千味央厨",
-      "score": 6.1,
-      "reason": "历史回测不达标"
-    },
-    {
       "code": "001260",
       "name": "坤泰股份",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001277",
+      "name": "速达股份",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -8868,16 +8472,22 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001330",
-      "name": "博纳影业",
-      "score": 6.1,
-      "reason": "短期胜率过低"
-    },
-    {
       "code": "001358",
       "name": "兴欣新材",
       "score": 6.1,
       "reason": "历史回测不达标"
+    },
+    {
+      "code": "001379",
+      "name": "腾达科技",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002090",
+      "name": "金智科技",
+      "score": 6.1,
+      "reason": "短期胜率过低"
     },
     {
       "code": "002092",
@@ -8886,8 +8496,32 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002105",
+      "name": "信隆健康",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002111",
+      "name": "威海广泰",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002148",
+      "name": "北纬科技",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002154",
       "name": "报 喜 鸟",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002193",
+      "name": "如意集团",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -8912,6 +8546,12 @@
     {
       "code": "002241",
       "name": "歌尔股份",
+      "score": 6.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002274",
+      "name": "华昌化工",
       "score": 6.1,
       "reason": "短期胜率过低"
     },
@@ -8946,8 +8586,8 @@
       "reason": "历史回测不达标"
     },
     {
-      "code": "000601",
-      "name": "韶能股份",
+      "code": "000790",
+      "name": "华神科技",
       "score": 6.4,
       "reason": "短期胜率过低"
     },
@@ -8970,6 +8610,12 @@
       "reason": "短期胜率过低"
     },
     {
+      "code": "002023",
+      "name": "海特高新",
+      "score": 6.4,
+      "reason": "短期胜率过低"
+    },
+    {
       "code": "002039",
       "name": "黔源电力",
       "score": 6.4,
@@ -8982,8 +8628,14 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002074",
-      "name": "国轩高科",
+      "code": "002100",
+      "name": "天康生物",
+      "score": 6.4,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "002108",
+      "name": "沧州明珠",
       "score": 6.4,
       "reason": "短期胜率过低"
     },
@@ -9006,8 +8658,8 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "002253",
-      "name": "*ST智胜",
+      "code": "002242",
+      "name": "九阳股份",
       "score": 6.4,
       "reason": "短期胜率过低"
     },
@@ -9036,20 +8688,20 @@
       "reason": "短期胜率过低"
     },
     {
-      "code": "001317",
-      "name": "三羊马",
+      "code": "001215",
+      "name": "千味央厨",
+      "score": 7.1,
+      "reason": "短期胜率过低"
+    },
+    {
+      "code": "001234",
+      "name": "泰慕士",
       "score": 7.1,
       "reason": "短期胜率过低"
     },
     {
       "code": "002081",
       "name": "金 螳 螂",
-      "score": 7.1,
-      "reason": "短期胜率过低"
-    },
-    {
-      "code": "002108",
-      "name": "沧州明珠",
       "score": 7.1,
       "reason": "短期胜率过低"
     },
@@ -9088,14 +8740,66 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000722",
-      "name": "湖南发展",
+      "code": "000546",
+      "name": "金圆股份",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 5.24,
+          "win": 66.7,
+          "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": -6.76,
+          "win": 33.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": -14.76,
+          "win": 27.3,
+          "trades": 11,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000628",
+      "name": "高新发展",
       "score": 7.1,
       "backtest": {
         "1y": {
           "profit": 12.0,
           "win": 66.7,
           "trades": 3,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 10.03,
+          "win": 50.0,
+          "trades": 8,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 12.03,
+          "win": 46.7,
+          "trades": 15,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000722",
+      "name": "湖南发展",
+      "score": 7.1,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
           "note": "OK"
         },
         "3y": {
@@ -9108,58 +8812,6 @@
           "profit": 9.55,
           "win": 38.5,
           "trades": 13,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000810",
-      "name": "创维数字",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 3.52,
-          "win": 83.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 11.52,
-          "win": 70.0,
-          "trades": 10,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 7.52,
-          "win": 57.1,
-          "trades": 14,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000989",
-      "name": "九芝堂",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 2.08,
-          "win": 100.0,
-          "trades": 1,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 5.65,
-          "win": 50.0,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 28.75,
-          "win": 58.3,
-          "trades": 12,
           "note": "OK"
         }
       },
@@ -9223,19 +8875,19 @@
       "score": 7.1,
       "backtest": {
         "1y": {
-          "profit": 14.1,
+          "profit": 15.01,
           "win": 80.0,
           "trades": 5,
           "note": "OK"
         },
         "3y": {
-          "profit": 2.1,
+          "profit": 3.01,
           "win": 45.5,
           "trades": 11,
           "note": "OK"
         },
         "5y": {
-          "profit": -4.77,
+          "profit": -3.86,
           "win": 37.5,
           "trades": 16,
           "note": "OK"
@@ -9264,84 +8916,6 @@
           "profit": -12.0,
           "win": 25.0,
           "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "002214",
-      "name": "*ST大立",
-      "score": 7.1,
-      "backtest": {
-        "1y": {
-          "profit": 1.04,
-          "win": 50.0,
-          "trades": 2,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -6.96,
-          "win": 28.6,
-          "trades": 7,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -2.96,
-          "win": 33.3,
-          "trades": 12,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000026",
-      "name": "飞亚达",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 6.13,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 6.74,
-          "win": 50.0,
-          "trades": 8,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 18.14,
-          "win": 53.8,
-          "trades": 13,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
-      "code": "000037",
-      "name": "深南电A",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 12.0,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": 36.0,
-          "win": 66.7,
-          "trades": 9,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": 36.0,
-          "win": 53.3,
-          "trades": 15,
           "note": "OK"
         }
       },
@@ -9426,32 +9000,6 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000546",
-      "name": "金圆股份",
-      "score": 6.4,
-      "backtest": {
-        "1y": {
-          "profit": 5.24,
-          "win": 66.7,
-          "trades": 3,
-          "note": "OK"
-        },
-        "3y": {
-          "profit": -6.76,
-          "win": 33.3,
-          "trades": 6,
-          "note": "OK"
-        },
-        "5y": {
-          "profit": -14.76,
-          "win": 27.3,
-          "trades": 11,
-          "note": "OK"
-        }
-      },
-      "reason": "因子与回测双重达标"
-    },
-    {
       "code": "000552",
       "name": "甘肃能化",
       "score": 6.4,
@@ -9478,26 +9026,78 @@
       "reason": "因子与回测双重达标"
     },
     {
-      "code": "000628",
-      "name": "高新发展",
+      "code": "000593",
+      "name": "德龙汇能",
       "score": 6.4,
       "backtest": {
         "1y": {
+          "profit": 4.9,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 14.45,
+          "win": 66.7,
+          "trades": 6,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 9.66,
+          "win": 50.0,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000688",
+      "name": "国城矿业",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 8.0,
+          "win": 100.0,
+          "trades": 1,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 4.0,
+          "win": 40.0,
+          "trades": 5,
+          "note": "OK"
+        },
+        "5y": {
           "profit": 12.0,
+          "win": 41.7,
+          "trades": 12,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000739",
+      "name": "普洛药业",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 11.03,
           "win": 66.7,
           "trades": 3,
           "note": "OK"
         },
         "3y": {
-          "profit": 10.03,
-          "win": 50.0,
-          "trades": 8,
+          "profit": 13.88,
+          "win": 57.1,
+          "trades": 7,
           "note": "OK"
         },
         "5y": {
-          "profit": 12.03,
-          "win": 46.7,
-          "trades": 15,
+          "profit": 5.88,
+          "win": 41.7,
+          "trades": 12,
           "note": "OK"
         }
       },
@@ -9547,9 +9147,35 @@
           "note": "OK"
         },
         "5y": {
-          "profit": 2.19,
-          "win": 38.5,
-          "trades": 13,
+          "profit": -1.81,
+          "win": 35.7,
+          "trades": 14,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000810",
+      "name": "创维数字",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 2.81,
+          "win": 83.3,
+          "trades": 6,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 10.81,
+          "win": 70.0,
+          "trades": 10,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 6.81,
+          "win": 57.1,
+          "trades": 14,
           "note": "OK"
         }
       },
@@ -9576,6 +9202,32 @@
           "profit": -11.14,
           "win": 30.0,
           "trades": 10,
+          "note": "OK"
+        }
+      },
+      "reason": "因子与回测双重达标"
+    },
+    {
+      "code": "000889",
+      "name": "中嘉博创",
+      "score": 6.4,
+      "backtest": {
+        "1y": {
+          "profit": 4.0,
+          "win": 50.0,
+          "trades": 2,
+          "note": "OK"
+        },
+        "3y": {
+          "profit": 21.59,
+          "win": 55.6,
+          "trades": 9,
+          "note": "OK"
+        },
+        "5y": {
+          "profit": 25.59,
+          "win": 50.0,
+          "trades": 14,
           "note": "OK"
         }
       },

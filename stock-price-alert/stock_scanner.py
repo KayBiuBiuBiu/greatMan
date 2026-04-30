@@ -336,11 +336,19 @@ def _parse_iso_ts(s: str | None) -> datetime | None:
 
 
 def scan_and_save(cfg_path: Path, *, force: bool = False) -> int:
-    sys.path.insert(0, str(Path(__file__).parent))
+    root = Path(__file__).parent
+    sys.path.insert(0, str(root))
 
     raw = json.loads(cfg_path.read_text(encoding="utf-8"))
-    sr = dict(raw.get("scan_rule") or {})
-    meta = dict(raw.get("scan_meta") or {})
+    from app_logging import emit_select_tool_line, setup_app_logging
+    from run_alert import merge_full_config
+    from utils import configure_ssl_from_sources
+
+    cfg = merge_full_config(dict(raw))
+    setup_app_logging(cfg, root=root)
+    configure_ssl_from_sources(cfg.get("sources"))
+    sr = dict(cfg.get("scan_rule") or {})
+    meta = dict(cfg.get("scan_meta") or {})
     scan_days = float(sr.get("full_scan_interval_days", 3.0))
 
     last_s = meta.get("last_full_scan_iso") or meta.get("last_full_scan_ts")
@@ -354,21 +362,35 @@ def scan_and_save(cfg_path: Path, *, force: bool = False) -> int:
         and (now - last_dt) < timedelta(days=scan_days)
     ):
         left = scan_days - (now - last_dt).total_seconds() / 86400.0
-        print(
+        emit_select_tool_line(
             f"[扫描跳过] 距离上次全量重筛不足 {scan_days:g} 天（约还剩 {max(0.0, left):.1f} 天）。"
-            f" 强制请使用：python run_alert.py --scan --force-scan"
+            f" 强制请使用：python run_alert.py --scan --force-scan",
+            event="stock_scanner_skip_interval",
+            section="stock_scanner",
         )
         return 0
 
-    target_n = int(raw.get("scan_pool_max", 450))
+    target_n = int(cfg.get("scan_pool_max", 800))
     target_n = max(200, min(800, target_n))
 
-    print("[接口抓取] 正在拉取沪深主板+创业板列表（不含科创板/北交所）…")
+    emit_select_tool_line(
+        "[接口抓取] 正在拉取沪深主板+创业板列表（不含科创板/北交所）…",
+        event="stock_scanner_fetch_start",
+        section="stock_scanner",
+    )
     rows = fetch_all_hs_cy_rows()
-    print(f"[接口完成] 原始行数 {len(rows)}，开始分层筛选…")
+    emit_select_tool_line(
+        f"[接口完成] 原始行数 {len(rows)}，开始分层筛选…",
+        event="stock_scanner_fetch_done",
+        section="stock_scanner",
+    )
 
     picked = layered_filter(rows, sr=sr)
-    print(f"[筛选完成] 规则命中 {len(picked)} 只，目标写入约 {target_n} 只（截断取整）")
+    emit_select_tool_line(
+        f"[筛选完成] 规则命中 {len(picked)} 只，目标写入约 {target_n} 只（截断取整）",
+        event="stock_scanner_filter_done",
+        section="stock_scanner",
+    )
 
     picked = picked[:target_n]
     prev_watch = raw.get("watchlist") or []
@@ -385,8 +407,10 @@ def scan_and_save(cfg_path: Path, *, force: bool = False) -> int:
 
     cfg_path.write_text(json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
     tagged_n = sum(1 for w in merged if isinstance(w, dict) and has_position_tag(w))
-    print(
-        f"[成功] 已写入 watchlist 共 {len(merged)} 条（其中持仓标签保留 {tagged_n} 条，扫描入池 {len(picked)} 条）"
+    emit_select_tool_line(
+        f"[成功] 已写入 watchlist 共 {len(merged)} 条（其中持仓标签保留 {tagged_n} 条，扫描入池 {len(picked)} 条）",
+        event="stock_scanner_watchlist_saved",
+        section="stock_scanner",
     )
     return 0
 

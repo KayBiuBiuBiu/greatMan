@@ -24,6 +24,152 @@
     "take_profit_short": 0.05,
     "take_profit_wave": 0.10
   },
+  "drawdown_alert": {
+    "enabled": true,
+    "warn_1_ratio": -0.03,
+    "warn_2_ratio": -0.06,
+    "warn_3_ratio": -0.1
+  },
+  "trend_slippage_alert": {
+    "enabled": true,
+    "require_resolved_bk": false,
+    "min_pillars_weak": 2,
+    "stock_min_weak_dims": 2,
+    "sector_min_weak_dims": 2,
+    "index_weak_mult_max": 0.99,
+    "index_5d_ret_weak": -0.008,
+    "volume_spike_vs_ma20": 1.85,
+    "near_high_20_ratio": 0.88,
+    "atr_tiers": {
+      "enabled": true,
+      "method": "wilder",
+      "lookback": 20,
+      "tiers": [
+        {
+          "max_close_atr_pct": 2.0,
+          "stock_min_weak_dims": 2,
+          "sector_min_weak_dims": 2,
+          "min_pillars_weak": 2
+        },
+        {
+          "max_close_atr_pct": 4.0,
+          "stock_min_weak_dims": 2,
+          "sector_min_weak_dims": 2,
+          "min_pillars_weak": 2
+        },
+        {
+          "max_close_atr_pct": null,
+          "stock_min_weak_dims": 3,
+          "sector_min_weak_dims": 3,
+          "min_pillars_weak": 2
+        }
+      ]
+    },
+    "verbose_trend_alert": true,
+    "min_price": 0,
+    "min_float_mv_yi": 0,
+    "min_volume_ratio": 0,
+    "alert_ignore_codes": [],
+    "require_consecutive_trade_days": 1
+  },
+  "sector_index_overrides": {},
+  "performance": {
+    "kline_cache_ttl_sec": 900,
+    "sector_kline_cache_ttl_sec": 3600,
+    "index_kline_cache_ttl_sec": 60,
+    "enable_parallel_fetch": true,
+    "fetch_max_workers": 4,
+    "fetch_max_concurrency": 4,
+    "request_min_interval_sec": 0,
+    "hub_poll_start_offset_sec": 3,
+    "hub_warm_timeout_sec": 12,
+    "hub_warm_min_fraction": 0.85,
+    "safe_get_jitter_sec_min": 0.25,
+    "safe_get_jitter_sec_max": 1.2,
+    "http_domain_bucket_rps": 0,
+    "http_domain_bucket_hosts": [],
+    "process_watch_max_workers": 1,
+    "name_prewarm_max_workers": 4
+  },
+  "notifications": {
+    "aggregate_interval_alerts": true,
+    "aggregate_max_items": 20,
+    "aggregate_trend_alerts": true,
+    "aggregate_trend_max_items": 15
+  },
+  "kline_store": {
+    "enabled": true,
+    "db_path": "data/daily_klines.db",
+    "fresh_hours_after_sync": 36,
+    "divergence_warn_price_pct": null,
+    "sync_skip_min_bars": 50,
+    "sync_max_stale_calendar_days": 2,
+    "use_indicator_last": false
+  },
+  "alert_log": {
+    "enabled": false,
+    "share_kline_db": true,
+    "db_path": "data/alert_events.db",
+    "bearish_hit_threshold_pct_1d": -2,
+    "bearish_hit_threshold_pct_3d": -2.5,
+    "bearish_hit_threshold_pct_5d": -3
+  },
+  "ml_filter": {
+    "enabled": false,
+    "model_path": "data/ml_bearish_nb.json",
+    "apply_to_alert_types": ["trend_slip"],
+    "bearish_prob_threshold": 0.6
+  },
+  "ops_automation": {
+    "enabled": false,
+    "preopen_enabled": true,
+    "preopen_cutoff_hhmm": "09:20",
+    "after_close_enabled": true,
+    "after_close_hhmm": "15:10",
+    "friday_weekly_enabled": true,
+    "backtest_since_days": 7,
+    "auto_tune_apply": false,
+    "auto_tune_email": true,
+    "ml_train_weekly": true,
+    "ml_train_days": 180,
+    "ml_train_min_samples": 50
+  },
+  "email_command_bot": {
+    "enabled": false,
+    "use_shared_mail_config": true,
+    "imap_server": "",
+    "imap_port": 993,
+    "imap_username": "",
+    "imap_password": "",
+    "imap_folder": "INBOX",
+    "trusted_senders": [],
+    "poll_interval_sec": 45,
+    "mark_seen": true
+  },
+  "realtime_hub": {
+    "enabled": true,
+    "poll_interval_sec": 5,
+    "ws_enabled": false,
+    "ws_transport": "",
+    "ws_url": "",
+    "ws_reconnect_sec": 5,
+    "ws_ping_interval_sec": 30,
+    "em_sse_url": "",
+    "em_sse_fields": "",
+    "em_sse_slots": 4,
+    "em_sse_burst_sec": 12,
+    "em_sse_read_timeout_sec": 60
+  },
+  "sector_em": {
+    "api_hosts": [
+      "https://push2.eastmoney.com",
+      "http://82.push2.eastmoney.com",
+      "http://77.push2.eastmoney.com"
+    ],
+    "industry_clist_fs": ["m:90+t:2", "m:90+t:3"],
+    "cache_filename": "sector_index_cache.json",
+    "industry_map_ttl_sec": 3600
+  },
   "scan_rule": {
     "min_price": 5,
     "max_price": 32,
@@ -43,7 +189,27 @@
     "index_mood_mult_override": 0
   },
   "sources": {
-    "eastmoney_ut": "ea"
+    "eastmoney_ut": "ea",
+    "ssl_verify": false,
+    "ssl_ca_bundle": null
+  },
+  "data_health": {
+    "enabled": true,
+    "host_consecutive_fail_threshold": 5,
+    "backoff_cap_sec": 16,
+    "backoff_base_sec": 0.25,
+    "full_outage_consecutive_notify_threshold": 0,
+    "full_outage_email_enabled": false,
+    "recovery_notify_enabled": true,
+    "suppress_trend_rounds_after_full_outage": 0
+  },
+  "logging": {
+    "enabled": true,
+    "file": "logs/run_alert.jsonl",
+    "max_bytes": 5000000,
+    "backup_count": 3,
+    "level": "INFO",
+    "console_mirror": false
   },
   "watchlist": [
     {

@@ -25,6 +25,13 @@ class RiskManager:
         self.tp_short = float(rr["take_profit_short"])
         self.tp_wave = float(rr["take_profit_wave"])
 
+        da = cfg.get("drawdown_alert") or {}
+        self.dd_enabled = bool(da.get("enabled", True))
+        self.dd_w1 = float(da.get("warn_1_ratio", -0.03))
+        self.dd_w2 = float(da.get("warn_2_ratio", -0.06))
+        w3 = da.get("warn_3_ratio", None)
+        self.dd_w3: float | None = float(w3) if w3 is not None else None
+
     def get_current_loss_ratio(self, now_price: float, cost_price: float) -> float:
         """相对成本的收益率，亏损为负，如 -0.06 表示 -6%。cost<=0 视为 0。"""
         if cost_price <= 0:
@@ -123,6 +130,38 @@ class RiskManager:
         if ratio >= self.tp_short:
             return "🟡 短线止盈目标到位"
         return None
+
+    def check_drawdown_alert(
+        self, now_price: float, cost_price: float
+    ) -> Optional[tuple[str, str]]:
+        """
+        相对成本回撤提前预警（不停损）：(级别键 w1|w2, 文案)。
+        已达 w2 阈值只报 w2；仅达 w1 报 w1。跌破 stop_loss_ratio 交由 check_stop_take，此处不再报。
+        """
+        if not self.dd_enabled or cost_price <= 0:
+            return None
+        ratio = (now_price - cost_price) / cost_price
+        if ratio > self.dd_w1:
+            return None
+        if ratio <= self.sl_ratio:
+            return None
+        if self.dd_w3 is not None and ratio <= self.dd_w3:
+            pct = ratio * 100.0
+            return (
+                "w3",
+                f"🔻 深度回撤预警：从成本回撤约 {pct:.1f}%（阈值 {self.dd_w3 * 100:.0f}%），请优先核对止损与总仓位",
+            )
+        if ratio <= self.dd_w2:
+            pct = ratio * 100.0
+            return (
+                "w2",
+                f"⚠️ 二次风险预警：从成本回撤约 {pct:.1f}%（阈值 {self.dd_w2 * 100:.0f}%），请关注仓位与止损纪律",
+            )
+        pct = ratio * 100.0
+        return (
+            "w1",
+            f"📉 初次走弱提醒：从成本回撤约 {pct:.1f}%（达 {self.dd_w1 * 100:.0f}% 预警线），留意支撑与加仓节奏",
+        )
 
     def profit_pct(self, now_price: float, cost_price: float) -> float:
         """兼容简短命名。"""

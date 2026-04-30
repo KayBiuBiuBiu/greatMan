@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import subprocess
 
+from legal_disclosure import append_to_body
+
 
 def notify(
     title: str,
@@ -42,9 +44,23 @@ def send_notification(
     subtitle: str | None = None,
     *,
     sound: bool = True,
+    cfg: dict | None = None,
+    skip_disclaimer: bool = False,
+    severity: str | None = None,
 ) -> bool:
-    """与 notify 等价，兼容 import send_notification。"""
-    return notify(title, text, subtitle=subtitle, sound=sound)
+    """与 notify 等价；默认在正文末附加合规免责声明（P0-2）。
+
+    severity：info / warning / critical，写入副标题前缀便于过滤（P1-5）。
+    """
+    body = text if skip_disclaimer else append_to_body(text, cfg=cfg)
+    sev = (severity or "").strip().lower()
+    sub = subtitle
+    if sev in ("info", "warning", "critical"):
+        tag = {"critical": "[紧急]", "warning": "[预警]", "info": "[提示]"}.get(
+            sev, ""
+        )
+        sub = f"{tag} {subtitle}".strip() if subtitle else tag
+    return notify(title, body, subtitle=sub, sound=sound)
 
 
 def _apple_quote(s: str) -> str:

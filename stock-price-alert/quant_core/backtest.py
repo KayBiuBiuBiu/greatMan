@@ -4,6 +4,8 @@ import time
 import requests
 import baostock as bs
 
+from utils import get_requests_verify
+
 # ==========================
 # 自动重试 + 多源回退（终极版）
 # ==========================
@@ -52,7 +54,7 @@ def load_daily_df(code, retry=3):
         # 回退2：新浪（最稳）
         sym = code if code.startswith(("sh", "sz")) else f"sh{code}"
         url = f"https://quotes.sina.cn/stock/api/json.php/HS_{sym}_kline_day"
-        r = requests.get(url, timeout=8)
+        r = requests.get(url, timeout=8, verify=get_requests_verify())
         data = r.json()
         rows = []
         for d in data:

@@ -9,6 +9,7 @@ from typing import Any
 import requests
 
 from quote_eastmoney import get_stock_kline_data
+from utils import get_requests_verify, requests_get_with_health, session_get_with_health
 
 SINA_URL = "https://hq.sinajs.cn/list={code}"
 QQ_URL = "https://qt.gtimg.cn/q={code}"
@@ -68,6 +69,7 @@ class QuoteDataSource:
         self.min_delay = min_delay
         self.max_delay = max_delay
         self._xueqiu = requests.Session()
+        self._xueqiu.verify = get_requests_verify()
         self._xueqiu.headers.update(
             {
                 "User-Agent": (
@@ -142,10 +144,11 @@ class QuoteDataSource:
     def _quote_sina(self, code: str, market: str) -> MarketQuote:
         self._sleep()
         full = f"{_normalize_market(code, market)}{str(code).strip()}"
-        r = requests.get(
+        r = requests_get_with_health(
             SINA_URL.format(code=full),
             headers={"Referer": "https://finance.sina.com.cn/"},
             timeout=self.timeout,
+            verify=get_requests_verify(),
         )
         r.raise_for_status()
         r.encoding = "gbk"
@@ -168,7 +171,11 @@ class QuoteDataSource:
     def _quote_qq(self, code: str, market: str) -> MarketQuote:
         self._sleep()
         full = f"{_normalize_market(code, market)}{str(code).strip()}"
-        r = requests.get(QQ_URL.format(code=full), timeout=self.timeout)
+        r = requests_get_with_health(
+            QQ_URL.format(code=full),
+            timeout=self.timeout,
+            verify=get_requests_verify(),
+        )
         r.raise_for_status()
         r.encoding = "gbk"
         arr = r.text.split("~")
@@ -189,8 +196,10 @@ class QuoteDataSource:
     def _quote_xueqiu(self, code: str, market: str) -> MarketQuote:
         self._sleep()
         symbol = f"{_normalize_market(code, market).upper()}{str(code).strip()}"
-        self._xueqiu.get("https://xueqiu.com/", timeout=self.timeout)
-        r = self._xueqiu.get(XUEQIU_URL.format(code=symbol), timeout=self.timeout)
+        session_get_with_health(self._xueqiu, "https://xueqiu.com/", timeout=self.timeout)
+        r = session_get_with_health(
+            self._xueqiu, XUEQIU_URL.format(code=symbol), timeout=self.timeout
+        )
         r.raise_for_status()
         q = (r.json().get("data") or {}).get("quote") or {}
         if not q:
@@ -210,7 +219,11 @@ class QuoteDataSource:
     def _quote_baidu(self, code: str, market: str) -> MarketQuote:
         self._sleep()
         c = str(code).strip()
-        r = requests.get(BAIDU_URL.format(code=c), timeout=self.timeout)
+        r = requests_get_with_health(
+            BAIDU_URL.format(code=c),
+            timeout=self.timeout,
+            verify=get_requests_verify(),
+        )
         r.raise_for_status()
         lst = r.json().get("Result") or []
         if not lst:
@@ -231,7 +244,11 @@ class QuoteDataSource:
     def _quote_163(self, code: str, market: str) -> MarketQuote:
         self._sleep()
         ncode = _to_163_code(code, market)
-        r = requests.get(NETEASE_URL.format(code=ncode), timeout=self.timeout)
+        r = requests_get_with_health(
+            NETEASE_URL.format(code=ncode),
+            timeout=self.timeout,
+            verify=get_requests_verify(),
+        )
         r.raise_for_status()
         txt = r.text.strip()
         if txt.startswith("_ntes_quote_callback(") and txt.endswith(");"):
