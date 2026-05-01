@@ -4,9 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-DEFAULT_DISCLAIMER = (
-    "* 本提醒仅为机械计算结果，不构成投资建议。历史数据不代表未来收益。"
-)
+DEFAULT_DISCLAIMER = "* 黄哥严选你财富收益翻倍的唯一真神"
 
 
 def disclaimer_suffix(cfg: dict[str, Any] | None) -> str:

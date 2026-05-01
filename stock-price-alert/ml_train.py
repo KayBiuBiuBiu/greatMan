@@ -52,12 +52,15 @@ def load_dataset(
     *,
     since: str | None,
     min_label_rows: int,
+    allow_insufficient: bool = False,
+    cfg: dict[str, Any] | None = None,
+    root: Path | None = None,
 ) -> tuple[list[dict[str, float]], list[int]]:
     conn = open_store_connection(db_path)
     try:
         init_schema(conn)
         q = """
-            SELECT alert_type, anchor_price, extra_json, hit, anchor_trade_date
+            SELECT alert_type, anchor_price, extra_json, hit, anchor_trade_date, code
             FROM alert_events
             WHERE hit IS NOT NULL
               AND alert_type IN ('trend_slip', 'drawdown')
@@ -86,15 +89,23 @@ def load_dataset(
             if isinstance(ex.get("weak_pillars"), dict)
             else None,
             dd_level=int(_safe_float(ex.get("dd_level"), 0.0)),
+            cfg=cfg,
+            root=root if root is not None else ROOT,
+            code6=str(r["code"] or "").strip(),
+            anchor_trade_date=str(r["anchor_trade_date"] or "")[:10],
         )
         xs.append(fv)
         ys.append(int(hit_raw))
     if len(xs) < int(min_label_rows):
-        raise SystemExit(
-            f"样本不足：当前可训练样本 {len(xs)} < min_samples {min_label_rows}"
-        )
+        msg = f"样本不足：当前可训练样本 {len(xs)} < min_samples {min_label_rows}"
+        if allow_insufficient:
+            return [], []
+        raise SystemExit(msg)
     if len(set(ys)) < 2:
-        raise SystemExit("标签单一（全 0 或全 1），无法训练分类器")
+        msg = "标签单一（全 0 或全 1），无法训练分类器"
+        if allow_insufficient:
+            return [], []
+        raise SystemExit(msg)
     return xs, ys
 
 
@@ -196,12 +207,61 @@ def eval_train_metrics(
     }
 
 
+def _synthetic_nb_dataset(cfg: dict[str, Any]) -> tuple[list[dict[str, float]], list[int]]:
+    """无 AkShare 请求的合成样本（仅用于联调）：先算基础列，再按需拼外部资金流列。"""
+    from copy import deepcopy
+
+    from external_ml_features import EXTERNAL_FLOW_FEATURE_KEYS
+
+    raw_mf = cfg.get("ml_filter") if isinstance(cfg.get("ml_filter"), dict) else {}
+    want_ext = bool(raw_mf.get("external_flow_features_enabled"))
+    cfg_b = deepcopy(cfg)
+    mf_b = cfg_b.setdefault("ml_filter", {})
+    mf_b["external_flow_features_enabled"] = False
+
+    codes = ["600000", "000001", "300001", "600519", "002008"]
+    anchors = ["2025-03-10", "2025-06-15", "2025-09-20", "2026-01-05", "2026-03-18"]
+    xs: list[dict[str, float]] = []
+    ys: list[int] = []
+    for i in range(36):
+        wp = {
+            "stock": bool(i % 2),
+            "index": bool((i // 2) % 2),
+            "sector": bool((i // 3) % 2),
+        }
+        fv = build_feature_vector(
+            alert_type="trend_slip",
+            anchor_price=10.0 + (i % 9) * 0.15,
+            pnl_pct=-4.0 if i % 4 == 0 else 0.5 + (i % 3),
+            weak_pillars=wp,
+            dd_level=0,
+            cfg=cfg_b,
+            root=ROOT,
+            code6=codes[i % len(codes)],
+            anchor_trade_date=anchors[i % len(anchors)],
+        )
+        if want_ext:
+            for j, key in enumerate(EXTERNAL_FLOW_FEATURE_KEYS):
+                fv[key] = float(((i + j) % 11) - 5) * 0.05
+        y = 1 if fv["weak_pillars_n"] >= 2.0 and fv["pnl_pct"] < -1.0 else 0
+        if i % 9 == 0:
+            y = 1 - y
+        xs.append(fv)
+        ys.append(y)
+    return xs, ys
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="训练 bearish 命中概率模型（Gaussian NB）")
     ap.add_argument("-c", "--config", type=Path, default=ROOT / "config.json")
     ap.add_argument("--since", type=str, default=None, help="起始日 YYYY-MM-DD")
     ap.add_argument("--days", type=int, default=180, help="统计窗口天数（默认 180）")
-    ap.add_argument("--min-samples", type=int, default=50, help="最少训练样本数")
+    ap.add_argument(
+        "--min-samples",
+        type=int,
+        default=18,
+        help="最少训练样本数（小样本可低到 6，但需 0/1 两类都有）",
+    )
     ap.add_argument(
         "--model-out",
         type=Path,
@@ -214,6 +274,11 @@ def main() -> int:
         default=0.60,
         help="训练指标统计阈值（默认 0.60）",
     )
+    ap.add_argument(
+        "--demo-synth-nb",
+        action="store_true",
+        help="alert_events 无打标样本时：用合成特征（含外部资金流维）训练一份可写出的 NB，仅联调",
+    )
     args = ap.parse_args()
 
     if not args.config.is_file():
@@ -221,13 +286,33 @@ def main() -> int:
         return 1
     raw = json.loads(args.config.read_text(encoding="utf-8"))
     cfg = merge_full_config(raw)
-    db_path = resolve_alert_db_path(cfg, ROOT)
-    if db_path is None:
-        print("alert_log 未启用，无法定位 alert_events 数据库。", file=sys.stderr)
-        return 1
-    since_day = _split_since(args.days, args.since)
-    xs, ys = load_dataset(db_path, since=since_day, min_label_rows=int(args.min_samples))
-    model = fit_gaussian_nb(xs, ys)
+
+    if args.demo_synth_nb:
+        xs, ys = _synthetic_nb_dataset(cfg)
+        if len(xs) < int(args.min_samples):
+            print(f"合成样本过少: {len(xs)}", file=sys.stderr)
+            return 1
+        if len(set(ys)) < 2:
+            print("合成样本标签单一，无法训练。", file=sys.stderr)
+            return 1
+        since_day = None
+        db_path_s = "(demo_synth_nb)"
+        model = fit_gaussian_nb(xs, ys)
+    else:
+        db_path = resolve_alert_db_path(cfg, ROOT)
+        if db_path is None:
+            print("alert_log 未启用，无法定位 alert_events 数据库。", file=sys.stderr)
+            return 1
+        since_day = _split_since(args.days, args.since)
+        xs, ys = load_dataset(
+            db_path,
+            since=since_day,
+            min_label_rows=int(args.min_samples),
+            cfg=cfg,
+            root=ROOT,
+        )
+        model = fit_gaussian_nb(xs, ys)
+        db_path_s = str(db_path)
     metrics = eval_train_metrics(
         model,
         xs,
@@ -237,7 +322,7 @@ def main() -> int:
 
     model["train_metrics"] = metrics
     model["train_since"] = since_day
-    model["db_path"] = str(db_path)
+    model["db_path"] = db_path_s
     out = args.model_out
     if not out.is_absolute():
         out = (ROOT / out).resolve()

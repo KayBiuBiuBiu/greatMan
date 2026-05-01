@@ -30,15 +30,12 @@ class Change:
     samples: int
 
 
+# 趋势类：样本足够时按命中率双向微调（类似比例控制，每次小幅移动）
+TREND_HR_HIGH = 0.70
+TREND_HR_LOW = 0.50
+TREND_MIN_SAMPLES = 15
+
 RULES = {
-    "trend_slip": {
-        "min_samples": 10,
-        "hit_rate_threshold": 0.55,
-        "param_path": ("trend_slippage_alert", "min_pillars_weak"),
-        "step": 1,
-        "max_value": 3,
-        "reason": "趋势命中率偏低，提高触发柱数阈值",
-    },
     "drawdown": {
         "min_samples": 10,
         "hit_rate_threshold": 0.60,
@@ -46,14 +43,6 @@ RULES = {
         "step": -0.01,
         "min_value": -0.10,
         "reason": "回撤命中率偏低，提高第一档触发严格度",
-    },
-    "volume_ratio": {
-        "min_samples": 20,
-        "hit_rate_threshold": 0.55,
-        "param_path": ("trend_slippage_alert", "min_volume_ratio"),
-        "step": 0.2,
-        "max_value": 2.0,
-        "reason": "趋势命中率偏低，提高量比过滤阈值",
     },
 }
 
@@ -113,51 +102,102 @@ def run_backtest_report(config_path: Path, days: int) -> dict[str, Any]:
         raise SystemExit(f"无法解析回测输出 JSON: {exc}\n输出片段: {preview}")
 
 
-def _trend_changes(cfg: dict[str, Any], by_type: dict[str, Any]) -> list[Change]:
+def _trend_slip_hit_rate_adjust(cfg: dict[str, Any], by_type: dict[str, Any]) -> list[Change]:
+    """
+    命中率偏高 → 略收紧（少报）；偏低 → 略放宽（多报）。
+    一次运行内每项最多动一档，避免震荡过大。
+    """
     changes: list[Change] = []
     ts = by_type.get("trend_slip") or {}
     n = int(ts.get("n", 0) or 0)
     hr = ts.get("hit_rate")
     hrf = float(hr) if isinstance(hr, (int, float)) else None
+    if n < TREND_MIN_SAMPLES or hrf is None:
+        return changes
 
-    # min_pillars_weak
-    r = RULES["trend_slip"]
-    if n >= int(r["min_samples"]) and hrf is not None and hrf < float(r["hit_rate_threshold"]):
-        path = r["param_path"]
-        old = int(_safe_float(_get_nested(cfg, path), 2))
-        new = min(old + int(r["step"]), int(r["max_value"]))
-        if new != old:
-            _set_nested(cfg, path, new)
-            changes.append(
-                Change(
-                    path=".".join(path),
-                    old=old,
-                    new=new,
-                    reason=str(r["reason"]),
-                    hit_rate=hrf,
-                    samples=n,
-                )
-            )
+    path_p = ("trend_slippage_alert", "min_pillars_weak")
+    path_d = ("trend_slippage_alert", "stock_min_weak_dims")
+    path_v = ("trend_slippage_alert", "min_volume_ratio")
 
-    # min_volume_ratio
-    rv = RULES["volume_ratio"]
-    if n >= int(rv["min_samples"]) and hrf is not None and hrf < float(rv["hit_rate_threshold"]):
-        path_v = rv["param_path"]
-        old_v = _safe_float(_get_nested(cfg, path_v), 0.0)
-        new_v = min(old_v + float(rv["step"]), float(rv["max_value"]))
-        new_v = round(new_v, 4)
-        if new_v != old_v:
-            _set_nested(cfg, path_v, new_v)
-            changes.append(
-                Change(
-                    path=".".join(path_v),
-                    old=old_v,
-                    new=new_v,
-                    reason=str(rv["reason"]),
-                    hit_rate=hrf,
-                    samples=n,
-                )
+    def _append(path: tuple[str, ...], old: Any, new: Any, reason: str) -> None:
+        if new == old:
+            return
+        _set_nested(cfg, path, new)
+        changes.append(
+            Change(
+                path=".".join(path),
+                old=old,
+                new=new,
+                reason=reason,
+                hit_rate=hrf,
+                samples=n,
             )
+        )
+
+    if hrf >= TREND_HR_HIGH:
+        old_p = int(_safe_float(_get_nested(cfg, path_p), 2))
+        new_p = min(old_p + 1, 4)
+        _append(
+            path_p,
+            old_p,
+            new_p,
+            f"趋势命中率偏高(≥{TREND_HR_HIGH:.0%})，略提高 min_pillars_weak 减少预警",
+        )
+        old_d = int(_safe_float(_get_nested(cfg, path_d), 2))
+        new_d = min(old_d + 1, 5)
+        _append(
+            path_d,
+            old_d,
+            new_d,
+            "趋势命中率偏高，略提高 stock_min_weak_dims",
+        )
+        old_v = _safe_float(_get_nested(cfg, path_v), 0.8)
+        new_v = min(round(old_v + 0.1, 4), 2.0)
+        _append(
+            path_v,
+            old_v,
+            new_v,
+            "趋势命中率偏高，略提高 min_volume_ratio",
+        )
+        return changes
+
+    if hrf <= TREND_HR_LOW:
+        old_p = int(_safe_float(_get_nested(cfg, path_p), 2))
+        new_p = max(old_p - 1, 1)
+        _append(
+            path_p,
+            old_p,
+            new_p,
+            f"趋势命中率偏低(≤{TREND_HR_LOW:.0%})，略降低 min_pillars_weak 增加覆盖",
+        )
+        old_d = int(_safe_float(_get_nested(cfg, path_d), 2))
+        new_d = max(old_d - 1, 1)
+        _append(
+            path_d,
+            old_d,
+            new_d,
+            "趋势命中率偏低，略降低 stock_min_weak_dims",
+        )
+        old_v = _safe_float(_get_nested(cfg, path_v), 0.8)
+        new_v = max(round(old_v - 0.1, 4), 0.2)
+        _append(
+            path_v,
+            old_v,
+            new_v,
+            "趋势命中率偏低，略降低 min_volume_ratio",
+        )
+        return changes
+
+    # 中间带：略低于 0.55 时仅小幅提高量比（兼容旧版「假阳性略多」时的温和收紧）
+    if hrf < 0.55 and n >= 20:
+        old_v = _safe_float(_get_nested(cfg, path_v), 0.8)
+        new_v = min(round(old_v + 0.1, 4), 2.0)
+        _append(
+            path_v,
+            old_v,
+            new_v,
+            "趋势命中率居中略低，仅略提高 min_volume_ratio",
+        )
     return changes
 
 
@@ -193,7 +233,7 @@ def adjust_config(cfg: dict[str, Any], report: dict[str, Any]) -> list[Change]:
     if not isinstance(by_type, dict):
         by_type = {}
     changes: list[Change] = []
-    changes.extend(_trend_changes(cfg, by_type))
+    changes.extend(_trend_slip_hit_rate_adjust(cfg, by_type))
     changes.extend(_drawdown_changes(cfg, by_type))
     return changes
 

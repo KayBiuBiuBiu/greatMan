@@ -16,18 +16,48 @@ from contextlib import nullcontext
 import queue
 import random
 import re
+import shutil
 import subprocess
 import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, time as dt_time, timedelta
+from datetime import date, datetime, time as dt_time, timedelta
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+
+def _maybe_reexec_with_project_venv() -> None:
+    """仓库内若有 .venv，则用其解释器重启进程（可直接 `python run_alert.py -c config.json`）。"""
+    if os.environ.get("STOCK_ALERT_NO_VENV_REEXEC") == "1":
+        return
+    # 被 pytest / 其它库 import 时不要 execv，否则会换掉测试进程
+    if any(m in sys.modules for m in ("pytest", "_pytest")):
+        return
+    if getattr(sys, "frozen", False):
+        return
+    if sys.platform == "win32":
+        vpy = ROOT / ".venv" / "Scripts" / "python.exe"
+    else:
+        vpy = ROOT / ".venv" / "bin" / "python3"
+        if not vpy.is_file():
+            vpy = ROOT / ".venv" / "bin" / "python"
+    if not vpy.is_file():
+        return
+    try:
+        if Path(sys.executable).resolve() == vpy.resolve():
+            return
+    except OSError:
+        return
+    os.environ["STOCK_ALERT_NO_VENV_REEXEC"] = "1"
+    os.execv(str(vpy), [str(vpy)] + sys.argv)
+
+
+_maybe_reexec_with_project_venv()
 
 _ANSI_RE = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
 
@@ -123,6 +153,18 @@ def _emit_cli_subcmd_line(msg: str, *, event: str) -> None:
     from app_logging import emit_select_tool_line
 
     emit_select_tool_line(_strip_ansi(msg), event=event, section="run_alert_cli")
+
+
+def _backup_user_config_file(config_path: Path) -> None:
+    """将正在使用的配置文件复制为同目录下 「原名.bak」（与 auto_tune 等备份并存）。"""
+    dst = config_path.parent / f"{config_path.name}.bak"
+    try:
+        shutil.copy2(config_path, dst)
+    except OSError as e:
+        print(
+            f"[config] 无法备份配置: {config_path} -> {dst} （{e}）",
+            file=sys.stderr,
+        )
 
 
 def _ensure_app_logging_from_config_path(config_path: Path) -> None:
@@ -377,6 +419,31 @@ DEFAULT_ATR_TIERS = {
         },
     ],
 }
+DEFAULT_DYNAMIC_ADAPTIVE = {
+    "enabled": False,
+    "ma_period": 20,
+    "bull_min_pillars": 3,
+    "bear_min_pillars": 2,
+    "volume_ratio_active": 1.2,
+    "use_volume_filter": False,
+    # 三档：强牛 / 震荡 / 弱熊（需 MA+RSI+布林宽度，可选上证量能）
+    "use_mood_three_tier": False,
+    "strong_bull_min_pillars": 4,
+    "range_min_pillars": 3,
+    "weak_bear_min_pillars": 2,
+    "rsi_period": 14,
+    "rsi_strong_bull_min": 56.0,
+    "rsi_weak_bear_max": 44.0,
+    "bb_period": 20,
+    "bb_width_min_for_strong": 0.012,
+    # 板块相对上证 N 日收益微调 min_pillars_weak
+    "sector_rs_enabled": False,
+    "sector_rs_ret_days": 20,
+    "sector_rs_outperform_pct": 0.005,
+    "sector_rs_underperform_pct": -0.005,
+    "sector_rs_strong_delta": 1,
+    "sector_rs_weak_delta": -1,
+}
 DEFAULT_TREND_SLIPPAGE_ALERT = {
     "enabled": True,
     "require_resolved_bk": False,
@@ -394,6 +461,7 @@ DEFAULT_TREND_SLIPPAGE_ALERT = {
     "min_volume_ratio": 0.0,
     "alert_ignore_codes": [],
     "require_consecutive_trade_days": 1,
+    "dynamic_adaptive": copy.deepcopy(DEFAULT_DYNAMIC_ADAPTIVE),
 }
 DEFAULT_DATA_HEALTH = {
     "enabled": True,
@@ -404,6 +472,9 @@ DEFAULT_DATA_HEALTH = {
     "full_outage_email_enabled": False,
     "recovery_notify_enabled": True,
     "suppress_trend_rounds_after_full_outage": 0,
+    # 非空路径且 interval>0 时写入 JSON（相对 stock-price-alert 根目录）
+    "heartbeat_path": "",
+    "heartbeat_interval_sec": 180,
 }
 DEFAULT_NOTIFICATIONS = {
     "aggregate_interval_alerts": True,
@@ -432,6 +503,16 @@ DEFAULT_ML_FILTER = {
     "model_path": "data/ml_bearish_nb.json",
     "apply_to_alert_types": ["trend_slip"],
     "bearish_prob_threshold": 0.60,
+    "kline_rf_enabled": False,
+    "kline_rf_db_path": "data/baostock_full.db",
+    "kline_rf_table": "daily_klines",
+    "kline_rf_model_path": "models/kline_rf.pkl",
+    "kline_rf_suppress_below": 0.30,
+    # any：任一模型认为「弱势/大跌概率」低于各自阈值即抑制；all：仅当已启用且算出概率的模型都低于阈值才抑制
+    "suppress_combo": "any",
+    # AkShare 资金/北向/龙虎榜附加特征（需重训 NB；默认关闭以保持与旧模型兼容）
+    "external_flow_features_enabled": False,
+    "external_flow_days": 10,
 }
 DEFAULT_OPS_AUTOMATION = {
     "enabled": False,
@@ -445,7 +526,23 @@ DEFAULT_OPS_AUTOMATION = {
     "auto_tune_email": True,
     "ml_train_weekly": True,
     "ml_train_days": 180,
-    "ml_train_min_samples": 50,
+    "ml_train_min_samples": 18,
+    # 开盘前自愈：日 K 过旧则 sync、行业缓存过旧则删文件强制重拉、pending 预警过多则补算回测
+    "self_health_enabled": False,
+    "self_health_kline_max_lag_calendar_days": 1,
+    "self_health_pending_alerts_min": 200,
+    "self_health_sector_cache_ttl_mult": 2.0,
+    # 周五在 ml_train 之后可选重训日 K 随机森林（需本机 sklearn；路径取自 ml_filter）
+    "friday_kline_rf_train_enabled": False,
+    "incremental_nb_after_close": False,
+    "incremental_nb_days": 30,
+    "incremental_nb_min_samples": 12,
+}
+DEFAULT_MONITORING = {
+    # true：忽略 daily_picks.json 优质股扩容，仅轮询 config watchlist（+ 运行时 hold 补票）
+    "watchlist_only": False,
+    # true：即使非 watchlist_only，也不在进程启动时跑盘前选股（优质池依赖 ops_automation 或手动选股）
+    "skip_startup_daily_select": False,
 }
 DEFAULT_EMAIL_COMMAND_BOT = {
     "enabled": False,
@@ -545,6 +642,7 @@ def _merge_trend_slippage_alert(raw: dict[str, Any] | None) -> dict[str, Any]:
     base = copy.deepcopy(DEFAULT_TREND_SLIPPAGE_ALERT)
     u = dict(raw or {})
     u_atr = u.pop("atr_tiers", None)
+    u_dyn = u.pop("dynamic_adaptive", None)
     base.update(u)
     merged_atr = copy.deepcopy(DEFAULT_ATR_TIERS)
     if isinstance(u_atr, dict):
@@ -553,7 +651,81 @@ def _merge_trend_slippage_alert(raw: dict[str, Any] | None) -> dict[str, Any]:
         if isinstance(user_tiers, list) and len(user_tiers) > 0:
             merged_atr["tiers"] = user_tiers
     base["atr_tiers"] = merged_atr
+    da = copy.deepcopy(DEFAULT_DYNAMIC_ADAPTIVE)
+    if isinstance(u_dyn, dict):
+        da.update(u_dyn)
+    base["dynamic_adaptive"] = da
     return base
+
+
+def _compute_round_dynamic_min_pillars_weak(cfg: dict[str, Any]) -> tuple[int | None, str]:
+    """按大盘情绪得到本轮动态 min_pillars_weak；未开启时返回 (None, '')。"""
+    tc = cfg.get("trend_slippage_alert") or {}
+    da = tc.get("dynamic_adaptive")
+    if not isinstance(da, dict) or not bool(da.get("enabled", False)):
+        return None, ""
+    from macro_risk import get_market_mood_three_tier, get_market_regime
+
+    ma_p = max(5, min(120, int(da.get("ma_period", 20) or 20)))
+    if bool(da.get("use_mood_three_tier", False)):
+        tier = get_market_mood_three_tier(dynamic_cfg=da)
+        if tier == "strong_bull":
+            v = int(da.get("strong_bull_min_pillars", da.get("bull_min_pillars", 4)))
+        elif tier == "weak_bear":
+            v = int(da.get("weak_bear_min_pillars", da.get("bear_min_pillars", 2)))
+        else:
+            v = int(da.get("range_min_pillars", 3))
+        tag = f"tier={tier}"
+    else:
+        regime = get_market_regime(ma_period=ma_p, dynamic_cfg=da)
+        if regime == "bull":
+            v = int(da.get("bull_min_pillars", 3))
+        else:
+            v = int(da.get("bear_min_pillars", 2))
+        tag = f"regime={regime}"
+    v = max(1, min(4, v))
+    msg = (
+        f"[市场状态] {tag}（上证 MA{ma_p}），"
+        f"本轮趋势 min_pillars_weak={v}（dynamic_adaptive）"
+    )
+    return v, msg
+
+
+def _merge_top_level_ml_alias(cfg: dict[str, Any], ml_filter: dict[str, Any]) -> None:
+    """将顶层 `ml` 节映射到 `ml_filter`，便于与方向二文档中的配置示例对齐。"""
+    box = cfg.get("ml")
+    if not isinstance(box, dict) or not box:
+        return
+
+    def _set(dst: str, val: Any) -> None:
+        if val is None:
+            return
+        ml_filter[dst] = val
+
+    if "kline_model_enabled" in box:
+        _set("kline_rf_enabled", bool(box.get("kline_model_enabled")))
+    if "kline_model_path" in box:
+        _set("kline_rf_model_path", str(box.get("kline_model_path") or "").strip())
+    if "kline_db_path" in box:
+        _set("kline_rf_db_path", str(box.get("kline_db_path") or "").strip())
+    if "kline_table" in box:
+        _set("kline_rf_table", str(box.get("kline_table") or "").strip())
+    if "kline_suppress_threshold" in box:
+        try:
+            _set("kline_rf_suppress_below", float(box.get("kline_suppress_threshold")))
+        except (TypeError, ValueError):
+            pass
+    if "suppress_combo" in box:
+        _set("suppress_combo", str(box.get("suppress_combo") or "any").strip().lower())
+    if "nb_enabled" in box:
+        _set("enabled", bool(box.get("nb_enabled")))
+    if "nb_model_path" in box:
+        _set("model_path", str(box.get("nb_model_path") or "").strip())
+    if "nb_prob_threshold" in box:
+        try:
+            _set("bearish_prob_threshold", float(box.get("nb_prob_threshold")))
+        except (TypeError, ValueError):
+            pass
 
 
 def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
@@ -636,6 +808,7 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
         cfg["ml_filter"] = {}
     mf_m = dict(DEFAULT_ML_FILTER)
     mf_m.update(cfg["ml_filter"])
+    _merge_top_level_ml_alias(cfg, mf_m)
     cfg["ml_filter"] = mf_m
     cfg.setdefault("ops_automation", {})
     if not isinstance(cfg["ops_automation"], dict):
@@ -649,6 +822,12 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     ecb_m = dict(DEFAULT_EMAIL_COMMAND_BOT)
     ecb_m.update(cfg["email_command_bot"])
     cfg["email_command_bot"] = ecb_m
+    cfg.setdefault("monitoring", {})
+    if not isinstance(cfg["monitoring"], dict):
+        cfg["monitoring"] = {}
+    mon_m = dict(DEFAULT_MONITORING)
+    mon_m.update(cfg["monitoring"])
+    cfg["monitoring"] = mon_m
     from config_validate import validate_merged_config_or_exit
 
     validate_merged_config_or_exit(cfg)
@@ -801,6 +980,18 @@ def _load_quality_codes(picks_path: Path) -> set[str]:
     return out
 
 
+def _should_run_startup_daily_select(cfg: dict[str, Any], args: Any) -> bool:
+    """是否在进入监控前执行「启动时」盘前选股（与轮内 ops_automation 独立）。"""
+    if bool(getattr(args, "skip_daily_select", False)):
+        return False
+    mon = cfg.get("monitoring") or {}
+    if bool(mon.get("watchlist_only", False)):
+        return False
+    if bool(mon.get("skip_startup_daily_select", False)):
+        return False
+    return True
+
+
 def _build_watch_from_daily_picks(cfg: dict[str, Any], cfg_path: Path) -> tuple[list[dict[str, Any]], str]:
     return _build_watch_from_daily_picks_with_overrides(
         cfg,
@@ -872,6 +1063,16 @@ def _build_watch_from_daily_picks_with_overrides(
     base_watch = [w for w in cfg.get("watchlist", []) if isinstance(w, dict) and w.get("enabled", True)]
     if not base_watch:
         return [], "watchlist_empty"
+    mon = cfg.get("monitoring") or {}
+    if bool(mon.get("watchlist_only", False)):
+        return (
+            _apply_runtime_watch_overrides(
+                base_watch,
+                force_include_codes=force_include_codes,
+                force_exclude_codes=force_exclude_codes,
+            ),
+            "watchlist_only",
+        )
     picks_path = cfg_path.parent / "daily_picks.json"
     qcodes = _load_quality_codes(picks_path)
     if not qcodes:
@@ -1687,10 +1888,14 @@ def _fetch_watch_item_pack(
 
 
 def _risk_kind_from_stop_msg(msg: str) -> str:
+    if "硬性止损" in msg:
+        return "stop_loss"
+    if "波段" in msg:
+        return "take_profit_wave"
+    if "短线" in msg:
+        return "take_profit_short"
     if "止损" in msg:
         return "stop_loss"
-    if "波段止盈" in msg:
-        return "take_profit_wave"
     return "take_profit_short"
 
 
@@ -1719,6 +1924,27 @@ def _try_log_watch_alert(
         logging.getLogger(__name__).debug("alert_log_store failed", exc_info=True)
 
 
+def _ml_external_flow_snapshot(
+    cfg: dict[str, Any], feats: dict[str, float] | None
+) -> dict[str, float]:
+    """从完整特征中取外部资金流字段，写入 JSONL。"""
+    if not feats:
+        return {}
+    mf = cfg.get("ml_filter") if isinstance(cfg, dict) else None
+    if not isinstance(mf, dict) or not bool(mf.get("external_flow_features_enabled")):
+        return {}
+    from external_ml_features import EXTERNAL_FLOW_FEATURE_KEYS
+
+    out: dict[str, float] = {}
+    for k in EXTERNAL_FLOW_FEATURE_KEYS:
+        if k in feats:
+            try:
+                out[k] = round(float(feats[k]), 8)
+            except (TypeError, ValueError):
+                out[k] = 0.0
+    return out
+
+
 def _ml_prob_for_alert(
     cfg: dict[str, Any],
     *,
@@ -1727,27 +1953,107 @@ def _ml_prob_for_alert(
     pnl_pct: float | None = None,
     weak_pillars: dict[str, bool] | None = None,
     dd_level: int | None = None,
-) -> float | None:
+    code6: str | None = None,
+    anchor_trade_date: str | None = None,
+) -> tuple[float | None, dict[str, float] | None, int | None]:
+    """返回 (NB 概率, 完整特征向量, 已加载模型 JSON 的 features 长度)。"""
     mfc = cfg.get("ml_filter") or {}
     if not bool(mfc.get("enabled", False)):
-        return None
+        return None, None, None
     types = mfc.get("apply_to_alert_types")
     if isinstance(types, list) and len(types) > 0:
         ts = {str(x).strip() for x in types if str(x).strip()}
         if str(alert_type).strip() not in ts:
-            return None
+            return None, None, None
     mp = resolve_ml_model_path(cfg, ROOT)
     model = load_ml_model_cached(mp)
     if not isinstance(model, dict):
-        return None
+        return None, None, None
+    try:
+        n_model_feats = len(list(model.get("features") or []))
+    except (TypeError, ValueError):
+        n_model_feats = None
     feats = build_ml_feature_vector(
         alert_type=alert_type,
         anchor_price=anchor_price,
         pnl_pct=pnl_pct,
         weak_pillars=weak_pillars,
         dd_level=dd_level,
+        cfg=cfg,
+        root=ROOT,
+        code6=code6,
+        anchor_trade_date=anchor_trade_date,
     )
-    return predict_ml_bearish_probability(model, feats)
+    return (
+        predict_ml_bearish_probability(model, feats),
+        feats,
+        n_model_feats,
+    )
+
+
+def _ml_kline_decline_prob_for_trend(
+    cfg: dict[str, Any],
+    *,
+    code6: str,
+    anchor_td: str,
+) -> float | None:
+    """全量日 K 模型：未来大跌概率；未启用或失败时返回 None。"""
+    mfc = cfg.get("ml_filter") or {}
+    if not bool(mfc.get("kline_rf_enabled", False)):
+        return None
+    try:
+        from ml_kline_infer import (
+            load_kline_rf_bundle,
+            predict_decline_probability,
+            resolve_kline_db_path,
+            resolve_kline_model_path,
+        )
+    except Exception:
+        return None
+    mp = resolve_kline_model_path(cfg, ROOT)
+    bundle = load_kline_rf_bundle(mp)
+    if not bundle:
+        return None
+    db = resolve_kline_db_path(cfg, ROOT)
+    tbl = str(mfc.get("kline_rf_table") or "daily_klines").strip()
+    return predict_decline_probability(
+        db_path=db,
+        table=tbl,
+        code6=code6,
+        anchor_trade_date=anchor_td,
+        bundle=bundle,
+    )
+
+
+def _dual_ml_trend_suppress(
+    *,
+    nb_on: bool,
+    kl_on: bool,
+    ml_prob: float | None,
+    k_prob: float | None,
+    nb_th: float,
+    k_th: float,
+    combo: str,
+) -> tuple[bool, bool, bool]:
+    """
+    趋势下滑双重 ML 抑制判定。
+    返回 (suppress, nb_low, k_low)；suppress=True 表示应抑制主预警。
+    nb_low / k_low：该路已启用、有概率且低于阈值（「模型认为弱势概率低」→ 倾向抑制假阳性）。
+    """
+    nb_low = bool(
+        nb_on and ml_prob is not None and float(ml_prob) < float(nb_th)
+    )
+    k_low = bool(kl_on and k_prob is not None and float(k_prob) < float(k_th))
+    c = str(combo or "any").strip().lower()
+    if c == "all":
+        if nb_on and kl_on:
+            return (nb_low and k_low, nb_low, k_low)
+        if nb_on:
+            return (nb_low, nb_low, k_low)
+        if kl_on:
+            return (k_low, nb_low, k_low)
+        return (False, nb_low, k_low)
+    return (nb_low or k_low, nb_low, k_low)
 
 
 def _parse_hhmm(s: str, fallback_h: int, fallback_m: int) -> tuple[int, int]:
@@ -1759,6 +2065,138 @@ def _parse_hhmm(s: str, fallback_h: int, fallback_m: int) -> tuple[int, int]:
         return h, m
     except Exception:
         return fallback_h, fallback_m
+
+
+def _self_health_kline_max_date(cfg: dict[str, Any], *, root: Path) -> str | None:
+    """返回 daily_klines 库中全局最新 trade_date（YYYY-MM-DD），失败为 None。"""
+    import sqlite3
+
+    ks = cfg.get("kline_store") or {}
+    rel = str(ks.get("db_path") or "data/daily_klines.db").strip()
+    p = Path(rel)
+    if not p.is_absolute():
+        p = root / p
+    if not p.is_file():
+        return None
+    try:
+        conn = sqlite3.connect(f"file:{p}?mode=ro", uri=True, timeout=5.0)
+    except sqlite3.Error:
+        return None
+    try:
+        row = conn.execute("SELECT MAX(trade_date) FROM daily_klines").fetchone()
+        if not row or row[0] is None:
+            return None
+        s = str(row[0]).strip()[:10]
+        return s if len(s) == 10 else None
+    except sqlite3.Error:
+        return None
+    finally:
+        conn.close()
+
+
+def _self_health_pending_alert_count(cfg: dict[str, Any], *, root: Path) -> int:
+    import sqlite3
+
+    try:
+        from alert_log_store import resolve_alert_db_path
+    except Exception:
+        return 0
+    db_path = resolve_alert_db_path(cfg, root)
+    if db_path is None or not db_path.is_file():
+        return 0
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=5.0)
+    except sqlite3.Error:
+        return 0
+    try:
+        row = conn.execute(
+            "SELECT COUNT(*) FROM alert_events WHERE eval_status = 'pending'"
+        ).fetchone()
+        return int(row[0] or 0) if row else 0
+    except sqlite3.Error:
+        return 0
+    finally:
+        conn.close()
+
+
+def _maybe_self_health_preopen(
+    *,
+    cfg: dict[str, Any],
+    state: dict[str, Any],
+    config_path: Path,
+    oa: dict[str, Any],
+    now: datetime,
+    today: str,
+    py: str,
+) -> None:
+    """每个交易日开盘窗口内至多执行一次：数据新鲜度巡检与轻量自愈。"""
+    if not bool(oa.get("self_health_enabled", False)):
+        return
+    if state.get("__self_health_preopen_done__") == today:
+        return
+    ph, pm = _parse_hhmm(str(oa.get("preopen_cutoff_hhmm") or "09:20"), 9, 20)
+    if now.time() > dt_time(ph, pm):
+        return
+
+    max_lag = max(0, int(oa.get("self_health_kline_max_lag_calendar_days", 1) or 1))
+    pend_min = max(10, int(oa.get("self_health_pending_alerts_min", 200) or 200))
+    ttl_mult = float(oa.get("self_health_sector_cache_ttl_mult", 2.0) or 2.0)
+
+    mx = _self_health_kline_max_date(cfg, root=ROOT)
+    need_before = (date.today() - timedelta(days=max_lag)).isoformat()
+    if mx is None or mx < need_before:
+        _emit_main_line(
+            f"[自愈] 日 K 库最新日期={mx or '—'}，晚于阈值 {need_before}，执行 sync_daily_klines",
+            event="ops_self_health_sync_klines",
+        )
+        _run_local_script(
+            [py, str(ROOT / "sync_daily_klines.py"), "-c", str(config_path)],
+            event="ops_self_health_sync_klines_run",
+        )
+
+    try:
+        from sector_em import sector_index_cache_path
+
+        cpath = sector_index_cache_path(cfg, ROOT)
+        se = cfg.get("sector_em") or {}
+        ttl = float(se.get("industry_map_ttl_sec", 3600) or 3600) * max(0.5, ttl_mult)
+        if cpath.is_file():
+            age = time.time() - cpath.stat().st_mtime
+            if age > ttl:
+                _emit_main_line(
+                    f"[自愈] 行业缓存 {cpath.name} 已 {age / 3600:.1f}h 未更新（>{ttl / 3600:.1f}h），删除以强制刷新",
+                    event="ops_self_health_sector_cache_stale",
+                )
+                try:
+                    cpath.unlink()
+                except OSError:
+                    pass
+    except Exception as exc:
+        _emit_main_line(
+            f"[自愈] 行业缓存检查异常: {exc}",
+            event="ops_self_health_sector_err",
+            level=logging.WARNING,
+        )
+
+    pend = _self_health_pending_alert_count(cfg, root=ROOT)
+    if pend >= pend_min:
+        _emit_main_line(
+            f"[自愈] alert_events 待评估 {pend} 条（≥{pend_min}），执行 backtest_alerts（仅 pending）",
+            event="ops_self_health_backtest_pending",
+        )
+        _run_local_script(
+            [
+                py,
+                str(ROOT / "backtest_alerts.py"),
+                "-c",
+                str(config_path),
+                "--since",
+                "2000-01-01",
+            ],
+            event="ops_self_health_backtest_run",
+        )
+
+    state["__self_health_preopen_done__"] = today
 
 
 def _run_local_script(argv: list[str], *, event: str) -> bool:
@@ -1808,8 +2246,17 @@ def _maybe_run_ops_automation(
     if now.weekday() >= 5:
         return
     today = now.strftime("%Y-%m-%d")
-    hhmm = now.strftime("%H:%M")
     py = sys.executable
+
+    _maybe_self_health_preopen(
+        cfg=cfg,
+        state=state,
+        config_path=config_path,
+        oa=oa,
+        now=now,
+        today=today,
+        py=py,
+    )
 
     # 开盘前任务（每天一次）
     if bool(oa.get("preopen_enabled", True)):
@@ -1869,6 +2316,22 @@ def _maybe_run_ops_automation(
             if bool(oa.get("auto_tune_email", True)):
                 tune_cmd.append("--email")
             _run_local_script(tune_cmd, event="after_close_auto_tune")
+            if bool(oa.get("incremental_nb_after_close", False)):
+                inc_days = max(7, int(oa.get("incremental_nb_days", 30) or 30))
+                inc_min = max(6, int(oa.get("incremental_nb_min_samples", 12) or 12))
+                _run_local_script(
+                    [
+                        py,
+                        str(ROOT / "ml_nb_incremental.py"),
+                        "-c",
+                        str(config_path),
+                        "--days",
+                        str(inc_days),
+                        "--min-samples",
+                        str(inc_min),
+                    ],
+                    event="after_close_ml_nb_incremental",
+                )
             state["__ops_after_close_done__"] = today
 
     # 周五额外任务（每周一次）
@@ -1889,12 +2352,45 @@ def _maybe_run_ops_automation(
                         "--days",
                         str(max(30, int(oa.get("ml_train_days", 180) or 180))),
                         "--min-samples",
-                        str(max(10, int(oa.get("ml_train_min_samples", 50) or 50))),
+                        str(max(6, int(oa.get("ml_train_min_samples", 18) or 18))),
                         "--model-out",
                         str(ROOT / "data" / "ml_bearish_nb.json"),
                     ],
                     event="weekly_ml_train",
                 )
+            if bool(oa.get("friday_kline_rf_train_enabled", False)):
+                mf = cfg.get("ml_filter") or {}
+                db_rf = str(mf.get("kline_rf_db_path") or "data/baostock_full.db").strip()
+                tbl = str(mf.get("kline_rf_table") or "daily_klines").strip()
+                mpath = str(mf.get("kline_rf_model_path") or "models/kline_rf.pkl").strip()
+                db_p = Path(db_rf)
+                if not db_p.is_absolute():
+                    db_p = ROOT / db_p
+                m_out = Path(mpath)
+                if not m_out.is_absolute():
+                    m_out = ROOT / m_out
+                if db_p.is_file():
+                    _run_local_script(
+                        [
+                            py,
+                            str(ROOT / "train_kline_model.py"),
+                            "--db",
+                            str(db_p),
+                            "--table",
+                            tbl,
+                            "--model",
+                            str(m_out),
+                            "--feature-set",
+                            "trend",
+                        ],
+                        event="weekly_kline_rf_train",
+                    )
+                else:
+                    _emit_main_line(
+                        f"[自动化] 跳过日 K RF 重训：未找到库 {db_p}",
+                        event="weekly_kline_rf_skip",
+                        level=logging.WARNING,
+                    )
             state["__ops_weekly_done__"] = week_tag
 
 
@@ -2171,8 +2667,17 @@ def process_watch_pack(
             st_msg = None
         if st_msg:
             risk_k = f"risk_{rk}"
+            ms = str(st_msg)
+            if "硬性止损" in ms:
+                _st_head = "【止损提醒】"
+            elif "波段" in ms:
+                _st_head = "【止盈提醒】"
+            elif "短线" in ms:
+                _st_head = "【止盈提醒】"
+            else:
+                _st_head = "【止盈止损】"
             _emit_watch_line(
-                f"      └ 【止盈止损】{bold_console(st_msg)}｜相对成本盈亏 {pnl:+.2f}%",
+                f"      └ {_st_head}{bold_console(st_msg)}｜相对成本盈亏 {pnl:+.2f}%",
                 event="watch_stop_take",
                 code=code,
                 rk=rk,
@@ -2281,6 +2786,7 @@ def process_watch_pack(
                 cfg=cfg,
                 stock_code=code,
                 float_mv_yuan=fm_yuan,
+                dynamic_min_pillars_weak=pack.get("_dynamic_min_pillars_weak"),
             )
             if tr.skipped_by_filter:
                 _emit_watch_line(
@@ -2340,23 +2846,57 @@ def process_watch_pack(
                     rk=rk,
                 )
             ml_prob: float | None = None
+            ml_nb_feats: dict[str, float] | None = None
+            ml_nb_model_dim: int | None = None
+            k_p: float | None = None
             ml_allow = True
             if tr.fire and notify_ok:
-                ml_prob = _ml_prob_for_alert(
+                mcfg = cfg.get("ml_filter") or {}
+                nb_on = bool(mcfg.get("enabled", False))
+                kl_on = bool(mcfg.get("kline_rf_enabled", False))
+                ml_prob, ml_nb_feats, ml_nb_model_dim = _ml_prob_for_alert(
                     cfg,
                     alert_type="trend_slip",
                     anchor_price=now_price,
                     pnl_pct=pnl,
                     weak_pillars=tr.weak_pillars,
                     dd_level=None,
+                    code6=str(code6_risk or ""),
+                    anchor_trade_date=anchor_td[:10],
                 )
-                mcfg = cfg.get("ml_filter") or {}
+                if not nb_on:
+                    ml_prob = None
+                    ml_nb_feats = None
+                    ml_nb_model_dim = None
+                if kl_on:
+                    k_p = _ml_kline_decline_prob_for_trend(
+                        cfg,
+                        code6=code6_risk,
+                        anchor_td=anchor_td,
+                    )
                 ml_th = float(mcfg.get("bearish_prob_threshold", 0.60) or 0.60)
-                if ml_prob is not None and ml_prob < ml_th:
+                k_th = float(mcfg.get("kline_rf_suppress_below", 0.30) or 0.30)
+                combo = str(mcfg.get("suppress_combo", "any") or "any").strip().lower()
+                suppress, nb_low, kl_low = _dual_ml_trend_suppress(
+                    nb_on=nb_on,
+                    kl_on=kl_on,
+                    ml_prob=ml_prob,
+                    k_prob=k_p,
+                    nb_th=ml_th,
+                    k_th=k_th,
+                    combo=combo,
+                )
+                if suppress and (nb_low or kl_low):
                     ml_allow = False
+                    parts: list[str] = []
+                    if nb_low:
+                        parts.append(f"NB {ml_prob:.1%}<{ml_th:.1%}")
+                    if kl_low:
+                        parts.append(f"日K {k_p:.1%}<{k_th:.1%}")
+                    mode_cn = "需同时满足" if combo == "all" else "任一满足"
                     _emit_watch_line(
-                        f"      └ 趋势下滑(ML抑制)｜bearish 概率 {ml_prob:.1%} < 阈值 {ml_th:.1%}",
-                        event="watch_trend_slip_ml_suppressed",
+                        f"      └ 趋势下滑(ML组合｜{mode_cn})｜" + "；".join(parts),
+                        event="watch_trend_slip_ml_combo_suppressed",
                         code=code,
                         rk=rk,
                     )
@@ -2420,6 +2960,19 @@ def process_watch_pack(
                             weak_dims=tr.weak_dims_by_pillar,
                             sector_data_incomplete=not tr.sector_eligible,
                             sector_data_warning=tr.sector_data_warning or "",
+                            ml_bearish_prob=ml_prob,
+                            ml_kline_decline_prob=k_p,
+                            ml_external_flow_enabled=bool(
+                                (cfg.get("ml_filter") or {}).get(
+                                    "external_flow_features_enabled"
+                                )
+                            ),
+                            ml_external_flow_snapshot=_ml_external_flow_snapshot(
+                                cfg, ml_nb_feats
+                            ),
+                            # NB 模型 JSON 中 features 长度：开外部流时期望 11；仍为 6 表示未重训占位/旧模型
+                            ml_nb_full_dim=ml_nb_model_dim,
+                            ml_nb_vector_dim=len(ml_nb_feats) if ml_nb_feats else 0,
                         )
                     except Exception:
                         pass
@@ -2437,7 +2990,25 @@ def process_watch_pack(
                         alert_type="trend_slip",
                         rk=rk,
                         summary=tr.summary[:800],
-                        extra={"weak_pillars": tr.weak_pillars, "pnl_pct": pnl, "ml_bearish_prob": ml_prob},
+                        extra={
+                            "weak_pillars": tr.weak_pillars,
+                            "pnl_pct": pnl,
+                            "ml_bearish_prob": ml_prob,
+                            "ml_kline_decline_prob": k_p,
+                            "ml_suppress_combo": str(
+                                (cfg.get("ml_filter") or {}).get("suppress_combo") or "any"
+                            ),
+                            "ml_external_flow_enabled": bool(
+                                (cfg.get("ml_filter") or {}).get(
+                                    "external_flow_features_enabled"
+                                )
+                            ),
+                            "ml_external_flow_snapshot": _ml_external_flow_snapshot(
+                                cfg, ml_nb_feats
+                            ),
+                            "ml_nb_full_dim": ml_nb_model_dim,
+                            "ml_nb_vector_dim": len(ml_nb_feats) if ml_nb_feats else 0,
+                        },
                     )
                     notif = cfg.get("notifications") or {}
                     if bool(notif.get("aggregate_trend_alerts")) and (
@@ -2598,6 +3169,11 @@ def main() -> int:
         help="一键自动：先盘前选股筛选，再直接进入盘中监控",
     )
     ap.add_argument(
+        "--skip-daily-select",
+        action="store_true",
+        help="启动时不跑自动盘前选股（沿用已有 daily_picks.json；选股源不可用时可用）",
+    )
+    ap.add_argument(
         "--backtest-code",
         type=str,
         default=None,
@@ -2607,6 +3183,16 @@ def main() -> int:
         "--check-bk",
         action="store_true",
         help="打印 watchlist 的趋势板块 BK 解析结果（不写 state、不拉行情）",
+    )
+    ap.add_argument(
+        "--verify-config",
+        action="store_true",
+        help="载入并合并配置，做 Schema + 路径/邮件自检后退出（0=无致命问题）",
+    )
+    ap.add_argument(
+        "--skip-startup-check",
+        action="store_true",
+        help="跳过启动路径/邮件等非 Schema 自检（不推荐）",
     )
     args = ap.parse_args()
 
@@ -2671,8 +3257,29 @@ def main() -> int:
         )
         return 1
 
-    # 默认主命令：自动先做盘前筛选，再进入盘中监控
-    auto_daily = not any(
+    cfg = merge_full_config(
+        json.loads(args.config.read_text(encoding="utf-8"))
+    )
+
+    if not args.verify_config:
+        _backup_user_config_file(args.config)
+
+    from config_startup_check import format_startup_report, run_startup_config_checks
+
+    if args.verify_config:
+        errs, warns = run_startup_config_checks(cfg, root=ROOT)
+        print(format_startup_report(errs, warns))
+        return 1 if errs else 0
+
+    if not args.skip_startup_check:
+        errs2, warns2 = run_startup_config_checks(cfg, root=ROOT)
+        if errs2 or warns2:
+            print(format_startup_report(errs2, warns2), file=sys.stderr)
+        if errs2:
+            return 1
+
+    # 默认主命令：按配置决定是否在进入监控前执行盘前选股（watchlist_only 等会跳过）
+    would_startup_daily = not any(
         (
             args.scan,
             args.daily_select,
@@ -2683,7 +3290,10 @@ def main() -> int:
             args.check_bk,
         )
     )
-    if auto_daily:
+    run_startup_daily = would_startup_daily and _should_run_startup_daily_select(
+        cfg, args
+    )
+    if run_startup_daily:
         _ensure_app_logging_from_config_path(args.config)
         _emit_cli_subcmd_line(
             "[主流程] 自动执行盘前选股+回测筛选...",
@@ -2692,8 +3302,13 @@ def main() -> int:
         rc = _run_auto_daily_select(args)
         if rc != 0:
             return rc
+    elif would_startup_daily:
+        _emit_cli_subcmd_line(
+            "[主流程] 按配置跳过启动盘前选股，直接进入监控"
+            "（watchlist_only / skip_startup_daily_select / --skip-daily-select）",
+            event="cli_startup_daily_select_skipped",
+        )
 
-    cfg = merge_full_config(json.loads(args.config.read_text(encoding="utf-8")))
     from app_logging import setup_app_logging
 
     setup_app_logging(cfg, root=ROOT)
@@ -2787,6 +3402,11 @@ def main() -> int:
         _emit_cli_subcmd_line(
             "[AI筛选] 盘中仅监控 daily_picks.json 的优质股（含持仓标签保留）",
             event="cli_watch_mode_quality_only",
+        )
+    elif watch_mode == "watchlist_only":
+        _emit_cli_subcmd_line(
+            "[监控] 已开启 watchlist_only：仅轮询 config.json 的 watchlist（不合并 daily_picks 优质股全表）",
+            event="cli_watch_mode_watchlist_only",
         )
     elif watch_mode == "fallback_all":
         _emit_cli_subcmd_line(
@@ -2971,6 +3591,13 @@ def main() -> int:
                 if res.get("kind") == "ok":
                     attempted += 1
                     items.append(res["pack"])
+
+            dyn_mp, dyn_msg = _compute_round_dynamic_min_pillars_weak(cfg)
+            if dyn_msg:
+                _emit_main_line(dyn_msg, event="poll_dynamic_regime")
+            if dyn_mp is not None:
+                for _p in items:
+                    _p["_dynamic_min_pillars_weak"] = dyn_mp
 
             full_outage = attempted > 0 and fails >= attempted
             dh_cfg = cfg.get("data_health") or {}
@@ -3199,6 +3826,16 @@ def main() -> int:
             state["__force_include__"] = sorted(force_include_codes)
             state["__force_exclude__"] = sorted(force_exclude_codes)
             save_state(st_path, state)
+
+            from data_health import maybe_write_data_heartbeat
+
+            maybe_write_data_heartbeat(
+                root=ROOT,
+                watch_count=len(watch),
+                attempted=int(attempted),
+                fails=int(fails),
+                trading_session=is_trading_session(),
+            )
 
             if attempted > 0 and fails * 10 >= attempted * 7:
                 fuse_msg = (

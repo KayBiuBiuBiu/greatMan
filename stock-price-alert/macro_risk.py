@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import threading
 import time
 from typing import Any
@@ -11,6 +12,7 @@ from utils import safe_get
 _INDEX_KLINE_LOCK = threading.Lock()
 _index_closes_ts: float = 0.0
 _index_closes: list[float] | None = None
+_index_volumes: list[float] | None = None
 _index_kline_ttl_sec: float = 60.0
 _SH_INDEX_UT = "fa5fd1943c7b386f172d6893dbfba10b"
 
@@ -24,8 +26,15 @@ def configure_index_kline_cache(ttl_sec: float | None = None) -> None:
 
 
 def _parse_closes_from_kline_json(j: dict[str, Any]) -> list[float] | None:
+    c, _v = _parse_bars_from_kline_json(j)
+    return c
+
+
+def _parse_bars_from_kline_json(j: dict[str, Any]) -> tuple[list[float], list[float]]:
+    """东财日 K 字符串：日期,开,收,高,低,量,... → 收盘价与成交量（与收盘对齐）。"""
     klines = (j.get("data") or {}).get("klines") or []
     closes: list[float] = []
+    vols: list[float] = []
     for line in klines:
         parts = line.split(",")
         if len(parts) >= 3:
@@ -33,17 +42,23 @@ def _parse_closes_from_kline_json(j: dict[str, Any]) -> list[float] | None:
                 closes.append(float(parts[2]))
             except ValueError:
                 continue
-    return closes if closes else None
+            try:
+                vols.append(float(parts[5]) if len(parts) >= 6 else 0.0)
+            except ValueError:
+                vols.append(0.0)
+    if len(vols) != len(closes):
+        vols = [0.0] * len(closes)
+    return closes, vols
 
 
-def _fetch_sh_index_closes_network() -> list[float] | None:
+def _fetch_sh_index_closes_network() -> tuple[list[float], list[float]] | None:
     try:
         url = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
         params = {
             "secid": "1.000001",
             "klt": "101",
             "fqt": "1",
-            "lmt": "12",
+            "lmt": "120",
             "end": "20500101",
             "fields1": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13",
             "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
@@ -54,14 +69,15 @@ def _fetch_sh_index_closes_network() -> list[float] | None:
             return None
         r.raise_for_status()
         j = r.json()
-        return _parse_closes_from_kline_json(j)
+        c, v = _parse_bars_from_kline_json(j)
+        return (c, v) if c else None
     except Exception:
         return None
 
 
 def get_sh_index_closes_cached() -> list[float] | None:
     """上证指数日 K 收盘价序列；带 TTL 的进程内缓存。"""
-    global _index_closes_ts, _index_closes
+    global _index_closes_ts, _index_closes, _index_volumes
     now = time.time()
     with _INDEX_KLINE_LOCK:
         if (
@@ -70,14 +86,206 @@ def get_sh_index_closes_cached() -> list[float] | None:
             and now - _index_closes_ts < _index_kline_ttl_sec
         ):
             return list(_index_closes)
-        closes = _fetch_sh_index_closes_network()
-        if closes:
+        bars = _fetch_sh_index_closes_network()
+        if bars:
+            closes, vols = bars
             _index_closes = closes
+            _index_volumes = vols
             _index_closes_ts = time.time()
             return list(closes)
         _index_closes = None
+        _index_volumes = None
         _index_closes_ts = 0.0
         return None
+
+
+def get_sh_index_volumes_cached() -> list[float] | None:
+    """与 `get_sh_index_closes_cached` 同一次拉取的量序列；无缓存或未拉取时返回 None。"""
+    get_sh_index_closes_cached()
+    with _INDEX_KLINE_LOCK:
+        if _index_volumes is None:
+            return None
+        return list(_index_volumes)
+
+
+def get_market_regime(
+    *,
+    ma_period: int = 20,
+    dynamic_cfg: dict[str, Any] | None = None,
+) -> str:
+    """
+    上证日 K：最新收盘是否高于近 ma_period 日简单均线。
+    数据不足或失败时返回 ``bear``（偏保守）。
+    """
+    closes = get_sh_index_closes_cached()
+    if not closes or len(closes) < max(2, int(ma_period)):
+        return "bear"
+    n = min(len(closes), max(2, int(ma_period)))
+    window = closes[-n:]
+    ma_val = sum(window) / float(len(window))
+    latest = closes[-1]
+    if latest <= ma_val:
+        return "bear"
+    dc = dynamic_cfg if isinstance(dynamic_cfg, dict) else {}
+    if bool(dc.get("use_volume_filter", False)):
+        thr = float(dc.get("volume_ratio_active", 1.2) or 1.2)
+        vols = get_sh_index_volumes_cached()
+        if (
+            vols
+            and len(vols) >= len(closes)
+            and len(closes) >= 22
+        ):
+            v_last = float(vols[-1])
+            v_ma = sum(float(x) for x in vols[-21:-1]) / 20.0
+            if v_ma > 0 and (v_last / v_ma) < thr:
+                return "bear"
+    return "bull"
+
+
+def _sma_last_window(closes: list[float], n: int) -> float | None:
+    if len(closes) < n or n < 1:
+        return None
+    w = closes[-n:]
+    return sum(w) / float(len(w))
+
+
+def _rsi_last_wilder(closes: list[float], period: int = 14) -> float | None:
+    """Wilder RSI，取序列最后一个 bar 的 RSI。"""
+    if len(closes) < period + 1:
+        return None
+    gains = 0.0
+    losses = 0.0
+    for i in range(-period, 0):
+        d = float(closes[i]) - float(closes[i - 1])
+        if d >= 0:
+            gains += d
+        else:
+            losses -= d
+    avg_g = gains / float(period)
+    avg_l = losses / float(period)
+    if avg_l <= 1e-12 and avg_g <= 1e-12:
+        return 50.0
+    if avg_l <= 1e-12:
+        return 100.0
+    rs = avg_g / avg_l
+    return 100.0 - (100.0 / (1.0 + rs))
+
+
+def _bb_width_ratio_last(closes: list[float], period: int = 20) -> float | None:
+    """(上轨-下轨)/中轨，中轨与标准差均基于最近 period 根收盘。"""
+    if len(closes) < period:
+        return None
+    w = [float(x) for x in closes[-period:]]
+    mid = sum(w) / float(len(w))
+    if mid <= 0:
+        return None
+    var = sum((x - mid) ** 2 for x in w) / max(1.0, float(len(w) - 1))
+    std = math.sqrt(max(1e-12, var))
+    upper = mid + 2.0 * std
+    lower = mid - 2.0 * std
+    return (upper - lower) / mid
+
+
+def _index_volume_ratio_last(closes: list[float], vols: list[float]) -> float | None:
+    if not vols or len(vols) < len(closes) or len(closes) < 22:
+        return None
+    v_last = float(vols[-1])
+    tail = [float(x) for x in vols[-21:-1]]
+    if not tail:
+        return None
+    v_ma = sum(tail) / float(len(tail))
+    if v_ma <= 0:
+        return None
+    return v_last / v_ma
+
+
+def get_market_mood_three_tier(*, dynamic_cfg: dict[str, Any] | None = None) -> str:
+    """
+    三档：strong_bull / range / weak_bear。
+    结合 MA、RSI、布林带宽度与可选量能；数据不足时偏保守为 weak_bear。
+    """
+    dc = dynamic_cfg if isinstance(dynamic_cfg, dict) else {}
+    ma_p = max(5, min(120, int(dc.get("ma_period", 20) or 20)))
+    closes = get_sh_index_closes_cached()
+    if not closes or len(closes) < max(ma_p, 22):
+        return "weak_bear"
+    ma_val = _sma_last_window(closes, ma_p)
+    if ma_val is None:
+        return "weak_bear"
+    latest = float(closes[-1])
+    rsi_p_raw = dc.get("rsi_period", dc.get("mood_rsi_period", 14))
+    rsi_p = max(2, min(30, int(rsi_p_raw if rsi_p_raw is not None else 14)))
+    rsi = _rsi_last_wilder(closes, period=rsi_p)
+    bb_p_raw = dc.get("bb_period", dc.get("mood_bb_period", 20))
+    bb_p = max(5, min(60, int(bb_p_raw if bb_p_raw is not None else 20)))
+    bbw = _bb_width_ratio_last(closes, period=bb_p)
+    rsi_strong = float(
+        dc.get("rsi_strong_bull_min", dc.get("mood_rsi_bull", 56)) or 56
+    )
+    rsi_weak = float(
+        dc.get("rsi_weak_bear_max", dc.get("mood_rsi_bear", 44)) or 44
+    )
+    bb_min = float(
+        dc.get("bb_width_min_for_strong", dc.get("mood_bb_width_bull", 0.012))
+        or 0.012
+    )
+    use_vol = bool(dc.get("use_volume_filter", False))
+    vol_thr = float(dc.get("volume_ratio_active", 1.2) or 1.2)
+    vols = get_sh_index_volumes_cached()
+    vr = (
+        _index_volume_ratio_last(closes, vols)
+        if use_vol and vols
+        else None
+    )
+
+    weak = latest <= ma_val
+    if rsi is not None:
+        weak = weak or (rsi <= rsi_weak)
+    if use_vol and vr is not None and vr < vol_thr:
+        weak = True
+    if weak:
+        return "weak_bear"
+
+    strong = latest > ma_val
+    if rsi is not None:
+        strong = strong and (rsi >= rsi_strong)
+    if use_vol and vr is not None:
+        strong = strong and (vr >= vol_thr)
+    if bbw is not None:
+        strong = strong and (bbw >= bb_min)
+    if strong:
+        return "strong_bull"
+    return "range"
+
+
+def sector_rs_bucket(
+    sector_closes: list[float],
+    index_closes: list[float] | None,
+    *,
+    ret_days: int = 20,
+    out_pct: float = 0.005,
+    under_pct: float = -0.005,
+) -> str:
+    """板块相对上证 N 日收益：outperform / neutral / underperform。"""
+    if not sector_closes or not index_closes:
+        return "neutral"
+    n = max(5, min(60, int(ret_days)))
+    if len(sector_closes) < n + 1 or len(index_closes) < n + 1:
+        return "neutral"
+    a_s = float(sector_closes[-n - 1])
+    b_s = float(sector_closes[-1])
+    a_i = float(index_closes[-n - 1])
+    b_i = float(index_closes[-1])
+    if a_s <= 0 or a_i <= 0:
+        return "neutral"
+    rs = b_s / a_s - 1.0
+    ri = b_i / a_i - 1.0
+    d = rs - ri
+    if d >= out_pct:
+        return "outperform"
+    if d <= under_pct:
+        return "underperform"
+    return "neutral"
 
 
 def _keyword_hit(text: str, keywords: tuple[str, ...]) -> bool:

@@ -4,6 +4,10 @@
   "alert_cooldown_minutes": 5,
   "alert_price_buffer": 0.02,
   "run_only_in_trading_hours": true,
+  "monitoring": {
+    "watchlist_only": false,
+    "skip_startup_daily_select": false
+  },
   "scan_pool_max": 800,
   "daily_pick_count": 6,
   "capital": {
@@ -70,7 +74,30 @@
     "min_float_mv_yi": 0,
     "min_volume_ratio": 0,
     "alert_ignore_codes": [],
-    "require_consecutive_trade_days": 1
+    "require_consecutive_trade_days": 1,
+    "dynamic_adaptive": {
+      "enabled": false,
+      "ma_period": 20,
+      "bull_min_pillars": 3,
+      "bear_min_pillars": 2,
+      "volume_ratio_active": 1.2,
+      "use_volume_filter": false,
+      "use_mood_three_tier": false,
+      "strong_bull_min_pillars": 4,
+      "range_min_pillars": 3,
+      "weak_bear_min_pillars": 2,
+      "rsi_period": 14,
+      "rsi_strong_bull_min": 56,
+      "rsi_weak_bear_max": 44,
+      "bb_period": 20,
+      "bb_width_min_for_strong": 0.012,
+      "sector_rs_enabled": false,
+      "sector_rs_ret_days": 20,
+      "sector_rs_outperform_pct": 0.005,
+      "sector_rs_underperform_pct": -0.005,
+      "sector_rs_strong_delta": 1,
+      "sector_rs_weak_delta": -1
+    }
   },
   "sector_index_overrides": {},
   "performance": {
@@ -118,7 +145,15 @@
     "enabled": false,
     "model_path": "data/ml_bearish_nb.json",
     "apply_to_alert_types": ["trend_slip"],
-    "bearish_prob_threshold": 0.6
+    "bearish_prob_threshold": 0.6,
+    "kline_rf_enabled": false,
+    "kline_rf_db_path": "data/baostock_full.db",
+    "kline_rf_table": "daily_klines",
+    "kline_rf_model_path": "models/kline_rf.pkl",
+    "kline_rf_suppress_below": 0.3,
+    "suppress_combo": "any",
+    "external_flow_features_enabled": false,
+    "external_flow_days": 10
   },
   "ops_automation": {
     "enabled": false,
@@ -132,7 +167,15 @@
     "auto_tune_email": true,
     "ml_train_weekly": true,
     "ml_train_days": 180,
-    "ml_train_min_samples": 50
+    "ml_train_min_samples": 18,
+    "self_health_enabled": false,
+    "self_health_kline_max_lag_calendar_days": 1,
+    "self_health_pending_alerts_min": 200,
+    "self_health_sector_cache_ttl_mult": 2,
+    "friday_kline_rf_train_enabled": false,
+    "incremental_nb_after_close": false,
+    "incremental_nb_days": 30,
+    "incremental_nb_min_samples": 12
   },
   "email_command_bot": {
     "enabled": false,
@@ -201,7 +244,9 @@
     "full_outage_consecutive_notify_threshold": 0,
     "full_outage_email_enabled": false,
     "recovery_notify_enabled": true,
-    "suppress_trend_rounds_after_full_outage": 0
+    "suppress_trend_rounds_after_full_outage": 0,
+    "heartbeat_path": "logs/data_heartbeat.json",
+    "heartbeat_interval_sec": 180
   },
   "logging": {
     "enabled": true,

@@ -98,4 +98,4 @@ def test_sector_data_warning_when_no_bk(merged_cfg: dict) -> None:
         cfg=cfg,
     )
     assert tr.sector_data_warning is not None
-    assert "板块数据缺失" in tr.sector_data_warning
+    assert "板块数据不完整" in tr.sector_data_warning

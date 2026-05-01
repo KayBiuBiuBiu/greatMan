@@ -90,6 +90,11 @@ def _cache_path(cfg: dict[str, Any], root: Path) -> Path:
     return root / name
 
 
+def sector_index_cache_path(cfg: dict[str, Any], root: Path) -> Path:
+    """行业板块缓存 JSON 路径（供运维自愈等使用）。"""
+    return _cache_path(cfg, root)
+
+
 def _load_cache_file(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {"version": 1, "by_code": {}, "industry_name_to_bk": {}}

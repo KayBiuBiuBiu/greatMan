@@ -30,6 +30,13 @@
       "minimum": 0
     },
     "run_only_in_trading_hours": { "type": "boolean" },
+    "monitoring": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "watchlist_only": { "type": "boolean" }
+      }
+    },
     "scan_pool_max": {
       "type": ["integer", "number"],
       "minimum": 1
@@ -125,6 +132,38 @@
           "type": ["integer", "number"],
           "minimum": 1,
           "description": "趋势下滑需连续 N 个交易日柱走弱才推送（>1 时写 SQLite streak，与 kline_store 同库）"
+        },
+        "dynamic_adaptive": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "ma_period": { "type": ["integer", "number"], "minimum": 5, "maximum": 120 },
+            "bull_min_pillars": { "type": ["integer", "number"], "minimum": 1, "maximum": 4 },
+            "bear_min_pillars": { "type": ["integer", "number"], "minimum": 1, "maximum": 4 },
+            "volume_ratio_active": { "type": ["integer", "number"], "minimum": 0 },
+            "use_volume_filter": { "type": "boolean" },
+            "use_mood_three_tier": { "type": "boolean" },
+            "strong_bull_min_pillars": { "type": ["integer", "number"], "minimum": 1, "maximum": 4 },
+            "range_min_pillars": { "type": ["integer", "number"], "minimum": 1, "maximum": 4 },
+            "weak_bear_min_pillars": { "type": ["integer", "number"], "minimum": 1, "maximum": 4 },
+            "rsi_period": { "type": ["integer", "number"], "minimum": 2, "maximum": 30 },
+            "mood_rsi_period": { "type": ["integer", "number"], "minimum": 2, "maximum": 30 },
+            "rsi_strong_bull_min": { "type": ["integer", "number"], "minimum": 0, "maximum": 100 },
+            "mood_rsi_bull": { "type": ["integer", "number"], "minimum": 0, "maximum": 100 },
+            "rsi_weak_bear_max": { "type": ["integer", "number"], "minimum": 0, "maximum": 100 },
+            "mood_rsi_bear": { "type": ["integer", "number"], "minimum": 0, "maximum": 100 },
+            "bb_period": { "type": ["integer", "number"], "minimum": 5, "maximum": 60 },
+            "mood_bb_period": { "type": ["integer", "number"], "minimum": 5, "maximum": 60 },
+            "bb_width_min_for_strong": { "type": ["integer", "number"], "minimum": 0 },
+            "mood_bb_width_bull": { "type": ["integer", "number"], "minimum": 0 },
+            "sector_rs_enabled": { "type": "boolean" },
+            "sector_rs_ret_days": { "type": ["integer", "number"], "minimum": 5, "maximum": 60 },
+            "sector_rs_outperform_pct": { "type": ["integer", "number"] },
+            "sector_rs_underperform_pct": { "type": ["integer", "number"] },
+            "sector_rs_strong_delta": { "type": ["integer", "number"], "minimum": -3, "maximum": 3 },
+            "sector_rs_weak_delta": { "type": ["integer", "number"], "minimum": -3, "maximum": 3 }
+          }
         },
         "atr_tiers": {
           "type": "object",
@@ -234,6 +273,42 @@
           "type": ["integer", "number"],
           "minimum": 0,
           "maximum": 1
+        },
+        "kline_rf_enabled": { "type": "boolean" },
+        "kline_rf_db_path": { "type": "string" },
+        "kline_rf_table": { "type": "string" },
+        "kline_rf_model_path": { "type": "string" },
+        "kline_rf_suppress_below": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "suppress_combo": { "type": "string", "enum": ["any", "all"] },
+        "external_flow_features_enabled": { "type": "boolean" },
+        "external_flow_days": { "type": ["integer", "number"], "minimum": 3, "maximum": 60 }
+      }
+    },
+    "ml": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "可选顶层别名，merge_full_config 会映射到 ml_filter",
+      "properties": {
+        "kline_model_enabled": { "type": "boolean" },
+        "kline_model_path": { "type": "string" },
+        "kline_db_path": { "type": "string" },
+        "kline_table": { "type": "string" },
+        "kline_suppress_threshold": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "suppress_combo": { "type": "string" },
+        "nb_enabled": { "type": "boolean" },
+        "nb_model_path": { "type": "string" },
+        "nb_prob_threshold": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
         }
       }
     },
@@ -252,7 +327,24 @@
         "auto_tune_email": { "type": "boolean" },
         "ml_train_weekly": { "type": "boolean" },
         "ml_train_days": { "type": ["integer", "number"], "minimum": 30 },
-        "ml_train_min_samples": { "type": ["integer", "number"], "minimum": 10 }
+        "ml_train_min_samples": { "type": ["integer", "number"], "minimum": 6 },
+        "self_health_enabled": { "type": "boolean" },
+        "self_health_kline_max_lag_calendar_days": {
+          "type": ["integer", "number"],
+          "minimum": 0
+        },
+        "self_health_pending_alerts_min": {
+          "type": ["integer", "number"],
+          "minimum": 1
+        },
+        "self_health_sector_cache_ttl_mult": {
+          "type": ["integer", "number"],
+          "minimum": 0.1
+        },
+        "friday_kline_rf_train_enabled": { "type": "boolean" },
+        "incremental_nb_after_close": { "type": "boolean" },
+        "incremental_nb_days": { "type": ["integer", "number"], "minimum": 7 },
+        "incremental_nb_min_samples": { "type": ["integer", "number"], "minimum": 6 }
       }
     },
     "email_command_bot": {
@@ -366,7 +458,12 @@
         "full_outage_consecutive_notify_threshold": { "type": ["integer", "number"], "minimum": 0 },
         "full_outage_email_enabled": { "type": "boolean" },
         "recovery_notify_enabled": { "type": "boolean" },
-        "suppress_trend_rounds_after_full_outage": { "type": ["integer", "number"], "minimum": 0 }
+        "suppress_trend_rounds_after_full_outage": { "type": ["integer", "number"], "minimum": 0 },
+        "heartbeat_path": {
+          "type": "string",
+          "description": "非空则定期写入 JSON 心跳文件（相对项目根）；空字符串关闭"
+        },
+        "heartbeat_interval_sec": { "type": ["integer", "number"], "minimum": 30 }
       }
     },
     "logging": {

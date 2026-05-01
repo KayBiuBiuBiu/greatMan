@@ -124,11 +124,11 @@ class RiskManager:
             return None
         ratio = (now_price - cost_price) / cost_price
         if ratio <= self.sl_ratio:
-            return "🔴 触及硬性止损线"
+            return "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛"
         if ratio >= self.tp_wave:
-            return "🟢 波段止盈目标到位"
+            return "🟢 波段涨得差不多了，到了止盈目标附近，可以考虑分批落袋"
         if ratio >= self.tp_short:
-            return "🟡 短线止盈目标到位"
+            return "🟡 短线赚得差不多了，可先卖一部分把利润锁住"
         return None
 
     def check_drawdown_alert(
@@ -149,18 +149,21 @@ class RiskManager:
             pct = ratio * 100.0
             return (
                 "w3",
-                f"🔻 深度回撤预警：从成本回撤约 {pct:.1f}%（阈值 {self.dd_w3 * 100:.0f}%），请优先核对止损与总仓位",
+                f"🔻 回撤比较深，浮亏大约 {abs(pct):.1f}%（到了约 {abs(self.dd_w3 * 100):.0f}% 这一档），"
+                "先盯紧总仓位和止损",
             )
         if ratio <= self.dd_w2:
             pct = ratio * 100.0
             return (
                 "w2",
-                f"⚠️ 二次风险预警：从成本回撤约 {pct:.1f}%（阈值 {self.dd_w2 * 100:.0f}%），请关注仓位与止损纪律",
+                f"⚠️ 回撤在加深，浮亏大约 {abs(pct):.1f}%（到了约 {abs(self.dd_w2 * 100):.0f}% 这一档），"
+                "注意仓位和止损纪律",
             )
         pct = ratio * 100.0
+        thr = abs(int(round(self.dd_w1 * 100)))
         return (
             "w1",
-            f"📉 初次走弱提醒：从成本回撤约 {pct:.1f}%（达 {self.dd_w1 * 100:.0f}% 预警线），留意支撑与加仓节奏",
+            f"📉 浮亏大约 {abs(pct):.1f}%，碰到约 {thr}% 这一档预警线了，留意支撑位或是否补仓",
         )
 
     def profit_pct(self, now_price: float, cost_price: float) -> float:
@@ -192,14 +195,16 @@ class RiskManager:
     def check_single_position_value(self, market_value: float) -> Optional[str]:
         if market_value > self.max_single_pos:
             return (
-                f"单票持仓市值约 {market_value:.0f} 元，超过单票上限 {self.max_single_pos:.0f} 元"
+                f"这只票买得有点集中，持仓市值大约 {market_value:.0f} 元，"
+                f"超过单票限额 {int(round(self.max_single_pos))} 元，注意集中度风险"
             )
         return None
 
     def check_total_position_value(self, total_mv: float) -> Optional[str]:
         if total_mv > self.max_total_pos:
             return (
-                f"持仓总市值约 {total_mv:.0f} 元，超过总仓位上限 {self.max_total_pos:.0f} 元"
+                f"加起来仓位偏重，总市值大约 {total_mv:.0f} 元，"
+                f"超过总仓位上限 {int(round(self.max_total_pos))} 元，注意总风险"
             )
         return None
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.local.stock-price-alert</string>
+	<key>WorkingDirectory</key>
+	<string>/ABS/PATH/stock-price-alert</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/ABS/PATH/stock-price-alert/.venv/bin/python3</string>
+		<string>/ABS/PATH/stock-price-alert/run_alert.py</string>
+		<string>-c</string>
+		<string>/ABS/PATH/stock-price-alert/config.json</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>STOCK_ALERT_NO_VENV_REEXEC</key>
+		<string>0</string>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/ABS/PATH/stock-price-alert/logs/launchd_stdout.log</string>
+	<key>StandardErrorPath</key>
+	<string>/ABS/PATH/stock-price-alert/logs/launchd_stderr.log</string>
+</dict>
+</plist>

@@ -52,10 +52,14 @@ def build_feature_vector(
     pnl_pct: float | None = None,
     weak_pillars: dict[str, bool] | None = None,
     dd_level: int | None = None,
+    cfg: dict[str, Any] | None = None,
+    root: Path | None = None,
+    code6: str | None = None,
+    anchor_trade_date: str | None = None,
 ) -> dict[str, float]:
     wp = weak_pillars if isinstance(weak_pillars, dict) else {}
     weak_n = float(sum(1 for v in wp.values() if bool(v)))
-    return {
+    base: dict[str, float] = {
         "anchor_price": max(0.0, _safe_float(anchor_price, 0.0)),
         "pnl_pct": _safe_float(pnl_pct, 0.0),
         "weak_pillars_n": weak_n,
@@ -63,6 +67,27 @@ def build_feature_vector(
         "is_trend_slip": 1.0 if str(alert_type) == "trend_slip" else 0.0,
         "is_drawdown": 1.0 if str(alert_type) == "drawdown" else 0.0,
     }
+    mf = cfg.get("ml_filter") if isinstance(cfg, dict) else None
+    if (
+        isinstance(mf, dict)
+        and bool(mf.get("external_flow_features_enabled"))
+        and cfg is not None
+        and isinstance(code6, str)
+        and code6.strip()
+        and isinstance(anchor_trade_date, str)
+        and anchor_trade_date.strip()
+    ):
+        from external_ml_features import compute_external_flow_features
+
+        base.update(
+            compute_external_flow_features(
+                cfg=cfg,
+                code=code6.strip(),
+                anchor_trade_date=anchor_trade_date.strip()[:10],
+                root=root,
+            )
+        )
+    return base
 
 
 def predict_bearish_probability(

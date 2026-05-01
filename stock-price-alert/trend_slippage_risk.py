@@ -301,6 +301,7 @@ def evaluate_trend_slippage_alert(
     cfg: dict[str, Any],
     stock_code: str | None = None,
     float_mv_yuan: float | None = None,
+    dynamic_min_pillars_weak: int | None = None,
 ) -> TrendSlippageResult:
     tc = dict(cfg.get("trend_slippage_alert") or {})
     if not bool(tc.get("enabled", True)):
@@ -329,14 +330,15 @@ def evaluate_trend_slippage_alert(
             }
             if c6 in ign_set:
                 return _trend_skip(
-                    "（趋势预警：该股在 alert_ignore_codes 中已忽略）",
+                    "（趋势预警：这只股票在您配置的忽略名单里，这里不做趋势预警）",
                     skipped="alert_ignore_codes",
                 )
 
     min_price = float(tc.get("min_price") or 0)
     if min_price > 0 and float(price) < min_price:
         return _trend_skip(
-            f"（趋势预警：现价 {float(price):.2f} 低于 min_price={min_price}，已跳过）",
+            f"（趋势预警：现价 {float(price):.2f} 元，低于您设的 {min_price:.2f} 元，"
+            "低价股波动大、假信号多，这里先不预警）",
             skipped="min_price",
         )
 
@@ -345,7 +347,8 @@ def evaluate_trend_slippage_alert(
         yi = float(float_mv_yuan) / 1e8
         if yi < min_mv_yi:
             return _trend_skip(
-                f"（趋势预警：流通市值约 {yi:.2f} 亿低于 min_float_mv_yi={min_mv_yi}，已跳过）",
+                f"（趋势预警：流通市值大约 {yi:.1f} 亿，小于您设的 {min_mv_yi:.1f} 亿，"
+                "盘子太小容易抖，这里先不预警）",
                 skipped="min_float_mv_yi",
             )
 
@@ -356,14 +359,50 @@ def evaluate_trend_slippage_alert(
             v_last = float(vols[-1])
             v_ma = sum(float(x) for x in vols[-21:-1]) / 20.0
             if v_ma > 0 and (v_last / v_ma) < min_vr:
+                vr = v_last / v_ma
                 return _trend_skip(
-                    f"（趋势预警：当日量/20日均量={v_last / v_ma:.2f} 低于 min_volume_ratio={min_vr}，已跳过）",
+                    f"（趋势预警：今天量能只有过去 20 天平均的 {vr:.0%}，缩量下跌、"
+                    f"动能不足，低于您设的 {min_vr:.0%} 门槛，这里先不预警）",
                     skipped="min_volume_ratio",
                 )
 
     stock_min = max(1, int(tc.get("stock_min_weak_dims", 2)))
     sector_min = max(1, int(tc.get("sector_min_weak_dims", 2)))
     min_pillars = max(1, int(tc.get("min_pillars_weak", 2)))
+    if dynamic_min_pillars_weak is not None:
+        try:
+            min_pillars = max(1, min(4, int(dynamic_min_pillars_weak)))
+        except (TypeError, ValueError):
+            pass
+    da_dyn = tc.get("dynamic_adaptive")
+    if (
+        isinstance(da_dyn, dict)
+        and bool(da_dyn.get("sector_rs_enabled", False))
+        and isinstance(sector_closes, list)
+        and len(sector_closes) > 0
+    ):
+        try:
+            from macro_risk import get_sh_index_closes_cached, sector_rs_bucket
+
+            nrd = max(5, min(60, int(da_dyn.get("sector_rs_ret_days", 20) or 20)))
+            out_p = float(da_dyn.get("sector_rs_outperform_pct", 0.005) or 0.005)
+            und_p = float(da_dyn.get("sector_rs_underperform_pct", -0.005) or -0.005)
+            idx_c = get_sh_index_closes_cached()
+            bk = sector_rs_bucket(
+                sector_closes,
+                idx_c,
+                ret_days=nrd,
+                out_pct=out_p,
+                under_pct=und_p,
+            )
+            d_strong = int(da_dyn.get("sector_rs_strong_delta", 1) or 0)
+            d_weak = int(da_dyn.get("sector_rs_weak_delta", -1) or 0)
+            if bk == "outperform":
+                min_pillars = max(1, min(4, min_pillars + d_strong))
+            elif bk == "underperform":
+                min_pillars = max(1, min(4, min_pillars + d_weak))
+        except Exception:
+            pass
     atr_note: str | None = None
     atr_cfg = tc.get("atr_tiers")
     if isinstance(atr_cfg, dict) and bool(atr_cfg.get("enabled")):
@@ -430,20 +469,20 @@ def evaluate_trend_slippage_alert(
 
     reasons = list(dict.fromkeys(st_reasons + m_reasons + sec_reasons))
     if not sector_eligible and sector_bk:
-        reasons.append("（板块K线不足，未计板块柱）")
+        reasons.append("（板块日 K 不齐，没算进「板块」这一柱）")
 
     sector_data_warning: str | None = None
     if not sector_eligible:
         bk_s = str(sector_bk or "").strip()
         if bk_s:
             sector_data_warning = (
-                "【数据说明】板块数据不完整：已解析BK但缺少可用板块日K，"
-                "当前仅个股技术柱+大盘柱参与判断；板块若实际走弱可能未计入，信号可能不完整。"
+                "板块数据不完整（缺可用的行业板块日 K），趋势信号可能偏保守；"
+                "这一会儿只看个股走势和大盘，板块若其实在走弱有可能没算进去。"
             )
         else:
             sector_data_warning = (
-                "【数据说明】板块数据缺失：未解析到BK或未配置 sector_index_overrides，"
-                "当前仅个股+大盘两柱；请用 --check-bk 或 overrides 补全以启用三柱。"
+                "板块数据不完整（没对上行业代码或还没配好映射），"
+                "这一会儿只看个股和大盘；需要三柱齐全时可用 run_alert --check-bk 或在配置里补 sector_index_overrides。"
             )
 
     weak_pillars = {

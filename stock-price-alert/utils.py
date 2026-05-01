@@ -207,8 +207,9 @@ def safe_get(
     timeout: float = 20,
 ) -> requests.Response | None:
     """
-    每次请求前随机等待 1～3 秒；verify 由 configure_ssl_from_sources 控制；失败则再等 3 秒后重试一次。
-    两次均失败返回 None（调用方可自行处理）。
+    请求前：可选 pacing / 域名令牌桶 / configure_safe_get_jitter 配置的抖动（max<=0 则无抖动）；
+    data_health 失败退避；verify 由 configure_ssl_from_sources 控制。
+    首次失败则固定 sleep 3s 后重试一次；两次均失败返回 None。
     """
     from data_health import extra_backoff_sleep_sec, record_http_result
 
