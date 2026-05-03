@@ -238,6 +238,69 @@ def adjust_config(cfg: dict[str, Any], report: dict[str, Any]) -> list[Change]:
     return changes
 
 
+def _normalized_ignore_list(raw: Any) -> list[str]:
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for x in raw:
+        s = str(x).strip()
+        if s.isdigit() and len(s) <= 6:
+            out.append(s.zfill(6))
+    return sorted(set(out))
+
+
+def merge_fp_user_feedback_into_ignore(
+    cfg: dict[str, Any], lookback_days: int, *, root: Path | None = None
+) -> list[Change]:
+    """
+    将 alert_events 中邮件标记为 fp 的股票代码并入
+    trend_slippage_alert / drawdown_alert 的 alert_ignore_codes。
+    """
+    from alert_log_store import distinct_fp_codes_since
+
+    base = root if root is not None else ROOT
+    since = (date.today() - timedelta(days=max(1, int(lookback_days)))).isoformat()
+    fp_codes = distinct_fp_codes_since(cfg, base, anchor_since=since)
+    if not fp_codes:
+        return []
+    changes: list[Change] = []
+
+    path_trend = ("trend_slippage_alert", "alert_ignore_codes")
+    old_t = _normalized_ignore_list(_get_nested(cfg, path_trend))
+    new_t = sorted(set(old_t) | set(fp_codes))
+    if new_t != old_t:
+        _set_nested(cfg, path_trend, new_t)
+        added = [c for c in fp_codes if c not in old_t]
+        changes.append(
+            Change(
+                path="trend_slippage_alert.alert_ignore_codes",
+                old=old_t,
+                new=new_t,
+                reason=f"合并最近 {lookback_days} 日内 user_feedback=fp 的代码（{len(added)} 只新增）",
+                hit_rate=None,
+                samples=len(added),
+            )
+        )
+
+    path_dd = ("drawdown_alert", "alert_ignore_codes")
+    old_d = _normalized_ignore_list(_get_nested(cfg, path_dd))
+    new_d = sorted(set(old_d) | set(fp_codes))
+    if new_d != old_d:
+        _set_nested(cfg, path_dd, new_d)
+        added_d = [c for c in fp_codes if c not in old_d]
+        changes.append(
+            Change(
+                path="drawdown_alert.alert_ignore_codes",
+                old=old_d,
+                new=new_d,
+                reason=f"合并最近 {lookback_days} 日内 user_feedback=fp 的代码（{len(added_d)} 只新增）",
+                hit_rate=None,
+                samples=len(added_d),
+            )
+        )
+    return changes
+
+
 def _build_mail_body(
     *,
     days: int,
@@ -407,9 +470,17 @@ def main() -> int:
 
     report = run_backtest_report(config_path, int(args.days))
     print_report(report)
-    changes = adjust_config(cfg, report)
+    at_sec = cfg.get("auto_tune") if isinstance(cfg.get("auto_tune"), dict) else {}
+    fb_days = at_sec.get("feedback_fp_lookback_days")
+    if fb_days is None:
+        fb_lookback = max(int(args.days), 30)
+    else:
+        fb_lookback = max(1, int(fb_days))
+    fb_changes = merge_fp_user_feedback_into_ignore(cfg, fb_lookback)
+    hit_changes = adjust_config(cfg, report)
+    changes = fb_changes + hit_changes
     if not changes:
-        print("✅ 无需调整参数。")
+        print("✅ 无需调整参数（命中率与邮件 fp 忽略名单均无变更）。")
         return 0
 
     print("建议调整：")

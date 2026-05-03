@@ -5,6 +5,7 @@ from __future__ import annotations
 import email
 import imaplib
 import re
+from dataclasses import dataclass, field
 from email.header import decode_header
 from email.utils import parseaddr
 from typing import Any
@@ -151,10 +152,49 @@ def _parse_runtime_commands(subject: str, body: str) -> list[str]:
     return commands[:8]
 
 
-def fetch_runtime_commands_from_email(cfg: dict[str, Any]) -> list[str]:
+def _parse_feedback_commands(subject: str, body: str) -> list[tuple[str, str]]:
+    """
+    解析邮件中的误报/真报指令，返回 (kind, code6)，kind 为 fp 或 tp。
+    """
+    txt = (subject + "\n" + body).replace("\r", "\n")
+    out: list[tuple[str, str]] = []
+    fp_patterns = [
+        r"\bfp\s+([0-9]{6})\b",
+        r"\bfalse\s*positive\s+([0-9]{6})\b",
+        r"误报\s*[:：]?\s*([0-9]{6})\b",
+        r"假阳性\s*[:：]?\s*([0-9]{6})\b",
+    ]
+    tp_patterns = [
+        r"\btp\s+([0-9]{6})\b",
+        r"\btrue\s*positive\s+([0-9]{6})\b",
+        r"真报\s*[:：]?\s*([0-9]{6})\b",
+    ]
+    for p in fp_patterns:
+        for m in re.finditer(p, txt, flags=re.IGNORECASE):
+            code = m.group(1)
+            t = ("fp", code)
+            if t not in out:
+                out.append(t)
+    for p in tp_patterns:
+        for m in re.finditer(p, txt, flags=re.IGNORECASE):
+            code = m.group(1)
+            t = ("tp", code)
+            if t not in out:
+                out.append(t)
+    return out[:16]
+
+
+@dataclass
+class EmailBotPollResult:
+    runtime_commands: list[str] = field(default_factory=list)
+    feedback_commands: list[tuple[str, str]] = field(default_factory=list)
+
+
+def fetch_email_bot_actions(cfg: dict[str, Any]) -> EmailBotPollResult:
+    """拉取未读邮件：交易类 runtime 命令 + 预警反馈 fp/tp。"""
     ec0 = cfg.get("email_command_bot") or {}
     if not bool(ec0.get("enabled", False)):
-        return []
+        return EmailBotPollResult()
     ec = _effective_email_command_settings(ec0 if isinstance(ec0, dict) else {})
     host = str(ec.get("imap_server") or "").strip()
     user = str(ec.get("imap_username") or "").strip()
@@ -162,24 +202,25 @@ def fetch_runtime_commands_from_email(cfg: dict[str, Any]) -> list[str]:
     folder = str(ec.get("imap_folder") or "INBOX").strip() or "INBOX"
     port = int(ec.get("imap_port") or 993)
     if not (host and user and password):
-        return []
+        return EmailBotPollResult()
 
     trusted = ec.get("trusted_senders") or []
     trusted_set = {str(x).strip().lower() for x in trusted if str(x).strip()}
     if not trusted_set:
-        return []
+        return EmailBotPollResult()
     mark_seen = bool(ec.get("mark_seen", True))
     cmds: list[str] = []
+    fbs: list[tuple[str, str]] = []
     M: imaplib.IMAP4_SSL | None = None
     try:
         M = imaplib.IMAP4_SSL(host, port, timeout=20)
         M.login(user, password)
         typ, _ = M.select(folder, readonly=False)
         if typ != "OK":
-            return []
+            return EmailBotPollResult()
         typ, data = M.search(None, "UNSEEN")
         if typ != "OK" or not data or not data[0]:
-            return []
+            return EmailBotPollResult()
         ids = data[0].split()[-30:]
         for mid in ids:
             typ, msg_data = M.fetch(mid, "(RFC822)")
@@ -196,12 +237,12 @@ def fetch_runtime_commands_from_email(cfg: dict[str, Any]) -> list[str]:
                 if mark_seen:
                     M.store(mid, "+FLAGS", "\\Seen")
                 continue
-            row_cmds = _parse_runtime_commands(subj, body)
-            cmds.extend(row_cmds)
+            cmds.extend(_parse_runtime_commands(subj, body))
+            fbs.extend(_parse_feedback_commands(subj, body))
             if mark_seen:
                 M.store(mid, "+FLAGS", "\\Seen")
     except Exception:
-        return []
+        return EmailBotPollResult()
     finally:
         try:
             if M is not None:
@@ -213,11 +254,25 @@ def fetch_runtime_commands_from_email(cfg: dict[str, Any]) -> list[str]:
                 M.logout()
         except Exception:
             pass
-    # 去重保序
-    out: list[str] = []
-    seen: set[str] = set()
+
+    out_rt: list[str] = []
+    seen_rt: set[str] = set()
     for c in cmds:
-        if c not in seen:
-            seen.add(c)
-            out.append(c)
-    return out
+        if c not in seen_rt:
+            seen_rt.add(c)
+            out_rt.append(c)
+    out_fb: list[tuple[str, str]] = []
+    seen_fb: set[tuple[str, str]] = set()
+    for t in fbs:
+        if t not in seen_fb:
+            seen_fb.add(t)
+            out_fb.append(t)
+    return EmailBotPollResult(
+        runtime_commands=out_rt[:8],
+        feedback_commands=out_fb,
+    )
+
+
+def fetch_runtime_commands_from_email(cfg: dict[str, Any]) -> list[str]:
+    """兼容旧调用：仅返回交易类 runtime 命令。"""
+    return fetch_email_bot_actions(cfg).runtime_commands

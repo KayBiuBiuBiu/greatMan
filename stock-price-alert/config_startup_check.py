@@ -53,8 +53,8 @@ def run_startup_config_checks(
                         warnings.append(
                             f"已开启 external_flow_features，但 NB 模型仅 {n_m} 维特征（"
                             f"期望 {expect_nb} 维：基础 6 + ext {len(EXTERNAL_FLOW_FEATURE_KEYS)}）。"
-                            f"请运行：python ml_train.py -c config.json --demo-synth-nb --min-samples 6 "
-                            f"或等有打标后全量重训。"
+                            f"请先跑 backtest_alerts 补全 hit，再执行："
+                            f"python ml_train.py -c config.json"
                         )
                 except (OSError, json.JSONDecodeError):
                     pass

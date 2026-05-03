@@ -219,7 +219,7 @@ def compute_external_flow_features(
     Parameters
     ----------
     root :
-        保留参数与占位接口一致（磁盘缓存如需可后用）。
+        预留参数（与历史签名一致；当前实现未使用）。
     """
     _ = root
     out = external_flow_feature_defaults()
@@ -260,7 +260,7 @@ def extra_flow_features_stub(
     anchor_trade_date: str,
     root: Path | None = None,
 ) -> dict[str, float]:
-    """与原占位同名，兼容外部调用。"""
+    """与 compute_external_flow_features 等价，保留旧函数名供外部调用。"""
     return compute_external_flow_features(
         cfg=cfg, code=code, anchor_trade_date=anchor_trade_date, root=root
     )

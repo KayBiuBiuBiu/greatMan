@@ -93,7 +93,11 @@
         "enabled": { "type": "boolean" },
         "warn_1_ratio": { "type": ["integer", "number"] },
         "warn_2_ratio": { "type": ["integer", "number"] },
-        "warn_3_ratio": { "type": ["integer", "number", "null"] }
+        "warn_3_ratio": { "type": ["integer", "number", "null"] },
+        "alert_ignore_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
       }
     },
     "trend_slippage_alert": {
@@ -309,6 +313,17 @@
           "type": ["integer", "number"],
           "minimum": 0,
           "maximum": 1
+        }
+      }
+    },
+    "auto_tune": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "feedback_fp_lookback_days": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "description": "auto_tune_accuracy 合并邮件 fp 时回溯的自然日窗口"
         }
       }
     },

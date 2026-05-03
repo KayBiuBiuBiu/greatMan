@@ -238,3 +238,89 @@ def evaluate_row(
     ex = row["extra_json"] if row["extra_json"] is not None else None
     hit = row_hit_for_eval(str(row["alert_type"]), ex, r1, r3, r5, thresholds=thresholds)
     return r1, r3, r5, hit
+
+
+def _normalize_code6(code: str) -> str:
+    s = "".join(c for c in str(code).strip() if c.isdigit())
+    if len(s) >= 6:
+        return s[-6:].zfill(6)
+    return s.zfill(6) if s else ""
+
+
+def apply_feedback_to_latest_alert(
+    cfg: dict[str, Any],
+    root: Path,
+    *,
+    code: str,
+    feedback: str,
+) -> int:
+    """
+    将最近一条尚未标注的 trend_slip/drawdown 预警标记为 fp/tp。
+    返回更新的行数（0 或 1）。
+    """
+    fb = str(feedback or "").strip().lower()
+    if fb not in ("fp", "tp"):
+        return 0
+    c6 = _normalize_code6(code)
+    if len(c6) != 6:
+        return 0
+    db_path = resolve_alert_db_path(cfg, root)
+    if db_path is None or not db_path.is_file():
+        return 0
+    types = tuple(sorted(BEARISH_ALERT_TYPES))
+    with db_lock():
+        conn = open_store_connection(db_path)
+        try:
+            init_schema(conn)
+            row = conn.execute(
+                f"""
+                SELECT id FROM alert_events
+                WHERE code = ? AND alert_type IN ({",".join("?" * len(types))})
+                  AND (user_feedback IS NULL OR TRIM(user_feedback) = '')
+                ORDER BY id DESC
+                LIMIT 1
+                """,
+                (c6,) + types,
+            ).fetchone()
+            if not row:
+                return 0
+            conn.execute(
+                "UPDATE alert_events SET user_feedback = ? WHERE id = ?",
+                (fb, int(row[0])),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+    return 1
+
+
+def distinct_fp_codes_since(
+    cfg: dict[str, Any],
+    root: Path,
+    *,
+    anchor_since: str,
+) -> list[str]:
+    """anchor_trade_date >= anchor_since 且 user_feedback='fp' 的去重股票代码（6 位）。"""
+    db_path = resolve_alert_db_path(cfg, root)
+    if db_path is None or not db_path.is_file():
+        return []
+    since = str(anchor_since or "").strip()[:10]
+    if len(since) != 10:
+        return []
+    with db_lock():
+        conn = open_store_connection(db_path)
+        try:
+            init_schema(conn)
+            cur = conn.execute(
+                """
+                SELECT DISTINCT code FROM alert_events
+                WHERE user_feedback = 'fp' AND length(anchor_trade_date) >= 10
+                  AND anchor_trade_date >= ?
+                ORDER BY code
+                """,
+                (since,),
+            )
+            out = [_normalize_code6(r[0]) for r in cur.fetchall()]
+        finally:
+            conn.close()
+    return [c for c in out if len(c) == 6]

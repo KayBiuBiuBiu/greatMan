@@ -207,50 +207,6 @@ def eval_train_metrics(
     }
 
 
-def _synthetic_nb_dataset(cfg: dict[str, Any]) -> tuple[list[dict[str, float]], list[int]]:
-    """无 AkShare 请求的合成样本（仅用于联调）：先算基础列，再按需拼外部资金流列。"""
-    from copy import deepcopy
-
-    from external_ml_features import EXTERNAL_FLOW_FEATURE_KEYS
-
-    raw_mf = cfg.get("ml_filter") if isinstance(cfg.get("ml_filter"), dict) else {}
-    want_ext = bool(raw_mf.get("external_flow_features_enabled"))
-    cfg_b = deepcopy(cfg)
-    mf_b = cfg_b.setdefault("ml_filter", {})
-    mf_b["external_flow_features_enabled"] = False
-
-    codes = ["600000", "000001", "300001", "600519", "002008"]
-    anchors = ["2025-03-10", "2025-06-15", "2025-09-20", "2026-01-05", "2026-03-18"]
-    xs: list[dict[str, float]] = []
-    ys: list[int] = []
-    for i in range(36):
-        wp = {
-            "stock": bool(i % 2),
-            "index": bool((i // 2) % 2),
-            "sector": bool((i // 3) % 2),
-        }
-        fv = build_feature_vector(
-            alert_type="trend_slip",
-            anchor_price=10.0 + (i % 9) * 0.15,
-            pnl_pct=-4.0 if i % 4 == 0 else 0.5 + (i % 3),
-            weak_pillars=wp,
-            dd_level=0,
-            cfg=cfg_b,
-            root=ROOT,
-            code6=codes[i % len(codes)],
-            anchor_trade_date=anchors[i % len(anchors)],
-        )
-        if want_ext:
-            for j, key in enumerate(EXTERNAL_FLOW_FEATURE_KEYS):
-                fv[key] = float(((i + j) % 11) - 5) * 0.05
-        y = 1 if fv["weak_pillars_n"] >= 2.0 and fv["pnl_pct"] < -1.0 else 0
-        if i % 9 == 0:
-            y = 1 - y
-        xs.append(fv)
-        ys.append(y)
-    return xs, ys
-
-
 def main() -> int:
     ap = argparse.ArgumentParser(description="训练 bearish 命中概率模型（Gaussian NB）")
     ap.add_argument("-c", "--config", type=Path, default=ROOT / "config.json")
@@ -274,11 +230,6 @@ def main() -> int:
         default=0.60,
         help="训练指标统计阈值（默认 0.60）",
     )
-    ap.add_argument(
-        "--demo-synth-nb",
-        action="store_true",
-        help="alert_events 无打标样本时：用合成特征（含外部资金流维）训练一份可写出的 NB，仅联调",
-    )
     args = ap.parse_args()
 
     if not args.config.is_file():
@@ -287,32 +238,20 @@ def main() -> int:
     raw = json.loads(args.config.read_text(encoding="utf-8"))
     cfg = merge_full_config(raw)
 
-    if args.demo_synth_nb:
-        xs, ys = _synthetic_nb_dataset(cfg)
-        if len(xs) < int(args.min_samples):
-            print(f"合成样本过少: {len(xs)}", file=sys.stderr)
-            return 1
-        if len(set(ys)) < 2:
-            print("合成样本标签单一，无法训练。", file=sys.stderr)
-            return 1
-        since_day = None
-        db_path_s = "(demo_synth_nb)"
-        model = fit_gaussian_nb(xs, ys)
-    else:
-        db_path = resolve_alert_db_path(cfg, ROOT)
-        if db_path is None:
-            print("alert_log 未启用，无法定位 alert_events 数据库。", file=sys.stderr)
-            return 1
-        since_day = _split_since(args.days, args.since)
-        xs, ys = load_dataset(
-            db_path,
-            since=since_day,
-            min_label_rows=int(args.min_samples),
-            cfg=cfg,
-            root=ROOT,
-        )
-        model = fit_gaussian_nb(xs, ys)
-        db_path_s = str(db_path)
+    db_path = resolve_alert_db_path(cfg, ROOT)
+    if db_path is None:
+        print("alert_log 未启用，无法定位 alert_events 数据库。", file=sys.stderr)
+        return 1
+    since_day = _split_since(args.days, args.since)
+    xs, ys = load_dataset(
+        db_path,
+        since=since_day,
+        min_label_rows=int(args.min_samples),
+        cfg=cfg,
+        root=ROOT,
+    )
+    model = fit_gaussian_nb(xs, ys)
+    db_path_s = str(db_path)
     metrics = eval_train_metrics(
         model,
         xs,

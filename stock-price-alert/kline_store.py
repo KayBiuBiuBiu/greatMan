@@ -84,7 +84,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ret_3d REAL,
             ret_5d REAL,
             hit INTEGER,
-            evaluated_iso TEXT
+            evaluated_iso TEXT,
+            user_feedback TEXT
         );
         CREATE INDEX IF NOT EXISTS idx_alert_eval ON alert_events(eval_status);
         CREATE INDEX IF NOT EXISTS idx_alert_type_td
@@ -103,6 +104,24 @@ def init_schema(conn: sqlite3.Connection) -> None:
         """
     )
     conn.commit()
+    _migrate_alert_events_user_feedback(conn)
+
+
+def _migrate_alert_events_user_feedback(conn: sqlite3.Connection) -> None:
+    try:
+        cols = {
+            str(r[1])
+            for r in conn.execute("PRAGMA table_info(alert_events)").fetchall()
+        }
+    except sqlite3.Error:
+        return
+    if "user_feedback" in cols:
+        return
+    try:
+        conn.execute("ALTER TABLE alert_events ADD COLUMN user_feedback TEXT")
+        conn.commit()
+    except sqlite3.Error:
+        pass
 
 
 def meta_get(conn: sqlite3.Connection, key: str) -> str | None:

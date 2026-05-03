@@ -192,7 +192,8 @@ from email_notify import (
     send_email_alert,
     send_sell_signal_email,
 )
-from email_command_bot import fetch_runtime_commands_from_email
+from alert_log_store import apply_feedback_to_latest_alert
+from email_command_bot import fetch_email_bot_actions
 from notify_macos import send_notification
 from pick_score import composite_pick_score
 from position_tags import format_tags_line, has_position_tag
@@ -393,6 +394,7 @@ DEFAULT_DRAWDOWN_ALERT = {
     "warn_1_ratio": -0.03,
     "warn_2_ratio": -0.06,
     "warn_3_ratio": -0.1,
+    "alert_ignore_codes": [],
 }
 DEFAULT_ATR_TIERS = {
     "enabled": True,
@@ -2411,10 +2413,24 @@ def _maybe_poll_email_commands(
     if now_ts - last_ts < poll_iv:
         return
     state["__email_cmd_last_poll_ts__"] = now_ts
-    cmds = fetch_runtime_commands_from_email(cfg)
-    if not cmds:
+    poll = fetch_email_bot_actions(cfg)
+    if not poll.runtime_commands and not poll.feedback_commands:
         return
-    for cmd in cmds:
+    for kind, code in poll.feedback_commands:
+        n = apply_feedback_to_latest_alert(
+            cfg, ROOT, code=code, feedback=kind
+        )
+        if n:
+            _emit_main_line(
+                f"[邮件反馈] 已记录 {kind.upper()} → 最近一条预警：{code}",
+                event="email_feedback_applied",
+            )
+        else:
+            _emit_main_line(
+                f"[邮件反馈] 未找到可标注的 trend_slip/drawdown 记录：{kind} {code}",
+                event="email_feedback_miss",
+            )
+    for cmd in poll.runtime_commands:
         _emit_main_line(
             f"[邮件指令] 执行：{cmd}",
             event="email_cmd_exec",
@@ -2707,9 +2723,19 @@ def process_watch_pack(
                 state[risk_k] = now_ts
 
         dd_alert = risk.check_drawdown_alert(now_price, cost) if cost > 0 else None
+        dd_cfg_ign = cfg.get("drawdown_alert") or {}
+        dd_ign_raw = dd_cfg_ign.get("alert_ignore_codes") or []
+        dd_ign_set = {
+            str(x).strip().zfill(6)
+            for x in dd_ign_raw
+            if str(x).strip().isdigit() and len(str(x).strip()) <= 6
+        }
+        code6_dd = code6_risk.zfill(6) if code6_risk.isdigit() else code6_risk
+        dd_code_blocked = len(code6_dd) == 6 and code6_dd in dd_ign_set
         if (
             dd_alert
             and valid_code(code6_risk)
+            and not dd_code_blocked
             and not should_suppress_risk_stop_take(code6_risk, state)
         ):
             dd_lv, dd_msg = dd_alert
@@ -2970,7 +2996,7 @@ def process_watch_pack(
                             ml_external_flow_snapshot=_ml_external_flow_snapshot(
                                 cfg, ml_nb_feats
                             ),
-                            # NB 模型 JSON 中 features 长度：开外部流时期望 11；仍为 6 表示未重训占位/旧模型
+                            # NB 模型 JSON 中 features 长度：开外部流时期望 11；仍为 6 表示未按当前配置重训的旧模型
                             ml_nb_full_dim=ml_nb_model_dim,
                             ml_nb_vector_dim=len(ml_nb_feats) if ml_nb_feats else 0,
                         )

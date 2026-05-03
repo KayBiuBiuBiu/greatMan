@@ -32,7 +32,8 @@
     "enabled": true,
     "warn_1_ratio": -0.03,
     "warn_2_ratio": -0.06,
-    "warn_3_ratio": -0.1
+    "warn_3_ratio": -0.1,
+    "alert_ignore_codes": []
   },
   "trend_slippage_alert": {
     "enabled": true,
@@ -100,6 +101,9 @@
     }
   },
   "sector_index_overrides": {},
+  "auto_tune": {
+    "feedback_fp_lookback_days": 90
+  },
   "performance": {
     "kline_cache_ttl_sec": 900,
     "sector_kline_cache_ttl_sec": 3600,
