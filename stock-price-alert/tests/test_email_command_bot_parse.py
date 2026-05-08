@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from email_command_bot import _parse_runtime_commands
+from email_command_bot import _parse_config_commands, _parse_runtime_commands
 
 
 def test_parse_sell_command_variants() -> None:
@@ -17,3 +17,18 @@ def test_parse_buy_with_position_and_cost() -> None:
 def test_parse_buy_watch_only_when_no_position_fields() -> None:
     cmds = _parse_runtime_commands("买入指令", "001258编号买入")
     assert "hold 001258" in cmds
+
+
+def test_parse_config_tp_hit_correctness() -> None:
+    assert _parse_config_commands("set", "take_profit_hit_for_correctness 1") == [
+        "set take_profit_hit_for_correctness 1"
+    ]
+    assert _parse_config_commands("", "tp_hit_correctness 0") == [
+        "set take_profit_hit_for_correctness 0"
+    ]
+    assert _parse_config_commands("止盈", "止盈命中：卖对") == [
+        "set take_profit_hit_for_correctness 1"
+    ]
+    assert _parse_config_commands("", "止盈命中 卖飞") == [
+        "set take_profit_hit_for_correctness 0"
+    ]

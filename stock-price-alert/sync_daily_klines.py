@@ -3,6 +3,9 @@
 
 与 `run_alert` 在存在 `daily_picks.json` 时的监控池对齐，避免「优质股不在 watchlist」导致日 K 仍走网络。
 
+根数与深度由 `kline_store.sync_fetch_lmt`（单次目标根数，东财会分页向前补）与 `sync_target_bars`
+（本地不足该根数时不做增量跳过）控制，便于 `backtest_alerts` 计算 T+5 与 hit。
+
 用法:
   cd stock-price-alert && python3 sync_daily_klines.py
   python3 sync_daily_klines.py -c /path/to/config.json
@@ -119,6 +122,15 @@ def main() -> int:
     max_stale = args.max_stale_days
     if max_stale is None:
         max_stale = int(ks.get("sync_max_stale_calendar_days") or 2)
+    fetch_lmt = int(ks.get("sync_fetch_lmt") or 1020)
+    fetch_lmt = max(40, fetch_lmt)
+    target_bars = ks.get("sync_target_bars")
+    try:
+        target_bars_i = int(target_bars) if target_bars is not None else 0
+    except (TypeError, ValueError):
+        target_bars_i = 0
+    if target_bars_i < 0:
+        target_bars_i = 0
     incremental = not bool(args.full)
 
     conn = open_store_connection(dbp)
@@ -165,7 +177,8 @@ def main() -> int:
         total = len(ordered)
         print(
             f"[开始] 待同步 secid 共 {total} 个（含个股与板块）"
-            f"｜增量={'开' if incremental else '关'} min_rows={min_rows} max_stale_days={max_stale}",
+            f"｜增量={'开' if incremental else '关'} min_rows={min_rows} max_stale_days={max_stale}"
+            f" fetch_lmt={fetch_lmt} target_bars={target_bars_i or '—'}",
             flush=True,
         )
         nbar = 0
@@ -179,11 +192,12 @@ def main() -> int:
                 secid,
                 min_rows=min_rows,
                 max_stale_calendar_days=max_stale,
+                target_bars=target_bars_i if target_bars_i > 0 else None,
             ):
                 skipped += 1
                 print(f"[跳过-增量] {secid} 本地已够新", flush=True)
                 continue
-            rows = fetch_kline_rows_for_secid(secid, ut, lmt=200)
+            rows = fetch_kline_rows_for_secid(secid, ut, lmt=fetch_lmt)
             if not rows:
                 print(f"[跳过] 无数据 {secid}", flush=True)
                 continue

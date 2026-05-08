@@ -156,7 +156,13 @@ def composite_pick_score(
     ma20 = float(kline["ma20"])
     low20 = float(kline["low20"])
     high20 = float(kline["high20"])
-    sig = ma_box_strategy(price, kline)
+    ss = cfg.get("strategy_signal") or {}
+    min_by = ss.get("min_score_by_strategy") if isinstance(ss, dict) else None
+    sig = ma_box_strategy(
+        price,
+        kline,
+        min_score_by_strategy=min_by if isinstance(min_by, dict) else None,
+    )
 
     pattern = 0.0
     if ma5 > ma20:

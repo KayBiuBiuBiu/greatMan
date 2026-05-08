@@ -157,9 +157,13 @@ def secid_incremental_skip_ok(
     *,
     min_rows: int,
     max_stale_calendar_days: int,
+    target_bars: int | None = None,
 ) -> bool:
     """本地已有足够根数且最新日 K 未过旧时跳过网络拉取。"""
     n, mx = secid_bar_stats(conn, secid)
+    tb = int(target_bars) if target_bars is not None else 0
+    if tb > 0 and n < tb:
+        return False
     if n < max(1, int(min_rows)):
         return False
     if not mx:

@@ -37,6 +37,36 @@
         "watchlist_only": { "type": "boolean" }
       }
     },
+    "quant_selector": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "score_min_quality": { "type": ["integer", "number"] },
+        "score_min_watch": { "type": ["integer", "number"] },
+        "profit_1y_min": { "type": ["integer", "number"] },
+        "win_1y_min": { "type": ["integer", "number"] },
+        "profit_3y_floor": { "type": ["integer", "number"] }
+      }
+    },
+    "strategy_signal": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "min_score_by_strategy": {
+          "type": "object",
+          "additionalProperties": { "type": ["integer", "number"] }
+        }
+      }
+    },
+    "strategy_buy_filter": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "min_volume_ratio": { "type": ["integer", "number"] },
+        "block_weak_bear": { "type": "boolean" }
+      }
+    },
     "scan_pool_max": {
       "type": ["integer", "number"],
       "minimum": 1
@@ -238,7 +268,20 @@
         "aggregate_interval_alerts": { "type": "boolean" },
         "aggregate_max_items": { "type": ["integer", "number"], "minimum": 1 },
         "aggregate_trend_alerts": { "type": "boolean" },
-        "aggregate_trend_max_items": { "type": ["integer", "number"], "minimum": 1 }
+        "aggregate_trend_max_items": { "type": ["integer", "number"], "minimum": 1 },
+        "remote_channel": {
+          "type": "string",
+          "description": "email | wecom | both | none；控制 send_email_alert 等远程投递"
+        },
+        "wecom_webhook": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "webhook_url": { "type": "string" },
+            "msgtype": { "type": "string", "description": "text 或 markdown" }
+          }
+        }
       }
     },
     "kline_store": {
@@ -248,7 +291,12 @@
         "enabled": { "type": "boolean" },
         "db_path": { "type": "string" },
         "fresh_hours_after_sync": { "type": ["integer", "number"], "minimum": 0 },
-        "divergence_warn_price_pct": { "type": ["integer", "number", "null"], "minimum": 0 }
+        "divergence_warn_price_pct": { "type": ["integer", "number", "null"], "minimum": 0 },
+        "sync_skip_min_bars": { "type": ["integer", "number"], "minimum": 1 },
+        "sync_max_stale_calendar_days": { "type": ["integer", "number"], "minimum": 0 },
+        "sync_fetch_lmt": { "type": ["integer", "number"], "minimum": 40 },
+        "sync_target_bars": { "type": ["integer", "number"], "minimum": 0 },
+        "use_indicator_last": { "type": "boolean" }
       }
     },
     "alert_log": {
@@ -260,7 +308,19 @@
         "db_path": { "type": "string" },
         "bearish_hit_threshold_pct_1d": { "type": ["integer", "number"] },
         "bearish_hit_threshold_pct_3d": { "type": ["integer", "number"] },
-        "bearish_hit_threshold_pct_5d": { "type": ["integer", "number"] }
+        "bearish_hit_threshold_pct_5d": { "type": ["integer", "number"] },
+        "position_suggestion_eval": {
+          "type": "object",
+          "additionalProperties": { "type": ["integer", "number"] }
+        },
+        "strategy_hit_eval": {
+          "type": "object",
+          "additionalProperties": { "type": ["integer", "number"] }
+        },
+        "risk_stop_take_eval": {
+          "type": "object",
+          "additionalProperties": { "type": ["integer", "number"] }
+        }
       }
     },
     "ml_filter": {
@@ -289,7 +349,9 @@
         },
         "suppress_combo": { "type": "string", "enum": ["any", "all"] },
         "external_flow_features_enabled": { "type": "boolean" },
-        "external_flow_days": { "type": ["integer", "number"], "minimum": 3, "maximum": 60 }
+        "external_flow_days": { "type": ["integer", "number"], "minimum": 3, "maximum": 60 },
+        "external_flow_north_max_lag_days": { "type": ["integer", "number"], "minimum": 30, "maximum": 800 },
+        "external_flow_warn_stale_north": { "type": "boolean" }
       }
     },
     "ml": {
@@ -324,6 +386,58 @@
           "type": ["integer", "number"],
           "minimum": 1,
           "description": "auto_tune_accuracy 合并邮件 fp 时回溯的自然日窗口"
+        },
+        "take_profit_semantics_auto": { "type": "boolean" },
+        "take_profit_semantics_min_samples": {
+          "type": ["integer", "number"],
+          "minimum": 5
+        },
+        "take_profit_hr_switch_to_legacy": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "take_profit_hr_switch_to_correctness": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "hit_eval_grid_enabled": {
+          "type": "boolean",
+          "description": "对 strategy_hit_eval 等做轻量网格（evaluate_hit_report_only，不写库）"
+        },
+        "hit_eval_optimize_pause": {
+          "type": "boolean",
+          "description": "为 true 时跳过全部 hit 网格（邮件或手动锁住调参）"
+        },
+        "hit_eval_param_locks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "被列出的参数名不参与网格，例如 buy_hit_r1_above_pct"
+        },
+        "hit_eval_grid_buy_hit_r1_above_pct": {
+          "type": "array",
+          "items": { "type": ["integer", "number"] },
+          "description": "buy_hit_r1_above_pct 候选（百分数，与 alert_log.strategy_hit_eval 一致）"
+        },
+        "hit_eval_grid_window_days": {
+          "description": "网格评估窗口自然日（与 hit_eval_grid_days 二选一，优先本字段）",
+          "anyOf": [
+            { "type": "null" },
+            { "type": ["integer", "number"], "minimum": 1 }
+          ]
+        },
+        "hit_eval_grid_days": {
+          "description": "同 hit_eval_grid_window_days；null 或省略则用 auto_tune_accuracy --days",
+          "anyOf": [
+            { "type": "null" },
+            { "type": ["integer", "number"], "minimum": 1 }
+          ]
+        },
+        "hit_eval_grid_min_strategy_scored": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "description": "strategy 类型 n_hit_scored 下限，低于则不改参数"
         }
       }
     },
@@ -378,7 +492,8 @@
           "items": { "type": "string" }
         },
         "poll_interval_sec": { "type": ["integer", "number"], "minimum": 10 },
-        "mark_seen": { "type": "boolean" }
+        "mark_seen": { "type": "boolean" },
+        "auto_backtest_on_take_profit_hit_change": { "type": "boolean" }
       }
     },
     "realtime_hub": {
@@ -387,7 +502,20 @@
       "properties": {
         "enabled": { "type": "boolean" },
         "poll_interval_sec": { "type": ["integer", "number"], "minimum": 0.1 },
-        "ws_enabled": { "type": "boolean" }
+        "ws_enabled": {
+          "type": "boolean",
+          "description": "为 true 且 ws_transport=eastmoney_sse 时启用东财 SSE 推送（与 poll 轮询并存）"
+        },
+        "ws_transport": {
+          "type": "string",
+          "description": "eastmoney_sse / em_sse / sse 为东财 SSE；留空且配 ws_url+websocket-client 可走自定义 WS"
+        },
+        "ws_url": { "type": "string" },
+        "em_sse_url": { "type": "string" },
+        "em_sse_fields": { "type": "string" },
+        "em_sse_slots": { "type": ["integer", "number"], "minimum": 1 },
+        "em_sse_burst_sec": { "type": ["integer", "number"], "minimum": 1 },
+        "em_sse_read_timeout_sec": { "type": ["integer", "number"], "minimum": 15 }
       }
     },
     "sector_em": {

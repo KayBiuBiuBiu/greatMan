@@ -176,6 +176,123 @@ def compute_bearish_hit(
     return 0
 
 
+def compute_position_suggestion_hit(
+    extra: dict[str, Any] | None,
+    r1: float | None,
+    r3: float | None,
+    r5: float | None,
+    ev: dict[str, Any],
+) -> int | None:
+    """
+    仓位建议回测：与远期收益对比。
+    hit=1 建议方向与 T+5（优先）走势一致；0 明显相反；None 数据不足或落在中性带。
+
+    ev 来自 alert_log.position_suggestion_eval，值为「百分数」如 -0.5 表示 -0.5%。
+    """
+    _ = r1
+    _ = r3
+    if not extra:
+        return None
+    act = str(extra.get("ps_action") or "").strip()
+    if act not in ("卖出", "补仓", "持有"):
+        return None
+
+    def pct(name: str, default: float) -> float:
+        try:
+            return float(ev.get(name, default))
+        except (TypeError, ValueError):
+            return float(default)
+
+    def frac(name: str, default: float) -> float:
+        return pct(name, default) / 100.0
+
+    if act == "卖出":
+        h = frac("sell_hit_r5_below_pct", -0.5)
+        m = frac("sell_miss_r5_above_pct", 1.5)
+        if r5 is not None:
+            if r5 <= h:
+                return 1
+            if r5 >= m:
+                return 0
+        return None
+
+    if act == "补仓":
+        h = frac("add_hit_r5_above_pct", 0.5)
+        m = frac("add_miss_r5_below_pct", -2.0)
+        if r5 is not None:
+            if r5 >= h:
+                return 1
+            if r5 <= m:
+                return 0
+        return None
+
+    if act == "持有":
+        hi = frac("hold_hit_abs_r5_below_pct", 3.0)
+        mis = frac("hold_miss_abs_r5_above_pct", 6.0)
+        if r5 is None:
+            return None
+        a = abs(float(r5))
+        if a <= hi:
+            return 1
+        if a >= mis:
+            return 0
+        return None
+
+    return None
+
+
+TAKE_PROFIT_RISK_KINDS = frozenset({"take_profit_wave", "take_profit_short"})
+
+
+def compute_strategy_hit(
+    summary: str | None,
+    r1: float | None,
+    r3: float | None,
+    r5: float | None,
+    ev: dict[str, Any],
+) -> int | None:
+    """
+    策略类（箱体/均线等）事后命中：从 summary 识别买入/卖出话术。
+    买入：默认 T+5 收益 > 0 为 hit；无 r5 时可用 T+1 同号替代。
+    卖出：默认 T+5 收益 < 0 为 hit（卖后走弱）；无 r5 时看 T+1。
+    阈值单位为「百分数」如 buy_hit_r5_above_pct=0 表示 r5>0 即命中。
+    """
+    _ = r3
+    s = str(summary or "")
+    is_buy = "【买入信号】" in s
+    is_sell = "【卖出信号】" in s
+    if not is_buy and not is_sell:
+        return None
+
+    def f(name: str, default: float) -> float:
+        try:
+            return float(ev.get(name, default))
+        except (TypeError, ValueError):
+            return float(default)
+
+    buy_r5_th = f("buy_hit_r5_above_pct", 0.0) / 100.0
+    sell_r5_th = f("sell_hit_r5_below_pct", 0.0) / 100.0
+    buy_r1_th = f("buy_hit_r1_above_pct", 0.0) / 100.0
+    sell_r1_th = f("sell_hit_r1_below_pct", 0.0) / 100.0
+
+    if is_buy:
+        if r5 is not None:
+            return 1 if r5 > buy_r5_th else 0
+        if r1 is not None:
+            return 1 if r1 > buy_r1_th else 0
+        return None
+
+    if r5 is not None:
+        if sell_r5_th == 0.0:
+            return 1 if r5 < 0.0 else 0
+        return 1 if r5 < sell_r5_th else 0
+    if r1 is not None:
+        if sell_r1_th == 0.0:
+            return 1 if r1 < 0.0 else 0
+        return 1 if r1 < sell_r1_th else 0
+    return None
+
+
 def compute_risk_stop_hit(
     extra: dict[str, Any] | None,
     r1: float | None,
@@ -185,21 +302,61 @@ def compute_risk_stop_hit(
     th1: float,
     th3: float,
     th5: float,
+    take_profit_eval: dict[str, Any],
 ) -> int | None:
-    """止损：与 bearish 相同；止盈类暂不写 hit。"""
-    kind = (extra or {}).get("risk_kind")
-    if kind != "stop_loss":
+    """
+    止损：与 bearish/drawdown 相同阈值。
+    止盈（波段/短线）：默认「卖对算 hit」——锚点后 T+1、T+5 收跌视为止盈正确；
+    take_profit_hit_for_correctness=0 时切回旧语义（T+1 超阈或 T+5>0 视为「卖飞」hit）。
+    """
+    _ = th3, th5
+    kind = str((extra or {}).get("risk_kind") or "").strip()
+    if kind == "stop_loss":
+        return compute_bearish_hit(
+            "drawdown",
+            None,
+            r1,
+            r3,
+            r5,
+            th1=th1,
+            th3=th3,
+            th5=th5,
+        )
+    if kind in TAKE_PROFIT_RISK_KINDS:
+        raw_corr = take_profit_eval.get("take_profit_hit_for_correctness", 1.0)
+        try:
+            use_correctness = bool(float(raw_corr))
+        except (TypeError, ValueError):
+            use_correctness = True
+        if not use_correctness:
+            try:
+                t1p = float(
+                    take_profit_eval.get("take_profit_hit_r1_above_pct", 0.5)
+                ) / 100.0
+            except (TypeError, ValueError):
+                t1p = 0.005
+            hit_up = (r1 is not None and r1 > t1p) or (
+                r5 is not None and r5 > 0.0
+            )
+            if hit_up:
+                return 1
+            if r1 is None and r5 is None:
+                return None
+            miss = (r1 is not None and r1 <= t1p) and (
+                r5 is not None and r5 <= 0.0
+            )
+            if miss:
+                return 0
+            return None
+
+        if r1 is not None and r5 is not None:
+            return 1 if (r1 < 0.0 and r5 < 0.0) else 0
+        if r1 is not None:
+            return 1 if r1 < 0.0 else 0
+        if r5 is not None:
+            return 1 if r5 < 0.0 else 0
         return None
-    return compute_bearish_hit(
-        "drawdown",
-        None,
-        r1,
-        r3,
-        r5,
-        th1=th1,
-        th3=th3,
-        th5=th5,
-    )
+    return None
 
 
 def row_hit_for_eval(
@@ -208,7 +365,9 @@ def row_hit_for_eval(
     r1: float | None,
     r3: float | None,
     r5: float | None,
-    thresholds: dict[str, float],
+    thresholds: dict[str, Any],
+    *,
+    summary: str | None = None,
 ) -> int | None:
     extra: dict[str, Any] | None = None
     if extra_json:
@@ -219,8 +378,23 @@ def row_hit_for_eval(
     th1 = float(thresholds.get("bearish_hit_threshold_pct_1d", -2.0))
     th3 = float(thresholds.get("bearish_hit_threshold_pct_3d", -2.5))
     th5 = float(thresholds.get("bearish_hit_threshold_pct_5d", -3.0))
+    if alert_type == "position_suggestion":
+        ev = thresholds.get("position_suggestion_eval")
+        if not isinstance(ev, dict):
+            ev = {}
+        return compute_position_suggestion_hit(extra, r1, r3, r5, ev)
+    if alert_type == "strategy":
+        ev = thresholds.get("strategy_hit_eval")
+        if not isinstance(ev, dict):
+            ev = {}
+        return compute_strategy_hit(summary, r1, r3, r5, ev)
     if alert_type == "risk_stop_take":
-        return compute_risk_stop_hit(extra, r1, r3, r5, th1=th1, th3=th3, th5=th5)
+        tpe = thresholds.get("risk_stop_take_eval")
+        if not isinstance(tpe, dict):
+            tpe = {}
+        return compute_risk_stop_hit(
+            extra, r1, r3, r5, th1=th1, th3=th3, th5=th5, take_profit_eval=tpe
+        )
     return compute_bearish_hit(
         alert_type, extra, r1, r3, r5, th1=th1, th3=th3, th5=th5
     )
@@ -229,14 +403,23 @@ def row_hit_for_eval(
 def evaluate_row(
     conn: sqlite3.Connection,
     row: sqlite3.Row,
-    thresholds: dict[str, float],
+    thresholds: dict[str, Any],
 ) -> tuple[float | None, float | None, float | None, int | None]:
     secid = str(row["secid"])
     anchor_td = str(row["anchor_trade_date"])
     anchor_px = float(row["anchor_price"])
     r1, r3, r5 = forward_returns_vs_anchor(conn, secid, anchor_td, anchor_px)
     ex = row["extra_json"] if row["extra_json"] is not None else None
-    hit = row_hit_for_eval(str(row["alert_type"]), ex, r1, r3, r5, thresholds=thresholds)
+    summ = row["summary"] if row["summary"] is not None else ""
+    hit = row_hit_for_eval(
+        str(row["alert_type"]),
+        ex,
+        r1,
+        r3,
+        r5,
+        thresholds=thresholds,
+        summary=str(summ),
+    )
     return r1, r3, r5, hit
 
 

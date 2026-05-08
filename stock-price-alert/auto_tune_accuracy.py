@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""基于 backtest_alerts 报告自动微调预警准确性参数。"""
+"""基于 backtest_alerts 报告自动微调预警准确性参数。
+
+含（可选）根据 risk_stop_take 命中率切换止盈回测语义：
+auto_tune.take_profit_semantics_auto 为 true 时，
+在样本量足够前提下可在「卖对」与「旧语义」之间写回 alert_log.risk_stop_take_eval。
+收盘后由 ops_automation 调用本脚本（与邮件机器人无关）。"""
 
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import shutil
 import smtplib
@@ -201,6 +207,84 @@ def _trend_slip_hit_rate_adjust(cfg: dict[str, Any], by_type: dict[str, Any]) ->
     return changes
 
 
+def _risk_stop_take_profit_semantics_changes(
+    cfg: dict[str, Any], by_type: dict[str, Any]
+) -> list[Change]:
+    """
+    根据 risk_stop_take 的命中率自动切换止盈回测语义（写 alert_log.risk_stop_take_eval）。
+    需在 config 中开启 auto_tune.take_profit_semantics_auto。
+
+    - 当前为「卖对」语义 (1) 且 scored 样本足够、命中率过低 → 切换为旧语义 (0)
+    - 当前为旧语义 (0) 且命中率过高 → 切回「卖对」语义 (1)（阈值默认较保守，避免震荡）
+    """
+    at = cfg.get("auto_tune") if isinstance(cfg.get("auto_tune"), dict) else {}
+    if not bool(at.get("take_profit_semantics_auto", False)):
+        return []
+    min_n = max(5, int(at.get("take_profit_semantics_min_samples", 25) or 25))
+    hr_to_legacy = float(at.get("take_profit_hr_switch_to_legacy", 0.15) or 0.15)
+    hr_to_correctness = float(
+        at.get("take_profit_hr_switch_to_correctness", 0.72) or 0.72
+    )
+    hr_to_legacy = max(0.0, min(1.0, hr_to_legacy))
+    hr_to_correctness = max(0.0, min(1.0, hr_to_correctness))
+
+    rst = by_type.get("risk_stop_take") or {}
+    n_scored = int(rst.get("n_hit_scored", 0) or 0)
+    hr = rst.get("hit_rate")
+    hrf = float(hr) if isinstance(hr, (int, float)) else None
+    if n_scored < min_n or hrf is None:
+        return []
+
+    al = cfg.setdefault("alert_log", {})
+    if not isinstance(al, dict):
+        cfg["alert_log"] = {}
+        al = cfg["alert_log"]
+    rte = al.setdefault("risk_stop_take_eval", {})
+    if not isinstance(rte, dict):
+        al["risk_stop_take_eval"] = {}
+        rte = al["risk_stop_take_eval"]
+    try:
+        cur = int(float(rte.get("take_profit_hit_for_correctness", 1.0)))
+    except (TypeError, ValueError):
+        cur = 1
+    cur = 0 if cur == 0 else 1
+
+    changes: list[Change] = []
+    path_label = "alert_log.risk_stop_take_eval.take_profit_hit_for_correctness"
+
+    if cur == 1 and hrf <= hr_to_legacy:
+        rte["take_profit_hit_for_correctness"] = 0.0
+        changes.append(
+            Change(
+                path=path_label,
+                old=1,
+                new=0,
+                reason=(
+                    f"卖对语义下 risk_stop_take 命中率≤{hr_to_legacy:.0%}，"
+                    "切换旧语义（卖飞算 hit）"
+                ),
+                hit_rate=hrf,
+                samples=n_scored,
+            )
+        )
+    elif cur == 0 and hrf >= hr_to_correctness:
+        rte["take_profit_hit_for_correctness"] = 1.0
+        changes.append(
+            Change(
+                path=path_label,
+                old=0,
+                new=1,
+                reason=(
+                    f"旧语义下 risk_stop_take 命中率≥{hr_to_correctness:.0%}，"
+                    "切回卖对语义"
+                ),
+                hit_rate=hrf,
+                samples=n_scored,
+            )
+        )
+    return changes
+
+
 def _drawdown_changes(cfg: dict[str, Any], by_type: dict[str, Any]) -> list[Change]:
     changes: list[Change] = []
     dd = by_type.get("drawdown") or {}
@@ -235,7 +319,111 @@ def adjust_config(cfg: dict[str, Any], report: dict[str, Any]) -> list[Change]:
     changes: list[Change] = []
     changes.extend(_trend_slip_hit_rate_adjust(cfg, by_type))
     changes.extend(_drawdown_changes(cfg, by_type))
+    changes.extend(_risk_stop_take_profit_semantics_changes(cfg, by_type))
     return changes
+
+
+def _strategy_buy_r1_grid_changes(cfg: dict[str, Any], days: int) -> list[Change]:
+    """
+    对 alert_log.strategy_hit_eval.buy_hit_r1_above_pct 做轻量网格搜索（不写库，只读 evaluate）。
+
+    控制项（均在 auto_tune 下）：
+    - hit_eval_grid_enabled: 总开关
+    - hit_eval_optimize_pause: true 时跳过全部 hit 网格（手动锁住）
+    - hit_eval_param_locks: 含 \"buy_hit_r1_above_pct\" 时跳过该参数
+    - hit_eval_grid_buy_hit_r1_above_pct: 候选列表（百分数，与 config 一致）
+    - hit_eval_grid_window_days / hit_eval_grid_days: 窗口自然日（优先前者；默认 CLI --days）
+    - hit_eval_grid_min_strategy_scored: strategy 计分样本下限
+    """
+    at = cfg.get("auto_tune") if isinstance(cfg.get("auto_tune"), dict) else {}
+    if not bool(at.get("hit_eval_grid_enabled", False)):
+        return []
+    if bool(at.get("hit_eval_optimize_pause", False)):
+        return []
+    locks_raw = at.get("hit_eval_param_locks")
+    locks = {str(x).strip() for x in (locks_raw or []) if str(x).strip()}
+    if "buy_hit_r1_above_pct" in locks:
+        return []
+
+    grid = at.get("hit_eval_grid_buy_hit_r1_above_pct")
+    if not isinstance(grid, list) or len(grid) < 2:
+        grid = [-0.5, 0.0, 0.5, 1.0]
+    grid_vals: list[float] = []
+    for x in grid:
+        try:
+            grid_vals.append(float(x))
+        except (TypeError, ValueError):
+            pass
+    if len(grid_vals) < 2:
+        return []
+
+    win_raw = at.get("hit_eval_grid_window_days", at.get("hit_eval_grid_days", days))
+    win_days = int(win_raw if win_raw is not None else days) or days
+    since_day = (date.today() - timedelta(days=max(1, win_days))).isoformat()
+    min_scored = max(5, int(at.get("hit_eval_grid_min_strategy_scored", 25) or 25))
+
+    al = cfg.setdefault("alert_log", {})
+    if not isinstance(al, dict):
+        cfg["alert_log"] = {}
+        al = cfg["alert_log"]
+    she = al.get("strategy_hit_eval")
+    if not isinstance(she, dict):
+        she = {}
+        al["strategy_hit_eval"] = she
+    try:
+        current = float(she.get("buy_hit_r1_above_pct", 0.0))
+    except (TypeError, ValueError):
+        current = 0.0
+
+    from backtest_alerts import evaluate_hit_report_only
+    from run_alert import merge_full_config
+
+    best_v: float | None = None
+    best_key: tuple[float, int] = (-1.0, -1)
+
+    for cand in grid_vals:
+        raw_t = copy.deepcopy(cfg)
+        al_t = raw_t.setdefault("alert_log", {})
+        if not isinstance(al_t, dict):
+            raw_t["alert_log"] = {}
+            al_t = raw_t["alert_log"]
+        she_t = al_t.setdefault("strategy_hit_eval", {})
+        if not isinstance(she_t, dict):
+            she_t = {}
+            al_t["strategy_hit_eval"] = she_t
+        she_t["buy_hit_r1_above_pct"] = cand
+        merged = merge_full_config(copy.deepcopy(raw_t))
+        rep = evaluate_hit_report_only(merged, root=ROOT, since=since_day)
+        st = (rep.get("by_alert_type") or {}).get("strategy") or {}
+        ns = int(st.get("n_hit_scored", 0) or 0)
+        hr = st.get("hit_rate")
+        hrf = float(hr) if isinstance(hr, (int, float)) else None
+        if hrf is None or ns < min_scored:
+            continue
+        key = (hrf, ns)
+        if key > best_key:
+            best_key = key
+            best_v = cand
+
+    if best_v is None:
+        return []
+    if abs(float(best_v) - current) < 1e-12:
+        return []
+
+    she["buy_hit_r1_above_pct"] = float(best_v)
+    return [
+        Change(
+            path="alert_log.strategy_hit_eval.buy_hit_r1_above_pct",
+            old=current,
+            new=float(best_v),
+            reason=(
+                f"网格优化 buy_hit_r1_above_pct（{win_days}d 窗口，"
+                f"strategy 计分≥{min_scored}）"
+            ),
+            hit_rate=best_key[0],
+            samples=int(best_key[1]),
+        )
+    ]
 
 
 def _normalized_ignore_list(raw: Any) -> list[str]:
@@ -319,11 +507,18 @@ def _build_mail_body(
         "",
         "回测摘要：",
     ]
-    for k in ("trend_slip", "drawdown"):
+    for k in ("trend_slip", "drawdown", "risk_stop_take", "strategy"):
         sec = by_type.get(k) or {}
         n = int(sec.get("n", 0) or 0)
+        ns = int(sec.get("n_hit_scored", 0) or 0)
         hr = sec.get("hit_rate")
-        lines.append(f"- {k}: 样本={n}，命中率={_fmt_pct(hr if isinstance(hr, (int, float)) else None)}")
+        hrf = hr if isinstance(hr, (int, float)) else None
+        if k == "risk_stop_take":
+            lines.append(
+                f"- {k}: 事件={n}，计分样本={ns}，命中率={_fmt_pct(hrf)}"
+            )
+        else:
+            lines.append(f"- {k}: 样本={n}，命中率={_fmt_pct(hrf)}")
     lines.append("")
     lines.append("参数调整：")
     for ch in changes:
@@ -351,6 +546,9 @@ def maybe_send_email(
         return
     try:
         from email_notify import send_email_alert
+        from run_alert import merge_full_config
+
+        notify_cfg = merge_full_config(copy.deepcopy(cfg))
 
         subject = f"【自动调参】已调整 {len(changes)} 项参数"
         body = _build_mail_body(
@@ -364,16 +562,18 @@ def maybe_send_email(
             subject,
             body,
             append_disclaimer=False,
-            app_cfg=None,
+            app_cfg=notify_cfg,
         )
         if ok:
-            print("📧 邮件通知已发送。")
+            print("📧 远程通知已发送（邮件/企微见 notifications.remote_channel）。")
         else:
             ok2 = _send_email_from_config_smtp(cfg, subject, body)
             if ok2:
-                print("📧 邮件通知已发送（config.smtp）。")
+                print("📧 远程通知已发送（config.smtp 兜底）。")
             else:
-                print("⚠️ 邮件未发送（未配置 mail_config.json / 环境变量 / config.smtp，或发送失败）。")
+                print(
+                    "⚠️ 远程通知未发送（未配置 mail_config.json / 企微 webhook / config.smtp，或发送失败）。"
+                )
     except Exception as exc:
         print(f"⚠️ 邮件发送异常：{exc}")
 
@@ -426,9 +626,15 @@ def print_report(report: dict[str, Any]) -> None:
         if not isinstance(sec, dict):
             continue
         n = int(sec.get("n", 0) or 0)
+        ns = int(sec.get("n_hit_scored", 0) or 0)
         hr = sec.get("hit_rate")
         hrf = float(hr) if isinstance(hr, (int, float)) else None
-        print(f"- {alert_type}: 样本={n}, 命中率={_fmt_pct(hrf)}")
+        if alert_type == "risk_stop_take":
+            print(
+                f"- {alert_type}: 事件={n}, 计分样本={ns}, 命中率={_fmt_pct(hrf)}"
+            )
+        else:
+            print(f"- {alert_type}: 样本={n}, 命中率={_fmt_pct(hrf)}")
 
 
 def save_config(config_path: Path, cfg: dict[str, Any]) -> Path:
@@ -478,9 +684,12 @@ def main() -> int:
         fb_lookback = max(1, int(fb_days))
     fb_changes = merge_fp_user_feedback_into_ignore(cfg, fb_lookback)
     hit_changes = adjust_config(cfg, report)
-    changes = fb_changes + hit_changes
+    grid_changes = _strategy_buy_r1_grid_changes(cfg, int(args.days))
+    changes = fb_changes + hit_changes + grid_changes
     if not changes:
-        print("✅ 无需调整参数（命中率与邮件 fp 忽略名单均无变更）。")
+        print(
+            "✅ 无需调整参数（fp 合并 / 规则调参 / strategy 网格 / 止盈语义均无变更）。"
+        )
         return 0
 
     print("建议调整：")

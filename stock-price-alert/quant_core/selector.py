@@ -1,12 +1,22 @@
 import akshare as ak
 import baostock as bs
 import json
+import random
 import pandas as pd
 import time
 from datetime import datetime
 from pathlib import Path
 
 _BS_LOGIN_OK = False
+
+
+def _score_sort_key(row: dict) -> tuple[float, float]:
+    """按分数降序；同分用随机次序打破平局，避免 JSON/展示里按代码挤成一片 000/002。"""
+    try:
+        s = float(row.get("score", 0.0) or 0.0)
+    except (TypeError, ValueError):
+        s = 0.0
+    return (-s, random.random())
 
 
 def _ensure_bs_login() -> bool:
@@ -158,14 +168,26 @@ def _run_backtest_on_df(df: pd.DataFrame, years: int) -> dict:
     return {"profit": profit, "win": win, "trades": len(trades), "note": "OK"}
 
 
-def _classify(score: float, bt1: dict, bt3: dict, bt5: dict) -> tuple[str, str]:
+def _classify(
+    score: float,
+    bt1: dict,
+    bt3: dict,
+    bt5: dict,
+    *,
+    th: dict[str, float],
+) -> tuple[str, str]:
     p1 = float(bt1.get("profit", 0.0))
     w1 = float(bt1.get("win", 0.0))
     p3 = float(bt3.get("profit", 0.0))
     p5 = float(bt5.get("profit", 0.0))
-    if score >= 5.5 and p1 >= 0 and w1 >= 50 and p3 >= -8:
+    sq = float(th.get("score_min_quality", 7.0))
+    sw = float(th.get("score_min_watch", 5.5))
+    p1_min = float(th.get("profit_1y_min", 0.0))
+    w1_min = float(th.get("win_1y_min", 50.0))
+    p3_floor = float(th.get("profit_3y_floor", -8.0))
+    if score >= sq and p1 >= p1_min and w1 >= w1_min and p3 >= p3_floor:
         return "优质股", "因子与回测双重达标"
-    if score >= 5.0 and p1 >= -3 and w1 >= 40 and p3 >= -15:
+    if score >= sw and p1 >= -3 and w1 >= 40 and p3 >= -15:
         return "观察股", "基本达标，建议继续跟踪"
     if score < 4.5:
         return "淘汰股", "当前因子偏弱"
@@ -174,6 +196,88 @@ def _classify(score: float, bt1: dict, bt3: dict, bt5: dict) -> tuple[str, str]:
     if p3 < -20 or p5 < -30:
         return "淘汰股", "中长期回测回撤过大"
     return "淘汰股", "历史回测不达标"
+
+
+def _split_codes_by_board(codes: list[str]) -> tuple[list[str], list[str], list[str]]:
+    """按板块拆分代码。全市场 sorted 后取前 N 只会全是 000/002 等 0 字头，300/301 与 6 字头永远进不了样本。"""
+    cy: list[str] = []
+    sh: list[str] = []
+    sz: list[str] = []
+    for raw in codes:
+        c = str(raw).strip()
+        if len(c) != 6 or not c.isdigit():
+            continue
+        if c.startswith(("300", "301")):
+            cy.append(c)
+        elif c.startswith("6"):
+            sh.append(c)
+        else:
+            sz.append(c)
+    cy.sort()
+    sh.sort()
+    sz.sort()
+    return cy, sh, sz
+
+
+def _allocate_proportional(sizes: list[int], max_n: int) -> list[int]:
+    """把 max_n 按 sizes 比例拆成整数份（最大余额法），与 sizes 等长。"""
+    total = sum(sizes)
+    if total <= 0 or max_n <= 0:
+        return [0] * len(sizes)
+    n = min(max_n, total)
+    exact = [n * s / total for s in sizes]
+    floors = [int(x) for x in exact]
+    rem = n - sum(floors)
+    order = sorted(
+        range(len(sizes)),
+        key=lambda i: exact[i] - floors[i],
+        reverse=True,
+    )
+    for k in range(rem):
+        floors[order[k]] += 1
+    return floors
+
+
+def _proportional_random_sample(
+    sz_c: list[str],
+    sh_c: list[str],
+    cy_c: list[str],
+    max_n: int,
+    *,
+    rng: random.Random,
+) -> list[str]:
+    """
+    三板块按全市场只数比例分配扫描名额，板内随机抽样；打分后全局排序，不强制每板都进优质名单。
+    """
+    pools = (sz_c, sh_c, cy_c)
+    sizes = [len(p) for p in pools]
+    total = sum(sizes)
+    if total == 0:
+        return []
+    n = min(max_n, total)
+    alloc = _allocate_proportional(sizes, n)
+    alloc = [min(alloc[i], sizes[i]) for i in range(3)]
+    short = n - sum(alloc)
+    spare = [sizes[i] - alloc[i] for i in range(3)]
+    si = 0
+    while short > 0 and sum(spare) > 0:
+        i = si % 3
+        si += 1
+        if spare[i] <= 0:
+            continue
+        alloc[i] += 1
+        spare[i] -= 1
+        short -= 1
+
+    out: list[str] = []
+    for pool, k in zip(pools, alloc):
+        if k <= 0:
+            continue
+        if k >= len(pool):
+            out.extend(pool)
+        else:
+            out.extend(rng.sample(pool, k))
+    return out
 
 
 def run_daily_selector(cfg, limit=250, top_n_per_strategy=30):
@@ -192,9 +296,22 @@ def run_daily_selector(cfg, limit=250, top_n_per_strategy=30):
     stock_list = sorted(set(stock_list))
     print(f"✅ 全市场股票：{len(stock_list)} 只")
 
-    max_scan = max(60, min(int(limit or 250), 800))
-    test_list = stock_list[:max_scan]
-    print(f"🔎 批量联动评分+回测：{len(test_list)} 只")
+    max_scan = max(60, min(int(limit or 250), 4000))
+    cy_c, sh_c, sz_c = _split_codes_by_board(stock_list)
+    seed_s = str(cfg.get("daily_select_sample_seed") or "").strip()
+    if seed_s:
+        rng = random.Random(seed_s)
+    else:
+        rng = random.Random(datetime.now().strftime("%Y%m%d"))
+    # 三板块按比例抽样 + 统一打分排序；优质/观察名单纯看分数与回测，不保证每板都有
+    test_list = _proportional_random_sample(sz_c, sh_c, cy_c, max_scan, rng=rng)
+    n_cy = sum(1 for x in test_list if x.startswith(("300", "301")))
+    n_sh = sum(1 for x in test_list if x.startswith("6"))
+    print(
+        f"🔎 批量联动评分+回测：{len(test_list)} 只"
+        f"（样本 深0字头 {len(test_list) - n_cy - n_sh} / 沪6字头 {n_sh} / 创业板 {n_cy}；"
+        f"全市场创业板约 {len(cy_c)} 只）"
+    )
 
     name_map = {}
     try:
@@ -207,15 +324,20 @@ def run_daily_selector(cfg, limit=250, top_n_per_strategy=30):
     watch: list[dict] = []
     reject: list[dict] = []
 
+    qs = cfg.get("quant_selector") if isinstance(cfg, dict) else {}
+    th = qs if isinstance(qs, dict) else {}
+    n_total = len(test_list)
+    prog_every = max(50, min(200, n_total // 20 or 50))
+    t0 = time.monotonic()
     try:
-        for code in test_list:
+        for i, code in enumerate(test_list):
             df = load_df(code, lookback=252 * 5 + 80)
             score = get_real_score(code, df=df)
             name = name_map.get(code, f"股票{code}")
             bt1 = _run_backtest_on_df(df, 1) if df is not None else {"profit": 0, "win": 0, "trades": 0, "note": "无数据"}
             bt3 = _run_backtest_on_df(df, 3) if df is not None else {"profit": 0, "win": 0, "trades": 0, "note": "无数据"}
             bt5 = _run_backtest_on_df(df, 5) if df is not None else {"profit": 0, "win": 0, "trades": 0, "note": "无数据"}
-            bucket, reason = _classify(score, bt1, bt3, bt5)
+            bucket, reason = _classify(score, bt1, bt3, bt5, th=th)
             row = {
                 "code": code,
                 "name": name,
@@ -238,23 +360,35 @@ def run_daily_selector(cfg, limit=250, top_n_per_strategy=30):
                     }
                 )
             time.sleep(0.08)
+            done = i + 1
+            if done == 1 or done % prog_every == 0 or done == n_total:
+                elapsed = time.monotonic() - t0
+                rate = done / elapsed if elapsed > 0 else 0.0
+                eta = (n_total - done) / rate if rate > 0 else 0.0
+                print(
+                    f"   … 选股进度 {done}/{n_total}（约 {rate:.1f} 只/秒，"
+                    f"剩余约 {eta / 60:.1f} 分钟）",
+                    flush=True,
+                )
     finally:
         _safe_bs_logout()
 
-    quality = sorted(quality, key=lambda x: x["score"], reverse=True)[:top_n_per_strategy]
-    watch = sorted(watch, key=lambda x: x["score"], reverse=True)[: max(top_n_per_strategy, 20)]
-    reject = sorted(reject, key=lambda x: x["score"])
+    quality = sorted(quality, key=_score_sort_key)[:top_n_per_strategy]
+    watch = sorted(watch, key=_score_sort_key)[: max(top_n_per_strategy, 20)]
+    reject = sorted(reject, key=_score_sort_key)
 
+    out_th = {
+        "score_min": float(th.get("score_min_quality", 7.0)),
+        "score_min_watch": float(th.get("score_min_watch", 5.5)),
+        "profit_1y_min": float(th.get("profit_1y_min", 0.0)),
+        "win_1y_min": float(th.get("win_1y_min", 50.0)),
+        "profit_3y_floor": float(th.get("profit_3y_floor", -8.0)),
+    }
     return {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "scan_total": len(stock_list),
         "scan_used": len(test_list),
-        "thresholds": {
-            "score_min": 5.5,
-            "profit_1y_min": 0.0,
-            "win_1y_min": 50.0,
-            "profit_3y_floor": -8.0,
-        },
+        "thresholds": out_th,
         "优质股": quality,
         "观察股": watch,
         "淘汰股": reject,

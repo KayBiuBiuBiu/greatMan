@@ -295,30 +295,41 @@ def merge_tagged_holdings(
     带持仓标签：永久保留，不被本轮扫描结果剔除。
     无标签：以本轮扫描池为准重建（旧池中未入选者删除）。
     """
+    from run_alert import _merge_duplicate_watch_rows, normalize_stock_code
+
     by_code: dict[str, dict[str, Any]] = {}
     for w in prev_watch:
         if not isinstance(w, dict):
             continue
-        c = str(w.get("code") or "").strip()
-        if c and has_position_tag(w):
-            by_code[c] = dict(w)
+        c_key = normalize_stock_code(str(w.get("code") or "").strip())
+        if not c_key or not has_position_tag(w):
+            continue
+        if c_key in by_code:
+            merged = _merge_duplicate_watch_rows(by_code[c_key], dict(w))
+            merged["code"] = c_key
+            by_code[c_key].clear()
+            by_code[c_key].update(merged)
+        else:
+            ent = dict(w)
+            ent["code"] = c_key
+            by_code[c_key] = ent
 
     for s in scanned:
-        c = str(s.get("code") or "").strip()
-        if not c:
+        c_key = normalize_stock_code(str(s.get("code") or "").strip())
+        if not c_key:
             continue
-        if c in by_code and has_position_tag(by_code[c]):
+        if c_key in by_code and has_position_tag(by_code[c_key]):
             continue
         ent = _watch_template(note)
         ent.update(
             {
-                "name": str(s.get("name") or c),
-                "code": c,
+                "name": str(s.get("name") or c_key),
+                "code": c_key,
                 "market": str(s.get("market") or "sh"),
                 "industry": str(s.get("industry") or ""),
             }
         )
-        by_code[c] = ent
+        by_code[c_key] = ent
 
     return list(by_code.values())
 
@@ -370,7 +381,7 @@ def scan_and_save(cfg_path: Path, *, force: bool = False) -> int:
         )
         return 0
 
-    target_n = int(cfg.get("scan_pool_max", 800))
+    target_n = int(cfg.get("scan_pool_max", 4000))
     target_n = max(200, min(800, target_n))
 
     emit_select_tool_line(

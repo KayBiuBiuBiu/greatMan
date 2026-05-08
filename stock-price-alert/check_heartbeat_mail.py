@@ -129,7 +129,7 @@ def _send_stale_alert(
         print("[heartbeat-mail] 已发送告警邮件。", file=sys.stderr)
         return 0
     print(
-        "[heartbeat-mail] 发送失败（未配置 SMTP 或网络错误）。",
+        "[heartbeat-mail] 发送失败（未配置远程通知：邮件/企微，或网络错误）。",
         file=sys.stderr,
     )
     return 1

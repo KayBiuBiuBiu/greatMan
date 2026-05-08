@@ -185,6 +185,7 @@ from macro_risk import (
     configure_index_kline_cache,
     fetch_index_5d_return,
     fetch_index_mood_mult,
+    get_market_mood_three_tier,
     macro_score_multiplier,
 )
 from email_notify import (
@@ -196,7 +197,7 @@ from alert_log_store import apply_feedback_to_latest_alert
 from email_command_bot import fetch_email_bot_actions
 from notify_macos import send_notification
 from pick_score import composite_pick_score
-from position_tags import format_tags_line, has_position_tag
+from position_tags import format_tags_line, has_position_tag, normalize_tags_field
 from quote_eastmoney import (
     DEFAULT_UT,
     configure_kline_performance,
@@ -370,9 +371,11 @@ DEFAULT_CLOSED_INTERVAL = 60
 DEFAULT_COOLDOWN_MIN = 5
 DEFAULT_BUFFER = 0.02
 FUSE_MIN_INTERVAL = 30
+# 监控池为空时，避免每轮 sleep 都刷同一条 CLI 提示（秒）
+EMPTY_WATCH_STATUS_LOG_SEC = 300.0
 
 DEFAULT_CAPITAL = {
-    "total": 10000,
+    "total": 200000,
     "max_total_position_ratio": 0.5,
     "max_single_stock_ratio": 0.3,
 }
@@ -483,6 +486,14 @@ DEFAULT_NOTIFICATIONS = {
     "aggregate_max_items": 20,
     "aggregate_trend_alerts": True,
     "aggregate_trend_max_items": 15,
+    # 远程投递：email=仅 SMTP；wecom=仅企业微信机器人；both=邮件+企微双发；none=不发（仍可有本机通知）
+    "remote_channel": "both",
+    "wecom_webhook": {
+        "enabled": True,
+        "webhook_url": "",
+        # text 与 curl 一致、兼容性最好；markdown 支持 <font color="warning"> 等
+        "msgtype": "text",
+    },
 }
 DEFAULT_LOGGING = {
     "enabled": True,
@@ -492,6 +503,26 @@ DEFAULT_LOGGING = {
     "level": "INFO",
     "console_mirror": False,
 }
+POSITION_SUGGESTION_EVAL_DEFAULT: dict[str, float] = {
+    # 百分比数值，如 -0.5 表示 -0.5%
+    "sell_hit_r5_below_pct": -0.5,
+    "sell_miss_r5_above_pct": 1.5,
+    "add_hit_r5_above_pct": 0.5,
+    "add_miss_r5_below_pct": -2.0,
+    "hold_hit_abs_r5_below_pct": 3.0,
+    "hold_miss_abs_r5_above_pct": 6.0,
+}
+STRATEGY_HIT_EVAL_DEFAULT: dict[str, float] = {
+    "buy_hit_r5_above_pct": 0.0,
+    "sell_hit_r5_below_pct": 0.0,
+    "buy_hit_r1_above_pct": 0.0,
+    "sell_hit_r1_below_pct": 0.0,
+}
+RISK_STOP_TAKE_EVAL_DEFAULT: dict[str, float] = {
+    "take_profit_hit_r1_above_pct": 0.5,
+    # 1=卖对算 hit（跌）；0=旧语义卖飞算 hit（配合 take_profit_hit_r1_above_pct）
+    "take_profit_hit_for_correctness": 1.0,
+}
 DEFAULT_ALERT_LOG = {
     "enabled": False,
     "share_kline_db": True,
@@ -499,6 +530,9 @@ DEFAULT_ALERT_LOG = {
     "bearish_hit_threshold_pct_1d": -2.0,
     "bearish_hit_threshold_pct_3d": -2.5,
     "bearish_hit_threshold_pct_5d": -3.0,
+    "position_suggestion_eval": dict(POSITION_SUGGESTION_EVAL_DEFAULT),
+    "strategy_hit_eval": dict(STRATEGY_HIT_EVAL_DEFAULT),
+    "risk_stop_take_eval": dict(RISK_STOP_TAKE_EVAL_DEFAULT),
 }
 DEFAULT_ML_FILTER = {
     "enabled": False,
@@ -515,16 +549,20 @@ DEFAULT_ML_FILTER = {
     # AkShare 资金/北向/龙虎榜附加特征（需重训 NB；默认关闭以保持与旧模型兼容）
     "external_flow_features_enabled": False,
     "external_flow_days": 10,
+    # 个股北向持股接口若滞后于锚定日超过该天数，则 ext_north_mv_chg_ratio 置 0（避免用陈旧序列误导 NB）
+    "external_flow_north_max_lag_days": 120,
+    # True：滞后时打 INFO；False：仅 DEBUG（默认安静）
+    "external_flow_warn_stale_north": False,
 }
 DEFAULT_OPS_AUTOMATION = {
-    "enabled": False,
+    "enabled": True,
     "preopen_enabled": True,
     "preopen_cutoff_hhmm": "09:20",
     "after_close_enabled": True,
     "after_close_hhmm": "15:10",
     "friday_weekly_enabled": True,
     "backtest_since_days": 7,
-    "auto_tune_apply": False,
+    "auto_tune_apply": True,
     "auto_tune_email": True,
     "ml_train_weekly": True,
     "ml_train_days": 180,
@@ -546,6 +584,55 @@ DEFAULT_MONITORING = {
     # true：即使非 watchlist_only，也不在进程启动时跑盘前选股（优质池依赖 ops_automation 或手动选股）
     "skip_startup_daily_select": False,
 }
+DEFAULT_QUANT_SELECTOR = {
+    # 优质池：因子分 + 回测门槛（见 quant_core.selector._classify）
+    "score_min_quality": 7.0,
+    "score_min_watch": 5.5,
+    "profit_1y_min": 0.0,
+    "win_1y_min": 50.0,
+    "profit_3y_floor": -8.0,
+}
+DEFAULT_STRATEGY_SIGNAL = {
+    # 各策略参考分下限（仅压制买入类 action，卖出/风控仍保留）
+    "min_score_by_strategy": {
+        "ma_dip": 72.0,
+        "box_breakout": 78.0,
+        "range_arbitrage": 74.0,
+    },
+}
+DEFAULT_STRATEGY_BUY_FILTER = {
+    "enabled": True,
+    # 日 K 量比（末根量 / 前 20 日均量）；≤0 表示不做量比过滤
+    "min_volume_ratio": 1.2,
+    # 上证三档 mood 为 weak_bear 时不采纳买入信号（与 position 建议用的 tier 独立，见代码注释）
+    "block_weak_bear": True,
+}
+DEFAULT_POSITION_SUGGESTION = {
+    "enabled": True,
+    "rules": {
+        "sell": {
+            "profit_to_take": 0.15,
+            "profit_break_ma5": True,
+            "loss_stop": -0.08,
+            "loss_below_ma20_and_ma60": True,
+            "bearish_prob_threshold": 0.7,
+            "box_high_threshold": 0.85,
+            "volume_ratio_low": 0.8,
+            "market_weak_bear_sell": True,
+        },
+        "add": {
+            "loss_min": -0.20,
+            "loss_max": -0.05,
+            "require_above_ma20": True,
+            "box_low_threshold": 0.4,
+            "min_volume_ratio": 0.8,
+            "forbid_market_weak_bear": True,
+            "add_amount_tier1": 6000,
+            "add_amount_tier2": 9000,
+            "loss_tier2": -0.15,
+        },
+    },
+}
 DEFAULT_EMAIL_COMMAND_BOT = {
     "enabled": False,
     "use_shared_mail_config": True,
@@ -557,6 +644,8 @@ DEFAULT_EMAIL_COMMAND_BOT = {
     "trusted_senders": [],
     "poll_interval_sec": 45,
     "mark_seen": True,
+    # 邮件/控制台 set take_profit_hit_for_correctness 成功后是否自动跑 backtest_alerts --force
+    "auto_backtest_on_take_profit_hit_change": False,
 }
 DEFAULT_SECTOR_EM = {
     "api_hosts": [
@@ -593,13 +682,16 @@ DEFAULT_KLINE_STORE = {
     "divergence_warn_price_pct": None,
     "sync_skip_min_bars": 50,
     "sync_max_stale_calendar_days": 2,
+    "sync_fetch_lmt": 1020,
+    "sync_target_bars": 800,
     "use_indicator_last": False,
 }
 DEFAULT_REALTIME_HUB = {
     "enabled": True,
     "poll_interval_sec": 5.0,
-    "ws_enabled": False,
-    "ws_transport": "",
+    # True + eastmoney_sse：东财 SSE 推送写入 Hub 缓存（与 HTTP 轮询并存，盘中更及时）
+    "ws_enabled": True,
+    "ws_transport": "eastmoney_sse",
     "ws_url": "",
     "ws_reconnect_sec": 5.0,
     "ws_ping_interval_sec": 30.0,
@@ -693,6 +785,215 @@ def _compute_round_dynamic_min_pillars_weak(cfg: dict[str, Any]) -> tuple[int | 
     return v, msg
 
 
+def _market_mood_tier_for_position_suggestion(cfg: dict[str, Any]) -> str:
+    """与 dynamic_adaptive 一致的大盘三档/牛熊标签，供持仓仓位建议。"""
+    tc = cfg.get("trend_slippage_alert") or {}
+    da = tc.get("dynamic_adaptive")
+    if not isinstance(da, dict) or not bool(da.get("enabled", False)):
+        return "range"
+    from macro_risk import get_market_mood_three_tier, get_market_regime
+
+    ma_p = max(5, min(120, int(da.get("ma_period", 20) or 20)))
+    if bool(da.get("use_mood_three_tier", False)):
+        return get_market_mood_three_tier(dynamic_cfg=da)
+    regime = get_market_regime(ma_period=ma_p, dynamic_cfg=da)
+    return "weak_bear" if regime == "bear" else "range"
+
+
+def _fill_position_suggestion_metrics(pack: dict[str, Any], now_price: float) -> None:
+    """写入 box/均线/量比等字段，供 _get_position_suggestion 使用。"""
+    pack.pop("_ps_box_pct", None)
+    pack.pop("_ps_above_ma5", None)
+    pack.pop("_ps_above_ma20", None)
+    pack.pop("_ps_above_ma60", None)
+    pack.pop("_ps_vol_ratio", None)
+    pack.pop("_ps_ma5", None)
+    pack.pop("_ps_ma20", None)
+    pack.pop("_ps_ma60", None)
+    kl = pack.get("kline")
+    if not isinstance(kl, dict) or now_price <= 0:
+        return
+    try:
+        ma5 = float(kl.get("ma5") or 0.0)
+        ma20 = float(kl.get("ma20") or 0.0)
+        low20 = float(kl.get("low20") or 0.0)
+        high20 = float(kl.get("high20") or 0.0)
+    except (TypeError, ValueError):
+        return
+    if ma5 > 0:
+        pack["_ps_ma5"] = ma5
+        pack["_ps_above_ma5"] = now_price > ma5
+    if ma20 > 0:
+        pack["_ps_ma20"] = ma20
+        pack["_ps_above_ma20"] = now_price > ma20
+    ma60v = kl.get("ma60")
+    if ma60v is not None:
+        try:
+            m60 = float(ma60v)
+        except (TypeError, ValueError):
+            m60 = 0.0
+        if m60 > 0:
+            pack["_ps_ma60"] = m60
+            pack["_ps_above_ma60"] = now_price > m60
+    span = max(high20 - low20, 1e-6)
+    if high20 > 0 and low20 >= 0:
+        pack["_ps_box_pct"] = (now_price - low20) / span
+    vols = kl.get("volumes")
+    if isinstance(vols, list) and len(vols) >= 21:
+        try:
+            v_last = float(vols[-1])
+            tail = [float(x) for x in vols[-21:-1]]
+            v_ma = sum(tail) / 20.0
+            if v_ma > 0:
+                pack["_ps_vol_ratio"] = v_last / v_ma
+        except (TypeError, ValueError):
+            pass
+
+
+def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) -> str | None:
+    """买入信号实时过滤：量比、大盘 weak_bear。返回原因文案；未拦截返回 None。"""
+    sbf = cfg.get("strategy_buy_filter") or {}
+    if not bool(sbf.get("enabled", True)):
+        return None
+    reasons: list[str] = []
+    min_vr = float(sbf.get("min_volume_ratio", 1.2) or 1.2)
+    if min_vr > 0:
+        vr = pack.get("_ps_vol_ratio")
+        if vr is None or float(vr) < min_vr:
+            v_show = f"{float(vr):.2f}" if vr is not None else "—"
+            reasons.append(f"量比{v_show}（需≥{min_vr:g}）")
+    if bool(sbf.get("block_weak_bear", True)):
+        mt = pack.get("_strategy_buy_mood_tier")
+        if mt == "weak_bear":
+            reasons.append("大盘 weak_bear")
+    return "；".join(reasons) if reasons else None
+
+
+def _ml_bearish_prob_for_position_suggestion(
+    cfg: dict[str, Any],
+    *,
+    now_price: float,
+    pnl_pct: float,
+    code6: str,
+    anchor_trade_date: str,
+) -> float | None:
+    """NB 模型下跌概率；未启用或失败返回 None。"""
+    mfc = cfg.get("ml_filter") or {}
+    if not bool(mfc.get("enabled", False)):
+        return None
+    mp = resolve_ml_model_path(cfg, ROOT)
+    model = load_ml_model_cached(mp)
+    if not isinstance(model, dict):
+        return None
+    td = str(anchor_trade_date or "")[:10]
+    feats = build_ml_feature_vector(
+        alert_type="trend_slip",
+        anchor_price=now_price,
+        pnl_pct=pnl_pct,
+        weak_pillars=None,
+        dd_level=None,
+        cfg=cfg,
+        root=ROOT,
+        code6=code6.strip() if code6 else None,
+        anchor_trade_date=td if td else None,
+    )
+    try:
+        return predict_ml_bearish_probability(model, feats)
+    except Exception:
+        return None
+
+
+def _get_position_suggestion(
+    pack: dict[str, Any],
+    cfg: dict[str, Any],
+    *,
+    pnl_pct: float,
+    bearish_prob: float | None,
+) -> tuple[str, str]:
+    """
+    返回 (卖出|补仓|持有, 理由文案)。
+    pnl_pct 为相对成本的盈亏百分数（与 risk.calc_profit_pct 一致）。
+    """
+    ps = cfg.get("position_suggestion") or {}
+    if not bool(ps.get("enabled", True)):
+        return "持有", ""
+    rules = ps.get("rules") or {}
+    sell_r = rules.get("sell") or {}
+    add_r = rules.get("add") or {}
+
+    def _f(key: str, default: float) -> float:
+        try:
+            return float(sell_r.get(key, default))
+        except (TypeError, ValueError):
+            return float(default)
+
+    def _fa(key: str, default: float) -> float:
+        try:
+            return float(add_r.get(key, default))
+        except (TypeError, ValueError):
+            return float(default)
+
+    p_frac = pnl_pct / 100.0
+    tier = str(pack.get("_market_mood_tier") or "range")
+    box_pct = pack.get("_ps_box_pct")
+    vol_ratio = pack.get("_ps_vol_ratio")
+    a5 = pack.get("_ps_above_ma5")
+    a20 = pack.get("_ps_above_ma20")
+    a60 = pack.get("_ps_above_ma60")
+
+    pt = _f("profit_to_take", 0.15)
+    if bool(sell_r.get("profit_break_ma5", True)) and p_frac >= pt:
+        if a5 is False:
+            return "卖出", f"浮盈{pnl_pct:.1f}%已破5日线，止盈"
+
+    ls = _f("loss_stop", -0.08)
+    if bool(sell_r.get("loss_below_ma20_and_ma60", True)) and p_frac <= ls:
+        if a20 is False and a60 is False:
+            return "卖出", "趋势走坏，止损"
+
+    bp_th = _f("bearish_prob_threshold", 0.7)
+    if bearish_prob is not None and float(bearish_prob) >= bp_th:
+        return "卖出", f"下跌概率{bearish_prob * 100:.1f}%，规避风险"
+
+    bh = _f("box_high_threshold", 0.85)
+    vr_lo = _f("volume_ratio_low", 0.8)
+    if (
+        isinstance(box_pct, (int, float))
+        and vol_ratio is not None
+        and isinstance(vol_ratio, (int, float))
+    ):
+        if float(box_pct) >= bh and float(vol_ratio) < vr_lo:
+            return "卖出", "高位缩量，动能不足"
+
+    if bool(sell_r.get("market_weak_bear_sell", True)):
+        if tier == "weak_bear" and a20 is False:
+            return "卖出", "大盘走弱+个股破均线"
+
+    lmin = _fa("loss_min", -0.20)
+    lmax = _fa("loss_max", -0.05)
+    in_loss_band = (pnl_pct >= lmin * 100.0) and (pnl_pct <= lmax * 100.0)
+    if in_loss_band:
+        ok_add = True
+        if bool(add_r.get("require_above_ma20", True)) and a20 is not True:
+            ok_add = False
+        bl = _fa("box_low_threshold", 0.4)
+        if not isinstance(box_pct, (int, float)) or float(box_pct) > bl:
+            ok_add = False
+        mvr = _fa("min_volume_ratio", 0.8)
+        if vol_ratio is None or float(vol_ratio) < mvr:
+            ok_add = False
+        if bool(add_r.get("forbid_market_weak_bear", True)) and tier == "weak_bear":
+            ok_add = False
+        if ok_add:
+            lt2 = _fa("loss_tier2", -0.15)
+            t1_amt = _fa("add_amount_tier1", 6000)
+            t2_amt = _fa("add_amount_tier2", 9000)
+            amt = t2_amt if pnl_pct <= lt2 * 100.0 else t1_amt
+            return "补仓", f"低位缩量企稳条件满足，建议补仓约{amt:.0f}元"
+
+    return "持有", "观望"
+
+
 def _merge_top_level_ml_alias(cfg: dict[str, Any], ml_filter: dict[str, Any]) -> None:
     """将顶层 `ml` 节映射到 `ml_filter`，便于与方向二文档中的配置示例对齐。"""
     box = cfg.get("ml")
@@ -760,7 +1061,7 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     sr.update(cfg.get("scan_rule") or {})
     cfg["scan_rule"] = sr
     cfg.setdefault("run_only_in_trading_hours", True)
-    cfg.setdefault("scan_pool_max", 800)
+    cfg.setdefault("scan_pool_max", 4000)
     cfg.setdefault("daily_pick_count", 6)
     cfg.setdefault("macro_risk", {})
     cfg.setdefault("sources", {})
@@ -798,12 +1099,44 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
         cfg["notifications"] = {}
     nt_m = dict(DEFAULT_NOTIFICATIONS)
     nt_m.update(cfg["notifications"])
+    _wc_def = dict(DEFAULT_NOTIFICATIONS.get("wecom_webhook") or {})
+    _wc_u = nt_m.get("wecom_webhook")
+    if isinstance(_wc_u, dict):
+        _wc_def.update(_wc_u)
+    nt_m["wecom_webhook"] = _wc_def
     cfg["notifications"] = nt_m
     cfg.setdefault("alert_log", {})
     if not isinstance(cfg["alert_log"], dict):
         cfg["alert_log"] = {}
     al_m = dict(DEFAULT_ALERT_LOG)
     al_m.update(cfg["alert_log"])
+    _pse = dict(POSITION_SUGGESTION_EVAL_DEFAULT)
+    _pse_in = al_m.get("position_suggestion_eval")
+    if isinstance(_pse_in, dict):
+        for _k, _v in _pse_in.items():
+            try:
+                _pse[str(_k)] = float(_v)
+            except (TypeError, ValueError):
+                pass
+    al_m["position_suggestion_eval"] = _pse
+    _she = dict(STRATEGY_HIT_EVAL_DEFAULT)
+    _she_in = al_m.get("strategy_hit_eval")
+    if isinstance(_she_in, dict):
+        for _k, _v in _she_in.items():
+            try:
+                _she[str(_k)] = float(_v)
+            except (TypeError, ValueError):
+                pass
+    al_m["strategy_hit_eval"] = _she
+    _rte = dict(RISK_STOP_TAKE_EVAL_DEFAULT)
+    _rte_in = al_m.get("risk_stop_take_eval")
+    if isinstance(_rte_in, dict):
+        for _k, _v in _rte_in.items():
+            try:
+                _rte[str(_k)] = float(_v)
+            except (TypeError, ValueError):
+                pass
+    al_m["risk_stop_take_eval"] = _rte
     cfg["alert_log"] = al_m
     cfg.setdefault("ml_filter", {})
     if not isinstance(cfg["ml_filter"], dict):
@@ -830,6 +1163,48 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     mon_m = dict(DEFAULT_MONITORING)
     mon_m.update(cfg["monitoring"])
     cfg["monitoring"] = mon_m
+    ps0 = copy.deepcopy(DEFAULT_POSITION_SUGGESTION)
+    ps_raw = cfg.get("position_suggestion")
+    if isinstance(ps_raw, dict):
+        ps0["enabled"] = bool(ps_raw.get("enabled", ps0["enabled"]))
+        rs_u = ps_raw.get("rules")
+        if isinstance(rs_u, dict):
+            for branch in ("sell", "add"):
+                if isinstance(rs_u.get(branch), dict):
+                    ps0["rules"][branch].update(rs_u[branch])
+    cfg["position_suggestion"] = ps0
+    cfg.setdefault("quant_selector", {})
+    if not isinstance(cfg["quant_selector"], dict):
+        cfg["quant_selector"] = {}
+    qs_m = dict(DEFAULT_QUANT_SELECTOR)
+    qs_m.update(cfg["quant_selector"])
+    cfg["quant_selector"] = qs_m
+
+    cfg.setdefault("strategy_signal", {})
+    if not isinstance(cfg["strategy_signal"], dict):
+        cfg["strategy_signal"] = {}
+    ss_m = copy.deepcopy(DEFAULT_STRATEGY_SIGNAL)
+    ss_raw = cfg.get("strategy_signal") or {}
+    for k, v in ss_raw.items():
+        if k == "min_score_by_strategy" and isinstance(v, dict):
+            base_ms = dict(ss_m.get("min_score_by_strategy") or {})
+            for sk, sv in v.items():
+                try:
+                    base_ms[str(sk)] = float(sv)
+                except (TypeError, ValueError):
+                    pass
+            ss_m["min_score_by_strategy"] = base_ms
+        elif k != "min_score_by_strategy":
+            ss_m[k] = v
+    cfg["strategy_signal"] = ss_m
+
+    cfg.setdefault("strategy_buy_filter", {})
+    if not isinstance(cfg["strategy_buy_filter"], dict):
+        cfg["strategy_buy_filter"] = {}
+    sbf_m = dict(DEFAULT_STRATEGY_BUY_FILTER)
+    sbf_m.update(cfg["strategy_buy_filter"])
+    cfg["strategy_buy_filter"] = sbf_m
+
     from config_validate import validate_merged_config_or_exit
 
     validate_merged_config_or_exit(cfg)
@@ -976,9 +1351,9 @@ def _load_quality_codes(picks_path: Path) -> set[str]:
     for row in rows:
         if not isinstance(row, dict):
             continue
-        c = str(row.get("code") or "").strip()
-        if valid_code(c):
-            out.add(c)
+        nc = normalize_stock_code(str(row.get("code") or "").strip())
+        if nc:
+            out.add(nc)
     return out
 
 
@@ -1010,25 +1385,31 @@ def _apply_runtime_watch_overrides(
     force_exclude_codes: set[str],
 ) -> list[dict[str, Any]]:
     """无 daily_picks 时：在 watchlist 上应用 hold（补票）/ sell（剔除）。"""
-    by_c = {
-        str(w.get("code") or "").strip(): w
-        for w in base_watch
-        if isinstance(w, dict)
-        and w.get("enabled", True)
-        and valid_code(str(w.get("code") or "").strip())
-    }
+    by_c: dict[str, dict[str, Any]] = {}
+    for w in base_watch:
+        if not isinstance(w, dict) or not w.get("enabled", True):
+            continue
+        nc = normalize_stock_code(str(w.get("code") or "").strip())
+        if nc:
+            by_c[nc] = w
     out: list[dict[str, Any]] = []
     for w in base_watch:
         if not isinstance(w, dict) or not w.get("enabled", True):
             continue
-        c = str(w.get("code") or "").strip()
-        if c in force_exclude_codes and c not in force_include_codes:
+        nc = normalize_stock_code(str(w.get("code") or "").strip())
+        if not nc:
             continue
-        out.append(dict(w))
+        if nc in force_exclude_codes and nc not in force_include_codes:
+            continue
+        ent = dict(w)
+        ent["code"] = nc
+        out.append(ent)
     for c in sorted(force_include_codes):
         if c in force_exclude_codes or not valid_code(c):
             continue
-        if any(str(x.get("code") or "").strip() == c for x in out):
+        if any(
+            normalize_stock_code(str(x.get("code") or "").strip()) == c for x in out
+        ):
             continue
         src = by_c.get(c)
         if src is not None:
@@ -1052,7 +1433,7 @@ def _apply_runtime_watch_overrides(
                 "market": _infer_market(c),
             }
         out.append(ent)
-    return out
+    return _shuffle_watch_if_multi(_dedupe_watch_rules_list(out))
 
 
 def _build_watch_from_daily_picks_with_overrides(
@@ -1087,7 +1468,14 @@ def _build_watch_from_daily_picks_with_overrides(
             "fallback_all",
         )
 
-    by_code = {str(w.get("code") or "").strip(): dict(w) for w in base_watch}
+    by_code: dict[str, dict[str, Any]] = {}
+    for w in base_watch:
+        nc = normalize_stock_code(str(w.get("code") or "").strip())
+        if not nc:
+            continue
+        ent_w = dict(w)
+        ent_w["code"] = nc
+        by_code[nc] = ent_w
     out: list[dict[str, Any]] = []
     # 只监控优质股
     for c in sorted(qcodes):
@@ -1109,7 +1497,7 @@ def _build_watch_from_daily_picks_with_overrides(
                 "code": c,
                 "market": _infer_market(c),
             }
-        out.append(ent)
+        out.append(dict(ent))
 
     # 强制加入 hold 的标的（即使不在优质池）
     for c in sorted(force_include_codes):
@@ -1117,7 +1505,9 @@ def _build_watch_from_daily_picks_with_overrides(
             continue
         if not valid_code(c):
             continue
-        if any(str(x.get("code") or "").strip() == c for x in out):
+        if any(
+            normalize_stock_code(str(x.get("code") or "").strip()) == c for x in out
+        ):
             continue
         ent = by_code.get(c)
         if ent is None:
@@ -1139,12 +1529,16 @@ def _build_watch_from_daily_picks_with_overrides(
 
     # 持仓标签标的永远保留（避免漏看真实持仓）
     for w in base_watch:
-        c = str(w.get("code") or "").strip()
-        if c in force_exclude_codes and c not in force_include_codes:
+        nc = normalize_stock_code(str(w.get("code") or "").strip())
+        if not nc:
             continue
-        if has_position_tag(w) and c and c not in qcodes:
-            out.append(dict(w))
-    return out, "quality_only"
+        if nc in force_exclude_codes and nc not in force_include_codes:
+            continue
+        if has_position_tag(w) and nc not in qcodes:
+            ent = dict(w)
+            ent["code"] = nc
+            out.append(ent)
+    return _shuffle_watch_if_multi(_dedupe_watch_rules_list(out)), "quality_only"
 
 
 def save_config_atomic(path: Path, cfg: dict[str, Any]) -> bool:
@@ -1179,6 +1573,111 @@ def _watchlist_indices_for_code(
     return out
 
 
+def _merge_duplicate_watch_rows(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
+    """两条记录视为同一标的时合并为一条（去重 / 扫描合并）。"""
+    sa, sb = int(a.get("hold_shares") or 0), int(b.get("hold_shares") or 0)
+    ca, cb = float(a.get("cost_price") or 0.0), float(b.get("cost_price") or 0.0)
+    if sa > sb or (sa == sb and ca >= cb):
+        primary, secondary = a, b
+    else:
+        primary, secondary = b, a
+    out = dict(primary)
+    out["hold_shares"] = max(sa, sb)
+    if sb > sa:
+        out["cost_price"] = cb
+    elif sa > sb:
+        out["cost_price"] = ca
+    else:
+        out["cost_price"] = cb if cb > 0 else ca
+    for fld in ("name", "industry", "market", "note", "alert_mode"):
+        if not str(out.get(fld) or "").strip():
+            v = secondary.get(fld)
+            if v is not None:
+                out[fld] = v
+    if out.get("alert_below") is None and secondary.get("alert_below") is not None:
+        out["alert_below"] = secondary["alert_below"]
+    if out.get("alert_above") is None and secondary.get("alert_above") is not None:
+        out["alert_above"] = secondary["alert_above"]
+    parts: list[str] = []
+    for t in (normalize_tags_field(primary), normalize_tags_field(secondary)):
+        t = str(t).strip()
+        if t and t not in parts:
+            parts.append(t)
+    tag_line = " ".join(parts)
+    out["tags"] = tag_line
+    if (has_position_tag(primary) or has_position_tag(secondary)) and not has_position_tag(
+        out
+    ):
+        out["tags"] = f"{tag_line} 持仓".strip() if tag_line else "持仓"
+    out["enabled"] = bool(primary.get("enabled", True)) or bool(
+        secondary.get("enabled", True)
+    )
+    return out
+
+
+def dedupe_watchlist_in_cfg(cfg: dict[str, Any]) -> int:
+    """按六位代码合并 watchlist 重复项，并统一 code 为补零形式；返回被合并掉的条数。"""
+    wl = cfg.get("watchlist")
+    if not isinstance(wl, list):
+        return 0
+    new_list: list[Any] = []
+    removed = 0
+    seen: dict[str, dict[str, Any]] = {}
+    for w in wl:
+        if not isinstance(w, dict):
+            new_list.append(w)
+            continue
+        key = normalize_stock_code(str(w.get("code") or "").strip())
+        if not key:
+            new_list.append(w)
+            continue
+        if key not in seen:
+            ent = dict(w)
+            ent["code"] = key
+            seen[key] = ent
+            new_list.append(ent)
+        else:
+            merged = _merge_duplicate_watch_rows(seen[key], dict(w))
+            merged["code"] = key
+            seen[key].clear()
+            seen[key].update(merged)
+            removed += 1
+    cfg["watchlist"] = new_list
+    return removed
+
+
+def _dedupe_watch_rules_list(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """监控规则列表按六位代码去重（保留首次出现顺序，合并同代码多条）。"""
+    tail: list[dict[str, Any]] = []
+    seen: dict[str, dict[str, Any]] = {}
+    order: list[str] = []
+    for w in rules:
+        if not isinstance(w, dict):
+            continue
+        nc = normalize_stock_code(str(w.get("code") or "").strip())
+        if not nc:
+            tail.append(dict(w))
+            continue
+        if nc not in seen:
+            ent = dict(w)
+            ent["code"] = nc
+            seen[nc] = ent
+            order.append(nc)
+        else:
+            merged = _merge_duplicate_watch_rows(seen[nc], dict(w))
+            merged["code"] = nc
+            seen[nc].clear()
+            seen[nc].update(merged)
+    return [seen[k] for k in order] + tail
+
+
+def _shuffle_watch_if_multi(watch: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """合并去重后打乱顺序，避免控制台长期按代码字典序刷屏（主循环每轮重建列表时会再次打乱）。"""
+    if len(watch) > 1:
+        random.shuffle(watch)
+    return watch
+
+
 def _upsert_hold_in_cfg(
     cfg: dict[str, Any],
     *,
@@ -1187,6 +1686,10 @@ def _upsert_hold_in_cfg(
     cost_price: float,
     config_path: Path,
 ) -> bool:
+    """
+    写入/更新持仓：同代码已存在则用本次命令的股数、成本覆盖原记录，并去掉重复条目；
+    否则追加新记录。字段与全站一致：hold_shares、cost_price；tags 为字符串。
+    """
     wl = cfg.get("watchlist")
     if not isinstance(wl, list):
         cfg["watchlist"] = []
@@ -1194,38 +1697,48 @@ def _upsert_hold_in_cfg(
     name = get_stock_name(code)
     market = _infer_market(code)
     indices = _watchlist_indices_for_code(wl, code)
-    patch = {
-        "enabled": True,
-        "code": code,
-        "name": name,
-        "market": market,
-        "hold_shares": int(hold_shares),
-        "cost_price": float(cost_price),
-        "tags": "持仓",
-        "alert_mode": "breach",
-        "alert_below": None,
-        "alert_above": None,
-        "note": "终端 hold",
-        "industry": "",
-    }
+    delta_sh = int(hold_shares)
+    delta_cost = float(cost_price)
+
     if indices:
         i0 = indices[0]
-        old = wl[i0]
-        if isinstance(old, dict):
-            merged = dict(old)
-            merged.update(patch)
-            merged["name"] = str(old.get("name") or name)
-            merged["industry"] = str(old.get("industry") or "")
-            if old.get("note"):
-                merged["note"] = str(old.get("note"))
-            if old.get("tags"):
-                merged["tags"] = str(old.get("tags"))
-            wl[i0] = merged
+        raw_old = wl[i0]
+        old = raw_old if isinstance(raw_old, dict) else {}
+        merged = dict(old)
+        merged["enabled"] = True
+        merged["code"] = code
+        merged["name"] = str(old.get("name") or name)
+        merged["market"] = str(old.get("market") or market) or market
+        merged["hold_shares"] = delta_sh
+        merged["cost_price"] = delta_cost
+        merged["alert_mode"] = str(old.get("alert_mode") or "breach")
+        merged["alert_below"] = old.get("alert_below")
+        merged["alert_above"] = old.get("alert_above")
+        merged["note"] = str(old.get("note") or "终端 hold")
+        merged["industry"] = str(old.get("industry") or "")
+        prev_tags = normalize_tags_field(old)
+        if not has_position_tag(old):
+            merged["tags"] = f"{prev_tags} 持仓".strip() if prev_tags else "持仓"
         else:
-            wl[i0] = patch
+            merged["tags"] = prev_tags if prev_tags else "持仓"
+        wl[i0] = merged
         for j in reversed(indices[1:]):
             wl.pop(j)
     else:
+        patch = {
+            "enabled": True,
+            "code": code,
+            "name": name,
+            "market": market,
+            "hold_shares": delta_sh,
+            "cost_price": delta_cost,
+            "tags": "持仓",
+            "alert_mode": "breach",
+            "alert_below": None,
+            "alert_above": None,
+            "note": "终端 hold",
+            "industry": "",
+        }
         wl.append(patch)
     return save_config_atomic(config_path, cfg)
 
@@ -1324,6 +1837,88 @@ def _start_command_listener(*, read_stdin_commands: bool) -> queue.Queue[str]:
     return q
 
 
+def _apply_take_profit_correctness_patch(
+    config_path: Path,
+    cfg: dict[str, Any],
+    value: int,
+) -> bool:
+    """写入 config.json 的 alert_log.risk_stop_take_eval，并同步当前内存中的 merged cfg。"""
+    if value not in (0, 1):
+        return False
+    try:
+        raw = json.loads(config_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    al = raw.setdefault("alert_log", {})
+    if not isinstance(al, dict):
+        raw["alert_log"] = {}
+        al = raw["alert_log"]
+    rte = al.setdefault("risk_stop_take_eval", {})
+    if not isinstance(rte, dict):
+        al["risk_stop_take_eval"] = {}
+        rte = al["risk_stop_take_eval"]
+    rte["take_profit_hit_for_correctness"] = float(value)
+    if not save_config_atomic(config_path, raw):
+        return False
+    al_m = cfg.setdefault("alert_log", {})
+    if not isinstance(al_m, dict):
+        cfg["alert_log"] = {}
+        al_m = cfg["alert_log"]
+    rte_m = al_m.setdefault("risk_stop_take_eval", {})
+    if not isinstance(rte_m, dict):
+        al_m["risk_stop_take_eval"] = {}
+        rte_m = al_m["risk_stop_take_eval"]
+    rte_m["take_profit_hit_for_correctness"] = float(value)
+    return True
+
+
+def _maybe_run_backtest_after_tp_hit_change(
+    *, cfg: dict[str, Any], config_path: Path
+) -> None:
+    ecb = cfg.get("email_command_bot") or {}
+    if not isinstance(ecb, dict):
+        return
+    if not bool(ecb.get("auto_backtest_on_take_profit_hit_change", False)):
+        return
+    py = sys.executable
+    try:
+        cp = subprocess.run(
+            [
+                py,
+                str(ROOT / "backtest_alerts.py"),
+                "-c",
+                str(config_path),
+                "--force",
+            ],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            timeout=900,
+            check=False,
+        )
+    except Exception as exc:
+        _emit_main_line(
+            f"[配置] 止盈 hit 语义已写入，但自动回测失败：{exc}",
+            event="tp_hit_change_backtest_err",
+            level=logging.WARNING,
+        )
+        return
+    tail = (cp.stdout or "")[-400:].strip()
+    if cp.returncode == 0:
+        _emit_main_line(
+            "[配置] 已自动执行 backtest_alerts --force"
+            + (f"｜{tail}" if tail else ""),
+            event="tp_hit_change_backtest_ok",
+        )
+    else:
+        _emit_main_line(
+            f"[配置] 自动回测失败 rc={cp.returncode}"
+            + (f"｜{tail}" if tail else ""),
+            event="tp_hit_change_backtest_fail",
+            level=logging.WARNING,
+        )
+
+
 def _handle_runtime_command(
     line: str,
     *,
@@ -1343,6 +1938,20 @@ def _handle_runtime_command(
 
     if cmd == "showhold" and len(parts) == 1:
         _print_showhold(cfg)
+        return
+
+    if cmd == "dedupewatchlist" and len(parts) == 1:
+        n = dedupe_watchlist_in_cfg(cfg)
+        if not save_config_atomic(config_path, cfg):
+            _emit_cli_subcmd_line(
+                "[dedupewatchlist] 写入 config 失败（请检查磁盘权限）",
+                event="cli_dedupe_watchlist_write_failed",
+            )
+            return
+        _emit_cli_subcmd_line(
+            f"[dedupewatchlist] 已按六位代码合并重复项，移除 {n} 条",
+            event="cli_dedupe_watchlist_ok",
+        )
         return
 
     if cmd == "unhold" and len(parts) == 2:
@@ -1406,8 +2015,17 @@ def _handle_runtime_command(
         force_include_codes.add(code)
         force_exclude_codes.discard(code)
         nm = get_stock_name(code)
+        tot_sh, tot_cp = shares, cost
+        wl_after = cfg.get("watchlist")
+        if isinstance(wl_after, list):
+            for ix in _watchlist_indices_for_code(wl_after, code)[:1]:
+                ent = wl_after[ix]
+                if isinstance(ent, dict):
+                    tot_sh = int(ent.get("hold_shares") or 0)
+                    tot_cp = float(ent.get("cost_price") or 0.0)
+                    break
         _emit_cli_subcmd_line(
-            f"[hold] 已写入 config：{code}（{nm}） 股数 {shares}  成本 {cost:.4f}",
+            f"[hold] 已写入 config：{code}（{nm}） 股数 {tot_sh}  成本 {tot_cp:.4f}",
             event="cli_hold_saved",
         )
         _emit_cli_subcmd_line(
@@ -1456,9 +2074,44 @@ def _handle_runtime_command(
         )
         return
 
+    if (
+        cmd == "set"
+        and len(parts) == 3
+        and parts[1] == "take_profit_hit_for_correctness"
+    ):
+        try:
+            v = int(parts[2])
+        except ValueError:
+            _emit_cli_subcmd_line(
+                f"[set] 取值须为 0 或 1，收到：{parts[2]!r}",
+                event="cli_set_tp_hit_invalid",
+            )
+            return
+        if v not in (0, 1):
+            _emit_cli_subcmd_line(
+                f"[set] 取值须为 0 或 1，收到：{v}",
+                event="cli_set_tp_hit_invalid",
+            )
+            return
+        if _apply_take_profit_correctness_patch(config_path, cfg, v):
+            lab = "卖对避险" if v == 1 else "卖飞/旧语义"
+            _emit_cli_subcmd_line(
+                f"[set] take_profit_hit_for_correctness={v}（{lab}）已写入 {config_path.name}",
+                event="cli_set_tp_hit_ok",
+            )
+            _maybe_run_backtest_after_tp_hit_change(
+                cfg=cfg, config_path=config_path
+            )
+        else:
+            _emit_cli_subcmd_line(
+                "[set] 写入 config 失败（磁盘权限或 JSON 损坏）",
+                event="cli_set_tp_hit_write_failed",
+            )
+        return
+
     _emit_cli_subcmd_line("[命令] 用法：", event="cli_usage_header")
     _emit_cli_subcmd_line(
-        "  hold <代码> <股数> <成本>   例：hold 000537 3000 10.25  （写入 config）",
+        "  hold <代码> <股数> <成本>   例：hold 000537 3000 10.25  （写入 config；同代码再次 hold 覆盖该股数与成本）",
         event="cli_usage_hold_full",
     )
     _emit_cli_subcmd_line(
@@ -1474,8 +2127,16 @@ def _handle_runtime_command(
         event="cli_usage_showhold",
     )
     _emit_cli_subcmd_line(
+        "  dedupewatchlist             合并 watchlist 中同一代码的重复条目并写回 config",
+        event="cli_usage_dedupe_watchlist",
+    )
+    _emit_cli_subcmd_line(
         "  sell <代码>                 暂停监控（runtime，不删 config）",
         event="cli_usage_sell",
+    )
+    _emit_cli_subcmd_line(
+        "  set take_profit_hit_for_correctness 0|1   止盈回测语义：1=卖对 0=卖飞（写 config；邮件可发同指令）",
+        event="cli_usage_set_tp_hit",
     )
 
 
@@ -1625,7 +2286,7 @@ def color_line(day_chg: float | None, text: str) -> str:
     if day_chg > 0:
         return f"\033[91m{text}\033[0m"   # 涨 → 红
     if day_chg < 0:
-        return f"\033[92m{text}\033[0m"   # 跌 → 绿
+        return f"\033[32m{text}\033[0m"   # 跌 → 深绿（非亮绿 92，减少刺眼）
     return f"\033[90m{text}\033[0m"
 # ======================================================================
 
@@ -1645,7 +2306,7 @@ def bold_strategy_buy_sell(sig: str) -> str:
     if buy_m in out:
         out = out.replace(buy_m, f"\033[1;91m{buy_m}\033[0m")
     if sell_m in out:
-        out = out.replace(sell_m, f"\033[1;92m{sell_m}\033[0m")
+        out = out.replace(sell_m, f"\033[1;32m{sell_m}\033[0m")
     return out
 
 
@@ -1869,6 +2530,8 @@ def _fetch_watch_item_pack(
                         x: y for x, y in skl2.items() if x != "closes"
                     }
         sort_score = float(score_row["sort_score"]) if score_row else -1e18
+        # 控制台分区「我的持仓」：仅 hold_shares>0（真实持股），不依据 tags / force_include
+        _hold_for_section = int(rule.get("hold_shares") or 0)
         pack = {
             "rule": rule,
             "q": q,
@@ -1876,7 +2539,7 @@ def _fetch_watch_item_pack(
             "closes": closes,
             "score_row": score_row,
             "sort_score": sort_score,
-            "tagged": has_position_tag(rule) or code in force_include_codes,
+            "tagged": _hold_for_section > 0,
             "rk": rk,
             "label": label,
             "no_quote": no_quote,
@@ -2194,6 +2857,7 @@ def _maybe_self_health_preopen(
                 str(config_path),
                 "--since",
                 "2000-01-01",
+                "--reeval-missing-returns",
             ],
             event="ops_self_health_backtest_run",
         )
@@ -2300,6 +2964,7 @@ def _maybe_run_ops_automation(
                     str(config_path),
                     "--since",
                     since_day,
+                    "--reeval-missing-returns",
                     "--json-out",
                     str(ROOT / "weekly.json"),
                 ],
@@ -2414,7 +3079,11 @@ def _maybe_poll_email_commands(
         return
     state["__email_cmd_last_poll_ts__"] = now_ts
     poll = fetch_email_bot_actions(cfg)
-    if not poll.runtime_commands and not poll.feedback_commands:
+    if (
+        not poll.runtime_commands
+        and not poll.feedback_commands
+        and not poll.config_commands
+    ):
         return
     for kind, code in poll.feedback_commands:
         n = apply_feedback_to_latest_alert(
@@ -2430,6 +3099,18 @@ def _maybe_poll_email_commands(
                 f"[邮件反馈] 未找到可标注的 trend_slip/drawdown 记录：{kind} {code}",
                 event="email_feedback_miss",
             )
+    for cmd in poll.config_commands:
+        _emit_main_line(
+            f"[邮件指令·配置] 执行：{cmd}",
+            event="email_cmd_config_exec",
+        )
+        _handle_runtime_command(
+            cmd,
+            cfg=cfg,
+            config_path=config_path,
+            force_include_codes=force_include_codes,
+            force_exclude_codes=force_exclude_codes,
+        )
     for cmd in poll.runtime_commands:
         _emit_main_line(
             f"[邮件指令] 执行：{cmd}",
@@ -2459,6 +3140,7 @@ def process_watch_pack(
     round_notify_digest: list[dict[str, Any]] | None = None,
     round_trend_digest: list[dict[str, Any]] | None = None,
     state_mut_lock: threading.RLock | None = None,
+    buy_mail_bucket: str | None = None,
 ) -> float:
     """单标的：行情展示、标签、策略、止盈止损、补仓、区间提醒；返回持仓市值。"""
     rule = pack["rule"]
@@ -2583,6 +3265,64 @@ def process_watch_pack(
     else:
         pnl = 0.0
 
+    pscfg = cfg.get("position_suggestion") or {}
+    if (
+        bool(pscfg.get("enabled", True))
+        and has_position_tag(rule)
+        and cost > 0
+        and not pack.get("no_quote")
+    ):
+        _fill_position_suggestion_metrics(pack, now_price)
+        kl_ps = pack.get("kline") or {}
+        anchor_td_ps = str(kl_ps.get("kline_last_trade_date") or "").strip()
+        if len(anchor_td_ps) < 10:
+            anchor_td_ps = datetime.now().strftime("%Y-%m-%d")
+        else:
+            anchor_td_ps = anchor_td_ps[:10]
+        code6_ps = normalize_stock_code(code) or code
+        bp_sug = _ml_bearish_prob_for_position_suggestion(
+            cfg,
+            now_price=now_price,
+            pnl_pct=float(pnl),
+            code6=code6_ps,
+            anchor_trade_date=anchor_td_ps,
+        )
+        act, why = _get_position_suggestion(
+            pack,
+            cfg,
+            pnl_pct=float(pnl),
+            bearish_prob=bp_sug,
+        )
+        if act != "持有" and why:
+            _emit_watch_line(
+                f"      └ 【仓位建议】{act}（{why}）",
+                event="watch_position_suggestion",
+                code=code,
+                rk=rk,
+            )
+            ps_log_k = f"ps_suggest_log_{rk}"
+            if state.get(ps_log_k) != anchor_td_ps:
+                _try_log_watch_alert(
+                    cfg,
+                    pack,
+                    alert_type="position_suggestion",
+                    rk=rk,
+                    summary=f"{act}｜{why}",
+                    extra={
+                        "ps_action": act,
+                        "ps_reason": why,
+                        "pnl_pct": float(pnl),
+                        "box_pct": pack.get("_ps_box_pct"),
+                        "vol_ratio": pack.get("_ps_vol_ratio"),
+                        "above_ma5": pack.get("_ps_above_ma5"),
+                        "above_ma20": pack.get("_ps_above_ma20"),
+                        "above_ma60": pack.get("_ps_above_ma60"),
+                        "market_mood_tier": pack.get("_market_mood_tier"),
+                        "bearish_prob": bp_sug,
+                    },
+                )
+                state[ps_log_k] = anchor_td_ps
+
     sw = risk.check_single_position_value(mv)
     if sw:
         _emit_watch_line(
@@ -2594,7 +3334,39 @@ def process_watch_pack(
 
     _state_cm = state_mut_lock if state_mut_lock is not None else nullcontext()
     with _state_cm:
-        sig = ma_box_strategy(now_price, kline) if kline else None
+        min_by = (cfg.get("strategy_signal") or {}).get("min_score_by_strategy")
+        raw_sig = (
+            ma_box_strategy(
+                now_price,
+                kline,
+                min_score_by_strategy=min_by if isinstance(min_by, dict) else None,
+            )
+            if kline
+            else None
+        )
+        sig = raw_sig
+        if raw_sig and "【买入信号】" in raw_sig:
+            sbf = cfg.get("strategy_buy_filter") or {}
+            if bool(sbf.get("enabled", True)):
+                _fill_position_suggestion_metrics(pack, now_price)
+                br = _strategy_buy_realtime_blocked(pack, cfg)
+                if br:
+                    _emit_watch_line(
+                        f"      └ 【策略】买入信号未采纳（实时过滤）｜{br}",
+                        event="watch_strategy_buy_filtered",
+                        code=code,
+                        rk=rk,
+                    )
+                    sig = None
+        # 持仓策略邮件：同一轮「买入/卖出」持续期间只发一封；信号消失后再出现再发
+        sig_has_buy = bool(sig and "【买入信号】" in sig)
+        sig_has_sell = bool(sig and "【卖出信号】" in sig)
+        ep_buy_k = f"strat_ep_mail_buy_{rk}"
+        ep_sell_k = f"strat_ep_mail_sell_{rk}"
+        if not sig_has_buy:
+            state.pop(ep_buy_k, None)
+        if not sig_has_sell:
+            state.pop(ep_sell_k, None)
         if sig:
             sig_k = f"sig_{rk}"
             code6_t1 = normalize_stock_code(code) or ""
@@ -2638,11 +3410,16 @@ def process_watch_pack(
                         extra=None,
                     )
                     if "【买入信号】" in sig and plan.allow_email_buy:
-                        if send_buy_signal_email(
-                            "【买入信号】",
-                            f"{code} {disp_name} 可以买入\n{sig}\n现价：{now_price:.2f} 元",
+                        send_buy_ok = False
+                        _bkt = str(buy_mail_bucket or "监控").strip() or "监控"
+                        if not state.get(ep_buy_k) and send_buy_signal_email(
+                            f"【买入信号·{_bkt}】",
+                            f"分区：{_bkt}\n{code} {disp_name} 可以买入\n{sig}\n现价：{now_price:.2f} 元",
                             app_cfg=cfg,
                         ):
+                            state[ep_buy_k] = True
+                            send_buy_ok = True
+                        if send_buy_ok:
                             _emit_watch_line(
                                 "      └ （已发邮件通知）",
                                 event="watch_email_sent",
@@ -2654,11 +3431,12 @@ def process_watch_pack(
                         and hold > 0
                         and plan.allow_email_sell
                     ):
-                        if send_sell_signal_email(
+                        if not state.get(ep_sell_k) and send_sell_signal_email(
                             "【卖出信号】",
                             f"{code} {disp_name} 可以卖出（持仓 {hold} 股）\n{sig}\n现价：{now_price:.2f} 元",
                             app_cfg=cfg,
                         ):
+                            state[ep_sell_k] = True
                             _emit_watch_line(
                                 "      └ （已发邮件通知）",
                                 event="watch_email_sent",
@@ -3211,6 +3989,11 @@ def main() -> int:
         help="打印 watchlist 的趋势板块 BK 解析结果（不写 state、不拉行情）",
     )
     ap.add_argument(
+        "--dedupe-watchlist",
+        action="store_true",
+        help="合并 config.json 里 watchlist 的重复代码（六位归一）并保存后退出",
+    )
+    ap.add_argument(
         "--verify-config",
         action="store_true",
         help="载入并合并配置，做 Schema + 路径/邮件自检后退出（0=无致命问题）",
@@ -3230,6 +4013,27 @@ def main() -> int:
             )
             return 1
         return _run_check_bk_mapping(args)
+
+    if args.dedupe_watchlist:
+        if not args.config.exists():
+            _emit_cli_subcmd_line(
+                f"缺少配置: {args.config}\n请复制 config.example.json 为 config.json",
+                event="cli_config_missing",
+            )
+            return 1
+        raw_cfg = json.loads(args.config.read_text(encoding="utf-8"))
+        n = dedupe_watchlist_in_cfg(raw_cfg)
+        if not save_config_atomic(args.config, raw_cfg):
+            _emit_cli_subcmd_line(
+                "[dedupe-watchlist] 写入 config 失败（请检查磁盘权限）",
+                event="cli_dedupe_watchlist_file_failed",
+            )
+            return 1
+        _emit_cli_subcmd_line(
+            f"[dedupe-watchlist] 已合并重复标的，移除 {n} 条重复记录",
+            event="cli_dedupe_watchlist_file_ok",
+        )
+        return 0
 
     if args.scan:
         from stock_scanner import scan_and_save
@@ -3314,6 +4118,7 @@ def main() -> int:
             args.test_notify,
             args.once,
             args.check_bk,
+            args.dedupe_watchlist,
         )
     )
     run_startup_daily = would_startup_daily and _should_run_startup_daily_select(
@@ -3403,48 +4208,58 @@ def main() -> int:
     hub = None
     if not watch:
         _emit_cli_subcmd_line(
-            "[提示] watchlist 为空或无 enabled 标的。\n"
-            "  可先执行：python run_alert.py --scan\n"
-            "  （沪深主板+创业板分层筛选；持仓标签标的永不清理）",
+            "[提示] watchlist 为空或无 enabled 标的；进程仍保留，用于收盘自动化（ops_automation）"
+            "与邮件指令轮询。\n"
+            "  有标的后将开始行情轮询；选股可执行：python run_alert.py --scan",
             event="cli_watch_empty_hint",
         )
-        return 0
-
-    hub = hub_from_cfg(cfg, ut=str(ut))
-    if hub is not None:
-        hub.set_watch_rules(watch)
-        hub.start()
+    else:
+        hub = hub_from_cfg(cfg, ut=str(ut))
+        if hub is not None:
+            hub.set_watch_rules(watch)
+            hub.start()
 
     run_only = cfg.get("run_only_in_trading_hours", True) and not args.poll_when_closed
 
-    _emit_cli_subcmd_line(
-        f"[启动] 标的 {len(watch)} | 盘中轮询 {base_interval}s | 非交易 {closed_iv}s | "
-        f"冷却 {cooldown_min:g}min | 限价防抖 ±{buffer} 元 | "
-        f"本金参照 {cfg['capital']['total']:.0f} 元"
-        + (" | 仅交易时段请求行情" if run_only else " | 休市亦请求行情"),
-        event="cli_monitor_startup_banner",
-    )
-    if watch_mode == "quality_only":
+    if watch:
         _emit_cli_subcmd_line(
-            "[AI筛选] 盘中仅监控 daily_picks.json 的优质股（含持仓标签保留）",
-            event="cli_watch_mode_quality_only",
+            f"[启动] 标的 {len(watch)} | 盘中轮询 {base_interval}s | 非交易 {closed_iv}s | "
+            f"冷却 {cooldown_min:g}min | 限价防抖 ±{buffer} 元 | "
+            f"本金参照 {cfg['capital']['total']:.0f} 元"
+            + (" | 仅交易时段请求行情" if run_only else " | 休市亦请求行情"),
+            event="cli_monitor_startup_banner",
         )
-    elif watch_mode == "watchlist_only":
+        if watch_mode == "quality_only":
+            _emit_cli_subcmd_line(
+                "[AI筛选] 盘中仅监控 daily_picks.json 的优质股（含持仓标签保留）；"
+                "列表顺序每轮随机",
+                event="cli_watch_mode_quality_only",
+            )
+        elif watch_mode == "watchlist_only":
+            _emit_cli_subcmd_line(
+                "[监控] 已开启 watchlist_only：仅轮询 config.json 的 watchlist（不合并 daily_picks 优质股全表）",
+                event="cli_watch_mode_watchlist_only",
+            )
+        elif watch_mode == "fallback_all":
+            _emit_cli_subcmd_line(
+                "[AI筛选] 未检测到优质股清单，回退监控全部 watchlist",
+                event="cli_watch_mode_fallback_all",
+            )
         _emit_cli_subcmd_line(
-            "[监控] 已开启 watchlist_only：仅轮询 config.json 的 watchlist（不合并 daily_picks 优质股全表）",
-            event="cli_watch_mode_watchlist_only",
+            "[命令] hold <代码> <股数> <成本> | hold <代码> | unhold | showhold | dedupewatchlist | sell",
+            event="cli_runtime_commands_hint",
         )
-    elif watch_mode == "fallback_all":
+    else:
+        oa0 = cfg.get("ops_automation") or {}
         _emit_cli_subcmd_line(
-            "[AI筛选] 未检测到优质股清单，回退监控全部 watchlist",
-            event="cli_watch_mode_fallback_all",
+            f"[启动] 监控池为空｜保留 ops_automation="
+            f"{bool(oa0.get('enabled', False))}（收盘后回测+调参）｜"
+            f"轮询间隔约 {max(5, min(base_interval, 30))}s 直至有标的",
+            event="cli_monitor_idle_ops_banner",
         )
-    _emit_cli_subcmd_line(
-        "[命令] hold <代码> <股数> <成本> | hold <代码> | unhold | showhold | sell",
-        event="cli_runtime_commands_hint",
-    )
 
     first_round = True
+    last_empty_watch_log_mono = 0.0
 
     try:
         while True:
@@ -3466,16 +4281,6 @@ def main() -> int:
                 force_include_codes=force_include_codes,
                 force_exclude_codes=force_exclude_codes,
             )
-            if not watch:
-                _emit_cli_subcmd_line(
-                    "[监控池] 当前为空，等待新命令或下一轮筛选...",
-                    event="cli_watch_pool_empty_wait",
-                )
-                time.sleep(max(5, min(base_interval, 30)))
-                if args.once:
-                    break
-                continue
-
             _maybe_run_ops_automation(
                 cfg=cfg,
                 state=state,
@@ -3488,6 +4293,35 @@ def main() -> int:
                 force_include_codes=force_include_codes,
                 force_exclude_codes=force_exclude_codes,
             )
+
+            if not watch:
+                now_m = time.monotonic()
+                if (
+                    last_empty_watch_log_mono == 0.0
+                    or now_m - last_empty_watch_log_mono >= EMPTY_WATCH_STATUS_LOG_SEC
+                ):
+                    _emit_cli_subcmd_line(
+                        "[监控池] 当前为空，等待新命令或下一轮筛选（仍已执行收盘自动化/邮件轮询）…",
+                        event="cli_watch_pool_empty_wait",
+                    )
+                    last_empty_watch_log_mono = now_m
+                state["__force_include__"] = sorted(force_include_codes)
+                state["__force_exclude__"] = sorted(force_exclude_codes)
+                save_state(st_path, state)
+                time.sleep(max(5, min(base_interval, 30)))
+                if args.once:
+                    break
+                continue
+
+            last_empty_watch_log_mono = 0.0
+
+            if hub is None:
+                hub = hub_from_cfg(cfg, ut=str(ut))
+                if hub is not None:
+                    hub.set_watch_rules(watch)
+                    hub.start()
+            elif hub is not None:
+                hub.set_watch_rules(watch)
 
             if run_only and not is_trading_session():
                 _emit_main_line(
@@ -3625,6 +4459,22 @@ def main() -> int:
                 for _p in items:
                     _p["_dynamic_min_pillars_weak"] = dyn_mp
 
+            _mood_tier = _market_mood_tier_for_position_suggestion(cfg)
+            for _p in items:
+                _p["_market_mood_tier"] = _mood_tier
+
+            sbf0 = cfg.get("strategy_buy_filter") or {}
+            round_buy_mood: str | None = None
+            if bool(sbf0.get("enabled", True)) and bool(
+                sbf0.get("block_weak_bear", True)
+            ):
+                da0 = (cfg.get("trend_slippage_alert") or {}).get("dynamic_adaptive")
+                round_buy_mood = get_market_mood_three_tier(
+                    dynamic_cfg=da0 if isinstance(da0, dict) else {}
+                )
+            for _p in items:
+                _p["_strategy_buy_mood_tier"] = round_buy_mood
+
             full_outage = attempted > 0 and fails >= attempted
             dh_cfg = cfg.get("data_health") or {}
             if full_outage:
@@ -3721,7 +4571,7 @@ def main() -> int:
 
             sections: list[tuple[str, list[dict[str, Any]], bool]] = []
             if tagged_items:
-                sections.append(("【我的持仓（带标签）】", tagged_items, False))
+                sections.append(("【我的持仓】", tagged_items, False))
             if top_picks:
                 sections.append((f"【今日{pick_n}只低吸优选】", top_picks, True))
             if rest_items:
@@ -3755,14 +4605,28 @@ def main() -> int:
             )
             _pw_lock = threading.RLock() if _pw_workers > 1 else None
 
+            def _buy_mail_bucket_from_sec(sec: str) -> str:
+                if "我的持仓" in sec:
+                    return "持仓"
+                if "低吸优选" in sec:
+                    return "优选"
+                if "其余监控" in sec:
+                    return "其余"
+                return "监控"
+
             for sec_title, group, show_pick in sections:
                 _emit_main_line(
                     f"\n---------- {sec_title} ----------",
                     event="poll_section_header",
                 )
+                _mail_bkt = _buy_mail_bucket_from_sec(sec_title)
                 if _pw_workers > 1:
 
-                    def _one_pw(pack: dict[str, Any]) -> float:
+                    def _one_pw(
+                        pack: dict[str, Any],
+                        *,
+                        bkt: str = _mail_bkt,
+                    ) -> float:
                         return process_watch_pack(
                             pack,
                             risk=risk,
@@ -3781,6 +4645,7 @@ def main() -> int:
                             if use_trend_digest
                             else None,
                             state_mut_lock=_pw_lock,
+                            buy_mail_bucket=bkt,
                         )
 
                     with ThreadPoolExecutor(max_workers=_pw_workers) as _expw:
@@ -3807,6 +4672,7 @@ def main() -> int:
                             if use_trend_digest
                             else None,
                             state_mut_lock=None,
+                            buy_mail_bucket=_mail_bkt,
                         )
 
             if use_digest and round_notify_digest and not args.no_notify:

@@ -4,7 +4,13 @@ from __future__ import annotations
 
 import sqlite3
 
-from alert_log_store import compute_bearish_hit, evaluate_row, forward_returns_vs_anchor
+from alert_log_store import (
+    compute_bearish_hit,
+    compute_risk_stop_hit,
+    compute_strategy_hit,
+    evaluate_row,
+    forward_returns_vs_anchor,
+)
 from kline_store import init_schema, open_store_connection
 from quote_eastmoney import secid_for
 
@@ -125,3 +131,156 @@ def test_price_band_hit_is_none(tmp_path) -> None:
     )
     conn.close()
     assert hit is None
+
+
+def test_strategy_buy_hit_uses_r5(tmp_path) -> None:
+    db = tmp_path / "st.db"
+    conn = open_store_connection(db)
+    init_schema(conn)
+    secid = secid_for("600000", "sh")
+    for td, c in [
+        ("2025-06-02", 10.0),
+        ("2025-06-03", 10.0),
+        ("2025-06-04", 10.1),
+        ("2025-06-05", 10.2),
+        ("2025-06-06", 10.3),
+        ("2025-06-09", 10.5),
+        ("2025-06-10", 10.6),
+    ]:
+        conn.execute(
+            """
+            INSERT INTO daily_klines (
+                secid, trade_date, open, high, low, close, volume
+            ) VALUES (?,?,?,?,?,?,?)
+            """,
+            (secid, td, c, c, c, c, 1.0),
+        )
+    conn.execute(
+        """
+        INSERT INTO alert_events (
+            fired_iso, anchor_trade_date, code, market, secid,
+            alert_type, rk, anchor_price, summary, eval_status
+        ) VALUES (?,?,?,?,?,?,?,?,?,'pending')
+        """,
+        (
+            "2025-06-03T10:00:00",
+            "2025-06-02",
+            "600000",
+            "sh",
+            secid,
+            "strategy",
+            "600000:sh",
+            10.0,
+            "【买入信号】箱体下沿",
+        ),
+    )
+    conn.commit()
+    conn.row_factory = sqlite3.Row
+    ev = conn.execute("SELECT * FROM alert_events WHERE id = 1").fetchone()
+    th = {
+        "bearish_hit_threshold_pct_1d": -2.0,
+        "bearish_hit_threshold_pct_3d": -2.5,
+        "bearish_hit_threshold_pct_5d": -3.0,
+        "strategy_hit_eval": {},
+        "risk_stop_take_eval": {},
+    }
+    _r1, _r3, r5, hit = evaluate_row(conn, ev, th)
+    conn.close()
+    assert r5 is not None and r5 > 0
+    assert hit == 1
+
+
+def test_take_profit_correctness_both_negative() -> None:
+    h = compute_risk_stop_hit(
+        {"risk_kind": "take_profit_short"},
+        -0.01,
+        None,
+        -0.02,
+        th1=-2.0,
+        th3=-2.5,
+        th5=-3.0,
+        take_profit_eval={"take_profit_hit_for_correctness": 1.0},
+    )
+    assert h == 1
+
+
+def test_take_profit_correctness_both_positive_is_miss() -> None:
+    h = compute_risk_stop_hit(
+        {"risk_kind": "take_profit_short"},
+        0.001,
+        None,
+        0.02,
+        th1=-2.0,
+        th3=-2.5,
+        th5=-3.0,
+        take_profit_eval={},
+    )
+    assert h == 0
+
+
+def test_take_profit_correctness_only_r1_negative() -> None:
+    h = compute_risk_stop_hit(
+        {"risk_kind": "take_profit_wave"},
+        -0.005,
+        None,
+        None,
+        th1=-2.0,
+        th3=-2.5,
+        th5=-3.0,
+        take_profit_eval={},
+    )
+    assert h == 1
+
+
+def test_take_profit_legacy_sell_flew_semantics() -> None:
+    h = compute_risk_stop_hit(
+        {"risk_kind": "take_profit_short"},
+        0.001,
+        None,
+        0.02,
+        th1=-2.0,
+        th3=-2.5,
+        th5=-3.0,
+        take_profit_eval={
+            "take_profit_hit_for_correctness": 0.0,
+            "take_profit_hit_r1_above_pct": 0.5,
+        },
+    )
+    assert h == 1
+
+
+def test_risk_stop_loss_still_bearish() -> None:
+    h = compute_risk_stop_hit(
+        {"risk_kind": "stop_loss"},
+        -0.03,
+        -0.04,
+        -0.05,
+        th1=-2.0,
+        th3=-2.5,
+        th5=-3.0,
+        take_profit_eval={},
+    )
+    assert h == 1
+
+
+def test_compute_strategy_sell_hit_negative_r5() -> None:
+    assert (
+        compute_strategy_hit(
+            "【卖出信号】箱体上沿",
+            None,
+            None,
+            -0.01,
+            {},
+        )
+        == 1
+    )
+    assert (
+        compute_strategy_hit(
+            "【卖出信号】箱体上沿",
+            None,
+            None,
+            0.01,
+            {},
+        )
+        == 0
+    )

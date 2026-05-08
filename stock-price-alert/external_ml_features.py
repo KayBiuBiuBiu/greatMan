@@ -116,16 +116,49 @@ def _cached_hsgt_table(code6: str) -> pd.DataFrame | None:
     return df if isinstance(df, pd.DataFrame) else None
 
 
-def _north_chg_ratio(code6: str, anchor: str, days: int = 5) -> float:
-    """北向持仓「最近若干行」市值变化之和 / 均值市值；接口停更时用已有末段近似。"""
+def _north_chg_ratio(
+    code6: str,
+    anchor: str,
+    days: int = 5,
+    cfg: dict[str, Any] | None = None,
+) -> float:
+    """
+    北向持仓「最近若干行」市值变化之和 / 均值市值。
+    东财 RPT_MUTUAL_HOLDSTOCKNDATE_STA 曾长期停更：若数据末日远早于锚定日，则返回 0，
+    避免把陈旧序列当作「当前北向」喂给模型（资金流 ext_fund_* 仍独立可用）。
+    """
     anchor_d = _anchor_to_date(anchor)
     if not anchor_d:
         return 0.0
+    mf = (cfg or {}).get("ml_filter") if isinstance(cfg, dict) else None
+    if not isinstance(mf, dict):
+        mf = {}
+    try:
+        max_lag = max(30, min(800, int(mf.get("external_flow_north_max_lag_days", 120))))
+    except (TypeError, ValueError):
+        max_lag = 120
+    warn_stale = bool(mf.get("external_flow_warn_stale_north", False))
+
     df = _cached_hsgt_table(code6)
     if df is None or df.empty or "持股日期" not in df.columns:
         return 0.0
     dc = pd.to_datetime(df["持股日期"], errors="coerce")
-    df2 = df.loc[dc <= pd.Timestamp(anchor_d)].copy()
+    mx = dc.max()
+    anchor_ts = pd.Timestamp(anchor_d)
+    if pd.notna(mx) and mx < anchor_ts - timedelta(days=max_lag):
+        msg = (
+            "北向个股持股数据滞后于锚定日，ext_north_mv_chg_ratio 已置 0 "
+            "(code=%s data_last=%s anchor=%s lag_days>=%s；"
+            "东财接口停更时可依赖 ext_fund_* 或关闭 external_flow_features)"
+        )
+        args_w = (code6, str(mx.date()), anchor[:10], max_lag)
+        if warn_stale:
+            _LOG.info(msg, *args_w)
+        else:
+            _LOG.debug(msg, *args_w)
+        return 0.0
+
+    df2 = df.loc[dc <= anchor_ts].copy()
     if df2.shape[0] < 3:
         return 0.0
     mv = pd.to_numeric(df2.get("持股市值"), errors="coerce")
@@ -142,14 +175,6 @@ def _north_chg_ratio(code6: str, anchor: str, days: int = 5) -> float:
     else:
         denom = mean_mv
     ratio = sum_chg / max(1.0, denom)
-    mx = dc.max()
-    if pd.notna(mx) and mx < pd.Timestamp(anchor_d - timedelta(days=400)):
-        _LOG.warning(
-            "北向明细可能停更已久 code=%s last=%s anchor=%s",
-            code6,
-            str(mx.date()),
-            anchor[:10],
-        )
     return float(ratio)
 
 
@@ -238,7 +263,9 @@ def compute_external_flow_features(
     fm, fs = _cached_fund_flow_aggs(c6, anchor_s, days)
     out["ext_fund_main_net_pct_mean"] = fm
     out["ext_fund_super_net_pct_mean"] = fs
-    out["ext_north_mv_chg_ratio"] = _north_chg_ratio(c6, anchor_s, days=min(10, days))
+    out["ext_north_mv_chg_ratio"] = _north_chg_ratio(
+        c6, anchor_s, days=min(10, days), cfg=cfg
+    )
 
     lhb_set = _cached_lhb_dates(c6)
     am = anchor_s if len(anchor_s) == 10 else ""

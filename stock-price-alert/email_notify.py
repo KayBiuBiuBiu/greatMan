@@ -1,4 +1,7 @@
-"""可选：SMTP 邮件提醒（买入信号等）。敏感信息放在 mail_config.json（已 gitignore）或环境变量。"""
+"""远程提醒：SMTP 邮件 + 企业微信群机器人 Webhook。
+
+敏感信息：mail_config.json（已 gitignore）、环境变量 MAIL_*、或 notifications.wecom_webhook.webhook_url。
+"""
 
 from __future__ import annotations
 
@@ -12,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from legal_disclosure import append_to_body
+from wecom_webhook import send_wecom_robot_message
 
 ROOT = Path(__file__).resolve().parent
 _MAIL_PATH = ROOT / "mail_config.json"
@@ -93,21 +97,41 @@ def load_mail_config() -> dict[str, Any] | None:
     return _load_mail_cfg()
 
 
-def send_email_alert(
+def _remote_notify_settings(
+    app_cfg: dict[str, Any] | None,
+) -> tuple[str, str, str, bool]:
+    """
+    返回 (remote_channel, wecom_url, wecom_msgtype, wecom_enabled)。
+    remote_channel: email | wecom | both | none
+    """
+    nt: dict[str, Any] = {}
+    if isinstance(app_cfg, dict):
+        raw_nt = app_cfg.get("notifications")
+        if isinstance(raw_nt, dict):
+            nt = raw_nt
+    ch = str(nt.get("remote_channel") or "email").strip().lower()
+    if ch not in ("email", "wecom", "both", "none"):
+        ch = "email"
+    wc_box = nt.get("wecom_webhook")
+    if not isinstance(wc_box, dict):
+        wc_box = {}
+    url = str(wc_box.get("webhook_url") or "").strip()
+    if not url:
+        url = os.environ.get("WEWORK_WEBHOOK_URL", "").strip()
+    msgtype = str(wc_box.get("msgtype") or "markdown").strip().lower()
+    if msgtype not in ("text", "markdown"):
+        msgtype = "markdown"
+    wc_en = bool(wc_box.get("enabled", True))
+    return ch, url, msgtype, wc_en
+
+
+def _send_smtp_alert(
     subject: str,
-    content: str,
-    *,
-    append_disclaimer: bool = True,
-    app_cfg: dict[str, Any] | None = None,
+    body: str,
 ) -> bool:
     cfg = _load_mail_cfg()
     if cfg is None:
         return False
-    body = (
-        append_to_body(content, cfg=app_cfg)
-        if append_disclaimer
-        else content
-    )
     msg = MIMEMultipart()
     msg["From"] = cfg["sender"]
     msg["To"] = ", ".join(cfg["receivers"])
@@ -123,15 +147,48 @@ def send_email_alert(
         return False
 
 
+def send_email_alert(
+    subject: str,
+    content: str,
+    *,
+    append_disclaimer: bool = True,
+    app_cfg: dict[str, Any] | None = None,
+) -> bool:
+    """
+    按 config.notifications.remote_channel 投递：email / wecom / both / none。
+    与历史行为兼容：未配置 notifications 时等同仅 email。
+    """
+    ch, wc_url, wc_msgtype, wc_en = _remote_notify_settings(app_cfg)
+    if ch == "none":
+        return False
+    body = (
+        append_to_body(content, cfg=app_cfg)
+        if append_disclaimer
+        else content
+    )
+    ok = False
+    if ch in ("email", "both"):
+        ok = _send_smtp_alert(subject, body) or ok
+    if ch in ("wecom", "both") and wc_en and wc_url:
+        ok = (
+            send_wecom_robot_message(
+                wc_url,
+                wc_msgtype,
+                subject,
+                body,
+            )
+            or ok
+        )
+    return ok
+
+
 def send_buy_signal_email(
     subject: str,
     body: str,
     *,
     app_cfg: dict[str, Any] | None = None,
 ) -> bool:
-    """已配置邮件时发送；未配置则静默跳过。"""
-    if _load_mail_cfg() is None:
-        return False
+    """买入类远程提醒（邮件/企微由配置决定）。"""
     return send_email_alert(subject, body, app_cfg=app_cfg)
 
 
@@ -141,9 +198,7 @@ def send_sell_signal_email(
     *,
     app_cfg: dict[str, Any] | None = None,
 ) -> bool:
-    """卖出信号邮件；逻辑与买入相同。"""
-    if _load_mail_cfg() is None:
-        return False
+    """卖出类远程提醒（邮件/企微由配置决定）。"""
     return send_email_alert(subject, body, app_cfg=app_cfg)
 
 

@@ -23,21 +23,19 @@ def _mean(xs: list[float]) -> float | None:
     return sum(xs) / len(xs) if xs else None
 
 
-def run_eval(
-    cfg: dict[str, Any],
-    *,
-    root: Path,
-    since: str | None,
-    force: bool,
-    limit: int | None,
-) -> dict[str, Any]:
-    from alert_log_store import resolve_alert_db_path
-
-    db_path = resolve_alert_db_path(cfg, root)
-    if db_path is None:
-        raise SystemExit("请在配置中启用 alert_log.enabled。")
+def hit_thresholds_from_cfg(cfg: dict[str, Any]) -> dict[str, Any]:
+    """从 merged cfg 构造 evaluate_row / 网格搜索用的阈值表。"""
     al = cfg.get("alert_log") or {}
-    thresholds = {
+    pse = al.get("position_suggestion_eval")
+    if not isinstance(pse, dict):
+        pse = {}
+    she = al.get("strategy_hit_eval")
+    if not isinstance(she, dict):
+        she = {}
+    rst = al.get("risk_stop_take_eval")
+    if not isinstance(rst, dict):
+        rst = {}
+    return {
         "bearish_hit_threshold_pct_1d": float(
             al.get("bearish_hit_threshold_pct_1d", -2.0)
         ),
@@ -47,15 +45,130 @@ def run_eval(
         "bearish_hit_threshold_pct_5d": float(
             al.get("bearish_hit_threshold_pct_5d", -3.0)
         ),
+        "position_suggestion_eval": pse,
+        "strategy_hit_eval": she,
+        "risk_stop_take_eval": rst,
     }
+
+
+def evaluate_hit_report_only(
+    cfg: dict[str, Any],
+    *,
+    root: Path,
+    since: str | None = None,
+) -> dict[str, Any]:
+    """
+    不重写 alert_events：按当前 cfg 阈值对事件重算 hit/收益并汇总。
+    供 auto_tune 网格搜索；数据库需已有足够 K 线以计算远期收益。
+    """
+    from alert_log_store import resolve_alert_db_path
+
+    db_path = resolve_alert_db_path(cfg, root)
+    if db_path is None or not db_path.is_file():
+        return {"by_alert_type": {}, "rows_evaluated": 0, "db_path": str(db_path or "")}
+    thresholds = hit_thresholds_from_cfg(cfg)
+    rows: list[Any] = []
     conn = open_store_connection(db_path)
     try:
         init_schema(conn)
         q = "SELECT * FROM alert_events WHERE 1=1"
         params: list[Any] = []
-        if not force:
-            q += " AND eval_status = 'pending'"
         if since:
+            q += " AND anchor_trade_date >= ?"
+            params.append(since[:10])
+        q += " ORDER BY id ASC"
+        rows = list(conn.execute(q, params).fetchall())
+        agg: dict[str, dict[str, Any]] = {}
+        for row in rows:
+            r1, r3, r5, hit = evaluate_row(conn, row, thresholds)
+            t = str(row["alert_type"])
+            b = agg.setdefault(
+                t,
+                {
+                    "_n": 0,
+                    "_scored": 0,
+                    "_hits": 0,
+                    "_s1": 0.0,
+                    "_c1": 0,
+                    "_s3": 0.0,
+                    "_c3": 0,
+                    "_s5": 0.0,
+                    "_c5": 0,
+                },
+            )
+            b["_n"] += 1
+            for val, key_s, key_c in (
+                (r1, "_s1", "_c1"),
+                (r3, "_s3", "_c3"),
+                (r5, "_s5", "_c5"),
+            ):
+                if val is not None:
+                    b[key_s] += float(val)
+                    b[key_c] += 1
+            if hit is not None:
+                b["_scored"] += 1
+                if int(hit) == 1:
+                    b["_hits"] += 1
+    finally:
+        conn.close()
+
+    by_type: dict[str, dict[str, Any]] = {}
+    for t, b in agg.items():
+        n = int(b["_n"])
+        ns = int(b["_scored"])
+        nh = int(b["_hits"])
+        by_type[t] = {
+            "n": n,
+            "n_hit_scored": ns,
+            "hit_rate": (nh / ns) if ns else None,
+            "avg_ret_1d": (b["_s1"] / b["_c1"]) if b["_c1"] else None,
+            "avg_ret_3d": (b["_s3"] / b["_c3"]) if b["_c3"] else None,
+            "avg_ret_5d": (b["_s5"] / b["_c5"]) if b["_c5"] else None,
+        }
+    return {
+        "by_alert_type": by_type,
+        "rows_evaluated": len(rows),
+        "db_path": str(db_path),
+    }
+
+
+def run_eval(
+    cfg: dict[str, Any],
+    *,
+    root: Path,
+    since: str | None,
+    force: bool,
+    reeval_missing_returns: bool,
+    limit: int | None,
+) -> dict[str, Any]:
+    from alert_log_store import resolve_alert_db_path
+
+    db_path = resolve_alert_db_path(cfg, root)
+    if db_path is None:
+        raise SystemExit("请在配置中启用 alert_log.enabled。")
+    thresholds = hit_thresholds_from_cfg(cfg)
+    conn = open_store_connection(db_path)
+    try:
+        init_schema(conn)
+        q = "SELECT * FROM alert_events WHERE 1=1"
+        params: list[Any] = []
+        if force:
+            pass
+        elif reeval_missing_returns:
+            if since:
+                q += """ AND (
+                    (eval_status = 'pending' AND anchor_trade_date >= ?)
+                    OR (eval_status = 'done' AND ret_5d IS NULL)
+                )"""
+                params.append(since[:10])
+            else:
+                q += " AND (eval_status = 'pending' OR (eval_status = 'done' AND ret_5d IS NULL))"
+        else:
+            q += " AND eval_status = 'pending'"
+            if since:
+                q += " AND anchor_trade_date >= ?"
+                params.append(since[:10])
+        if since and force:
             q += " AND anchor_trade_date >= ?"
             params.append(since[:10])
         q += " ORDER BY id ASC"
@@ -132,6 +245,11 @@ def main() -> int:
         action="store_true",
         help="重算所有行（不仅 pending）",
     )
+    ap.add_argument(
+        "--reeval-missing-returns",
+        action="store_true",
+        help="重算 pending 以及已 done 但 ret_5d 仍为空的记录（适合补全历史 K 线后回填）",
+    )
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--json-out", type=Path, default=None)
     args = ap.parse_args()
@@ -140,11 +258,17 @@ def main() -> int:
         return 1
     raw = json.loads(args.config.read_text(encoding="utf-8"))
     cfg = merge_full_config(raw)
+    if bool(args.force) and bool(args.reeval_missing_returns):
+        print(
+            "已指定 --force，将重算全部行（忽略 --reeval-missing-returns 的筛选）",
+            file=sys.stderr,
+        )
     report = run_eval(
         cfg,
         root=ROOT,
         since=args.since,
         force=bool(args.force),
+        reeval_missing_returns=bool(args.reeval_missing_returns),
         limit=args.limit,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))

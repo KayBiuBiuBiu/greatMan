@@ -8,10 +8,55 @@
     "watchlist_only": false,
     "skip_startup_daily_select": false
   },
-  "scan_pool_max": 800,
+  "quant_selector": {
+    "score_min_quality": 7.0,
+    "score_min_watch": 5.5,
+    "profit_1y_min": 0.0,
+    "win_1y_min": 50.0,
+    "profit_3y_floor": -8.0
+  },
+  "strategy_signal": {
+    "min_score_by_strategy": {
+      "ma_dip": 72,
+      "box_breakout": 78,
+      "range_arbitrage": 74
+    }
+  },
+  "strategy_buy_filter": {
+    "enabled": true,
+    "min_volume_ratio": 1.2,
+    "block_weak_bear": true
+  },
+  "position_suggestion": {
+    "enabled": true,
+    "rules": {
+      "sell": {
+        "profit_to_take": 0.15,
+        "profit_break_ma5": true,
+        "loss_stop": -0.08,
+        "loss_below_ma20_and_ma60": true,
+        "bearish_prob_threshold": 0.7,
+        "box_high_threshold": 0.85,
+        "volume_ratio_low": 0.8,
+        "market_weak_bear_sell": true
+      },
+      "add": {
+        "loss_min": -0.20,
+        "loss_max": -0.05,
+        "require_above_ma20": true,
+        "box_low_threshold": 0.4,
+        "min_volume_ratio": 0.8,
+        "forbid_market_weak_bear": true,
+        "add_amount_tier1": 6000,
+        "add_amount_tier2": 9000,
+        "loss_tier2": -0.15
+      }
+    }
+  },
+  "scan_pool_max": 4000,
   "daily_pick_count": 6,
   "capital": {
-    "total": 10000,
+    "total": 200000,
     "max_total_position_ratio": 0.5,
     "max_single_stock_ratio": 0.3
   },
@@ -102,7 +147,18 @@
   },
   "sector_index_overrides": {},
   "auto_tune": {
-    "feedback_fp_lookback_days": 90
+    "feedback_fp_lookback_days": 90,
+    "take_profit_semantics_auto": true,
+    "take_profit_semantics_min_samples": 25,
+    "take_profit_hr_switch_to_legacy": 0.15,
+    "take_profit_hr_switch_to_correctness": 0.72,
+    "hit_eval_grid_enabled": false,
+    "hit_eval_optimize_pause": false,
+    "hit_eval_param_locks": [],
+    "hit_eval_grid_buy_hit_r1_above_pct": [-0.5, 0, 0.5, 1.0],
+    "hit_eval_grid_window_days": null,
+    "hit_eval_grid_days": null,
+    "hit_eval_grid_min_strategy_scored": 25
   },
   "performance": {
     "kline_cache_ttl_sec": 900,
@@ -126,7 +182,13 @@
     "aggregate_interval_alerts": true,
     "aggregate_max_items": 20,
     "aggregate_trend_alerts": true,
-    "aggregate_trend_max_items": 15
+    "aggregate_trend_max_items": 15,
+    "remote_channel": "both",
+    "wecom_webhook": {
+      "enabled": true,
+      "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY",
+      "msgtype": "text"
+    }
   },
   "kline_store": {
     "enabled": true,
@@ -135,6 +197,8 @@
     "divergence_warn_price_pct": null,
     "sync_skip_min_bars": 50,
     "sync_max_stale_calendar_days": 2,
+    "sync_fetch_lmt": 1020,
+    "sync_target_bars": 800,
     "use_indicator_last": false
   },
   "alert_log": {
@@ -143,7 +207,25 @@
     "db_path": "data/alert_events.db",
     "bearish_hit_threshold_pct_1d": -2,
     "bearish_hit_threshold_pct_3d": -2.5,
-    "bearish_hit_threshold_pct_5d": -3
+    "bearish_hit_threshold_pct_5d": -3,
+    "position_suggestion_eval": {
+      "sell_hit_r5_below_pct": -0.5,
+      "sell_miss_r5_above_pct": 1.5,
+      "add_hit_r5_above_pct": 0.5,
+      "add_miss_r5_below_pct": -2.0,
+      "hold_hit_abs_r5_below_pct": 3.0,
+      "hold_miss_abs_r5_above_pct": 6.0
+    },
+    "strategy_hit_eval": {
+      "buy_hit_r5_above_pct": 0.0,
+      "sell_hit_r5_below_pct": 0.0,
+      "buy_hit_r1_above_pct": 0.0,
+      "sell_hit_r1_below_pct": 0.0
+    },
+    "risk_stop_take_eval": {
+      "take_profit_hit_r1_above_pct": 0.5,
+      "take_profit_hit_for_correctness": 1
+    }
   },
   "ml_filter": {
     "enabled": false,
@@ -157,17 +239,19 @@
     "kline_rf_suppress_below": 0.3,
     "suppress_combo": "any",
     "external_flow_features_enabled": false,
-    "external_flow_days": 10
+    "external_flow_days": 10,
+    "external_flow_north_max_lag_days": 120,
+    "external_flow_warn_stale_north": false
   },
   "ops_automation": {
-    "enabled": false,
+    "enabled": true,
     "preopen_enabled": true,
     "preopen_cutoff_hhmm": "09:20",
     "after_close_enabled": true,
     "after_close_hhmm": "15:10",
     "friday_weekly_enabled": true,
     "backtest_since_days": 7,
-    "auto_tune_apply": false,
+    "auto_tune_apply": true,
     "auto_tune_email": true,
     "ml_train_weekly": true,
     "ml_train_days": 180,
@@ -191,13 +275,14 @@
     "imap_folder": "INBOX",
     "trusted_senders": [],
     "poll_interval_sec": 45,
-    "mark_seen": true
+    "mark_seen": true,
+    "auto_backtest_on_take_profit_hit_change": false
   },
   "realtime_hub": {
     "enabled": true,
     "poll_interval_sec": 5,
-    "ws_enabled": false,
-    "ws_transport": "",
+    "ws_enabled": true,
+    "ws_transport": "eastmoney_sse",
     "ws_url": "",
     "ws_reconnect_sec": 5,
     "ws_ping_interval_sec": 30,

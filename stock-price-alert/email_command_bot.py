@@ -184,14 +184,55 @@ def _parse_feedback_commands(subject: str, body: str) -> list[tuple[str, str]]:
     return out[:16]
 
 
+def _parse_config_commands(subject: str, body: str) -> list[str]:
+    """
+    解析邮件中的配置类指令（写回 config.json 的 alert_log 等）。
+    返回 run_alert._handle_runtime_command 可执行的行，如：
+    set take_profit_hit_for_correctness 1
+    """
+    txt = (subject + "\n" + body).replace("\r", "\n")
+    out: list[str] = []
+    seen: set[str] = set()
+
+    def add(cmd: str) -> None:
+        if cmd not in seen:
+            seen.add(cmd)
+            out.append(cmd)
+
+    for m in re.finditer(
+        r"\bset\s+take_profit_hit_for_correctness\s+([01])\b",
+        txt,
+        flags=re.IGNORECASE,
+    ):
+        add(f"set take_profit_hit_for_correctness {m.group(1)}")
+    for m in re.finditer(
+        r"\btp_hit_correctness\s+([01])\b",
+        txt,
+        flags=re.IGNORECASE,
+    ):
+        add(f"set take_profit_hit_for_correctness {m.group(1)}")
+    for m in re.finditer(
+        r"止盈命中\s*[:：]?\s*(卖对|正确|避险)",
+        txt,
+    ):
+        add("set take_profit_hit_for_correctness 1")
+    for m in re.finditer(
+        r"止盈命中\s*[:：]?\s*(卖飞|旧语义|上涨)",
+        txt,
+    ):
+        add("set take_profit_hit_for_correctness 0")
+    return out[:8]
+
+
 @dataclass
 class EmailBotPollResult:
     runtime_commands: list[str] = field(default_factory=list)
     feedback_commands: list[tuple[str, str]] = field(default_factory=list)
+    config_commands: list[str] = field(default_factory=list)
 
 
 def fetch_email_bot_actions(cfg: dict[str, Any]) -> EmailBotPollResult:
-    """拉取未读邮件：交易类 runtime 命令 + 预警反馈 fp/tp。"""
+    """拉取未读邮件：交易类 runtime、写 config 的指令、预警反馈 fp/tp。"""
     ec0 = cfg.get("email_command_bot") or {}
     if not bool(ec0.get("enabled", False)):
         return EmailBotPollResult()
@@ -210,6 +251,7 @@ def fetch_email_bot_actions(cfg: dict[str, Any]) -> EmailBotPollResult:
         return EmailBotPollResult()
     mark_seen = bool(ec.get("mark_seen", True))
     cmds: list[str] = []
+    cfg_cmds: list[str] = []
     fbs: list[tuple[str, str]] = []
     M: imaplib.IMAP4_SSL | None = None
     try:
@@ -239,6 +281,9 @@ def fetch_email_bot_actions(cfg: dict[str, Any]) -> EmailBotPollResult:
                 continue
             cmds.extend(_parse_runtime_commands(subj, body))
             fbs.extend(_parse_feedback_commands(subj, body))
+            for cc in _parse_config_commands(subj, body):
+                if cc not in cfg_cmds:
+                    cfg_cmds.append(cc)
             if mark_seen:
                 M.store(mid, "+FLAGS", "\\Seen")
     except Exception:
@@ -267,9 +312,16 @@ def fetch_email_bot_actions(cfg: dict[str, Any]) -> EmailBotPollResult:
         if t not in seen_fb:
             seen_fb.add(t)
             out_fb.append(t)
+    out_cfg: list[str] = []
+    seen_cfg: set[str] = set()
+    for c in cfg_cmds:
+        if c not in seen_cfg:
+            seen_cfg.add(c)
+            out_cfg.append(c)
     return EmailBotPollResult(
         runtime_commands=out_rt[:8],
         feedback_commands=out_fb,
+        config_commands=out_cfg[:8],
     )
 
 

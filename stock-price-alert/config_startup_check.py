@@ -104,18 +104,28 @@ def run_startup_config_checks(
 
     oa = cfg.get("ops_automation") or {}
     eb = cfg.get("email_command_bot") or {}
+    nt = cfg.get("notifications") or {}
+    ch = str((nt.get("remote_channel") if isinstance(nt, dict) else "") or "email").strip().lower()
+    wc = (nt.get("wecom_webhook") or {}) if isinstance(nt, dict) else {}
+    wc_url = str(wc.get("webhook_url") or "").strip() if isinstance(wc, dict) else ""
     needs_mail = bool(oa.get("auto_tune_email")) or bool(eb.get("enabled"))
-    if needs_mail:
+    if needs_mail and ch in ("email", "both"):
         try:
             from email_notify import _load_mail_cfg
 
             if _load_mail_cfg() is None:
                 warnings.append(
-                    "已开启收盘调参邮件或邮件指令机器人，但未检测到可用的 "
-                    "mail_config.json 或 MAIL_* 环境变量 SMTP 配置。"
+                    "已开启收盘调参邮件或邮件指令机器人，且 remote_channel 含 email，"
+                    "但未检测到可用的 mail_config.json 或 MAIL_* 环境变量 SMTP 配置。"
                 )
         except Exception as ex:
             warnings.append(f"检查邮件配置时异常（可忽略）：{ex}")
+    if ch in ("wecom", "both") and isinstance(wc, dict) and bool(wc.get("enabled", True)):
+        if not wc_url and not os.environ.get("WEWORK_WEBHOOK_URL", "").strip():
+            warnings.append(
+                "notifications.remote_channel 含 wecom，但未配置 wecom_webhook.webhook_url "
+                "或环境变量 WEWORK_WEBHOOK_URL。"
+            )
 
     dh = cfg.get("data_health") or {}
     hp = str(dh.get("heartbeat_path") or "").strip()
@@ -127,11 +137,12 @@ def run_startup_config_checks(
             errors.append(f"data_health.heartbeat_path 父目录不可写：{e}")
 
     rh = cfg.get("realtime_hub") or {}
-    if bool(rh.get("enabled")):
+    if bool(rh.get("enabled")) and bool(rh.get("ws_enabled", True)):
         wt = str(rh.get("ws_transport") or "").strip().lower()
         if not wt:
             warnings.append(
-                "realtime_hub.enabled 为真但 ws_transport 为空，SSE/WS 可能未正确配置。"
+                "realtime_hub.ws_enabled 为真但 ws_transport 为空，"
+                "SSE/WS 可能未正确配置（纯 HTTP 轮询可关 ws_enabled 或填 eastmoney_sse）。"
             )
 
     try:

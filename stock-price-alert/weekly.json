@@ -1,8 +1,32 @@
 {
-  "updated_rows": 147,
+  "updated_rows": 1680,
   "by_alert_type": {
+    "drawdown": {
+      "n": 6,
+      "n_hit_scored": 6,
+      "hit_rate": 1.0,
+      "avg_ret_1d": -0.021806853582554606,
+      "avg_ret_3d": null,
+      "avg_ret_5d": null
+    },
+    "risk_stop_take": {
+      "n": 183,
+      "n_hit_scored": 111,
+      "hit_rate": 1.0,
+      "avg_ret_1d": 0.055083570436881536,
+      "avg_ret_3d": null,
+      "avg_ret_5d": null
+    },
     "strategy": {
-      "n": 156,
+      "n": 1468,
+      "n_hit_scored": 736,
+      "hit_rate": 0.3342391304347826,
+      "avg_ret_1d": 0.01732890560328316,
+      "avg_ret_3d": null,
+      "avg_ret_5d": null
+    },
+    "trend_slip": {
+      "n": 23,
       "n_hit_scored": 0,
       "hit_rate": null,
       "avg_ret_1d": null,

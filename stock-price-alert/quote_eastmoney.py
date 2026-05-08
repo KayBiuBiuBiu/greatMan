@@ -7,7 +7,7 @@ import re
 import threading
 import time
 import urllib.parse
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -91,25 +91,28 @@ def configure_kline_store_from_cfg(
     }
 
 
-def fetch_kline_rows_for_secid(
+def _fetch_kline_chunk_rows(
     secid: str,
-    ut: str | None = None,
+    ut_token: str,
     *,
-    lmt: int = 160,
+    lmt: int,
+    end_ymd: str,
     kline_bases: tuple[str, ...] | None = None,
 ) -> list[tuple[str, float, float, float, float, float]] | None:
-    """东财日 K 原始行 (trade_date, o,h,l,c,v) 升序，供 sync_daily_klines 写入库。"""
-    u = resolve_ut(ut or DEFAULT_UT)
+    """单次请求：东财日 K 原始行 (trade_date, o,h,l,c,v) 升序。"""
     eff_lmt = max(40, int(lmt))
+    end_s = str(end_ymd or "").strip()
+    if len(end_s) != 8 or not end_s.isdigit():
+        end_s = "20500101"
     params = {
         "secid": secid,
         "klt": "101",
         "fqt": "1",
         "lmt": str(eff_lmt),
-        "end": "20500101",
+        "end": end_s,
         "fields1": KLINE_FIELDS1,
         "fields2": KLINE_FIELDS2,
-        "ut": u,
+        "ut": ut_token,
     }
     qs = urllib.parse.urlencode(params)
     bases = kline_bases or (
@@ -147,6 +150,51 @@ def fetch_kline_rows_for_secid(
         except Exception:
             continue
     return None
+
+
+def fetch_kline_rows_for_secid(
+    secid: str,
+    ut: str | None = None,
+    *,
+    lmt: int = 160,
+    kline_bases: tuple[str, ...] | None = None,
+    max_fetch_rounds: int | None = None,
+) -> list[tuple[str, float, float, float, float, float]] | None:
+    """东财日 K 原始行 (trade_date, o,h,l,c,v) 升序；根数大时自动分页向前补历史。"""
+    u = resolve_ut(ut or DEFAULT_UT)
+    want = max(40, int(lmt))
+    chunk_cap = 1020
+    rounds_cap = max_fetch_rounds
+    if rounds_cap is None:
+        rounds_cap = max(6, min(48, want // chunk_cap + 10))
+    by_date: dict[str, tuple[str, float, float, float, float, float]] = {}
+    end = "20500101"
+    rounds = 0
+    while len(by_date) < want and rounds < int(rounds_cap):
+        need = want - len(by_date)
+        req_lmt = min(chunk_cap, max(need, 40))
+        chunk = _fetch_kline_chunk_rows(
+            secid, u, lmt=req_lmt, end_ymd=end, kline_bases=kline_bases
+        )
+        if not chunk:
+            break
+        before = len(by_date)
+        for row in chunk:
+            by_date[row[0][:10]] = row
+        if len(chunk) < 20:
+            break
+        oldest = str(chunk[0][0]).strip()[:10]
+        try:
+            end = (date.fromisoformat(oldest) - timedelta(days=1)).strftime("%Y%m%d")
+        except ValueError:
+            break
+        if len(by_date) == before:
+            break
+        rounds += 1
+    if len(by_date) < 20:
+        return None
+    tail = sorted(by_date.keys())[-want:]
+    return [by_date[d] for d in tail]
 
 def resolve_ut(ut: str | None) -> str:
     """配置里写 ea 时自动使用站内常用长 ut，减少接口异常。"""

@@ -17,8 +17,15 @@ _SIGNAL_FRIENDLY: dict[tuple[str, str], str] = {
 }
 
 
-def ma_box_strategy(price: float, data: dict[str, Any]) -> Optional[str]:
-    signals = evaluate_all_strategies(price, data)
+def ma_box_strategy(
+    price: float,
+    data: dict[str, Any],
+    *,
+    min_score_by_strategy: dict[str, float] | None = None,
+) -> Optional[str]:
+    signals = evaluate_all_strategies(
+        price, data, min_score_by_strategy=min_score_by_strategy
+    )
     if not signals:
         return None
     best = max(signals, key=lambda x: float(x.score))

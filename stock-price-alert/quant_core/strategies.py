@@ -85,11 +85,28 @@ def range_arbitrage_strategy(price: float, kline: dict[str, Any]) -> StrategySig
     return None
 
 
-def evaluate_all_strategies(price: float, kline: dict[str, Any]) -> list[StrategySignal]:
+def evaluate_all_strategies(
+    price: float,
+    kline: dict[str, Any],
+    *,
+    min_score_by_strategy: dict[str, float] | None = None,
+) -> list[StrategySignal]:
+    """
+    min_score_by_strategy: 策略名 -> 最低参考分；低于则丢弃该策略信号（仅影响买入侧候选，卖出仍保留）。
+    """
     signals: list[StrategySignal] = []
+    floors = min_score_by_strategy or {}
     for fn in (ma_dip_strategy, box_breakout_strategy, range_arbitrage_strategy):
         sig = fn(price, kline)
-        if sig is not None:
-            signals.append(sig)
+        if sig is None:
+            continue
+        floor = float(floors.get(sig.strategy, 0.0) or 0.0)
+        if floor > 0 and float(sig.score) < floor and sig.action in (
+            "buy_watch",
+            "buy_breakout",
+            "buy_range_low",
+        ):
+            continue
+        signals.append(sig)
     return signals
 
