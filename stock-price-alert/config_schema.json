@@ -64,7 +64,10 @@
       "properties": {
         "enabled": { "type": "boolean" },
         "min_volume_ratio": { "type": ["integer", "number"] },
-        "block_weak_bear": { "type": "boolean" }
+        "block_weak_bear": { "type": "boolean" },
+        "use_intraday_position_filter": { "type": "boolean" },
+        "min_intraday_position": { "type": ["integer", "number"] },
+        "max_intraday_position": { "type": ["integer", "number"] }
       }
     },
     "scan_pool_max": {

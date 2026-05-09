@@ -25,7 +25,10 @@
   "strategy_buy_filter": {
     "enabled": true,
     "min_volume_ratio": 1.2,
-    "block_weak_bear": true
+    "block_weak_bear": true,
+    "use_intraday_position_filter": true,
+    "min_intraday_position": 0.3,
+    "max_intraday_position": 0.85
   },
   "position_suggestion": {
     "enabled": true,

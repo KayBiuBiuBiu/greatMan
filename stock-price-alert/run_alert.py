@@ -75,6 +75,7 @@ def _emit_watch_line(
     section: str = "watch_pack",
     duration_ms: float | None = None,
     level: int = logging.INFO,
+    skipped_by_filter: str | None = None,
 ) -> None:
     print(rendered)
     try:
@@ -88,6 +89,7 @@ def _emit_watch_line(
             rk=rk,
             section=section,
             duration_ms=duration_ms,
+            skipped_by_filter=skipped_by_filter,
         )
     except Exception:
         pass
@@ -606,6 +608,10 @@ DEFAULT_STRATEGY_BUY_FILTER = {
     "min_volume_ratio": 1.2,
     # 上证三档 mood 为 weak_bear 时不采纳买入信号（与 position 建议用的 tier 独立，见代码注释）
     "block_weak_bear": True,
+    # 日内位置过滤（依赖 RealtimeQuoteHub 增量统计 + pack["q"] 中 intraday_position；默认关闭）
+    "use_intraday_position_filter": False,
+    "min_intraday_position": 0.3,
+    "max_intraday_position": 0.85,
 }
 DEFAULT_POSITION_SUGGESTION = {
     "enabled": True,
@@ -851,7 +857,7 @@ def _fill_position_suggestion_metrics(pack: dict[str, Any], now_price: float) ->
 
 
 def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) -> str | None:
-    """买入信号实时过滤：量比、大盘 weak_bear。返回原因文案；未拦截返回 None。"""
+    """买入信号实时过滤：量比、大盘 weak_bear、可选日内位置。返回原因文案；未拦截返回 None。"""
     sbf = cfg.get("strategy_buy_filter") or {}
     if not bool(sbf.get("enabled", True)):
         return None
@@ -866,6 +872,26 @@ def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) ->
         mt = pack.get("_strategy_buy_mood_tier")
         if mt == "weak_bear":
             reasons.append("大盘 weak_bear")
+    if bool(sbf.get("use_intraday_position_filter", False)):
+        qd = pack.get("q")
+        if isinstance(qd, dict):
+            ip_raw = qd.get("intraday_position")
+            if ip_raw is not None:
+                try:
+                    ipv = float(ip_raw)
+                except (TypeError, ValueError):
+                    ipv = None
+                if ipv is not None:
+                    mn = float(sbf.get("min_intraday_position", 0.3) or 0.0)
+                    mx = float(sbf.get("max_intraday_position", 0.85) or 1.0)
+                    if mn > 0.0 and ipv + 1e-9 < mn:
+                        reasons.append(
+                            f"日内位置{ipv:.2f}（需≥{mn:g}，避免贴近当日最低区）"
+                        )
+                    if mx < 1.0 and ipv > mx + 1e-9:
+                        reasons.append(
+                            f"日内位置{ipv:.2f}（需≤{mx:g}，避免追日内高点）"
+                        )
     return "；".join(reasons) if reasons else None
 
 
@@ -2461,6 +2487,24 @@ def _fetch_watch_item_pack(
         else:
             q["price_source"] = str(q.get("source") or "eastmoney")
 
+        if hub is not None and float(q.get("price") or 0) > 0:
+            chg_for_snap: float | None = None
+            _cr = q.get("change_pct")
+            if _cr is not None:
+                try:
+                    chg_for_snap = float(_cr)
+                except (TypeError, ValueError):
+                    chg_for_snap = None
+            snap = hub.get_intraday_snapshot(
+                code,
+                market,
+                price=float(q["price"]),
+                change_pct=chg_for_snap,
+            )
+            for _k, _v in snap.items():
+                if _v is not None:
+                    q[_k] = _v
+
         if no_quote:
             kl_raw = None
         else:
@@ -3351,11 +3395,20 @@ def process_watch_pack(
                 _fill_position_suggestion_metrics(pack, now_price)
                 br = _strategy_buy_realtime_blocked(pack, cfg)
                 if br:
+                    ip_s = ""
+                    ip_raw = (pack.get("q") or {}).get("intraday_position")
+                    if ip_raw is not None:
+                        try:
+                            ip_s = f" 日内位{float(ip_raw):.2f}"
+                        except (TypeError, ValueError):
+                            ip_s = ""
                     _emit_watch_line(
-                        f"      └ 【策略】买入信号未采纳（实时过滤）｜{br}",
+                        f"      └ 【策略】{code} ({disp_name}) "
+                        f"买入信号未采纳（实时过滤）{ip_s}｜{br}",
                         event="watch_strategy_buy_filtered",
                         code=code,
                         rk=rk,
+                        skipped_by_filter=br,
                     )
                     sig = None
         # 持仓策略邮件：同一轮「买入/卖出」持续期间只发一封；信号消失后再出现再发

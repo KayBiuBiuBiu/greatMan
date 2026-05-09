@@ -61,6 +61,46 @@ def test_strategy_buy_realtime_blocked() -> None:
     assert _strategy_buy_realtime_blocked(pack_wb, cfg2) is None
 
 
+def test_strategy_buy_intraday_position_filter() -> None:
+    from run_alert import _strategy_buy_realtime_blocked, merge_full_config
+
+    ex = Path(__file__).resolve().parent.parent / "config.example.json"
+    cfg = merge_full_config(json.loads(ex.read_text(encoding="utf-8")))
+    cfg["strategy_buy_filter"] = {
+        **(cfg.get("strategy_buy_filter") or {}),
+        "enabled": True,
+        "min_volume_ratio": 0.0,
+        "block_weak_bear": False,
+        "use_intraday_position_filter": True,
+        "min_intraday_position": 0.3,
+        "max_intraday_position": 0.85,
+    }
+    pack_hi = {
+        "_ps_vol_ratio": 2.0,
+        "_strategy_buy_mood_tier": "range",
+        "q": {"intraday_position": 0.9},
+    }
+    r_hi = _strategy_buy_realtime_blocked(pack_hi, cfg)
+    assert r_hi is not None
+    assert "日内位置" in r_hi
+
+    pack_lo = {
+        "_ps_vol_ratio": 2.0,
+        "_strategy_buy_mood_tier": "range",
+        "q": {"intraday_position": 0.1},
+    }
+    r_lo = _strategy_buy_realtime_blocked(pack_lo, cfg)
+    assert r_lo is not None
+    assert "日内位置" in r_lo
+
+    pack_ok = {
+        "_ps_vol_ratio": 2.0,
+        "_strategy_buy_mood_tier": "range",
+        "q": {"intraday_position": 0.5},
+    }
+    assert _strategy_buy_realtime_blocked(pack_ok, cfg) is None
+
+
 @pytest.mark.parametrize(
     "score,p1,w1,p3,expect_bucket",
     [
