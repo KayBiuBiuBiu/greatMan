@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "a_share_names.json"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-from utils import get_requests_verify
+from utils import get_requests_proxies, get_requests_verify
 
 # 东财 A 股聚合；URL 与 stock_scanner 一致（部分环境 https 易失败）
 CLIST_URLS = (
@@ -57,8 +57,8 @@ def _clist_get_json(url: str, params: dict[str, Any]) -> dict[str, Any]:
     import requests
 
     time.sleep(random.uniform(0.2, 0.6))
-    r2 = requests.get(
-        url,
+    kw2: dict[str, Any] = dict(
+        url=url,
         params=params,
         headers={
             "User-Agent": (
@@ -71,6 +71,10 @@ def _clist_get_json(url: str, params: dict[str, Any]) -> dict[str, Any]:
         timeout=45,
         verify=get_requests_verify(),
     )
+    px = get_requests_proxies()
+    if px:
+        kw2["proxies"] = px
+    r2 = requests.get(**kw2)
     r2.raise_for_status()
     return r2.json()
 
@@ -125,6 +129,16 @@ def fetch_via_akshare() -> dict[str, str]:
 
 
 def main() -> int:
+    cfg_path = ROOT / "config.json"
+    if cfg_path.is_file():
+        try:
+            raw = json.loads(cfg_path.read_text(encoding="utf-8"))
+            from run_alert import merge_full_config
+            from utils import configure_ssl_from_sources
+
+            configure_ssl_from_sources(merge_full_config(raw).get("sources"))
+        except Exception:
+            pass
     mapping: dict[str, str] = {}
     try:
         print("正在拉取东财全市场列表（分页 clist）…")

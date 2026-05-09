@@ -28,7 +28,29 @@
     "block_weak_bear": true,
     "use_intraday_position_filter": true,
     "min_intraday_position": 0.3,
-    "max_intraday_position": 0.85
+    "max_intraday_position": 0.85,
+    "sector_buy_cross_check": {
+      "enabled": false,
+      "mode": "vote",
+      "min_evaluated_dims": 2,
+      "min_pass_votes": 2,
+      "pass_weighted_threshold": 0.5,
+      "weights": {
+        "sector_rs_vs_index": 1.0,
+        "sector_above_ma20": 1.0,
+        "stock_vs_sector_rs": 1.0
+      },
+      "sector_rs_vs_index_margin": -0.003,
+      "ma20_tolerance": 0.002,
+      "stock_vs_sector_max_lag": 0.02,
+      "require_sector_bk": true
+    },
+    "adaptive_by_mood": {
+      "enabled": false,
+      "strong_bull": {},
+      "range": {},
+      "weak_bear": {}
+    }
   },
   "position_suggestion": {
     "enabled": true,
@@ -179,7 +201,18 @@
     "http_domain_bucket_rps": 0,
     "http_domain_bucket_hosts": [],
     "process_watch_max_workers": 1,
-    "name_prewarm_max_workers": 4
+    "name_prewarm_max_workers": 4,
+    "fetch_minute_kline_today": false,
+    "minute_kline_max_bars": 256,
+    "minute_kline_cache_ttl_sec": 120,
+    "minute_kline_max_per_round": 0,
+    "minute_kline_am_session_only": true,
+    "log_poll_segment_ms": false,
+    "async_minute_kline": {
+      "enabled": false,
+      "refresh_sec": 300,
+      "max_bars": 240
+    }
   },
   "notifications": {
     "aggregate_interval_alerts": true,
@@ -266,7 +299,10 @@
     "friday_kline_rf_train_enabled": false,
     "incremental_nb_after_close": false,
     "incremental_nb_days": 30,
-    "incremental_nb_min_samples": 12
+    "incremental_nb_min_samples": 12,
+    "friday_buy_filter_digest_enabled": true,
+    "buy_filter_digest_forward_days": 5,
+    "buy_filter_digest_max_events": 200
   },
   "email_command_bot": {
     "enabled": false,
@@ -326,7 +362,16 @@
   "sources": {
     "eastmoney_ut": "ea",
     "ssl_verify": false,
-    "ssl_ca_bundle": null
+    "ssl_ca_bundle": null,
+    "proxy": "",
+    "tushare": {
+      "enabled": false,
+      "token": "",
+      "token_env": "TUSHARE_TOKEN",
+      "sh_index_free_fallback": false,
+      "stock_rt_k_enabled": true,
+      "stock_rt_k_fallback": false
+    }
   },
   "data_health": {
     "enabled": true,

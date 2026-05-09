@@ -16,7 +16,7 @@ from typing import Any, Callable
 import requests
 
 from quote_eastmoney import secid_for
-from utils import get_requests_verify
+from utils import get_requests_proxies, get_requests_verify
 
 _log = logging.getLogger("eastmoney_sse")
 
@@ -140,13 +140,17 @@ def sse_burst_read(
     t_end = time.monotonic() + max(1.0, float(burst_sec))
     r: requests.Response | None = None
     try:
-        r = requests.get(
-            url,
+        kw: dict[str, Any] = dict(
+            url=url,
             stream=True,
             timeout=(10, max(20.0, float(read_timeout_sec))),
             headers=headers,
             verify=get_requests_verify(),
         )
+        px = get_requests_proxies()
+        if px:
+            kw["proxies"] = px
+        r = requests.get(**kw)
         r.raise_for_status()
         for line in r.iter_lines(decode_unicode=True):
             if stop.is_set() or time.monotonic() >= t_end:

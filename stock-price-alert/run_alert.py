@@ -190,6 +190,7 @@ from macro_risk import (
     get_market_mood_three_tier,
     macro_score_multiplier,
 )
+from strategy_buy_filter_resolve import resolve_effective_strategy_buy_filter
 from email_notify import (
     send_buy_signal_email,
     send_email_alert,
@@ -204,6 +205,7 @@ from quote_eastmoney import (
     DEFAULT_UT,
     configure_kline_performance,
     configure_kline_store_from_cfg,
+    configure_quote_live_from_cfg,
     fetch_price,
     fetch_quote_metrics,
     fetch_quote_metrics_bulk,
@@ -579,6 +581,10 @@ DEFAULT_OPS_AUTOMATION = {
     "incremental_nb_after_close": False,
     "incremental_nb_days": 30,
     "incremental_nb_min_samples": 12,
+    # 周五收盘后任务内：买入过滤拦截复盘 → 邮件+企微（走 notifications.remote_channel）
+    "friday_buy_filter_digest_enabled": True,
+    "buy_filter_digest_forward_days": 5,
+    "buy_filter_digest_max_events": 200,
 }
 DEFAULT_MONITORING = {
     # true：忽略 daily_picks.json 优质股扩容，仅轮询 config watchlist（+ 运行时 hold 补票）
@@ -612,6 +618,34 @@ DEFAULT_STRATEGY_BUY_FILTER = {
     "use_intraday_position_filter": False,
     "min_intraday_position": 0.3,
     "max_intraday_position": 0.85,
+}
+DEFAULT_SECTOR_BUY_CROSS_CHECK = {
+    "enabled": False,
+    # vote：有效维度≥min_evaluated_dims 时，通过票数≥min_pass_votes 则放行；
+    # weighted：按 weights 加权得分≥pass_weighted_threshold 则放行。
+    "mode": "vote",
+    "min_evaluated_dims": 2,
+    "min_pass_votes": 2,
+    "pass_weighted_threshold": 0.5,
+    "weights": {
+        "sector_rs_vs_index": 1.0,
+        "sector_above_ma20": 1.0,
+        "stock_vs_sector_rs": 1.0,
+    },
+    # 板块 5 日收益可略弱于大盘（小数，如 -0.003 表示可低 0.3%）
+    "sector_rs_vs_index_margin": -0.003,
+    # 收盘允许略低于 MA20（比例容忍，如 0.002）
+    "ma20_tolerance": 0.002,
+    # 个股 5 日可弱于板块的最大幅度（小数）
+    "stock_vs_sector_max_lag": 0.02,
+    # 无板块代码时不做本项过滤（放行）
+    "require_sector_bk": True,
+}
+DEFAULT_ADAPTIVE_BY_MOOD = {
+    "enabled": False,
+    "strong_bull": {},
+    "range": {},
+    "weak_bear": {},
 }
 DEFAULT_POSITION_SUGGESTION = {
     "enabled": True,
@@ -667,6 +701,24 @@ DEFAULT_PERFORMANCE = {
     "kline_cache_ttl_sec": 900,
     "sector_kline_cache_ttl_sec": 3600,
     "index_kline_cache_ttl_sec": 60,
+    # 为 True 时拉取当日 1 分钟 K 摘要写入 pack["minute_kline"]（增加请求量，默认关）
+    "fetch_minute_kline_today": False,
+    "minute_kline_max_bars": 256,
+    # 分钟 K 进程内缓存秒数（越大越少重复请求；0=不缓存，仅调试）
+    "minute_kline_cache_ttl_sec": 120.0,
+    # 每轮最多拉几只的分钟 K；0=不限制（监控池大时请求多）
+    "minute_kline_max_per_round": 0,
+    # True：仅在上午盘 9:30–11:30 拉分钟 K（下午一般不消费则省请求）
+    "minute_kline_am_session_only": True,
+    # 为 True 时本轮轮询各阶段毫秒耗时写入控制台 + JSONL event=poll_round_timing；
+    # 另打印一行「单票拉取耗时」按墙钟 ms 排序（含并行线程内整包耗时）。
+    "log_poll_segment_ms": False,
+    # 后台线程维护分钟 K 摘要，主轮询只读缓存（见 async_minute_kline.py）
+    "async_minute_kline": {
+        "enabled": False,
+        "refresh_sec": 300,
+        "max_bars": 240,
+    },
     "enable_parallel_fetch": True,
     "fetch_max_workers": 4,
     "fetch_max_concurrency": 4,
@@ -758,6 +810,14 @@ def _merge_trend_slippage_alert(raw: dict[str, Any] | None) -> dict[str, Any]:
     return base
 
 
+def _market_state_log_label_three_tier(tier: str) -> str:
+    return {"strong_bull": "牛市", "range": "震荡", "weak_bear": "熊市"}.get(tier, tier)
+
+
+def _market_state_log_label_regime(regime: str) -> str:
+    return {"bull": "牛市", "bear": "熊市"}.get(regime, regime)
+
+
 def _compute_round_dynamic_min_pillars_weak(cfg: dict[str, Any]) -> tuple[int | None, str]:
     """按大盘情绪得到本轮动态 min_pillars_weak；未开启时返回 (None, '')。"""
     tc = cfg.get("trend_slippage_alert") or {}
@@ -775,14 +835,14 @@ def _compute_round_dynamic_min_pillars_weak(cfg: dict[str, Any]) -> tuple[int | 
             v = int(da.get("weak_bear_min_pillars", da.get("bear_min_pillars", 2)))
         else:
             v = int(da.get("range_min_pillars", 3))
-        tag = f"tier={tier}"
+        tag = _market_state_log_label_three_tier(tier)
     else:
         regime = get_market_regime(ma_period=ma_p, dynamic_cfg=da)
         if regime == "bull":
             v = int(da.get("bull_min_pillars", 3))
         else:
             v = int(da.get("bear_min_pillars", 2))
-        tag = f"regime={regime}"
+        tag = _market_state_log_label_regime(regime)
     v = max(1, min(4, v))
     msg = (
         f"[市场状态] {tag}（上证 MA{ma_p}），"
@@ -857,8 +917,12 @@ def _fill_position_suggestion_metrics(pack: dict[str, Any], now_price: float) ->
 
 
 def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) -> str | None:
-    """买入信号实时过滤：量比、大盘 weak_bear、可选日内位置。返回原因文案；未拦截返回 None。"""
-    sbf = cfg.get("strategy_buy_filter") or {}
+    """买入信号实时过滤：量比、大盘 weak_bear、可选日内位置、可选板块交叉。返回原因文案；未拦截返回 None。"""
+    from sector_cross_check import sector_buy_cross_block_reason
+
+    sbf = cfg.get("_runtime_effective_strategy_buy_filter")
+    if not isinstance(sbf, dict):
+        sbf = cfg.get("strategy_buy_filter") or {}
     if not bool(sbf.get("enabled", True)):
         return None
     reasons: list[str] = []
@@ -892,6 +956,12 @@ def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) ->
                         reasons.append(
                             f"日内位置{ipv:.2f}（需≤{mx:g}，避免追日内高点）"
                         )
+    scc = sbf.get("sector_buy_cross_check")
+    scc_r = sector_buy_cross_block_reason(
+        pack, scc if isinstance(scc, dict) else None
+    )
+    if scc_r:
+        reasons.append(scc_r)
     return "；".join(reasons) if reasons else None
 
 
@@ -1097,6 +1167,11 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     cfg.setdefault("scan_meta", {})
     perf = dict(DEFAULT_PERFORMANCE)
     perf.update(cfg.get("performance") or {})
+    _am0 = dict(DEFAULT_PERFORMANCE.get("async_minute_kline") or {})
+    _am_in = perf.get("async_minute_kline")
+    if isinstance(_am_in, dict):
+        _am0.update(_am_in)
+    perf["async_minute_kline"] = _am0
     cfg["performance"] = perf
     if not isinstance(cfg.get("kline_store"), dict):
         cfg["kline_store"] = {}
@@ -1229,6 +1304,35 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
         cfg["strategy_buy_filter"] = {}
     sbf_m = dict(DEFAULT_STRATEGY_BUY_FILTER)
     sbf_m.update(cfg["strategy_buy_filter"])
+    _scc = dict(DEFAULT_SECTOR_BUY_CROSS_CHECK)
+    _scc_in = sbf_m.get("sector_buy_cross_check")
+    _w0 = dict(DEFAULT_SECTOR_BUY_CROSS_CHECK.get("weights") or {})
+    if isinstance(_scc_in, dict):
+        for _k, _v in _scc_in.items():
+            if _k == "weights":
+                continue
+            _scc[_k] = _v
+        _w_in = _scc_in.get("weights")
+        if isinstance(_w_in, dict):
+            for _wk, _wv in _w_in.items():
+                try:
+                    _w0[str(_wk)] = float(_wv)
+                except (TypeError, ValueError):
+                    pass
+    _scc["weights"] = _w0
+    sbf_m["sector_buy_cross_check"] = _scc
+    _ab_m = dict(DEFAULT_ADAPTIVE_BY_MOOD)
+    _ab_in = sbf_m.get("adaptive_by_mood")
+    if isinstance(_ab_in, dict):
+        if "enabled" in _ab_in:
+            _ab_m["enabled"] = bool(_ab_in["enabled"])
+        for _tier in ("strong_bull", "range", "weak_bear"):
+            _t_in = _ab_in.get(_tier)
+            if isinstance(_t_in, dict):
+                _cur = dict(_ab_m.get(_tier) or {})
+                _cur.update(_t_in)
+                _ab_m[_tier] = _cur
+    sbf_m["adaptive_by_mood"] = _ab_m
     cfg["strategy_buy_filter"] = sbf_m
 
     from config_validate import validate_merged_config_or_exit
@@ -2222,6 +2326,41 @@ def _run_auto_daily_select(args: Any) -> int:
             if valid_code(c):
                 get_stock_name(c)
 
+    ks_post = cfg.get("kline_store") or {}
+    if (
+        isinstance(ks_post, dict)
+        and bool(ks_post.get("enabled"))
+        and not bool(getattr(args, "no_sync_after_select", False))
+    ):
+        _emit_cli_subcmd_line(
+            "[主流程] 选股完成，自动同步日 K 到本地 SQLite（含新 daily_picks）…",
+            event="cli_post_daily_select_sync_klines_start",
+        )
+        try:
+            from sync_daily_klines import run_sync_daily_klines
+
+            sr = run_sync_daily_klines(cfg, config_path=args.config)
+            if sr != 0:
+                _emit_cli_subcmd_line(
+                    "[警告] 选股后日 K 同步返回非 0，监控仍继续（个股 K 可能走网络）",
+                    event="cli_post_daily_select_sync_klines_bad_rc",
+                )
+            else:
+                _emit_cli_subcmd_line(
+                    "[主流程] 选股后日 K 同步已完成",
+                    event="cli_post_daily_select_sync_klines_done",
+                )
+        except Exception as e:
+            _emit_cli_subcmd_line(
+                f"[警告] 选股后日 K 同步异常（已忽略，监控仍继续）: {e}",
+                event="cli_post_daily_select_sync_klines_exc",
+            )
+    elif isinstance(ks_post, dict) and bool(ks_post.get("enabled")):
+        _emit_cli_subcmd_line(
+            "[主流程] 已跳过选股后日 K 同步（--no-sync-after-select）；请单独执行 sync_daily_klines",
+            event="cli_post_daily_select_sync_klines_skipped",
+        )
+
     return 0
 
 
@@ -2397,6 +2536,9 @@ def _fetch_watch_item_pack(
     print_lock: threading.Lock,
     hub: Any,
     prefetched_quotes: dict[tuple[str, str], dict[str, Any]] | None = None,
+    bk_cache_stats: dict[str, int] | None = None,
+    minute_budget_box: list[int] | None = None,
+    minute_budget_lock: threading.Lock | None = None,
 ) -> dict[str, Any]:
     """拉取单标的行情+K 线+板块 K；供线程池调用。返回 kind ok|invalid|fail。"""
     with fetch_sem:
@@ -2568,6 +2710,14 @@ def _fetch_watch_item_pack(
                         )
                         if skl2:
                             round_bk_kline[bk_key] = skl2
+                        if bk_cache_stats is not None:
+                            bk_cache_stats["bk_kline_fetch"] = (
+                                int(bk_cache_stats.get("bk_kline_fetch", 0)) + 1
+                            )
+                    elif bk_cache_stats is not None:
+                        bk_cache_stats["bk_kline_hit"] = (
+                            int(bk_cache_stats.get("bk_kline_hit", 0)) + 1
+                        )
                 if skl2:
                     sector_closes_list = list(skl2.get("closes") or [])
                     sector_kline_pure = {
@@ -2576,6 +2726,59 @@ def _fetch_watch_item_pack(
         sort_score = float(score_row["sort_score"]) if score_row else -1e18
         # 控制台分区「我的持仓」：仅 hold_shares>0（真实持股），不依据 tags / force_include
         _hold_for_section = int(rule.get("hold_shares") or 0)
+        minute_kline_snap: dict[str, Any] | None = None
+        perf_loc = cfg.get("performance") or {}
+        async_am = (
+            perf_loc.get("async_minute_kline")
+            if isinstance(perf_loc, dict)
+            else None
+        )
+        use_async_minute = (
+            not no_quote
+            and isinstance(async_am, dict)
+            and bool(async_am.get("enabled", False))
+        )
+        if use_async_minute:
+            from async_minute_kline import get_async_minute_kline_for_code
+
+            minute_kline_snap = get_async_minute_kline_for_code(code)
+        want_minute = (
+            not use_async_minute
+            and not no_quote
+            and isinstance(perf_loc, dict)
+            and bool(perf_loc.get("fetch_minute_kline_today", False))
+        )
+        if want_minute and bool(perf_loc.get("minute_kline_am_session_only", False)):
+            _nt = datetime.now().time()
+            if not (TRADING_START_AM <= _nt <= TRADING_END_AM):
+                want_minute = False
+        if want_minute:
+            allow_minute = True
+            if minute_budget_box is not None and minute_budget_lock is not None:
+                with minute_budget_lock:
+                    if minute_budget_box[0] <= 0:
+                        allow_minute = False
+                    else:
+                        minute_budget_box[0] -= 1
+            if allow_minute:
+                try:
+                    from quote_eastmoney import get_stock_minute_kline_summary_today
+
+                    mx_bar = max(
+                        32, int(perf_loc.get("minute_kline_max_bars", 256) or 256)
+                    )
+                    ttl_m = float(
+                        perf_loc.get("minute_kline_cache_ttl_sec", 120.0) or 0.0
+                    )
+                    minute_kline_snap = get_stock_minute_kline_summary_today(
+                        code,
+                        market,
+                        ut=str(ut),
+                        lmt=mx_bar,
+                        cache_ttl_sec=ttl_m,
+                    )
+                except Exception:
+                    minute_kline_snap = None
         pack = {
             "rule": rule,
             "q": q,
@@ -2592,6 +2795,7 @@ def _fetch_watch_item_pack(
             "sector_bk": sector_bk_res,
             "sector_kline": sector_kline_pure,
             "sector_closes": sector_closes_list,
+            "minute_kline": minute_kline_snap,
         }
         return {"kind": "ok", "idx": watch_idx, "pack": pack}
 
@@ -2909,6 +3113,48 @@ def _maybe_self_health_preopen(
     state["__self_health_preopen_done__"] = today
 
 
+def _maybe_friday_buy_filter_digest_notify(
+    *,
+    cfg: dict[str, Any],
+    state: dict[str, Any],
+    oa: dict[str, Any],
+    now: datetime,
+) -> None:
+    """周五收盘后：汇总 watch_strategy_buy_filtered 后续收益，经 send_email_alert 双通道投递。"""
+    if not bool(oa.get("friday_buy_filter_digest_enabled", True)):
+        return
+    if now.weekday() != 4:
+        return
+    week_tag = f"{now.isocalendar().year}-W{now.isocalendar().week:02d}"
+    if state.get("__ops_buy_filter_digest_week__") == week_tag:
+        return
+    from buy_filter_digest import build_friday_buy_filter_digest
+    from email_notify import send_email_alert
+
+    fd = max(1, int(oa.get("buy_filter_digest_forward_days", 5) or 5))
+    mx = max(1, int(oa.get("buy_filter_digest_max_events", 200) or 200))
+    ut_raw = (cfg.get("sources") or {}).get("eastmoney_ut")
+    ut = str(ut_raw).strip() if ut_raw else None
+    ok = False
+    try:
+        subject, body = build_friday_buy_filter_digest(
+            cfg, ROOT, forward_days=fd, max_events=mx, ut=ut
+        )
+        ok = bool(send_email_alert(subject, body, app_cfg=cfg))
+    except Exception as exc:
+        _emit_main_line(
+            f"[自动化] 周五买入过滤复盘失败: {exc}",
+            event="ops_friday_buy_filter_digest_err",
+            level=logging.WARNING,
+        )
+    else:
+        _emit_main_line(
+            f"[自动化] 周五买入过滤复盘已投递（send_ok={ok}）",
+            event="ops_friday_buy_filter_digest_done",
+        )
+    state["__ops_buy_filter_digest_week__"] = week_tag
+
+
 def _run_local_script(argv: list[str], *, event: str) -> bool:
     try:
         cp = subprocess.run(
@@ -2973,7 +3219,8 @@ def _maybe_run_ops_automation(
         ph, pm = _parse_hhmm(str(oa.get("preopen_cutoff_hhmm") or "09:20"), 9, 20)
         if now.time() <= dt_time(ph, pm) and state.get("__ops_preopen_done__") != today:
             _emit_main_line(
-                "[自动化] 开盘前任务开始：sync_daily_klines -> compute_kline_indicators -> daily_select",
+                "[自动化] 开盘前任务开始：sync_daily_klines -> compute_kline_indicators -> daily_select"
+                "（选股完成后程序内会再同步一次日 K，含新 picks）",
                 event="ops_auto_preopen_start",
             )
             _run_local_script(
@@ -3043,6 +3290,9 @@ def _maybe_run_ops_automation(
                     ],
                     event="after_close_ml_nb_incremental",
                 )
+            _maybe_friday_buy_filter_digest_notify(
+                cfg=cfg, state=state, oa=oa, now=now
+            )
             state["__ops_after_close_done__"] = today
 
     # 周五额外任务（每周一次）
@@ -3390,8 +3640,10 @@ def process_watch_pack(
         )
         sig = raw_sig
         if raw_sig and "【买入信号】" in raw_sig:
-            sbf = cfg.get("strategy_buy_filter") or {}
-            if bool(sbf.get("enabled", True)):
+            sbf_gate = cfg.get("_runtime_effective_strategy_buy_filter")
+            if not isinstance(sbf_gate, dict):
+                sbf_gate = cfg.get("strategy_buy_filter") or {}
+            if bool(sbf_gate.get("enabled", True)):
                 _fill_position_suggestion_metrics(pack, now_price)
                 br = _strategy_buy_realtime_blocked(pack, cfg)
                 if br:
@@ -4031,6 +4283,11 @@ def main() -> int:
         help="启动时不跑自动盘前选股（沿用已有 daily_picks.json；选股源不可用时可用）",
     )
     ap.add_argument(
+        "--no-sync-after-select",
+        action="store_true",
+        help="与 --daily-select / --daily-auto 合用：写出 daily_picks 后不自动跑 sync_daily_klines（改由单独命令同步）",
+    )
+    ap.add_argument(
         "--backtest-code",
         type=str,
         default=None,
@@ -4055,6 +4312,12 @@ def main() -> int:
         "--skip-startup-check",
         action="store_true",
         help="跳过启动路径/邮件等非 Schema 自检（不推荐）",
+    )
+    ap.add_argument(
+        "--max-poll-rounds",
+        type=int,
+        default=0,
+        help="完成「完整行情轮询」轮数后退出（0=不限制；用于本地测速）",
     )
     args = ap.parse_args()
 
@@ -4204,6 +4467,7 @@ def main() -> int:
     )
     configure_index_kline_cache(float(perf0.get("index_kline_cache_ttl_sec", 60)))
     configure_kline_store_from_cfg(cfg, root=ROOT)
+    configure_quote_live_from_cfg(cfg)
     from utils import configure_ssl_from_sources
 
     configure_ssl_from_sources(cfg.get("sources"))
@@ -4313,6 +4577,7 @@ def main() -> int:
 
     first_round = True
     last_empty_watch_log_mono = 0.0
+    poll_rounds_done = 0
 
     try:
         while True:
@@ -4402,12 +4667,27 @@ def main() -> int:
             attempted = 0
             total_mv = 0.0
             now_ts = time.time()
+            _tseg = time.monotonic()
+            seg_ms: dict[str, float] = {}
             index_mult = fetch_index_mood_mult()
             index_5d_ret = fetch_index_5d_return()
+            seg_ms["index_mood_ms"] = round(
+                (time.monotonic() - _tseg) * 1000.0, 2
+            )
 
             sector_clear_round_cache()
             round_bk_kline: dict[str, dict[str, Any]] = {}
+            bk_cache_stats: dict[str, int] = {"bk_kline_fetch": 0, "bk_kline_hit": 0}
             perf = cfg.get("performance") or {}
+            _am_chk = perf.get("async_minute_kline") if isinstance(perf, dict) else None
+            if isinstance(_am_chk, dict) and bool(_am_chk.get("enabled", False)):
+                from async_minute_kline import (
+                    ensure_async_minute_kline_worker,
+                    update_async_minute_kline_context,
+                )
+
+                ensure_async_minute_kline_worker()
+                update_async_minute_kline_context(watch, cfg)
             parallel_on = bool(perf.get("enable_parallel_fetch", True))
             max_w = max(1, min(16, int(perf.get("fetch_max_workers", 4))))
             sem_n = max(1, min(max_w, int(perf.get("fetch_max_concurrency", 3))))
@@ -4420,6 +4700,7 @@ def main() -> int:
             use_digest = bool(notif0.get("aggregate_interval_alerts"))
             use_trend_digest = bool(notif0.get("aggregate_trend_alerts"))
 
+            _hq0 = time.monotonic()
             if parallel_on and len(watch) > 1:
                 _emit_main_line(
                     f"[性能] 并行拉取 workers={max_w} 并发信号量={sem_n}",
@@ -4451,7 +4732,7 @@ def main() -> int:
                         bulk_items.append((code0, market0))
                 if bulk_items:
                     prefetched_quotes = fetch_quote_metrics_bulk(
-                        bulk_items, timeout=12.0
+                        bulk_items, timeout=12.0, ut=str(ut)
                     )
                     if prefetched_quotes:
                         _emit_main_line(
@@ -4465,8 +4746,20 @@ def main() -> int:
                     level=logging.WARNING,
                 )
 
+            seg_ms["hub_quote_bulk_ms"] = round(
+                (time.monotonic() - _hq0) * 1000.0, 2
+            )
+            _fp0 = time.monotonic()
+
+            m_cap = int(perf.get("minute_kline_max_per_round", 0) or 0)
+            minute_budget_box: list[int] | None = None
+            minute_budget_lock = threading.Lock()
+            if bool(perf.get("fetch_minute_kline_today", False)) and m_cap > 0:
+                minute_budget_box = [m_cap]
+
             def _one(idx: int, rule: dict[str, Any]) -> dict[str, Any]:
-                return _fetch_watch_item_pack(
+                _t_item = time.monotonic()
+                out = _fetch_watch_item_pack(
                     rule=rule,
                     cfg=cfg,
                     ut=str(ut),
@@ -4480,7 +4773,18 @@ def main() -> int:
                     print_lock=print_lock,
                     hub=hub,
                     prefetched_quotes=prefetched_quotes,
+                    bk_cache_stats=bk_cache_stats,
+                    minute_budget_box=minute_budget_box,
+                    minute_budget_lock=minute_budget_lock,
                 )
+                wall_ms = round((time.monotonic() - _t_item) * 1000.0, 2)
+                if isinstance(out, dict):
+                    return {
+                        **out,
+                        "fetch_wall_ms": wall_ms,
+                        "watch_code": str(rule.get("code") or "").strip(),
+                    }
+                return out
 
             raw_pack: list[dict[str, Any]] = []
             if parallel_on and len(watch) > 1:
@@ -4505,6 +4809,34 @@ def main() -> int:
                     attempted += 1
                     items.append(res["pack"])
 
+            seg_ms["fetch_packs_ms"] = round(
+                (time.monotonic() - _fp0) * 1000.0, 2
+            )
+            if bool(perf.get("log_poll_segment_ms", False)) and raw_pack:
+                _pw_rows: list[tuple[str, float, str]] = []
+                for _r in raw_pack:
+                    _wc = str(_r.get("watch_code") or "").strip() or "?"
+                    _wms = float(_r.get("fetch_wall_ms") or 0.0)
+                    _wk = str(_r.get("kind") or "")
+                    _pw_rows.append((_wc, _wms, _wk))
+                _pw_rows.sort(key=lambda x: -x[1])
+                _top_n = 24
+                _head = _pw_rows[:_top_n]
+                _tail = ""
+                if len(_pw_rows) > _top_n:
+                    _tail = f" …(共{len(_pw_rows)}只)"
+                _parts: list[str] = []
+                for _c, _ms, _k in _head:
+                    _lab = f"{_c}={_ms:.0f}ms"
+                    if _k != "ok":
+                        _lab += f"[{_k}]"
+                    _parts.append(_lab)
+                _emit_main_line(
+                    "[单票拉取耗时 慢→快] " + " ".join(_parts) + _tail,
+                    event="poll_per_watch_fetch_ms",
+                )
+            _en0 = time.monotonic()
+
             dyn_mp, dyn_msg = _compute_round_dynamic_min_pillars_weak(cfg)
             if dyn_msg:
                 _emit_main_line(dyn_msg, event="poll_dynamic_regime")
@@ -4527,6 +4859,14 @@ def main() -> int:
                 )
             for _p in items:
                 _p["_strategy_buy_mood_tier"] = round_buy_mood
+
+            tier_for_sbf = (
+                round_buy_mood if round_buy_mood is not None else _mood_tier
+            )
+            cfg["_runtime_mood_tier_for_buy_filter"] = tier_for_sbf
+            cfg["_runtime_effective_strategy_buy_filter"] = (
+                resolve_effective_strategy_buy_filter(cfg)
+            )
 
             full_outage = attempted > 0 and fails >= attempted
             dh_cfg = cfg.get("data_health") or {}
@@ -4614,6 +4954,11 @@ def main() -> int:
                             rec,
                             app_cfg=cfg,
                         )
+
+            seg_ms["pack_enrich_ms"] = round(
+                (time.monotonic() - _en0) * 1000.0, 2
+            )
+            _pw0 = time.monotonic()
 
             tagged_items = [x for x in items if x["tagged"]]
             untagged_items = [x for x in items if not x["tagged"]]
@@ -4728,6 +5073,11 @@ def main() -> int:
                             buy_mail_bucket=_mail_bkt,
                         )
 
+            seg_ms["process_watch_ms"] = round(
+                (time.monotonic() - _pw0) * 1000.0, 2
+            )
+            _nf0 = time.monotonic()
+
             if use_digest and round_notify_digest and not args.no_notify:
                 _flush_round_notification_merge(
                     round_notify_digest,
@@ -4749,6 +5099,10 @@ def main() -> int:
                     severity="warning",
                 )
 
+            seg_ms["notify_flush_ms"] = round(
+                (time.monotonic() - _nf0) * 1000.0, 2
+            )
+
             _round_dur_ms = (time.monotonic() - round_mono) * 1000.0
             try:
                 from app_logging import record_alert_event
@@ -4767,6 +5121,46 @@ def main() -> int:
                 event="poll_round_done_console",
                 duration_ms=_round_dur_ms,
             )
+
+            if bool(perf.get("log_poll_segment_ms", False)):
+                try:
+                    from app_logging import record_alert_event
+
+                    _line = (
+                        f"[分段 ms] idx={seg_ms.get('index_mood_ms')} "
+                        f"hub+q={seg_ms.get('hub_quote_bulk_ms')} "
+                        f"packs={seg_ms.get('fetch_packs_ms')} "
+                        f"enrich={seg_ms.get('pack_enrich_ms')} "
+                        f"proc={seg_ms.get('process_watch_ms')} "
+                        f"notify={seg_ms.get('notify_flush_ms')} "
+                        f"bk_fetch={bk_cache_stats.get('bk_kline_fetch', 0)} "
+                        f"bk_hit={bk_cache_stats.get('bk_kline_hit', 0)}"
+                    )
+                    _emit_main_line(_line, event="poll_segment_console")
+                    record_alert_event(
+                        logging.INFO,
+                        f"poll_round_timing ts={ts_line}",
+                        event="poll_round_timing",
+                        section="main_loop",
+                        duration_ms=_round_dur_ms,
+                        metrics={
+                            "seg_ms": seg_ms,
+                            "bk_kline_fetch": int(
+                                bk_cache_stats.get("bk_kline_fetch", 0)
+                            ),
+                            "bk_kline_hit": int(bk_cache_stats.get("bk_kline_hit", 0)),
+                        },
+                    )
+                except Exception:
+                    pass
+
+            cfg.pop("_runtime_effective_strategy_buy_filter", None)
+            cfg.pop("_runtime_mood_tier_for_buy_filter", None)
+
+            poll_rounds_done += 1
+            if int(getattr(args, "max_poll_rounds", 0) or 0) > 0:
+                if poll_rounds_done >= int(args.max_poll_rounds):
+                    break
 
             state["__force_include__"] = sorted(force_include_codes)
             state["__force_exclude__"] = sorted(force_exclude_codes)
@@ -4823,6 +5217,12 @@ def main() -> int:
     finally:
         if hub is not None:
             hub.stop()
+        try:
+            from async_minute_kline import stop_async_minute_kline_worker
+
+            stop_async_minute_kline_worker()
+        except Exception:
+            pass
 
     return 0
 

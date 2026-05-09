@@ -67,7 +67,36 @@
         "block_weak_bear": { "type": "boolean" },
         "use_intraday_position_filter": { "type": "boolean" },
         "min_intraday_position": { "type": ["integer", "number"] },
-        "max_intraday_position": { "type": ["integer", "number"] }
+        "max_intraday_position": { "type": ["integer", "number"] },
+        "sector_buy_cross_check": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "mode": { "type": "string" },
+            "min_evaluated_dims": { "type": ["integer", "number"] },
+            "min_pass_votes": { "type": ["integer", "number"] },
+            "pass_weighted_threshold": { "type": ["integer", "number"] },
+            "weights": {
+              "type": "object",
+              "additionalProperties": { "type": ["integer", "number"] }
+            },
+            "sector_rs_vs_index_margin": { "type": ["integer", "number"] },
+            "ma20_tolerance": { "type": ["integer", "number"] },
+            "stock_vs_sector_max_lag": { "type": ["integer", "number"] },
+            "require_sector_bk": { "type": "boolean" }
+          }
+        },
+        "adaptive_by_mood": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "strong_bull": { "type": "object", "additionalProperties": true },
+            "range": { "type": "object", "additionalProperties": true },
+            "weak_bear": { "type": "object", "additionalProperties": true }
+          }
+        }
       }
     },
     "scan_pool_max": {
@@ -261,7 +290,25 @@
         "request_min_interval_sec": { "type": ["integer", "number"], "minimum": 0 },
         "hub_poll_start_offset_sec": { "type": ["integer", "number"], "minimum": 0 },
         "hub_warm_timeout_sec": { "type": ["integer", "number"], "minimum": 0 },
-        "hub_warm_min_fraction": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 }
+        "hub_warm_min_fraction": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 },
+        "fetch_minute_kline_today": { "type": "boolean" },
+        "minute_kline_max_bars": { "type": ["integer", "number"], "minimum": 8 },
+        "minute_kline_cache_ttl_sec": { "type": ["integer", "number"], "minimum": 0 },
+        "minute_kline_max_per_round": { "type": ["integer", "number"], "minimum": 0 },
+        "minute_kline_am_session_only": { "type": "boolean" },
+        "log_poll_segment_ms": {
+          "type": "boolean",
+          "description": "为 true 时输出各阶段 ms 与按墙钟排序的单票拉取耗时（慢→快，并行下为整包耗时）"
+        },
+        "async_minute_kline": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "refresh_sec": { "type": ["integer", "number"], "minimum": 30 },
+            "max_bars": { "type": ["integer", "number"], "minimum": 32 }
+          }
+        }
       }
     },
     "notifications": {
@@ -590,7 +637,50 @@
       "properties": {
         "eastmoney_ut": { "type": "string" },
         "ssl_verify": { "type": ["boolean", "string"] },
-        "ssl_ca_bundle": { "type": ["string", "null"] }
+        "ssl_ca_bundle": { "type": ["string", "null"] },
+        "proxy": {
+          "type": "string",
+          "description": "HTTP/HTTPS 共用代理 URL（可含 user:pass）。亦可分设 http_proxy / https_proxy"
+        },
+        "http_proxy": { "type": "string" },
+        "https_proxy": { "type": "string" },
+        "quote": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "eastmoney_only": {
+              "type": "boolean",
+              "description": "为 true 时现价仅请求东财 push2 stock/get（无其他托底源）"
+            },
+            "live_sources": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "现价按序尝试；合法键：eastmoney,akshare,sina,qq,xueqiu,baidu,163。未配置时默认东财优先、其余托底。仅当本列表首项为 sina 时启用新浪 hq.sinajs 批量预取（避免批量抢在东财前面）"
+            }
+          }
+        },
+        "tushare": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Tushare Pro：上证主路径为 index_daily 历史 + rt_idx_k 最新；未开 Tushare 或 sh_index_free_fallback 时用新浪/腾讯/东财。个股仍尝试 daily，失败回退东财",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "token": { "type": "string" },
+            "token_env": { "type": "string" },
+            "sh_index_free_fallback": {
+              "type": "boolean",
+              "description": "为 true 且 index_daily 失败时，上证历史仍从新浪/腾讯/东财拉取（仅持 rt_idx_k、无 index_daily 积分时建议开）"
+            },
+            "stock_rt_k_enabled": {
+              "type": "boolean",
+              "description": "为 true 且 Tushare 已启用时，个股日 K 在历史序列上合并 rt_k（A 股日线 RT）；默认 true"
+            },
+            "stock_rt_k_fallback": {
+              "type": "boolean",
+              "description": "为 true 且 rt_k 失败时，用东财再取最新一根补最后一根；默认 false（保持历史最后一根）"
+            }
+          }
+        }
       }
     },
     "data_health": {

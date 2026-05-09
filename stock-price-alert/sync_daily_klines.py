@@ -69,6 +69,130 @@ def _merge_cfg(raw: dict) -> dict:
     return merge_full_config(raw)
 
 
+def run_sync_daily_klines(
+    cfg: dict,
+    *,
+    config_path: Path,
+    full: bool = False,
+    skip_daily_picks: bool = False,
+    min_rows: int | None = None,
+    max_stale_days: int | None = None,
+    progress_every: int = 0,
+) -> int:
+    """
+    将 watchlist +（可选）daily_picks 优质股及板块日 K 写入 SQLite。
+    供 CLI 与 `run_alert` 选股完成后同进程调用（与命令行脚本行为一致）。
+    """
+    ks = cfg.get("kline_store") or {}
+    if not isinstance(ks, dict) or not bool(ks.get("enabled")):
+        return 0
+    from utils import configure_ssl_from_sources
+
+    configure_ssl_from_sources(cfg.get("sources"))
+    rel = str(ks.get("db_path") or "data/daily_klines.db")
+    dbp = Path(rel)
+    if not dbp.is_absolute():
+        dbp = ROOT / dbp
+    ut = resolve_ut((cfg.get("sources") or {}).get("eastmoney_ut") or "ea")
+
+    min_rows_eff = min_rows
+    if min_rows_eff is None:
+        min_rows_eff = int(ks.get("sync_skip_min_bars") or 50)
+    max_stale = max_stale_days
+    if max_stale is None:
+        max_stale = int(ks.get("sync_max_stale_calendar_days") or 2)
+    fetch_lmt = int(ks.get("sync_fetch_lmt") or 1020)
+    fetch_lmt = max(40, fetch_lmt)
+    target_bars = ks.get("sync_target_bars")
+    try:
+        target_bars_i = int(target_bars) if target_bars is not None else 0
+    except (TypeError, ValueError):
+        target_bars_i = 0
+    if target_bars_i < 0:
+        target_bars_i = 0
+    incremental = not bool(full)
+
+    conn = open_store_connection(dbp)
+    try:
+        init_schema(conn)
+        secids: set[str] = set()
+        for rule in cfg.get("watchlist") or []:
+            if not isinstance(rule, dict) or not rule.get("enabled", True):
+                continue
+            code = str(rule.get("code") or "").strip().zfill(6)
+            market = str(rule.get("market") or "sh").strip().lower()
+            if len(code) != 6 or not code.isdigit():
+                continue
+            secids.add(secid_for(code, market))
+            ind = str(rule.get("industry") or "")
+            bk = resolve_sector_bk(
+                code,
+                market,
+                cfg,
+                root=ROOT,
+                fallback_industry=ind or None,
+            )
+            if bk:
+                secids.add(f"90.{str(bk).strip().upper()}")
+
+        n_watch = len(secids)
+        if not bool(skip_daily_picks):
+            extra = _collect_secids_from_daily_picks(
+                cfg, config_path=config_path, root=ROOT
+            )
+            secids |= extra
+            print(
+                f"[范围] watchlist 展开 {n_watch} 个 secid；"
+                f"合并 daily_picks 后共 {len(secids)} 个（--skip-daily-picks 可关闭）",
+                flush=True,
+            )
+        else:
+            print(
+                f"[范围] 仅 watchlist，共 {len(secids)} 个 secid（已 --skip-daily-picks）",
+                flush=True,
+            )
+
+        ordered = sorted(secids)
+        total = len(ordered)
+        print(
+            f"[开始] 待同步 secid 共 {total} 个（含个股与板块）"
+            f"｜增量={'开' if incremental else '关'} min_rows={min_rows_eff} max_stale_days={max_stale}"
+            f" fetch_lmt={fetch_lmt} target_bars={target_bars_i or '—'}",
+            flush=True,
+        )
+        nbar = 0
+        skipped = 0
+        prog_every_eff = max(0, int(progress_every or 0))
+        for i, secid in enumerate(ordered, start=1):
+            if prog_every_eff and (i == 1 or i == total or i % prog_every_eff == 0):
+                print(f"[进度] {i}/{total} {secid}", flush=True)
+            if incremental and secid_incremental_skip_ok(
+                conn,
+                secid,
+                min_rows=min_rows_eff,
+                max_stale_calendar_days=max_stale,
+                target_bars=target_bars_i if target_bars_i > 0 else None,
+            ):
+                skipped += 1
+                print(f"[跳过-增量] {secid} 本地已够新", flush=True)
+                continue
+            rows = fetch_kline_rows_for_secid(secid, ut, lmt=fetch_lmt)
+            if not rows:
+                print(f"[跳过] 无数据 {secid}", flush=True)
+                continue
+            n = upsert_bars(conn, secid, rows)
+            nbar += n
+            print(f"[OK] {secid} 写入 {n} 条", flush=True)
+        touch_full_sync(conn)
+        print(
+            f"[完成] 写入约 {nbar} 行，增量跳过 {skipped}，库: {dbp.resolve()}",
+            flush=True,
+        )
+    finally:
+        conn.close()
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="同步日 K 到本地 SQLite")
     ap.add_argument("-c", "--config", type=Path, default=ROOT / "config.json")
@@ -110,108 +234,15 @@ def main() -> int:
     if not isinstance(ks, dict) or not bool(ks.get("enabled")):
         print("请在 config 中设置 kline_store.enabled 为 true 并指定 db_path", flush=True)
         return 1
-    rel = str(ks.get("db_path") or "data/daily_klines.db")
-    dbp = Path(rel)
-    if not dbp.is_absolute():
-        dbp = ROOT / dbp
-    ut = resolve_ut((cfg.get("sources") or {}).get("eastmoney_ut") or "ea")
-
-    min_rows = args.min_rows
-    if min_rows is None:
-        min_rows = int(ks.get("sync_skip_min_bars") or 50)
-    max_stale = args.max_stale_days
-    if max_stale is None:
-        max_stale = int(ks.get("sync_max_stale_calendar_days") or 2)
-    fetch_lmt = int(ks.get("sync_fetch_lmt") or 1020)
-    fetch_lmt = max(40, fetch_lmt)
-    target_bars = ks.get("sync_target_bars")
-    try:
-        target_bars_i = int(target_bars) if target_bars is not None else 0
-    except (TypeError, ValueError):
-        target_bars_i = 0
-    if target_bars_i < 0:
-        target_bars_i = 0
-    incremental = not bool(args.full)
-
-    conn = open_store_connection(dbp)
-    try:
-        init_schema(conn)
-        secids: set[str] = set()
-        for rule in cfg.get("watchlist") or []:
-            if not isinstance(rule, dict) or not rule.get("enabled", True):
-                continue
-            code = str(rule.get("code") or "").strip().zfill(6)
-            market = str(rule.get("market") or "sh").strip().lower()
-            if len(code) != 6 or not code.isdigit():
-                continue
-            secids.add(secid_for(code, market))
-            ind = str(rule.get("industry") or "")
-            bk = resolve_sector_bk(
-                code,
-                market,
-                cfg,
-                root=ROOT,
-                fallback_industry=ind or None,
-            )
-            if bk:
-                secids.add(f"90.{str(bk).strip().upper()}")
-
-        n_watch = len(secids)
-        if not bool(args.skip_daily_picks):
-            extra = _collect_secids_from_daily_picks(
-                cfg, config_path=args.config, root=ROOT
-            )
-            secids |= extra
-            print(
-                f"[范围] watchlist 展开 {n_watch} 个 secid；"
-                f"合并 daily_picks 后共 {len(secids)} 个（--skip-daily-picks 可关闭）",
-                flush=True,
-            )
-        else:
-            print(
-                f"[范围] 仅 watchlist，共 {len(secids)} 个 secid（已 --skip-daily-picks）",
-                flush=True,
-            )
-
-        ordered = sorted(secids)
-        total = len(ordered)
-        print(
-            f"[开始] 待同步 secid 共 {total} 个（含个股与板块）"
-            f"｜增量={'开' if incremental else '关'} min_rows={min_rows} max_stale_days={max_stale}"
-            f" fetch_lmt={fetch_lmt} target_bars={target_bars_i or '—'}",
-            flush=True,
-        )
-        nbar = 0
-        skipped = 0
-        prog_every = max(0, int(args.progress_every or 0))
-        for i, secid in enumerate(ordered, start=1):
-            if prog_every and (i == 1 or i == total or i % prog_every == 0):
-                print(f"[进度] {i}/{total} {secid}", flush=True)
-            if incremental and secid_incremental_skip_ok(
-                conn,
-                secid,
-                min_rows=min_rows,
-                max_stale_calendar_days=max_stale,
-                target_bars=target_bars_i if target_bars_i > 0 else None,
-            ):
-                skipped += 1
-                print(f"[跳过-增量] {secid} 本地已够新", flush=True)
-                continue
-            rows = fetch_kline_rows_for_secid(secid, ut, lmt=fetch_lmt)
-            if not rows:
-                print(f"[跳过] 无数据 {secid}", flush=True)
-                continue
-            n = upsert_bars(conn, secid, rows)
-            nbar += n
-            print(f"[OK] {secid} 写入 {n} 条", flush=True)
-        touch_full_sync(conn)
-        print(
-            f"[完成] 写入约 {nbar} 行，增量跳过 {skipped}，库: {dbp.resolve()}",
-            flush=True,
-        )
-    finally:
-        conn.close()
-    return 0
+    return run_sync_daily_klines(
+        cfg,
+        config_path=args.config,
+        full=bool(args.full),
+        skip_daily_picks=bool(args.skip_daily_picks),
+        min_rows=args.min_rows,
+        max_stale_days=args.max_stale_days,
+        progress_every=int(args.progress_every or 0),
+    )
 
 
 if __name__ == "__main__":

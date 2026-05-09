@@ -53,6 +53,9 @@ class _JsonLineFormatter(logging.Formatter):
         dh = getattr(record, "degraded_hosts", None)
         if dh is not None:
             d["degraded_hosts"] = dh
+        m = getattr(record, "metrics", None)
+        if isinstance(m, dict) and m:
+            d["metrics"] = m
         return json.dumps(d, ensure_ascii=False)
 
 
@@ -134,6 +137,7 @@ def record_alert_event(
     sector_data_incomplete: bool | None = None,
     sector_data_warning: str | None = None,
     skipped_by_filter: str | None = None,
+    metrics: dict[str, Any] | None = None,
 ) -> None:
     """控制台外的结构化行：仅在 JSONL 启用时写入。"""
     if not has_jsonl_file_handler():
@@ -164,6 +168,8 @@ def record_alert_event(
         extra["sector_data_warning"] = str(sector_data_warning).strip()
     if skipped_by_filter is not None and str(skipped_by_filter).strip() != "":
         extra["skipped_by_filter"] = str(skipped_by_filter).strip()
+    if isinstance(metrics, dict) and metrics:
+        extra["metrics"] = metrics
     lg.log(level, msg, extra=extra)
 
 

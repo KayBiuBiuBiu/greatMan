@@ -36,6 +36,9 @@ _domain_bucket_next_ok: dict[str, float] = {}
 # 线程本地 Session（keep-alive，减少 TLS 握手）
 _tls = threading.local()
 
+# sources.proxy / http_proxy / https_proxy；由 configure_http_proxies_from_sources 注入
+_http_proxies: dict[str, str] | None = None
+
 
 def configure_safe_get_jitter(min_sec: float | None, max_sec: float | None) -> None:
     """performance.safe_get_jitter_sec_min / max；max<=0 关闭抖动。"""
@@ -101,13 +104,18 @@ def _domain_bucket_wait(url: str) -> None:
 
 def _thread_session() -> requests.Session:
     s = getattr(_tls, "session", None)
+    v = get_requests_verify()
     if s is not None:
+        if s.verify != v:
+            s.verify = v
+        apply_proxies_to_session(s)
         return s
     s = requests.Session()
     h = _headers()
     h.pop("Connection", None)
     s.headers.update(h)
-    s.verify = get_requests_verify()
+    s.verify = v
+    apply_proxies_to_session(s)
     _tls.session = s
     return s
 
@@ -151,16 +159,61 @@ def configure_ssl_verify(value: bool | str | None) -> None:
     _ssl_verify = s in ("1", "true", "yes", "on")
 
 
+def configure_http_proxies_from_sources(sources: dict[str, Any] | None) -> None:
+    """
+    sources.proxy：http(s) 共用一条代理 URL（含认证）。
+    亦可分设 sources.http_proxy / sources.https_proxy；仅配其一则另一协议复用同 URL。
+    """
+    global _http_proxies
+    src = sources or {}
+    single = str(src.get("proxy") or "").strip()
+    http_p = str(src.get("http_proxy") or "").strip()
+    https_p = str(src.get("https_proxy") or "").strip()
+    if single:
+        _http_proxies = {"http": single, "https": single}
+    elif https_p or http_p:
+        hp = https_p or http_p
+        _http_proxies = {
+            "http": http_p or hp,
+            "https": https_p or http_p,
+        }
+    else:
+        _http_proxies = None
+
+
+def get_requests_proxies() -> dict[str, str] | None:
+    """供裸 requests.get/post 使用；与 Session 路径一致。"""
+    return dict(_http_proxies) if _http_proxies else None
+
+
+def apply_proxies_to_session(sess: requests.Session) -> None:
+    """写入 configure_http_proxies_from_sources 解析出的代理；无配置则清空并允许读环境变量。"""
+    if _http_proxies:
+        sess.proxies = dict(_http_proxies)
+        sess.trust_env = False
+    else:
+        sess.proxies = {}
+        sess.trust_env = True
+
+
 def configure_ssl_from_sources(sources: dict[str, Any] | None) -> None:
     """
     sources.ssl_verify：证书校验开关。
     sources.ssl_ca_bundle：可选 PEM 路径；存在且为文件时，requests 使用该 CA 包（常用于内网根证书）。
+    sources.proxy / http_proxy / https_proxy：HTTP(S) 代理（见 configure_http_proxies_from_sources）。
     """
     global _ssl_ca_bundle
     src = sources or {}
     configure_ssl_verify(src.get("ssl_verify"))
     raw = str(src.get("ssl_ca_bundle") or "").strip()
     _ssl_ca_bundle = raw or None
+    configure_http_proxies_from_sources(src)
+    try:
+        from quote_tushare import configure_tushare_from_sources
+
+        configure_tushare_from_sources(src)
+    except ImportError:
+        pass
 
 
 def get_ssl_verify() -> bool:
@@ -225,8 +278,6 @@ def safe_get(
             if _jitter_max_sec > 0:
                 time.sleep(random.uniform(_jitter_min_sec, _jitter_max_sec))
             sess = _thread_session()
-            if sess.verify != v:
-                sess.verify = v
             response = sess.get(
                 url,
                 params=params,
@@ -257,8 +308,12 @@ def requests_get_with_health(url: str, **kwargs: Any) -> requests.Response:
     """直连 requests.get，写入 data_health（无 safe_get 的随机等待与重试）。"""
     from data_health import record_http_result
 
+    kw = dict(kwargs)
+    px = get_requests_proxies()
+    if px is not None and not kw.get("proxies"):
+        kw["proxies"] = px
     try:
-        r = requests.get(url, **kwargs)
+        r = requests.get(url, **kw)
         ok = r.status_code == 200
         record_http_result(str(r.url), ok=ok, status_code=r.status_code)
         return r

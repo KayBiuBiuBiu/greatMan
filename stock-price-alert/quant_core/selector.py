@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import akshare as ak
 import baostock as bs
 import json

@@ -16,6 +16,20 @@ _index_volumes: list[float] | None = None
 _index_kline_ttl_sec: float = 60.0
 _SH_INDEX_UT = "fa5fd1943c7b386f172d6893dbfba10b"
 
+# 上证日 K：未启用 Tushare 时为新浪 / 腾讯 / 东财；启用 Tushare 时为 index_daily + rt_idx_k（可选免费回退）
+_EM_SH_INDEX_KLINE_BASES: tuple[str, ...] = (
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get",
+    "https://push2.eastmoney.com/api/qt/stock/kline/get",
+    "http://82.push2his.eastmoney.com/api/qt/stock/kline/get",
+)
+_SINA_SH_INDEX_KLINE_URL = (
+    "https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/"
+    "CN_MarketData.getKLineData"
+)
+_QQ_SH_INDEX_KLINE_URL = "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"
+_SH_INDEX_MIN_BARS = 20
+_SH_INDEX_LMT = 120
+
 
 def configure_index_kline_cache(ttl_sec: float | None = None) -> None:
     """加载 config 后由 run_alert 调用；上证日 K 在 TTL 内只拉一次，供情绪与 5 日收益共用。"""
@@ -51,28 +65,242 @@ def _parse_bars_from_kline_json(j: dict[str, Any]) -> tuple[list[float], list[fl
     return closes, vols
 
 
-def _fetch_sh_index_closes_network() -> tuple[list[float], list[float]] | None:
+def _em_sh_index_kline_params() -> dict[str, str]:
+    return {
+        "secid": "1.000001",
+        "klt": "101",
+        "fqt": "1",
+        "lmt": str(max(40, int(_SH_INDEX_LMT))),
+        "end": "20500101",
+        "fields1": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13",
+        "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
+        "ut": _SH_INDEX_UT,
+    }
+
+
+def _fetch_sh_index_from_em_bases_ex() -> tuple[list[float], list[float], str | None] | None:
+    """东财上证日 K + 最后一根 trade_date（YYYY-MM-DD）。"""
+    params = _em_sh_index_kline_params()
+    for url in _EM_SH_INDEX_KLINE_BASES:
+        base_clean = url.split("?")[0] if "?" in url else url
+        try:
+            r = safe_get(base_clean, params=params, timeout=10.0)
+            if r is None or r.status_code != 200:
+                continue
+            j = r.json()
+            c, v = _parse_bars_from_kline_json(j)
+            if not c or len(c) < _SH_INDEX_MIN_BARS:
+                continue
+            klines = (j.get("data") or {}).get("klines") or []
+            last_d: str | None = None
+            if klines:
+                parts = str(klines[-1]).split(",")
+                if parts and str(parts[0]).strip():
+                    last_d = _normalize_sh_calendar_date(str(parts[0]).strip())
+            return c, v, last_d
+        except Exception:
+            continue
+    return None
+
+
+def _fetch_sh_index_from_em_bases() -> tuple[list[float], list[float]] | None:
+    """东财 kline/get 兜底：多 base 依次尝试（主域 / push2 / 82 镜像）。"""
+    ex = _fetch_sh_index_from_em_bases_ex()
+    if not ex:
+        return None
+    return ex[0], ex[1]
+
+
+def _normalize_sh_calendar_date(raw: str | None) -> str | None:
+    if raw is None:
+        return None
+    s = str(raw).strip().replace("/", "-")
+    if len(s) >= 10:
+        return s[:10]
+    if len(s) >= 8 and s[:8].isdigit():
+        s8 = s[:8]
+        return f"{s8[:4]}-{s8[4:6]}-{s8[6:8]}"
+    return None
+
+
+def _parse_bars_from_sina_money_kline_ex(
+    rows: Any,
+) -> tuple[list[float], list[float], str | None] | None:
+    """新浪日 K + 最后一根交易日（供与 rt_idx_k 对齐）。"""
+    if not isinstance(rows, list) or len(rows) < _SH_INDEX_MIN_BARS:
+        return None
+    closes: list[float] = []
+    vols: list[float] = []
+    last_d: str | None = None
+    for item in rows:
+        if not isinstance(item, dict):
+            continue
+        try:
+            c = float(item.get("close") or 0.0)
+            v = float(item.get("volume") or 0.0)
+        except (TypeError, ValueError):
+            continue
+        raw_d = item.get("day") or item.get("date")
+        if raw_d:
+            last_d = _normalize_sh_calendar_date(str(raw_d))
+        closes.append(c)
+        vols.append(max(v, 0.0))
+    if len(closes) < _SH_INDEX_MIN_BARS or len(vols) != len(closes):
+        return None
+    return closes, vols, last_d
+
+
+def _parse_bars_from_sina_money_kline(rows: Any) -> tuple[list[float], list[float]] | None:
+    """新浪 CN_MarketData.getKLineData：对象列表 day,open,high,low,close,volume。"""
+    ex = _parse_bars_from_sina_money_kline_ex(rows)
+    if not ex:
+        return None
+    return ex[0], ex[1]
+
+
+def _fetch_sh_index_from_sina_money_ex() -> tuple[list[float], list[float], str | None] | None:
     try:
-        url = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
-        params = {
-            "secid": "1.000001",
-            "klt": "101",
-            "fqt": "1",
-            "lmt": "120",
-            "end": "20500101",
-            "fields1": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13",
-            "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
-            "ut": _SH_INDEX_UT,
-        }
-        r = safe_get(url, params=params, timeout=10.0)
-        if r is None:
+        r = safe_get(
+            _SINA_SH_INDEX_KLINE_URL,
+            params={
+                "symbol": "sh000001",
+                "scale": "240",
+                "ma": "no",
+                "datalen": str(max(40, int(_SH_INDEX_LMT))),
+            },
+            timeout=10.0,
+        )
+        if r is None or r.status_code != 200:
             return None
-        r.raise_for_status()
-        j = r.json()
-        c, v = _parse_bars_from_kline_json(j)
-        return (c, v) if c else None
+        rows = r.json()
+        return _parse_bars_from_sina_money_kline_ex(rows)
     except Exception:
         return None
+
+
+def _fetch_sh_index_from_sina_money() -> tuple[list[float], list[float]] | None:
+    ex = _fetch_sh_index_from_sina_money_ex()
+    if not ex:
+        return None
+    return ex[0], ex[1]
+
+
+def _parse_bars_from_qq_fqkline_ex(
+    j: dict[str, Any],
+) -> tuple[list[float], list[float], str | None] | None:
+    data = j.get("data")
+    if not isinstance(data, dict):
+        return None
+    blk = data.get("sh000001")
+    if not isinstance(blk, dict):
+        blk = data.get("SH000001")
+    if not isinstance(blk, dict):
+        return None
+    raw = blk.get("day") or blk.get("qfqday") or blk.get("hfqday")
+    if not isinstance(raw, list):
+        return None
+    closes: list[float] = []
+    vols: list[float] = []
+    last_d: str | None = None
+    for row in raw:
+        if not isinstance(row, (list, tuple)) or len(row) < 6:
+            continue
+        try:
+            c = float(row[2])
+            v = float(row[5])
+        except (TypeError, ValueError):
+            continue
+        if row:
+            last_d = _normalize_sh_calendar_date(str(row[0]))
+        closes.append(c)
+        vols.append(max(v, 0.0))
+    if len(closes) < _SH_INDEX_MIN_BARS:
+        return None
+    return closes, vols, last_d
+
+
+def _parse_bars_from_qq_fqkline(j: dict[str, Any]) -> tuple[list[float], list[float]] | None:
+    ex = _parse_bars_from_qq_fqkline_ex(j)
+    if not ex:
+        return None
+    return ex[0], ex[1]
+
+
+def _fetch_sh_index_from_qq_ex() -> tuple[list[float], list[float], str | None] | None:
+    try:
+        r = safe_get(
+            _QQ_SH_INDEX_KLINE_URL,
+            params={"param": f"sh000001,day,,,{max(40, int(_SH_INDEX_LMT))},qfq"},
+            timeout=10.0,
+        )
+        if r is None or r.status_code != 200:
+            return None
+        j = r.json()
+        if not isinstance(j, dict):
+            return None
+        return _parse_bars_from_qq_fqkline_ex(j)
+    except Exception:
+        return None
+
+
+def _fetch_sh_index_from_qq() -> tuple[list[float], list[float]] | None:
+    ex = _fetch_sh_index_from_qq_ex()
+    if not ex:
+        return None
+    return ex[0], ex[1]
+
+
+def _fetch_sh_index_hist_with_last_date() -> tuple[list[float], list[float], str | None] | None:
+    """上证历史日 K（≥20 根）+ 最后一根交易日：新浪 → 腾讯 → 东财（仅未走 Tushare 主源或回退时）。"""
+    ex = _fetch_sh_index_from_sina_money_ex()
+    if ex:
+        return ex
+    ex = _fetch_sh_index_from_qq_ex()
+    if ex:
+        return ex
+    return _fetch_sh_index_from_em_bases_ex()
+
+
+def _fetch_sh_index_closes_network() -> tuple[list[float], list[float]] | None:
+    """
+    上证指数日 K：
+    - 已启用 Tushare：index_daily 历史 + rt_idx_k 最新；默认不再请求新浪/腾讯/东财。
+    - 未启用或 sh_index_free_fallback：新浪 → 腾讯 → 东财，并可叠 rt_idx_k（Tushare 开时）。
+    """
+    try:
+        from quote_tushare import (
+            fetch_sh_index_hist_index_daily,
+            merge_sh_index_with_rt_idx_k,
+            sh_index_free_fallback_enabled,
+            tushare_sh_index_primary,
+        )
+
+        if tushare_sh_index_primary():
+            tu_hist = fetch_sh_index_hist_index_daily(limit=_SH_INDEX_LMT)
+            if tu_hist:
+                closes, vols, last_d = tu_hist
+                closes, vols = merge_sh_index_with_rt_idx_k(
+                    list(closes), list(vols), free_last_date=last_d
+                )
+                return closes, vols
+            if not sh_index_free_fallback_enabled():
+                return None
+    except Exception:
+        pass
+
+    hist = _fetch_sh_index_hist_with_last_date()
+    if not hist:
+        return None
+    closes, vols, last_d = hist
+    try:
+        from quote_tushare import merge_sh_index_with_rt_idx_k
+
+        closes, vols = merge_sh_index_with_rt_idx_k(
+            list(closes), list(vols), free_last_date=last_d
+        )
+    except Exception:
+        pass
+    return closes, vols
 
 
 def get_sh_index_closes_cached() -> list[float] | None:

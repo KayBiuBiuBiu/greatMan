@@ -101,6 +101,96 @@ def test_strategy_buy_intraday_position_filter() -> None:
     assert _strategy_buy_realtime_blocked(pack_ok, cfg) is None
 
 
+def test_sector_buy_cross_check_vote_blocks_and_passes() -> None:
+    from run_alert import _strategy_buy_realtime_blocked, merge_full_config
+    from sector_cross_check import evaluate_sector_buy_cross_dims
+
+    base_pack = {
+        "_ps_vol_ratio": 2.0,
+        "_strategy_buy_mood_tier": "range",
+        "sector_bk": "BK0475",
+        "index_5d_ret": 0.02,
+        "sector_closes": [100.0, 100.0, 100.0, 100.0, 100.0, 110.0],
+        "sector_kline": {"ma20": 105.0},
+        "closes": [10.0, 10.0, 10.0, 10.0, 10.0, 11.5],
+    }
+    ev = evaluate_sector_buy_cross_dims(
+        base_pack,
+        {
+            "sector_rs_vs_index_margin": -0.003,
+            "ma20_tolerance": 0.002,
+            "stock_vs_sector_max_lag": 0.02,
+        },
+    )
+    assert ev["evaluated_count"] == 3
+    assert ev["pass_count"] == 3
+
+    ex = Path(__file__).resolve().parent.parent / "config.example.json"
+    cfg = merge_full_config(json.loads(ex.read_text(encoding="utf-8")))
+    cfg["strategy_buy_filter"] = {
+        **(cfg.get("strategy_buy_filter") or {}),
+        "enabled": True,
+        "min_volume_ratio": 0.0,
+        "block_weak_bear": False,
+        "sector_buy_cross_check": {
+            "enabled": True,
+            "mode": "vote",
+            "min_evaluated_dims": 2,
+            "min_pass_votes": 2,
+        },
+    }
+    assert _strategy_buy_realtime_blocked(base_pack, cfg) is None
+
+    weak_sector = {
+        **base_pack,
+        "sector_closes": [100.0, 100.0, 100.0, 100.0, 100.0, 101.0],
+        "sector_kline": {"ma20": 108.0},
+        "closes": [10.0, 10.0, 10.0, 10.0, 10.0, 10.2],
+    }
+    br = _strategy_buy_realtime_blocked(weak_sector, cfg)
+    assert br is not None
+    assert "板块交叉" in br
+
+
+def test_sector_buy_cross_check_weighted_mode() -> None:
+    from run_alert import _strategy_buy_realtime_blocked, merge_full_config
+
+    pack = {
+        "_ps_vol_ratio": 2.0,
+        "_strategy_buy_mood_tier": "range",
+        "sector_bk": "BK0475",
+        "index_5d_ret": 0.02,
+        "sector_closes": [100.0, 100.0, 100.0, 100.0, 100.0, 108.0],
+        "sector_kline": {"ma20": 100.0},
+        "closes": [10.0, 10.0, 10.0, 10.0, 10.0, 10.5],
+    }
+    ex = Path(__file__).resolve().parent.parent / "config.example.json"
+    cfg = merge_full_config(json.loads(ex.read_text(encoding="utf-8")))
+    cfg["strategy_buy_filter"] = {
+        **(cfg.get("strategy_buy_filter") or {}),
+        "enabled": True,
+        "min_volume_ratio": 0.0,
+        "block_weak_bear": False,
+        "sector_buy_cross_check": {
+            "enabled": True,
+            "mode": "weighted",
+            "min_evaluated_dims": 2,
+            "pass_weighted_threshold": 0.67,
+            "weights": {
+                "sector_rs_vs_index": 1.0,
+                "sector_above_ma20": 1.0,
+                "stock_vs_sector_rs": 2.0,
+            },
+        },
+    }
+    # 2/4 weight pass (50%) < 0.67 → block
+    r_block = _strategy_buy_realtime_blocked(pack, cfg)
+    assert r_block is not None
+    cfg["strategy_buy_filter"]["sector_buy_cross_check"]["pass_weighted_threshold"] = 0.5
+    cfg = merge_full_config(cfg)
+    assert _strategy_buy_realtime_blocked(pack, cfg) is None
+
+
 @pytest.mark.parametrize(
     "score,p1,w1,p3,expect_bucket",
     [

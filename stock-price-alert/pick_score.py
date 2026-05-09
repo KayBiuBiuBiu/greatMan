@@ -75,15 +75,20 @@ def dip_logic_text(
     sig: Optional[str],
 ) -> str:
     parts: list[str] = []
-    if ma5 > ma20:
-        parts.append("短期均线位于中期均线上方")
     bp = _box_position(price, low20, high20)
-    if bp <= 0.45:
-        parts.append("股价处于近20日箱体偏下区域")
-    elif bp <= 0.62:
-        parts.append("股价处于箱体中下区域")
+    if ma5 > ma20 and bp > 0.62:
+        parts.append(
+            "短线趋势还行，但股价快到前面高点附近了，这时候回调买进去不一定能涨，胜算一般。"
+        )
     else:
-        parts.append("股价临近箱体上沿附近，回踩低吸确定性一般")
+        if ma5 > ma20:
+            parts.append("短期均线位于中期均线上方")
+        if bp <= 0.45:
+            parts.append("股价处于近20日箱体偏下区域")
+        elif bp <= 0.62:
+            parts.append("股价处于箱体中下区域")
+        else:
+            parts.append("股价临近箱体上沿附近，回踩低吸确定性一般")
     if sig and "低吸" in sig:
         parts.append("与均线箱体低吸模板一致")
     elif sig and "跌破" in sig:

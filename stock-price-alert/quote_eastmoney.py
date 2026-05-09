@@ -13,7 +13,13 @@ from typing import Any
 
 import requests
 
-from utils import get_requests_verify, requests_get_with_health, safe_get, session_get_with_health
+from utils import (
+    apply_proxies_to_session,
+    get_requests_verify,
+    requests_get_with_health,
+    safe_get,
+    session_get_with_health,
+)
 
 DEFAULT_UT = "fa5fd1943c7b386f172d6893dbfba10b"
 QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
@@ -34,6 +40,19 @@ _XUEQIU_SESSION: requests.Session | None = None
 _AK_CACHE_TS: datetime | None = None
 _AK_CACHE_ROWS: list[dict[str, Any]] = []
 _AK_CACHE_TTL = timedelta(seconds=8)
+
+# 现价链路：默认东财优先，其余托底；可由 sources.quote.live_sources / eastmoney_only 覆盖
+_QUOTE_LIVE_ORDER: tuple[str, ...] | None = None
+
+_EM_PUSH2_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Referer": "https://quote.eastmoney.com/",
+    "Origin": "https://quote.eastmoney.com",
+    "Accept": "application/json,text/plain,*/*",
+}
 
 # 日 K 内存缓存（跨轮询复用，减轻东财压力）；TTL 由 configure_kline_performance 注入
 _kline_lock = threading.Lock()
@@ -65,6 +84,33 @@ def configure_kline_performance(
 def clear_kline_ram_cache() -> None:
     with _kline_lock:
         _kline_ram_cache.clear()
+
+
+def configure_quote_live_from_cfg(cfg: dict[str, Any] | None) -> None:
+    """
+    sources.quote：
+      - eastmoney_only: true → 现价仅东财 push2 stock/get。
+      - live_sources: 按序尝试，如 [\"eastmoney\",\"sina\",\"qq\",...]。
+    新浪批量预取：仅当「有效顺序」首项为 sina 时启用（避免批量新浪抢在东财前面）。
+    """
+    global _QUOTE_LIVE_ORDER
+    raw = cfg or {}
+    src = raw.get("sources") if isinstance(raw.get("sources"), dict) else {}
+    q = src.get("quote") if isinstance(src.get("quote"), dict) else {}
+    if bool(q.get("eastmoney_only")):
+        _QUOTE_LIVE_ORDER = ("eastmoney",)
+        return
+    order_raw = q.get("live_sources")
+    if isinstance(order_raw, list) and order_raw:
+        names: list[str] = []
+        for x in order_raw:
+            s = str(x).strip().lower()
+            if s:
+                names.append(s)
+        if names:
+            _QUOTE_LIVE_ORDER = tuple(names)
+            return
+    _QUOTE_LIVE_ORDER = None
 
 
 def configure_kline_store_from_cfg(
@@ -152,6 +198,136 @@ def _fetch_kline_chunk_rows(
     return None
 
 
+def _fetch_kline_chunk_rows_intraday(
+    secid: str,
+    ut_token: str,
+    *,
+    klt: str,
+    lmt: int,
+    end_ymd: str,
+    kline_bases: tuple[str, ...] | None = None,
+    min_rows: int = 1,
+) -> list[tuple[str, float, float, float, float, float]] | None:
+    """东财分钟级 K 线原始行 (时间戳, o,h,l,c,v)；klt=1 为 1 分钟。"""
+    eff_lmt = max(int(min_rows), min(1024, int(lmt)))
+    end_s = str(end_ymd or "").strip()
+    if len(end_s) != 8 or not end_s.isdigit():
+        end_s = "20500101"
+    params = {
+        "secid": secid,
+        "klt": str(klt).strip(),
+        "fqt": "1",
+        "lmt": str(eff_lmt),
+        "end": end_s,
+        "fields1": KLINE_FIELDS1,
+        "fields2": KLINE_FIELDS2,
+        "ut": ut_token,
+    }
+    qs = urllib.parse.urlencode(params)
+    bases = kline_bases or (
+        KLINE_URL,
+        "https://push2his.eastmoney.com/api/qt/stock/kline/get",
+        "http://82.push2his.eastmoney.com/api/qt/stock/kline/get",
+    )
+    for base in bases:
+        base_clean = base.split("?")[0] if "?" in base else base
+        url = f"{base_clean}?{qs}"
+        try:
+            r = safe_get(url, timeout=12.0)
+            if r is None:
+                continue
+            r.raise_for_status()
+            j = r.json()
+            klines = (j.get("data") or {}).get("klines") or []
+            rows: list[tuple[str, float, float, float, float, float]] = []
+            for line in klines:
+                parts = line.split(",")
+                if len(parts) < 6:
+                    continue
+                try:
+                    ds = str(parts[0]).strip()
+                    o = float(parts[1])
+                    c = float(parts[2])
+                    h = float(parts[3])
+                    low = float(parts[4])
+                    v = float(parts[5]) if len(parts) > 5 else 0.0
+                except (ValueError, IndexError):
+                    continue
+                rows.append((ds, o, h, low, c, max(v, 0.0)))
+            if len(rows) >= int(min_rows):
+                return rows
+        except Exception:
+            continue
+    return None
+
+
+_min1_ram_cache: dict[tuple[str, str, str], tuple[float, dict[str, Any]]] = {}
+_min1_ram_lock = threading.Lock()
+
+
+def get_stock_minute_kline_summary_today(
+    code: str,
+    market: str,
+    ut: str | None = None,
+    *,
+    lmt: int = 256,
+    cache_ttl_sec: float = 45.0,
+) -> dict[str, Any] | None:
+    """
+    当日 1 分钟 K 摘要（仅网络；默认短 TTL 内存缓存减轻同轮压力）。
+    返回 dict：bar_count, session_high, session_low, last_close, last_bar_ts, trade_date。
+    非交易日或接口失败返回 None。
+    """
+    c = str(code).strip()
+    m = _normalize_market(c, market)
+    u = resolve_ut(ut or DEFAULT_UT)
+    today = datetime.now().strftime("%Y-%m-%d")
+    cache_key = (c, m, today)
+    ttl = max(0.0, float(cache_ttl_sec))
+    now = time.time()
+    if ttl > 0:
+        with _min1_ram_lock:
+            hit = _min1_ram_cache.get(cache_key)
+            if hit is not None:
+                ts0, snap = hit
+                if now - ts0 < ttl:
+                    return copy.deepcopy(snap)
+    try:
+        secid = secid_for(c, m)
+    except ValueError:
+        return None
+    rows = _fetch_kline_chunk_rows_intraday(
+        secid,
+        u,
+        klt="1",
+        lmt=max(32, int(lmt)),
+        end_ymd="20500101",
+        min_rows=1,
+    )
+    if not rows:
+        return None
+    day_rows = [r for r in rows if str(r[0])[:10] == today]
+    if not day_rows:
+        day_rows = rows
+    highs = [r[2] for r in day_rows]
+    lows = [r[3] for r in day_rows]
+    last = day_rows[-1]
+    out: dict[str, Any] = {
+        "klt": "1",
+        "trade_date": today,
+        "bar_count": len(day_rows),
+        "session_high": max(highs) if highs else None,
+        "session_low": min(lows) if lows else None,
+        "last_close": float(last[4]) if last else None,
+        "last_bar_ts": str(last[0]) if last else None,
+        "open_first": float(day_rows[0][1]) if day_rows else None,
+    }
+    if ttl > 0:
+        with _min1_ram_lock:
+            _min1_ram_cache[cache_key] = (now, copy.deepcopy(out))
+    return out
+
+
 def fetch_kline_rows_for_secid(
     secid: str,
     ut: str | None = None,
@@ -163,6 +339,15 @@ def fetch_kline_rows_for_secid(
     """东财日 K 原始行 (trade_date, o,h,l,c,v) 升序；根数大时自动分页向前补历史。"""
     u = resolve_ut(ut or DEFAULT_UT)
     want = max(40, int(lmt))
+    try:
+        from quote_tushare import merge_stock_rows_with_rt_k, try_fetch_daily_rows_for_secid
+
+        tr = try_fetch_daily_rows_for_secid(secid, lmt=want)
+        if tr is not None:
+            tr = merge_stock_rows_with_rt_k(secid, tr, ut=u)
+            return tr
+    except Exception:
+        pass
     chunk_cap = 1020
     rounds_cap = max_fetch_rounds
     if rounds_cap is None:
@@ -194,7 +379,14 @@ def fetch_kline_rows_for_secid(
     if len(by_date) < 20:
         return None
     tail = sorted(by_date.keys())[-want:]
-    return [by_date[d] for d in tail]
+    rows = [by_date[d] for d in tail]
+    try:
+        from quote_tushare import merge_stock_rows_with_rt_k
+
+        rows = merge_stock_rows_with_rt_k(secid, rows, ut=u)
+    except Exception:
+        pass
+    return rows
 
 def resolve_ut(ut: str | None) -> str:
     """配置里写 ea 时自动使用站内常用长 ut，减少接口异常。"""
@@ -377,6 +569,7 @@ def _xueqiu_session() -> requests.Session:
     )
     sess.headers.update({"User-Agent": ua, "Referer": "https://xueqiu.com/"})
     sess.verify = get_requests_verify()
+    apply_proxies_to_session(sess)
     # 预热 Cookie，避免部分场景直接访问 quote 接口被拒绝
     session_get_with_health(sess, "https://xueqiu.com/", timeout=10)
     _XUEQIU_SESSION = sess
@@ -461,18 +654,104 @@ def _fetch_163(code: str, market: str, timeout: float) -> dict[str, Any]:
     )
 
 
-def _fetch_price_multi_source(code: str, market: str, timeout: float) -> dict[str, Any]:
+def _em_push2_money_scalar(v: Any) -> float:
+    """东财 push2 行情数值多为「元×100」的整数或浮点。"""
+    x = _to_float(v, 0.0)
+    if x <= 0:
+        return 0.0
+    return round(x / 100.0, 4)
+
+
+def _fetch_eastmoney(code: str, market: str, timeout: float, ut: str) -> dict[str, Any]:
+    secid = secid_for(code, market)
+    params = {
+        "secid": secid,
+        "fields": QUOTE_FIELDS,
+        "fltt": "2",
+        "invt": "2",
+        "ut": ut,
+    }
+    r = requests_get_with_health(
+        QUOTE_URL,
+        params=params,
+        headers=_EM_PUSH2_HEADERS,
+        timeout=timeout,
+        verify=get_requests_verify(),
+    )
+    r.raise_for_status()
+    j = r.json()
+    if not isinstance(j, dict):
+        raise ValueError("东财返回非 JSON 对象")
+    d = j.get("data")
+    if not isinstance(d, dict) or not d:
+        raise ValueError("东财无 data")
+    name = str(d.get("f58") or "").strip()
+    price = _em_push2_money_scalar(d.get("f43"))
+    pre_close = _em_push2_money_scalar(d.get("f46"))
+    if price <= 0:
+        raise ValueError("东财 f43 无效")
+    row = _build_price_row(
+        code,
+        market,
+        name=name or str(code).strip(),
+        price=price,
+        pre_close=pre_close,
+        open_=0.0,
+        high=0.0,
+        low=0.0,
+        source="eastmoney",
+    )
+    raw170 = d.get("f170")
+    if raw170 is not None and (row.get("change_pct") is None or pre_close <= 0):
+        x = _to_float(raw170, 0.0)
+        if x != 0:
+            if abs(x) < 30 and x != int(x):
+                row["change_pct"] = round(x, 4)
+            else:
+                row["change_pct"] = round(x / 100.0, 4)
+    return row
+
+
+_DEFAULT_QUOTE_LIVE_ORDER = (
+    "eastmoney",
+    "akshare",
+    "sina",
+    "qq",
+    "xueqiu",
+    "baidu",
+    "163",
+)
+
+_LIVE_FETCHERS: dict[str, Any] = {
+    "akshare": _fetch_akshare,
+    "sina": _fetch_sina,
+    "qq": _fetch_qq,
+    "xueqiu": _fetch_xueqiu,
+    "baidu": _fetch_baidu,
+    "163": _fetch_163,
+}
+
+
+def _effective_quote_live_order() -> tuple[str, ...]:
+    return _QUOTE_LIVE_ORDER or _DEFAULT_QUOTE_LIVE_ORDER
+
+
+def _fetch_price_multi_source(
+    code: str, market: str, timeout: float, *, ut: str = DEFAULT_UT
+) -> dict[str, Any]:
     errs: list[str] = []
-    for source_name, fn in (
-        ("akshare", _fetch_akshare),
-        ("sina", _fetch_sina),
-        ("qq", _fetch_qq),
-        ("xueqiu", _fetch_xueqiu),
-        ("baidu", _fetch_baidu),
-        ("163", _fetch_163),
-    ):
+    order = _effective_quote_live_order()
+    u = resolve_ut(ut)
+    for source_name in order:
         try:
-            row = fn(code, market, timeout)
+            if source_name == "eastmoney":
+                row = _fetch_eastmoney(code, market, timeout, u)
+            else:
+                fn = _LIVE_FETCHERS.get(source_name)
+                if fn is None:
+                    errs.append(f"{source_name}:unknown_source")
+                    continue
+                row = fn(code, market, timeout)
             if row.get("price", 0.0) > 0:
                 return row
             errs.append(f"{source_name}:price<=0")
@@ -490,9 +769,8 @@ def fetch_price(
     jitter: bool = True,
 ) -> dict[str, Any]:
     """返回 price（元）、change_pct（百分比数值，如 -3.96 表示 -3.96%）。"""
-    _ = resolve_ut(ut)  # 兼容旧参数，不再依赖 ut 取实时价
     _ = jitter
-    row = _fetch_price_multi_source(code, market, timeout)
+    row = _fetch_price_multi_source(code, market, timeout, ut=ut)
     return {
         "code": row["code"],
         "name": row["name"],
@@ -510,8 +788,9 @@ def fetch_quote_metrics_bulk(
     items: list[tuple[str, str]],
     *,
     timeout: float = 12.0,
+    ut: str = DEFAULT_UT,
 ) -> dict[tuple[str, str], dict[str, Any]]:
-    """批量现价（优先一次新浪接口）；失败或缺失时降级到单票多源。"""
+    """批量现价：仅当 live 优先级首项为 sina 时走 hq.sinajs 批量，否则直接按单票多源顺序拉取。"""
     out: dict[tuple[str, str], dict[str, Any]] = {}
     dedup: list[tuple[str, str]] = []
     seen: set[tuple[str, str]] = set()
@@ -528,73 +807,79 @@ def fetch_quote_metrics_bulk(
     if not dedup:
         return out
 
-    headers = {"Referer": "https://finance.sina.com.cn/"}
-    chunk_n = 80
-    sym_re = re.compile(r'^var hq_str_(?P<sym>[^=]+)="(?P<payload>.*)";$')
-    sym_map: dict[str, tuple[str, str]] = {
-        _to_sina_code(c, m): (c, m) for c, m in dedup
-    }
     pending: set[tuple[str, str]] = set(dedup)
+    eff_order = _effective_quote_live_order()
+    use_sina_bulk = bool(eff_order) and eff_order[0] == "sina"
+    if use_sina_bulk:
+        headers = {"Referer": "https://finance.sina.com.cn/"}
+        chunk_n = 80
+        sym_re = re.compile(r'^var hq_str_(?P<sym>[^=]+)="(?P<payload>.*)";$')
+        sym_map: dict[str, tuple[str, str]] = {
+            _to_sina_code(c, m): (c, m) for c, m in dedup
+        }
 
-    for i in range(0, len(dedup), chunk_n):
-        part = dedup[i : i + chunk_n]
-        syms = [_to_sina_code(c, m) for c, m in part]
-        try:
-            r = requests_get_with_health(
-                SINA_URL.format(code=",".join(syms)),
-                headers=headers,
-                timeout=timeout,
-                verify=get_requests_verify(),
-            )
-            r.raise_for_status()
-            r.encoding = "gbk"
-            txt = r.text or ""
-        except Exception:
-            continue
-        for ln in txt.splitlines():
-            s = ln.strip()
-            if not s:
+    if use_sina_bulk:
+        for i in range(0, len(dedup), chunk_n):
+            part = dedup[i : i + chunk_n]
+            syms = [_to_sina_code(c, m) for c, m in part]
+            try:
+                r = requests_get_with_health(
+                    SINA_URL.format(code=",".join(syms)),
+                    headers=headers,
+                    timeout=timeout,
+                    verify=get_requests_verify(),
+                )
+                r.raise_for_status()
+                r.encoding = "gbk"
+                txt = r.text or ""
+            except Exception:
                 continue
-            m0 = sym_re.match(s)
-            if not m0:
-                continue
-            sym = m0.group("sym").strip()
-            payload = m0.group("payload")
-            cm = sym_map.get(sym)
-            if cm is None:
-                continue
-            code, market = cm
-            arr = payload.split(",")
-            if len(arr) < 6:
-                continue
-            row = _build_price_row(
-                code,
-                market,
-                name=arr[0],
-                open_=arr[1],
-                pre_close=arr[2],
-                price=arr[3],
-                high=arr[4],
-                low=arr[5],
-                source="sina_batch",
-            )
-            if float(row.get("price") or 0.0) <= 0:
-                continue
-            out[(code, market)] = {
-                "code": row["code"],
-                "name": row["name"],
-                "price": row["price"],
-                "change_pct": row["change_pct"],
-                "amount_yuan": 0.0,
-                "float_mv_yuan": 0.0,
-                "total_mv_yuan": 0.0,
-                "source": row.get("source"),
-            }
-            pending.discard((code, market))
+            for ln in txt.splitlines():
+                s = ln.strip()
+                if not s:
+                    continue
+                m0 = sym_re.match(s)
+                if not m0:
+                    continue
+                sym = m0.group("sym").strip()
+                payload = m0.group("payload")
+                cm = sym_map.get(sym)
+                if cm is None:
+                    continue
+                code, market = cm
+                arr = payload.split(",")
+                if len(arr) < 6:
+                    continue
+                row = _build_price_row(
+                    code,
+                    market,
+                    name=arr[0],
+                    open_=arr[1],
+                    pre_close=arr[2],
+                    price=arr[3],
+                    high=arr[4],
+                    low=arr[5],
+                    source="sina_batch",
+                )
+                if float(row.get("price") or 0.0) <= 0:
+                    continue
+                out[(code, market)] = {
+                    "code": row["code"],
+                    "name": row["name"],
+                    "price": row["price"],
+                    "change_pct": row["change_pct"],
+                    "amount_yuan": 0.0,
+                    "float_mv_yuan": 0.0,
+                    "total_mv_yuan": 0.0,
+                    "source": row.get("source"),
+                }
+                pending.discard((code, market))
 
     for code, market in sorted(pending):
         try:
-            out[(code, market)] = fetch_quote_metrics(code, market, timeout=timeout)
+            out[(code, market)] = fetch_quote_metrics(
+                code, market, timeout=timeout, ut=ut
+            )
         except Exception:
             continue
     return out
@@ -648,6 +933,45 @@ def get_stock_price(
         return None
 
 
+def _ohlcv_lists_from_em_klines_payload(
+    j: dict[str, Any],
+) -> tuple[list[float], list[float], list[float], list[float], list[float], str | None] | None:
+    """东财日 K JSON → OHLCV 升序列表与最后一根日期；不足 20 根返回 None。"""
+    data = j.get("data") or {}
+    klines = data.get("klines") or []
+    if len(klines) < 20:
+        return None
+    opens: list[float] = []
+    highs: list[float] = []
+    lows: list[float] = []
+    vols: list[float] = []
+    closes: list[float] = []
+    last_trade_date: str | None = None
+    for line in klines:
+        parts = line.split(",")
+        if len(parts) < 5:
+            continue
+        try:
+            o = float(parts[1])
+            c = float(parts[2])
+            h = float(parts[3])
+            low = float(parts[4])
+            v = float(parts[5]) if len(parts) > 5 else 0.0
+        except (ValueError, IndexError):
+            continue
+        td = str(parts[0] or "").strip()[:10]
+        if td:
+            last_trade_date = td
+        opens.append(o)
+        highs.append(h)
+        lows.append(low)
+        closes.append(c)
+        vols.append(max(v, 0.0))
+    if len(closes) < 20:
+        return None
+    return opens, highs, lows, closes, vols, last_trade_date
+
+
 def kline_dict_from_ohlcv_series(
     opens: list[float],
     highs: list[float],
@@ -698,38 +1022,10 @@ def kline_dict_from_ohlcv_series(
 
 
 def _parse_klines_payload(j: dict[str, Any], *, return_closes: bool) -> dict[str, Any] | None:
-    data = j.get("data") or {}
-    klines = data.get("klines") or []
-    if len(klines) < 20:
+    got = _ohlcv_lists_from_em_klines_payload(j)
+    if got is None:
         return None
-    opens: list[float] = []
-    highs: list[float] = []
-    lows: list[float] = []
-    vols: list[float] = []
-    closes: list[float] = []
-    last_trade_date: str | None = None
-    for line in klines:
-        parts = line.split(",")
-        if len(parts) < 5:
-            continue
-        try:
-            o = float(parts[1])
-            c = float(parts[2])
-            h = float(parts[3])
-            l = float(parts[4])
-            v = float(parts[5]) if len(parts) > 5 else 0.0
-        except (ValueError, IndexError):
-            continue
-        td = str(parts[0] or "").strip()[:10]
-        if td:
-            last_trade_date = td
-        opens.append(o)
-        highs.append(h)
-        lows.append(l)
-        closes.append(c)
-        vols.append(max(v, 0.0))
-    if len(closes) < 20:
-        return None
+    opens, highs, lows, closes, vols, last_trade_date = got
     return kline_dict_from_ohlcv_series(
         opens,
         highs,
@@ -763,8 +1059,15 @@ def get_kline_data_for_secid(
             if str(secid).strip().startswith("90.")
             else _kline_ttl_stock_sec
         )
+    skip_ram_rtk = False
+    try:
+        from quote_tushare import stock_rt_k_skip_ram_cache_for_secid
+
+        skip_ram_rtk = stock_rt_k_skip_ram_cache_for_secid(str(secid).strip())
+    except Exception:
+        pass
     now = time.time()
-    if ttl > 0:
+    if ttl > 0 and not skip_ram_rtk:
         with _kline_lock:
             hit = _kline_ram_cache.get(cache_key)
             if hit is not None:
@@ -790,8 +1093,32 @@ def get_kline_data_for_secid(
                 ohlcv = read_ohlcv_lists(dbp, str(secid).strip(), lmt=eff_lmt)
                 if ohlcv is not None:
                     last_dt = read_last_trade_date_for_secid(dbp, str(secid).strip())
+                    op, hi, lo, cl, vo = ohlcv
+                    try:
+                        from quote_tushare import merge_stock_ohlcv_lists_with_rt_k
+
+                        op, hi, lo, cl, vo, last_m = (
+                            merge_stock_ohlcv_lists_with_rt_k(
+                                str(secid).strip(),
+                                list(op),
+                                list(hi),
+                                list(lo),
+                                list(cl),
+                                list(vo),
+                                hist_last_date=last_dt,
+                                ut=u,
+                            )
+                        )
+                        if last_m:
+                            last_dt = last_m
+                    except Exception:
+                        pass
                     out = kline_dict_from_ohlcv_series(
-                        *ohlcv,
+                        op,
+                        hi,
+                        lo,
+                        cl,
+                        vo,
                         return_closes=return_closes,
                         kline_data_source="sqlite",
                         kline_last_trade_date=last_dt,
@@ -818,7 +1145,7 @@ def get_kline_data_for_secid(
                                     conn_i.close()
                             except Exception:
                                 pass
-                        if ttl > 0:
+                        if ttl > 0 and not skip_ram_rtk:
                             with _kline_lock:
                                 _kline_ram_cache[cache_key] = (
                                     time.time(),
@@ -827,6 +1154,20 @@ def get_kline_data_for_secid(
                         return out
         except Exception:
             pass
+
+    try:
+        from quote_tushare import try_get_kline_dict_for_secid
+
+        tu = try_get_kline_dict_for_secid(
+            secid, eff_lmt, return_closes=return_closes, ut=u
+        )
+        if tu is not None:
+            if ttl > 0 and not skip_ram_rtk:
+                with _kline_lock:
+                    _kline_ram_cache[cache_key] = (time.time(), copy.deepcopy(tu))
+            return tu
+    except Exception:
+        pass
 
     params = {
         "secid": secid,
@@ -853,9 +1194,39 @@ def get_kline_data_for_secid(
                 continue
             r.raise_for_status()
             j = r.json()
-            out = _parse_klines_payload(j, return_closes=return_closes)
+            got = _ohlcv_lists_from_em_klines_payload(j)
+            if got is None:
+                continue
+            o, h, low, c, v, last_d = got
+            try:
+                from quote_tushare import merge_stock_ohlcv_lists_with_rt_k
+
+                o, h, low, c, v, last_eff = merge_stock_ohlcv_lists_with_rt_k(
+                    str(secid).strip(),
+                    o,
+                    h,
+                    low,
+                    c,
+                    v,
+                    hist_last_date=last_d,
+                    ut=u,
+                )
+                if last_eff:
+                    last_d = last_eff
+            except Exception:
+                pass
+            out = kline_dict_from_ohlcv_series(
+                o,
+                h,
+                low,
+                c,
+                v,
+                return_closes=return_closes,
+                kline_data_source="network",
+                kline_last_trade_date=last_d,
+            )
             if out is not None:
-                if ttl > 0:
+                if ttl > 0 and not skip_ram_rtk:
                     with _kline_lock:
                         _kline_ram_cache[cache_key] = (time.time(), copy.deepcopy(out))
                 return out

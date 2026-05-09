@@ -78,3 +78,82 @@ def test_sector_rs_bucket_underperform():
     idx = [100.0] * 25
     sec = [100.0] * 24 + [97.0]
     assert mr.sector_rs_bucket(sec, idx, ret_days=20, out_pct=0.005, under_pct=-0.005) == "underperform"
+
+
+def test_parse_bars_from_sina_money_kline():
+    rows = [
+        {"day": "2026-01-01", "open": "1", "high": "2", "low": "0.5", "close": "1.5", "volume": "100"},
+    ] * 25
+    c, v = mr._parse_bars_from_sina_money_kline(rows)
+    assert c == [1.5] * 25
+    assert v == [100.0] * 25
+
+
+def test_parse_bars_from_qq_fqkline():
+    j = {
+        "code": 0,
+        "data": {
+            "sh000001": {
+                "day": [
+                    ["2026-01-01", "1", "1.5", "2", "0.5", "1000"],
+                ]
+                * 25
+            }
+        },
+    }
+    c, v = mr._parse_bars_from_qq_fqkline(j)
+    assert c == [1.5] * 25
+    assert v == [1000.0] * 25
+
+
+def test_fetch_sh_index_closes_network_prefers_sina_then_skips_qq_em(monkeypatch):
+    calls: list[str] = []
+
+    def sina_ex_ok():
+        calls.append("sina_ex")
+        rows = [
+            {"day": "x", "close": "10", "volume": "1"},
+        ] * 25
+        return mr._parse_bars_from_sina_money_kline_ex(rows)
+
+    def qq_ex_unused():
+        raise AssertionError("qq_ex should not run")
+
+    def em_ex_unused():
+        raise AssertionError("em_ex should not run")
+
+    monkeypatch.setattr(mr, "_fetch_sh_index_from_sina_money_ex", sina_ex_ok)
+    monkeypatch.setattr(mr, "_fetch_sh_index_from_qq_ex", qq_ex_unused)
+    monkeypatch.setattr(mr, "_fetch_sh_index_from_em_bases_ex", em_ex_unused)
+    out = mr._fetch_sh_index_closes_network()
+    assert out is not None
+    assert calls == ["sina_ex"]
+
+
+def test_fetch_sh_index_closes_network_qq_before_em(monkeypatch):
+    calls: list[str] = []
+
+    def sina_ex_fail():
+        calls.append("sina_ex")
+        return None
+
+    def qq_ex_ok():
+        calls.append("qq_ex")
+        j = {
+            "data": {
+                "sh000001": {
+                    "day": [["2026-01-01", "1", "10", "2", "0.5", "1"]] * 25,
+                }
+            }
+        }
+        return mr._parse_bars_from_qq_fqkline_ex(j)
+
+    def em_ex_unused():
+        raise AssertionError("em_ex should not run")
+
+    monkeypatch.setattr(mr, "_fetch_sh_index_from_sina_money_ex", sina_ex_fail)
+    monkeypatch.setattr(mr, "_fetch_sh_index_from_qq_ex", qq_ex_ok)
+    monkeypatch.setattr(mr, "_fetch_sh_index_from_em_bases_ex", em_ex_unused)
+    out = mr._fetch_sh_index_closes_network()
+    assert out is not None
+    assert calls == ["sina_ex", "qq_ex"]

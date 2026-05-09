@@ -12,7 +12,7 @@ from typing import Any, Iterator
 import requests
 
 from quote_eastmoney import normalize_bk_code, resolve_ut, secid_for
-from utils import get_requests_verify
+from utils import get_requests_proxies, get_requests_verify
 
 # 行业 clist 分页 / pz 修正后递增，用于使旧缓存自动失效并重拉全表
 INDUSTRY_LIST_DISK_REV = 3
@@ -62,13 +62,17 @@ def _em_get_json(url: str, params: dict[str, Any], *, timeout: float = 15.0) -> 
     if es > 0:
         time.sleep(es)
     try:
-        r = requests.get(
-            url,
+        kw: dict[str, Any] = dict(
+            url=url,
             params=params,
             headers=_EM_HEADERS,
             timeout=timeout,
             verify=get_requests_verify(),
         )
+        px = get_requests_proxies()
+        if px:
+            kw["proxies"] = px
+        r = requests.get(**kw)
         eff_url = str(getattr(r, "url", None) or url)
         if r.status_code != 200:
             record_http_result(eff_url, ok=False, status_code=r.status_code)
