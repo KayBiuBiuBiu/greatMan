@@ -57,7 +57,10 @@ def update_async_minute_kline_context(
             continue
         seen.add(c)
         deduped.append((c, m))
-    ut_raw = (cfg.get("sources") or {}).get("eastmoney_ut")
+    src_am = cfg.get("sources") or {}
+    ut_raw = (
+        src_am.get("quote_ut") if isinstance(src_am, dict) else None
+    ) or (src_am.get("eastmoney_ut") if isinstance(src_am, dict) else None)
     ut_s = str(ut_raw).strip() if ut_raw else None
     with _lock:
         _targets = deduped

@@ -8,12 +8,83 @@
     "watchlist_only": false,
     "skip_startup_daily_select": false
   },
+  "afternoon_refresh": {
+    "enabled": false,
+    "trigger_time": "11:35",
+    "max_picks": 20,
+    "poll_during_lunch": true,
+    "min_chg_pct": 2.0,
+    "max_chg_pct": 5.0,
+    "min_vol_ratio": 1.5,
+    "max_intraday_position": 0.7,
+    "use_akshare_volume": true,
+    "pm_use_afternoon_quality_pool": false
+  },
   "quant_selector": {
-    "score_min_quality": 7.0,
+    "score_min_quality": 6.5,
     "score_min_watch": 5.5,
     "profit_1y_min": 0.0,
     "win_1y_min": 50.0,
-    "profit_3y_floor": -8.0
+    "profit_3y_floor": -8.0,
+    "picks_history_snapshot": {
+      "enabled": false,
+      "dir": "data/picks_history"
+    },
+    "select_candidate_filters": {
+      "enabled": false,
+      "range_lookback_days": 20,
+      "range_position_max": 0.7,
+      "strategy_sell_score_max": 70,
+      "skip_if_has_position_tag": true
+    },
+    "sw_l1_pool": {
+      "enabled": false,
+      "picks_per_industry": 1,
+      "max_stocks": 28,
+      "min_score": null,
+      "strength_tiers_enabled": false,
+      "strength_lookback_days": 5,
+      "use_relative_to_index": true,
+      "strength_benchmark_ts_code": "000001.SH",
+      "strength_fetch_sleep_sec": 0.06,
+      "top_third_picks": 2,
+      "mid_third_picks": 1,
+      "bottom_third_max_picks": 1,
+      "bottom_tier_min_score": null,
+      "bottom_tier_min_score_delta": 0.5,
+      "unmapped_strength_tier": "bottom"
+    },
+    "cluster_pool": {
+      "enabled": false,
+      "after_sw_l1": true,
+      "n_clusters": 12,
+      "picks_per_cluster": 1,
+      "max_stocks": 28,
+      "min_score": null,
+      "random_state": null,
+      "features": [
+        "volatility_20d",
+        "momentum_20d",
+        "momentum_5d",
+        "volume_ratio_5_20",
+        "range_pct_20d"
+      ]
+    },
+    "use_tushare_for_daily": true,
+    "tushare_rt_k_enabled": true,
+    "use_stock_basic_cache_universe": true,
+    "per_stock_sleep_sec": 0,
+    "daily_select_max_workers": 6,
+    "use_sqlite_cache": true,
+    "max_stale_calendar_days": 2,
+    "afternoon_repeat_boost": {
+      "enabled": false,
+      "lookback_calendar_days": 15,
+      "points_per_distinct_day": 0.08,
+      "max_bonus": 0.35,
+      "state_path": "data/afternoon_repeat_hits.json",
+      "retain_calendar_days": 45
+    }
   },
   "strategy_signal": {
     "min_score_by_strategy": {
@@ -78,8 +149,13 @@
       }
     }
   },
-  "scan_pool_max": 4000,
+  "scan_pool_max": 0,
   "daily_pick_count": 6,
+  "dip_display_filter": {
+    "enabled": true,
+    "max_change_pct": 5.0,
+    "max_intraday_position": 0.85
+  },
   "capital": {
     "total": 200000,
     "max_total_position_ratio": 0.5,
@@ -279,6 +355,37 @@
     "external_flow_north_max_lag_days": 120,
     "external_flow_warn_stale_north": false
   },
+  "ml_forward4": {
+    "enabled": false,
+    "model_path": "data/ml_forward4_nb.json",
+    "min_bars_infer": 80,
+    "select_gate_enabled": false,
+    "select_min_up_prob_quality": null,
+    "select_min_up_prob_watch": null,
+    "select_strict_no_prob": false,
+    "select_adaptive_by_mood": {
+      "enabled": false,
+      "strong_bull": {
+        "select_min_up_prob_quality": 0.38,
+        "select_min_up_prob_watch": 0.32
+      },
+      "range": {},
+      "weak_bear": {
+        "select_min_up_prob_quality": 0.52,
+        "select_min_up_prob_watch": 0.44
+      }
+    },
+    "sector_strength": {
+      "enabled": false,
+      "lookback_days": 5,
+      "outperform_threshold": 0.012,
+      "quality_adjust": -0.02,
+      "watch_adjust": -0.02,
+      "index_benchmark_ts_code": "000001.SH",
+      "clamp_min": 0.1,
+      "clamp_max": 0.9
+    }
+  },
   "ops_automation": {
     "enabled": true,
     "preopen_enabled": true,
@@ -302,7 +409,54 @@
     "incremental_nb_min_samples": 12,
     "friday_buy_filter_digest_enabled": true,
     "buy_filter_digest_forward_days": 5,
-    "buy_filter_digest_max_events": 200
+    "buy_filter_digest_max_events": 200,
+    "ml_forward4_train_weekly": true,
+    "ml_forward4_train_min_samples": 2000,
+    "ml_forward4_train_max_secids": 0,
+    "ml_forward4_train_min_bars": 120,
+    "daily_summary_email_enabled": false,
+    "self_improve_from_summary_enabled": false,
+    "self_improve_lookback_days": 5,
+    "self_improve_blend_weight": 0.25,
+    "auto_tune_selector_filters": {
+      "enabled": false,
+      "run_on": "weekly_friday",
+      "min_snapshot_files": 20,
+      "min_best_filtered_samples": 20,
+      "max_range_delta": 0.1,
+      "max_sell_score_delta": 15,
+      "skip_write_if_exceeds_delta": true,
+      "apply": true,
+      "notify": false,
+      "keep_config_backups": 5,
+      "log_history_comparison": true,
+      "notify_history_comparison": false,
+      "rollback_guard_enabled": false,
+      "rollback_eval_delay_calendar_days": 3,
+      "rollback_min_eval_samples": 12,
+      "rollback_mean_ret_drop": 0.004,
+      "rollback_notify": true,
+      "rollback_notify_on_accept": false
+    },
+    "watchlist_auto_replenish": {
+      "enabled": false,
+      "min_watchlist_count": 50,
+      "target_count": 50,
+      "max_add_per_run": 15,
+      "min_quality_score": 6.5,
+      "min_watch_score": 6.0,
+      "note": "自动补充(优质/观察)",
+      "notify": false
+    },
+    "watchlist_liquidity_prune": {
+      "enabled": false,
+      "lookback_days": 20,
+      "min_avg_amount_wan": 5000,
+      "consecutive_days_below": 5,
+      "state_path": "data/liquidity_prune_state.json",
+      "log_path": "data/watchlist_liquidity_prune.log",
+      "notify": false
+    }
   },
   "email_command_bot": {
     "enabled": false,
@@ -320,8 +474,8 @@
   "realtime_hub": {
     "enabled": true,
     "poll_interval_sec": 5,
-    "ws_enabled": true,
-    "ws_transport": "eastmoney_sse",
+    "ws_enabled": false,
+    "ws_transport": "",
     "ws_url": "",
     "ws_reconnect_sec": 5,
     "ws_ping_interval_sec": 30,
@@ -332,12 +486,8 @@
     "em_sse_read_timeout_sec": 60
   },
   "sector_em": {
-    "api_hosts": [
-      "https://push2.eastmoney.com",
-      "http://82.push2.eastmoney.com",
-      "http://77.push2.eastmoney.com"
-    ],
-    "industry_clist_fs": ["m:90+t:2", "m:90+t:3"],
+    "api_hosts": [],
+    "industry_clist_fs": [],
     "cache_filename": "sector_index_cache.json",
     "industry_map_ttl_sec": 3600
   },
@@ -357,20 +507,32 @@
     "last_scan_pool_count": 0
   },
   "macro_risk": {
-    "index_mood_mult_override": 0
+    "index_mood_mult_override": 0,
+    "index_list": ["000001.SH", "000300.SH", "399006.SZ"]
   },
   "sources": {
-    "eastmoney_ut": "ea",
+    "quote_ut": "fa5fd1943c7b386f172d6893dbfba10b",
     "ssl_verify": false,
     "ssl_ca_bundle": null,
     "proxy": "",
+    "quote": {
+      "live_sources": ["sina", "qq", "xueqiu"]
+    },
     "tushare": {
       "enabled": false,
       "token": "",
       "token_env": "TUSHARE_TOKEN",
+      "pro_dataapi_base": "https://api.tushare.pro/dataapi",
+      "pro_dataapi_fallbacks": [],
+      "dataapi_connect_retries": 5,
+      "dataapi_retry_base_delay_sec": 0.45,
+      "daily_max_per_minute": 500,
       "sh_index_free_fallback": false,
       "stock_rt_k_enabled": true,
-      "stock_rt_k_fallback": false
+      "stock_rt_k_fallback": false,
+      "sw_enabled": true,
+      "stock_basic_cache_path": "data/stock_basic_cache.json",
+      "stock_to_sw_path": "data/stock_to_sw.json"
     }
   },
   "data_health": {

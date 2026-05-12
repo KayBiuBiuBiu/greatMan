@@ -3,7 +3,7 @@
 
 与 `run_alert` 在存在 `daily_picks.json` 时的监控池对齐，避免「优质股不在 watchlist」导致日 K 仍走网络。
 
-根数与深度由 `kline_store.sync_fetch_lmt`（单次目标根数，东财会分页向前补）与 `sync_target_bars`
+根数与深度由 `kline_store.sync_fetch_lmt`（单次目标根数）与 `sync_target_bars`
 （本地不足该根数时不做增量跳过）控制，便于 `backtest_alerts` 计算 T+5 与 hit。
 
 用法:
@@ -37,6 +37,15 @@ from kline_store import (
 from sector_em import resolve_sector_bk
 
 
+def _sw_sector_secid(bk: str | None) -> str | None:
+    if not bk:
+        return None
+    s = str(bk).strip().upper()
+    if len(s) >= 9 and s.endswith(".SI") and s[:-3].isdigit():
+        return s
+    return None
+
+
 def _collect_secids_from_daily_picks(
     cfg: dict,
     *,
@@ -58,8 +67,9 @@ def _collect_secids_from_daily_picks(
             root=root,
             fallback_industry=None,
         )
-        if bk:
-            out.add(f"90.{str(bk).strip().upper()}")
+        sw = _sw_sector_secid(bk)
+        if sw:
+            out.add(sw)
     return out
 
 
@@ -93,7 +103,12 @@ def run_sync_daily_klines(
     dbp = Path(rel)
     if not dbp.is_absolute():
         dbp = ROOT / dbp
-    ut = resolve_ut((cfg.get("sources") or {}).get("eastmoney_ut") or "ea")
+    src = cfg.get("sources") or {}
+    ut = resolve_ut(
+        (src.get("quote_ut") or src.get("eastmoney_ut") or "ea")
+        if isinstance(src, dict)
+        else "ea"
+    )
 
     min_rows_eff = min_rows
     if min_rows_eff is None:
@@ -132,8 +147,9 @@ def run_sync_daily_klines(
                 root=ROOT,
                 fallback_industry=ind or None,
             )
-            if bk:
-                secids.add(f"90.{str(bk).strip().upper()}")
+            sw = _sw_sector_secid(bk)
+            if sw:
+                secids.add(sw)
 
         n_watch = len(secids)
         if not bool(skip_daily_picks):

@@ -1,4 +1,4 @@
-"""A 股行情聚合：实时价多源回退 + 东方财富日 K（均线 / 箱体策略用）。"""
+"""A 股行情：新浪 / 腾讯 / 雪球等多源现价；日 K 由 Tushare（quote_tushare）与本地 SQLite 提供。"""
 
 from __future__ import annotations
 
@@ -6,7 +6,6 @@ import copy
 import re
 import threading
 import time
-import urllib.parse
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -17,18 +16,10 @@ from utils import (
     apply_proxies_to_session,
     get_requests_verify,
     requests_get_with_health,
-    safe_get,
     session_get_with_health,
 )
 
 DEFAULT_UT = "fa5fd1943c7b386f172d6893dbfba10b"
-QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
-KLINE_URL = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
-
-QUOTE_FIELDS = "f43,f57,f58,f170,f46"
-QUOTE_METRIC_FIELDS = "f43,f57,f58,f170,f48,f117,f116"
-KLINE_FIELDS1 = "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13"
-KLINE_FIELDS2 = "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61"
 SINA_URL = "https://hq.sinajs.cn/list={code}"
 QQ_URL = "https://qt.gtimg.cn/q={code}"
 XUEQIU_URL = "https://stock.xueqiu.com/v5/stock/quote.json?symbol={code}"
@@ -41,20 +32,10 @@ _AK_CACHE_TS: datetime | None = None
 _AK_CACHE_ROWS: list[dict[str, Any]] = []
 _AK_CACHE_TTL = timedelta(seconds=8)
 
-# 现价链路：默认东财优先，其余托底；可由 sources.quote.live_sources / eastmoney_only 覆盖
+# 现价：sources.quote.live_sources，不含 eastmoney
 _QUOTE_LIVE_ORDER: tuple[str, ...] | None = None
 
-_EM_PUSH2_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Referer": "https://quote.eastmoney.com/",
-    "Origin": "https://quote.eastmoney.com",
-    "Accept": "application/json,text/plain,*/*",
-}
-
-# 日 K 内存缓存（跨轮询复用，减轻东财压力）；TTL 由 configure_kline_performance 注入
+# 日 K 内存缓存；TTL 由 configure_kline_performance 注入
 _kline_lock = threading.Lock()
 _kline_ram_cache: dict[tuple[str, str, int, bool], tuple[float, dict[str, Any]]] = {}
 _kline_ttl_stock_sec: float = 900.0
@@ -88,24 +69,19 @@ def clear_kline_ram_cache() -> None:
 
 def configure_quote_live_from_cfg(cfg: dict[str, Any] | None) -> None:
     """
-    sources.quote：
-      - eastmoney_only: true → 现价仅东财 push2 stock/get。
-      - live_sources: 按序尝试，如 [\"eastmoney\",\"sina\",\"qq\",...]。
-    新浪批量预取：仅当「有效顺序」首项为 sina 时启用（避免批量新浪抢在东财前面）。
+    sources.quote.live_sources：按序尝试 sina / qq / xueqiu / akshare 等；忽略 eastmoney。
+    新浪批量预取：仅当有效顺序首项为 sina 时启用。
     """
     global _QUOTE_LIVE_ORDER
     raw = cfg or {}
     src = raw.get("sources") if isinstance(raw.get("sources"), dict) else {}
     q = src.get("quote") if isinstance(src.get("quote"), dict) else {}
-    if bool(q.get("eastmoney_only")):
-        _QUOTE_LIVE_ORDER = ("eastmoney",)
-        return
     order_raw = q.get("live_sources")
     if isinstance(order_raw, list) and order_raw:
         names: list[str] = []
         for x in order_raw:
             s = str(x).strip().lower()
-            if s:
+            if s and s != "eastmoney":
                 names.append(s)
         if names:
             _QUOTE_LIVE_ORDER = tuple(names)
@@ -118,7 +94,7 @@ def configure_kline_store_from_cfg(
     *,
     root: Path | None = None,
 ) -> None:
-    """启用后：在「同步新鲜度」窗口内优先从 SQLite 读日 K，减少东财 his 请求。"""
+    """启用后：在「同步新鲜度」窗口内优先从 SQLite 读日 K。"""
     global _kline_local_store
     raw_cfg = dict(cfg or {})
     k = raw_cfg.get("kline_store")
@@ -137,130 +113,6 @@ def configure_kline_store_from_cfg(
     }
 
 
-def _fetch_kline_chunk_rows(
-    secid: str,
-    ut_token: str,
-    *,
-    lmt: int,
-    end_ymd: str,
-    kline_bases: tuple[str, ...] | None = None,
-) -> list[tuple[str, float, float, float, float, float]] | None:
-    """单次请求：东财日 K 原始行 (trade_date, o,h,l,c,v) 升序。"""
-    eff_lmt = max(40, int(lmt))
-    end_s = str(end_ymd or "").strip()
-    if len(end_s) != 8 or not end_s.isdigit():
-        end_s = "20500101"
-    params = {
-        "secid": secid,
-        "klt": "101",
-        "fqt": "1",
-        "lmt": str(eff_lmt),
-        "end": end_s,
-        "fields1": KLINE_FIELDS1,
-        "fields2": KLINE_FIELDS2,
-        "ut": ut_token,
-    }
-    qs = urllib.parse.urlencode(params)
-    bases = kline_bases or (
-        KLINE_URL,
-        "https://push2his.eastmoney.com/api/qt/stock/kline/get",
-        "http://82.push2his.eastmoney.com/api/qt/stock/kline/get",
-    )
-    for base in bases:
-        base_clean = base.split("?")[0] if "?" in base else base
-        url = f"{base_clean}?{qs}"
-        try:
-            r = safe_get(url, timeout=12.0)
-            if r is None:
-                continue
-            r.raise_for_status()
-            j = r.json()
-            klines = (j.get("data") or {}).get("klines") or []
-            rows: list[tuple[str, float, float, float, float, float]] = []
-            for line in klines:
-                parts = line.split(",")
-                if len(parts) < 6:
-                    continue
-                try:
-                    ds = str(parts[0]).strip()[:10]
-                    o = float(parts[1])
-                    c = float(parts[2])
-                    h = float(parts[3])
-                    low = float(parts[4])
-                    v = float(parts[5]) if len(parts) > 5 else 0.0
-                except (ValueError, IndexError):
-                    continue
-                rows.append((ds, o, h, low, c, max(v, 0.0)))
-            if len(rows) >= 20:
-                return rows
-        except Exception:
-            continue
-    return None
-
-
-def _fetch_kline_chunk_rows_intraday(
-    secid: str,
-    ut_token: str,
-    *,
-    klt: str,
-    lmt: int,
-    end_ymd: str,
-    kline_bases: tuple[str, ...] | None = None,
-    min_rows: int = 1,
-) -> list[tuple[str, float, float, float, float, float]] | None:
-    """东财分钟级 K 线原始行 (时间戳, o,h,l,c,v)；klt=1 为 1 分钟。"""
-    eff_lmt = max(int(min_rows), min(1024, int(lmt)))
-    end_s = str(end_ymd or "").strip()
-    if len(end_s) != 8 or not end_s.isdigit():
-        end_s = "20500101"
-    params = {
-        "secid": secid,
-        "klt": str(klt).strip(),
-        "fqt": "1",
-        "lmt": str(eff_lmt),
-        "end": end_s,
-        "fields1": KLINE_FIELDS1,
-        "fields2": KLINE_FIELDS2,
-        "ut": ut_token,
-    }
-    qs = urllib.parse.urlencode(params)
-    bases = kline_bases or (
-        KLINE_URL,
-        "https://push2his.eastmoney.com/api/qt/stock/kline/get",
-        "http://82.push2his.eastmoney.com/api/qt/stock/kline/get",
-    )
-    for base in bases:
-        base_clean = base.split("?")[0] if "?" in base else base
-        url = f"{base_clean}?{qs}"
-        try:
-            r = safe_get(url, timeout=12.0)
-            if r is None:
-                continue
-            r.raise_for_status()
-            j = r.json()
-            klines = (j.get("data") or {}).get("klines") or []
-            rows: list[tuple[str, float, float, float, float, float]] = []
-            for line in klines:
-                parts = line.split(",")
-                if len(parts) < 6:
-                    continue
-                try:
-                    ds = str(parts[0]).strip()
-                    o = float(parts[1])
-                    c = float(parts[2])
-                    h = float(parts[3])
-                    low = float(parts[4])
-                    v = float(parts[5]) if len(parts) > 5 else 0.0
-                except (ValueError, IndexError):
-                    continue
-                rows.append((ds, o, h, low, c, max(v, 0.0)))
-            if len(rows) >= int(min_rows):
-                return rows
-        except Exception:
-            continue
-    return None
-
-
 _min1_ram_cache: dict[tuple[str, str, str], tuple[float, dict[str, Any]]] = {}
 _min1_ram_lock = threading.Lock()
 
@@ -273,14 +125,10 @@ def get_stock_minute_kline_summary_today(
     lmt: int = 256,
     cache_ttl_sec: float = 45.0,
 ) -> dict[str, Any] | None:
-    """
-    当日 1 分钟 K 摘要（仅网络；默认短 TTL 内存缓存减轻同轮压力）。
-    返回 dict：bar_count, session_high, session_low, last_close, last_bar_ts, trade_date。
-    非交易日或接口失败返回 None。
-    """
+    """当日 1 分钟 K：Tushare stk_mins（需积分权限）；失败返回 None。"""
+    _ = ut
     c = str(code).strip()
     m = _normalize_market(c, market)
-    u = resolve_ut(ut or DEFAULT_UT)
     today = datetime.now().strftime("%Y-%m-%d")
     cache_key = (c, m, today)
     ttl = max(0.0, float(cache_ttl_sec))
@@ -293,36 +141,12 @@ def get_stock_minute_kline_summary_today(
                 if now - ts0 < ttl:
                     return copy.deepcopy(snap)
     try:
-        secid = secid_for(c, m)
-    except ValueError:
-        return None
-    rows = _fetch_kline_chunk_rows_intraday(
-        secid,
-        u,
-        klt="1",
-        lmt=max(32, int(lmt)),
-        end_ymd="20500101",
-        min_rows=1,
-    )
-    if not rows:
-        return None
-    day_rows = [r for r in rows if str(r[0])[:10] == today]
-    if not day_rows:
-        day_rows = rows
-    highs = [r[2] for r in day_rows]
-    lows = [r[3] for r in day_rows]
-    last = day_rows[-1]
-    out: dict[str, Any] = {
-        "klt": "1",
-        "trade_date": today,
-        "bar_count": len(day_rows),
-        "session_high": max(highs) if highs else None,
-        "session_low": min(lows) if lows else None,
-        "last_close": float(last[4]) if last else None,
-        "last_bar_ts": str(last[0]) if last else None,
-        "open_first": float(day_rows[0][1]) if day_rows else None,
-    }
-    if ttl > 0:
+        from quote_tushare import try_stock_minute_kline_summary_from_tushare
+
+        out = try_stock_minute_kline_summary_from_tushare(c, m, lmt=lmt)
+    except Exception:
+        out = None
+    if out and ttl > 0:
         with _min1_ram_lock:
             _min1_ram_cache[cache_key] = (now, copy.deepcopy(out))
     return out
@@ -336,57 +160,14 @@ def fetch_kline_rows_for_secid(
     kline_bases: tuple[str, ...] | None = None,
     max_fetch_rounds: int | None = None,
 ) -> list[tuple[str, float, float, float, float, float]] | None:
-    """东财日 K 原始行 (trade_date, o,h,l,c,v) 升序；根数大时自动分页向前补历史。"""
+    """日 K 原始行：Tushare pro_bar / sw_daily（申万）/ daily + 实时合并。"""
+    _ = kline_bases
+    _ = max_fetch_rounds
+    from quote_tushare import fetch_kline_rows_unified
+
     u = resolve_ut(ut or DEFAULT_UT)
-    want = max(40, int(lmt))
-    try:
-        from quote_tushare import merge_stock_rows_with_rt_k, try_fetch_daily_rows_for_secid
+    return fetch_kline_rows_unified(str(secid).strip(), int(lmt), ut=u)
 
-        tr = try_fetch_daily_rows_for_secid(secid, lmt=want)
-        if tr is not None:
-            tr = merge_stock_rows_with_rt_k(secid, tr, ut=u)
-            return tr
-    except Exception:
-        pass
-    chunk_cap = 1020
-    rounds_cap = max_fetch_rounds
-    if rounds_cap is None:
-        rounds_cap = max(6, min(48, want // chunk_cap + 10))
-    by_date: dict[str, tuple[str, float, float, float, float, float]] = {}
-    end = "20500101"
-    rounds = 0
-    while len(by_date) < want and rounds < int(rounds_cap):
-        need = want - len(by_date)
-        req_lmt = min(chunk_cap, max(need, 40))
-        chunk = _fetch_kline_chunk_rows(
-            secid, u, lmt=req_lmt, end_ymd=end, kline_bases=kline_bases
-        )
-        if not chunk:
-            break
-        before = len(by_date)
-        for row in chunk:
-            by_date[row[0][:10]] = row
-        if len(chunk) < 20:
-            break
-        oldest = str(chunk[0][0]).strip()[:10]
-        try:
-            end = (date.fromisoformat(oldest) - timedelta(days=1)).strftime("%Y%m%d")
-        except ValueError:
-            break
-        if len(by_date) == before:
-            break
-        rounds += 1
-    if len(by_date) < 20:
-        return None
-    tail = sorted(by_date.keys())[-want:]
-    rows = [by_date[d] for d in tail]
-    try:
-        from quote_tushare import merge_stock_rows_with_rt_k
-
-        rows = merge_stock_rows_with_rt_k(secid, rows, ut=u)
-    except Exception:
-        pass
-    return rows
 
 def resolve_ut(ut: str | None) -> str:
     """配置里写 ea 时自动使用站内常用长 ut，减少接口异常。"""
@@ -534,26 +315,18 @@ def _fetch_sina(code: str, market: str, timeout: float) -> dict[str, Any]:
 
 
 def _fetch_qq(code: str, market: str, timeout: float) -> dict[str, Any]:
-    full = _to_qq_code(code, market)
-    r = requests_get_with_health(
-        QQ_URL.format(code=full),
-        timeout=timeout,
-        verify=get_requests_verify(),
-    )
-    r.raise_for_status()
-    r.encoding = "gbk"
-    arr = r.text.split("~")
-    if len(arr) < 35:
-        raise ValueError("腾讯字段不足")
+    from quote_tencent import fetch_quote_row_gtimg
+
+    p = fetch_quote_row_gtimg(code, market, timeout=timeout)
     return _build_price_row(
         code,
         market,
-        name=arr[1],
-        price=arr[3],
-        pre_close=arr[4],
-        open_=arr[5],
-        high=arr[33],
-        low=arr[34],
+        name=p.get("name"),
+        price=p.get("price"),
+        pre_close=p.get("pre_close"),
+        open_=p.get("open"),
+        high=p.get("high"),
+        low=p.get("low"),
         source="qq",
     )
 
@@ -654,70 +427,11 @@ def _fetch_163(code: str, market: str, timeout: float) -> dict[str, Any]:
     )
 
 
-def _em_push2_money_scalar(v: Any) -> float:
-    """东财 push2 行情数值多为「元×100」的整数或浮点。"""
-    x = _to_float(v, 0.0)
-    if x <= 0:
-        return 0.0
-    return round(x / 100.0, 4)
-
-
-def _fetch_eastmoney(code: str, market: str, timeout: float, ut: str) -> dict[str, Any]:
-    secid = secid_for(code, market)
-    params = {
-        "secid": secid,
-        "fields": QUOTE_FIELDS,
-        "fltt": "2",
-        "invt": "2",
-        "ut": ut,
-    }
-    r = requests_get_with_health(
-        QUOTE_URL,
-        params=params,
-        headers=_EM_PUSH2_HEADERS,
-        timeout=timeout,
-        verify=get_requests_verify(),
-    )
-    r.raise_for_status()
-    j = r.json()
-    if not isinstance(j, dict):
-        raise ValueError("东财返回非 JSON 对象")
-    d = j.get("data")
-    if not isinstance(d, dict) or not d:
-        raise ValueError("东财无 data")
-    name = str(d.get("f58") or "").strip()
-    price = _em_push2_money_scalar(d.get("f43"))
-    pre_close = _em_push2_money_scalar(d.get("f46"))
-    if price <= 0:
-        raise ValueError("东财 f43 无效")
-    row = _build_price_row(
-        code,
-        market,
-        name=name or str(code).strip(),
-        price=price,
-        pre_close=pre_close,
-        open_=0.0,
-        high=0.0,
-        low=0.0,
-        source="eastmoney",
-    )
-    raw170 = d.get("f170")
-    if raw170 is not None and (row.get("change_pct") is None or pre_close <= 0):
-        x = _to_float(raw170, 0.0)
-        if x != 0:
-            if abs(x) < 30 and x != int(x):
-                row["change_pct"] = round(x, 4)
-            else:
-                row["change_pct"] = round(x / 100.0, 4)
-    return row
-
-
 _DEFAULT_QUOTE_LIVE_ORDER = (
-    "eastmoney",
-    "akshare",
     "sina",
     "qq",
     "xueqiu",
+    "akshare",
     "baidu",
     "163",
 )
@@ -745,13 +459,13 @@ def _fetch_price_multi_source(
     for source_name in order:
         try:
             if source_name == "eastmoney":
-                row = _fetch_eastmoney(code, market, timeout, u)
-            else:
-                fn = _LIVE_FETCHERS.get(source_name)
-                if fn is None:
-                    errs.append(f"{source_name}:unknown_source")
-                    continue
-                row = fn(code, market, timeout)
+                errs.append("eastmoney:removed")
+                continue
+            fn = _LIVE_FETCHERS.get(source_name)
+            if fn is None:
+                errs.append(f"{source_name}:unknown_source")
+                continue
+            row = fn(code, market, timeout)
             if row.get("price", 0.0) > 0:
                 return row
             errs.append(f"{source_name}:price<=0")
@@ -933,45 +647,6 @@ def get_stock_price(
         return None
 
 
-def _ohlcv_lists_from_em_klines_payload(
-    j: dict[str, Any],
-) -> tuple[list[float], list[float], list[float], list[float], list[float], str | None] | None:
-    """东财日 K JSON → OHLCV 升序列表与最后一根日期；不足 20 根返回 None。"""
-    data = j.get("data") or {}
-    klines = data.get("klines") or []
-    if len(klines) < 20:
-        return None
-    opens: list[float] = []
-    highs: list[float] = []
-    lows: list[float] = []
-    vols: list[float] = []
-    closes: list[float] = []
-    last_trade_date: str | None = None
-    for line in klines:
-        parts = line.split(",")
-        if len(parts) < 5:
-            continue
-        try:
-            o = float(parts[1])
-            c = float(parts[2])
-            h = float(parts[3])
-            low = float(parts[4])
-            v = float(parts[5]) if len(parts) > 5 else 0.0
-        except (ValueError, IndexError):
-            continue
-        td = str(parts[0] or "").strip()[:10]
-        if td:
-            last_trade_date = td
-        opens.append(o)
-        highs.append(h)
-        lows.append(low)
-        closes.append(c)
-        vols.append(max(v, 0.0))
-    if len(closes) < 20:
-        return None
-    return opens, highs, lows, closes, vols, last_trade_date
-
-
 def kline_dict_from_ohlcv_series(
     opens: list[float],
     highs: list[float],
@@ -1021,23 +696,6 @@ def kline_dict_from_ohlcv_series(
     return out
 
 
-def _parse_klines_payload(j: dict[str, Any], *, return_closes: bool) -> dict[str, Any] | None:
-    got = _ohlcv_lists_from_em_klines_payload(j)
-    if got is None:
-        return None
-    opens, highs, lows, closes, vols, last_trade_date = got
-    return kline_dict_from_ohlcv_series(
-        opens,
-        highs,
-        lows,
-        closes,
-        vols,
-        return_closes=return_closes,
-        kline_data_source="network",
-        kline_last_trade_date=last_trade_date,
-    )
-
-
 def get_kline_data_for_secid(
     secid: str,
     ut: str | None = None,
@@ -1047,16 +705,17 @@ def get_kline_data_for_secid(
     kline_bases: tuple[str, ...] | None = None,
     cache_ttl_sec: float | None = None,
 ) -> dict[str, Any] | None:
-    """东财日 K 通用入口：secid 如 1.600711（个股）或 90.BK0474（行业板块指数）。"""
+    """日 K：SQLite（新鲜）→ Tushare（个股 pro_bar / 申万 sw_daily）。"""
     u = resolve_ut(ut or DEFAULT_UT)
     eff_lmt = max(40, int(lmt))
     cache_key = (str(secid), u, eff_lmt, bool(return_closes))
+    sid_u = str(secid).strip().upper()
     if cache_ttl_sec is not None:
         ttl = max(0.0, float(cache_ttl_sec))
     else:
         ttl = (
             _kline_ttl_bk_sec
-            if str(secid).strip().startswith("90.")
+            if sid_u.startswith("90.") or sid_u.endswith(".SI")
             else _kline_ttl_stock_sec
         )
     skip_ram_rtk = False
@@ -1169,69 +828,6 @@ def get_kline_data_for_secid(
     except Exception:
         pass
 
-    params = {
-        "secid": secid,
-        "klt": "101",
-        "fqt": "1",
-        "lmt": str(eff_lmt),
-        "end": "20500101",
-        "fields1": KLINE_FIELDS1,
-        "fields2": KLINE_FIELDS2,
-        "ut": u,
-    }
-    qs = urllib.parse.urlencode(params)
-    bases = kline_bases or (
-        KLINE_URL,
-        "https://push2his.eastmoney.com/api/qt/stock/kline/get",
-        "http://82.push2his.eastmoney.com/api/qt/stock/kline/get",
-    )
-    for base in bases:
-        base_clean = base.split("?")[0] if "?" in base else base
-        url = f"{base_clean}?{qs}"
-        try:
-            r = safe_get(url, timeout=12.0)
-            if r is None:
-                continue
-            r.raise_for_status()
-            j = r.json()
-            got = _ohlcv_lists_from_em_klines_payload(j)
-            if got is None:
-                continue
-            o, h, low, c, v, last_d = got
-            try:
-                from quote_tushare import merge_stock_ohlcv_lists_with_rt_k
-
-                o, h, low, c, v, last_eff = merge_stock_ohlcv_lists_with_rt_k(
-                    str(secid).strip(),
-                    o,
-                    h,
-                    low,
-                    c,
-                    v,
-                    hist_last_date=last_d,
-                    ut=u,
-                )
-                if last_eff:
-                    last_d = last_eff
-            except Exception:
-                pass
-            out = kline_dict_from_ohlcv_series(
-                o,
-                h,
-                low,
-                c,
-                v,
-                return_closes=return_closes,
-                kline_data_source="network",
-                kline_last_trade_date=last_d,
-            )
-            if out is not None:
-                if ttl > 0 and not skip_ram_rtk:
-                    with _kline_lock:
-                        _kline_ram_cache[cache_key] = (time.time(), copy.deepcopy(out))
-                return out
-        except Exception:
-            continue
     return None
 
 
@@ -1253,7 +849,10 @@ def get_stock_kline_data(
 
 
 def normalize_bk_code(raw: str) -> str:
+    """申万行业指数 ts_code（801780.SI）；遗留 BK 仅大写透传（已无东财 K 线）。"""
     s = str(raw).strip().upper()
+    if len(s) >= 9 and s.endswith(".SI") and s[:-3].isdigit():
+        return s
     if s.startswith("BK"):
         return s
     if s.isdigit():
@@ -1269,12 +868,11 @@ def get_bk_kline_data(
     return_closes: bool = True,
     cache_ttl_sec: float | None = None,
 ) -> dict[str, Any] | None:
-    """行业板块指数日 K，secid=90.BKxxxx。"""
-    bk = normalize_bk_code(bk_code)
-    if not bk.startswith("BK") or len(bk) < 4:
-        return None
+    """申万行业指数日 K（801xxx.SI）；东财 90.BK 已废弃。"""
     u = resolve_ut(ut or DEFAULT_UT)
-    secid = f"90.{bk}"
-    return get_kline_data_for_secid(
-        secid, u, lmt=lmt, return_closes=return_closes, cache_ttl_sec=cache_ttl_sec
-    )
+    ts = normalize_bk_code(bk_code)
+    if ts.endswith(".SI"):
+        return get_kline_data_for_secid(
+            ts, u, lmt=lmt, return_closes=return_closes, cache_ttl_sec=cache_ttl_sec
+        )
+    return None

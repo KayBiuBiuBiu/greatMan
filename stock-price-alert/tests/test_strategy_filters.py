@@ -108,7 +108,7 @@ def test_sector_buy_cross_check_vote_blocks_and_passes() -> None:
     base_pack = {
         "_ps_vol_ratio": 2.0,
         "_strategy_buy_mood_tier": "range",
-        "sector_bk": "BK0475",
+        "sector_bk": "801780.SI",
         "index_5d_ret": 0.02,
         "sector_closes": [100.0, 100.0, 100.0, 100.0, 100.0, 110.0],
         "sector_kline": {"ma20": 105.0},
@@ -158,7 +158,7 @@ def test_sector_buy_cross_check_weighted_mode() -> None:
     pack = {
         "_ps_vol_ratio": 2.0,
         "_strategy_buy_mood_tier": "range",
-        "sector_bk": "BK0475",
+        "sector_bk": "801780.SI",
         "index_5d_ret": 0.02,
         "sector_closes": [100.0, 100.0, 100.0, 100.0, 100.0, 108.0],
         "sector_kline": {"ma20": 100.0},

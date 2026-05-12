@@ -1,4 +1,4 @@
-"""阶段三·推送演进：HTTP 轮询 + 可选东财 SSE 推送 / 自定义 WebSocket。"""
+"""阶段三·推送演进：HTTP 轮询 + 可选自定义 WebSocket（东财 SSE 已移除）。"""
 
 from __future__ import annotations
 
@@ -20,11 +20,6 @@ try:
 except ImportError:  # pragma: no cover
     ZoneInfo = None  # type: ignore[misc, assignment]
 
-from eastmoney_sse_quotes import (
-    DEFAULT_FIELDS as EM_SSE_DEFAULT_FIELDS,
-    DEFAULT_SSE_URL as EM_SSE_DEFAULT_URL,
-    start_sse_partition_threads,
-)
 from quote_eastmoney import fetch_quote_metrics
 
 _log = logging.getLogger("realtime_hub")
@@ -78,7 +73,7 @@ def _em_price_from_f43(v: Any) -> float | None:
 class RealtimeQuoteHub:
     """
     后台线程按固定间隔批量拉取 watchlist 行情，写入线程安全缓存；
-    可选：东财 SSE 分区线程（真推送）或自定义 ws_url 的 WebSocketApp。
+    可选：自定义 ws_url 的 WebSocketApp（与 HTTP 轮询并存）。
     """
 
     def __init__(
@@ -325,11 +320,12 @@ class RealtimeQuoteHub:
         self._thread = threading.Thread(target=self._run, name="RealtimeQuoteHub", daemon=True)
         self._thread.start()
 
-        use_sse = self._push_stream_enabled and self._ws_transport in (
-            "eastmoney_sse",
-            "em_sse",
-            "sse",
-        )
+        wt = self._ws_transport
+        if self._push_stream_enabled and wt in ("eastmoney_sse", "em_sse", "sse"):
+            _log.warning(
+                "realtime_hub：ws_transport=%s 已废弃（东财 SSE 不可用），仅 HTTP 轮询",
+                wt,
+            )
         use_ws = (
             self._push_stream_enabled
             and self._ws_url
@@ -337,35 +333,7 @@ class RealtimeQuoteHub:
             and _ws_client_available()
         )
 
-        if use_sse:
-            base = self._em_sse_url or EM_SSE_DEFAULT_URL
-            fields = self._em_sse_fields or EM_SSE_DEFAULT_FIELDS
-
-            def _on(m: dict[str, Any]) -> None:
-                c = str(m.get("code") or "").strip().zfill(6)
-                mk = str(m.get("market") or "sh").strip().lower()
-                if "market" not in m or mk not in ("sh", "sz"):
-                    mk = "sh"
-                self._merge_quote(c, mk, m)
-
-            self._sse_threads = start_sse_partition_threads(
-                get_rules=self._snap_rules,
-                n_slots=self._em_sse_slots,
-                ut=self._ut,
-                base_url=base,
-                fields=fields,
-                stop=self._stop,
-                on_metrics=_on,
-                reconnect_sec=self._ws_reconnect,
-                burst_sec=self._em_sse_burst,
-                read_timeout_sec=self._em_sse_read_to,
-            )
-            _log.info(
-                "realtime hub: eastmoney SSE 已启动 slots=%s burst=%ss",
-                self._em_sse_slots,
-                self._em_sse_burst,
-            )
-        elif use_ws:
+        if use_ws:
             self._ws_thread = threading.Thread(
                 target=self._run_ws_loop, name="RealtimeQuoteHubWS", daemon=True
             )
@@ -599,6 +567,8 @@ def hub_from_cfg(cfg: dict[str, Any], *, ut: str) -> RealtimeQuoteHub | None:
     if bool(rh.get("ws_enabled")):
         if ws_transport not in ("eastmoney_sse", "em_sse", "sse"):
             ws_url = str(rh.get("ws_url") or "").strip()
+        else:
+            ws_url = ""
     return RealtimeQuoteHub(
         poll_interval_sec=float(rh.get("poll_interval_sec", 5) or 5),
         ut=ut,
@@ -618,7 +588,7 @@ def hub_from_cfg(cfg: dict[str, Any], *, ut: str) -> RealtimeQuoteHub | None:
 
 
 def ws_transport_enabled(cfg: dict[str, Any] | None) -> bool:
-    """ws_enabled 时：东财 SSE 模式，或已填 ws_url 且已安装 websocket-client。"""
+    """ws_enabled 时：仅当配置了 ws_url 且已安装 websocket-client。"""
     rh = (cfg or {}).get("realtime_hub") or {}
     if not isinstance(rh, dict):
         return False
@@ -626,7 +596,7 @@ def ws_transport_enabled(cfg: dict[str, Any] | None) -> bool:
         return False
     wt = str(rh.get("ws_transport") or "").strip().lower()
     if wt in ("eastmoney_sse", "em_sse", "sse"):
-        return True
+        return False
     if str(rh.get("ws_url") or "").strip():
         return _ws_client_available()
     return False

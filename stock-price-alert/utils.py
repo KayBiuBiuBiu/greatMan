@@ -239,17 +239,16 @@ SAFE_HEADERS = {
     "Connection": "close",
 }
 
-# 东方财富 JSON 接口常用补充（避免仅文本 Accept 被拒）
-_EM_EXTRA = {
-    "Referer": "https://quote.eastmoney.com/",
-    "Origin": "https://quote.eastmoney.com",
+_JSON_ACCEPT_EXTRA = {
+    "Referer": "https://finance.sina.com.cn/",
+    "Origin": "https://finance.sina.com.cn",
     "Accept": "application/json,text/plain,*/*",
 }
 
 
 def _headers() -> dict[str, str]:
     h = dict(SAFE_HEADERS)
-    h.update(_EM_EXTRA)
+    h.update(_JSON_ACCEPT_EXTRA)
     return h
 
 

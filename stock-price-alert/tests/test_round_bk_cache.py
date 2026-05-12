@@ -18,7 +18,7 @@ def test_concurrent_same_bk_single_fetch() -> None:
 
     def worker() -> None:
         fetch_sector_kline_once_per_round(
-            "BK0475",
+            "801780.SI",
             ut="ea",
             round_bk_kline=round_bk,
             bk_round_lock=lock,

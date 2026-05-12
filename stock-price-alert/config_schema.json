@@ -37,6 +37,46 @@
         "watchlist_only": { "type": "boolean" }
       }
     },
+    "midday_ops": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "午休 11:30–13:00：优质股展示过滤、持仓策略临近价提示、可选流动性预警（不写 daily_picks.json）",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "poll_during_lunch": { "type": "boolean" },
+        "run_refresh_after_hhmm": { "type": "string" },
+        "max_intraday_position": { "type": ["integer", "number"] },
+        "precompute_up_pct": { "type": ["integer", "number"] },
+        "precompute_down_pct": { "type": ["integer", "number"] },
+        "liquidity_warn_equiv_30m_wan": { "type": ["integer", "number"] },
+        "liquidity_use_akshare_spot": { "type": "boolean" }
+      }
+    },
+    "afternoon_refresh": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "午休 11:30–13:00 过 trigger_time 后：从 daily_picks 优质∪观察 ∪ watchlist 与上午行情筛选，写 afternoon_picks.json；13:00+ 分区【下午机会·新增】。量比为近5日全日均量按进度估算同时段的工程近似",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "trigger_time": { "type": "string" },
+        "max_picks": { "type": "integer", "minimum": 1 },
+        "poll_during_lunch": { "type": "boolean" },
+        "min_chg_pct": { "type": ["integer", "number"] },
+        "max_chg_pct": { "type": ["integer", "number"] },
+        "min_vol_ratio": { "type": ["integer", "number"] },
+        "max_intraday_position": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1,
+          "description": "日内位置须严格小于该阈值（现价在当日上午高低区间的相对位置）"
+        },
+        "use_akshare_volume": { "type": "boolean" },
+        "pm_use_afternoon_quality_pool": {
+          "type": "boolean",
+          "description": "true 时 13:00+ 用文件中 quality_display_codes 替换「今日优质股」底集（默认 false）"
+        }
+      }
+    },
     "quant_selector": {
       "type": "object",
       "additionalProperties": true,
@@ -45,7 +85,111 @@
         "score_min_watch": { "type": ["integer", "number"] },
         "profit_1y_min": { "type": ["integer", "number"] },
         "win_1y_min": { "type": ["integer", "number"] },
-        "profit_3y_floor": { "type": ["integer", "number"] }
+        "profit_3y_floor": { "type": ["integer", "number"] },
+        "exclude_star_board": {
+          "type": "boolean",
+          "description": "日选股全市场列表剔除 688/689 科创板"
+        },
+        "use_tushare_for_daily": { "type": "boolean" },
+        "tushare_rt_k_enabled": { "type": "boolean" },
+        "use_stock_basic_cache_universe": {
+          "type": "boolean",
+          "description": "选股全市场代码优先从 data/stock_basic_cache.json（Tushare stock_basic）读取；关闭或缓存无效时回退 AkShare"
+        },
+        "per_stock_sleep_sec": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "description": "每只股处理后的额外停顿（秒），用于非 Tushare 源限频；默认 0"
+        },
+        "daily_select_max_workers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "选股评分+回测并发线程数；Baostock/AkShare 回退路径会自动串行化，Tushare 下可拉高"
+        },
+        "use_sqlite_cache": {
+          "type": "boolean",
+          "description": "Tushare 日 K：优先读 kline_store SQLite（与 sync 写入的前复权口径一致），不足或过时再 pro_bar"
+        },
+        "max_stale_calendar_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "SQLite 命中条件：库中最新 trade_date 距今天历日不超过此值（默认 2，与 sync 增量类似）"
+        },
+        "picks_history_snapshot": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "选股完成后将 daily_picks.json 复制到 picks_history/YYYY-MM-DD.json，供 backtest_picks_performance.py",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "dir": { "type": "string" }
+          }
+        },
+        "select_candidate_filters": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "对优质/观察候选：近 N 日区间位置、策略卖出侧参考分过滤；淘汰写入 reason。watchlist 持仓标签可豁免（监控仍由 run_alert 保留）",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "range_lookback_days": { "type": "integer", "minimum": 5, "maximum": 252 },
+            "range_position_max": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 },
+            "strategy_sell_score_max": { "type": ["integer", "number"], "minimum": 0, "maximum": 100 },
+            "skip_if_has_position_tag": { "type": "boolean" }
+          }
+        },
+        "sw_l1_pool": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "picks_per_industry": { "type": ["integer", "number"], "minimum": 1 },
+            "max_stocks": { "type": ["integer", "number"], "minimum": 1 },
+            "min_score": { "type": ["integer", "number", "null"] },
+            "strength_tiers_enabled": { "type": "boolean" },
+            "strength_lookback_days": { "type": ["integer", "number"], "minimum": 1 },
+            "use_relative_to_index": { "type": "boolean" },
+            "strength_benchmark_ts_code": { "type": "string" },
+            "strength_fetch_sleep_sec": { "type": ["integer", "number"], "minimum": 0 },
+            "top_third_picks": { "type": ["integer", "number"], "minimum": 0 },
+            "mid_third_picks": { "type": ["integer", "number"], "minimum": 0 },
+            "bottom_third_max_picks": { "type": ["integer", "number"], "minimum": 0 },
+            "bottom_tier_min_score": { "type": ["integer", "number", "null"] },
+            "bottom_tier_min_score_delta": { "type": ["integer", "number"] },
+            "unmapped_strength_tier": { "type": "string" }
+          },
+          "description": "申万一级去重；可选 strength_tiers：按行业近 N 日涨跌（相对基准）分三档动态名额，末档需更高分；数据不足时回退均匀 picks_per_industry"
+        },
+        "cluster_pool": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "after_sw_l1": { "type": "boolean" },
+            "n_clusters": { "type": ["integer", "number"], "minimum": 2 },
+            "picks_per_cluster": { "type": ["integer", "number"], "minimum": 1 },
+            "max_stocks": { "type": ["integer", "number"], "minimum": 1 },
+            "min_score": { "type": ["integer", "number", "null"] },
+            "random_state": { "type": ["integer", "number", "null"] },
+            "features": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "description": "对优质股日 K 技术特征做 K-means，每簇按 score 择优；after_sw_l1 控制与申万去重顺序"
+        },
+        "afternoon_repeat_boost": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "下午机会列表按日累计；盘前选股对 get_real_score 加小分（需 config_parent 与 afternoon_refresh 写 hits）",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "lookback_calendar_days": { "type": "integer", "minimum": 1 },
+            "points_per_distinct_day": { "type": ["integer", "number"], "minimum": 0 },
+            "max_bonus": { "type": ["integer", "number"], "minimum": 0 },
+            "state_path": { "type": "string" },
+            "retain_calendar_days": { "type": "integer", "minimum": 7 }
+          }
+        }
       }
     },
     "strategy_signal": {
@@ -101,11 +245,22 @@
     },
     "scan_pool_max": {
       "type": ["integer", "number"],
-      "minimum": 1
+      "minimum": 0,
+      "description": "每日评分+回测抽样上限；0 表示全市场（不截断）"
     },
     "daily_pick_count": {
       "type": ["integer", "number"],
       "minimum": 1
+    },
+    "dip_display_filter": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "控制台「低吸优选」与「其余监控」（未进优选池部分）展示：涨幅/日内位置过高则跳过；不按是否持仓或 tags 豁免（轮询与告警仍覆盖全 watchlist）",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "max_change_pct": { "type": ["integer", "number"] },
+        "max_intraday_position": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 }
+      }
     },
     "capital": {
       "type": "object",
@@ -291,7 +446,11 @@
         "hub_poll_start_offset_sec": { "type": ["integer", "number"], "minimum": 0 },
         "hub_warm_timeout_sec": { "type": ["integer", "number"], "minimum": 0 },
         "hub_warm_min_fraction": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 },
-        "fetch_minute_kline_today": { "type": "boolean" },
+        "fetch_minute_kline_today": {
+          "type": "boolean",
+          "default": false,
+          "description": "为 true 时主轮询内同步拉取当日 1 分钟 K 写入 pack[\"minute_kline\"]；请求量更大，默认 false"
+        },
         "minute_kline_max_bars": { "type": ["integer", "number"], "minimum": 8 },
         "minute_kline_cache_ttl_sec": { "type": ["integer", "number"], "minimum": 0 },
         "minute_kline_max_per_round": { "type": ["integer", "number"], "minimum": 0 },
@@ -401,7 +560,69 @@
         "external_flow_features_enabled": { "type": "boolean" },
         "external_flow_days": { "type": ["integer", "number"], "minimum": 3, "maximum": 60 },
         "external_flow_north_max_lag_days": { "type": ["integer", "number"], "minimum": 30, "maximum": 800 },
-        "external_flow_warn_stale_north": { "type": "boolean" }
+        "external_flow_warn_stale_north": { "type": "boolean" },
+        "reference_line_include_position_hint": {
+          "type": "boolean",
+          "description": "false 时【ML参考】行只展示 NB 概率，不并列仓位结论（避免窄屏断行与【仓位建议】重复）"
+        }
+      }
+    },
+    "ml_forward4": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "5交易日后收涨 NB（close[T+5]>close[T]）；需 ml_train_forward4.py；N 以代码常量为准",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "model_path": { "type": "string" },
+        "min_bars_infer": { "type": ["integer", "number"], "minimum": 40, "maximum": 500 },
+        "select_gate_enabled": { "type": "boolean" },
+        "select_min_up_prob_quality": {
+          "type": ["null", "integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "select_min_up_prob_watch": {
+          "type": ["null", "integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "select_strict_no_prob": { "type": "boolean" },
+        "select_adaptive_by_mood": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "strong_bull": { "type": "object", "additionalProperties": true },
+            "range": { "type": "object", "additionalProperties": true },
+            "weak_bear": { "type": "object", "additionalProperties": true }
+          }
+        },
+        "sector_strength": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "lookback_days": { "type": ["integer", "number"], "minimum": 1, "maximum": 60 },
+            "outperform_threshold": {
+              "type": ["integer", "number"],
+              "minimum": 0,
+              "maximum": 0.5
+            },
+            "quality_adjust": { "type": ["integer", "number"] },
+            "watch_adjust": { "type": ["integer", "number"] },
+            "index_benchmark_ts_code": { "type": "string" },
+            "clamp_min": {
+              "type": ["integer", "number"],
+              "minimum": 0,
+              "maximum": 1
+            },
+            "clamp_max": {
+              "type": ["integer", "number"],
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
       }
     },
     "ml": {
@@ -523,7 +744,126 @@
         "friday_kline_rf_train_enabled": { "type": "boolean" },
         "incremental_nb_after_close": { "type": "boolean" },
         "incremental_nb_days": { "type": ["integer", "number"], "minimum": 7 },
-        "incremental_nb_min_samples": { "type": ["integer", "number"], "minimum": 6 }
+        "incremental_nb_min_samples": { "type": ["integer", "number"], "minimum": 6 },
+        "friday_buy_filter_digest_enabled": { "type": "boolean" },
+        "buy_filter_digest_forward_days": { "type": ["integer", "number"], "minimum": 1 },
+        "buy_filter_digest_max_events": { "type": ["integer", "number"], "minimum": 1 },
+        "ml_forward4_train_weekly": {
+          "type": "boolean",
+          "description": "周五 weekly 内在 ml_train 后运行 ml_train_forward4（需 ml_forward4.enabled）"
+        },
+        "ml_forward4_train_min_samples": { "type": ["integer", "number"], "minimum": 100 },
+        "ml_forward4_train_max_secids": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "description": "0 表示不限制扫描 secid 数"
+        },
+        "ml_forward4_train_min_bars": { "type": ["integer", "number"], "minimum": 40 },
+        "daily_summary_email_enabled": {
+          "type": "boolean",
+          "description": "true：每日总结写入后另发邮件/企微（notifications.remote_channel）"
+        },
+        "self_improve_from_summary_enabled": {
+          "type": "boolean",
+          "description": "true：选股过滤网格叠近窗 anchor 目标，并将 auto_tune_selector_filters 排期视为 daily（需子项 enabled）"
+        },
+        "self_improve_lookback_days": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "description": "短窗：anchor_date 不早于 今天−N 日"
+        },
+        "self_improve_blend_weight": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1,
+          "description": "combined = (1−w)×全样本 mean_ret + w×短窗 mean_ret"
+        },
+        "self_improve_min_recent_samples": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "description": "短窗子样本上过滤后 n 低于此则该格不采用叠合均值（仍保留全样本 mean_ret）"
+        },
+        "auto_tune_selector_filters": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "收盘后自动网格优化 quant_selector.select_candidate_filters（复用 optimize_selector_thresholds）",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "run_on": {
+              "type": "string",
+              "description": "weekly_friday | daily"
+            },
+            "min_snapshot_files": { "type": "integer", "minimum": 1 },
+            "horizon": { "type": "integer", "minimum": 1 },
+            "min_grid_eligible_samples": { "type": "integer", "minimum": 1 },
+            "min_best_filtered_samples": { "type": "integer", "minimum": 1 },
+            "range_min": { "type": ["integer", "number"] },
+            "range_max": { "type": ["integer", "number"] },
+            "range_step": { "type": ["integer", "number"] },
+            "sell_min": { "type": ["integer", "number"] },
+            "sell_max": { "type": ["integer", "number"] },
+            "sell_step": { "type": ["integer", "number"] },
+            "range_only": { "type": "boolean" },
+            "require_range_pos": { "type": "boolean" },
+            "max_range_delta": { "type": ["integer", "number"] },
+            "max_sell_score_delta": { "type": ["integer", "number"] },
+            "skip_write_if_exceeds_delta": { "type": "boolean" },
+            "apply": { "type": "boolean" },
+            "notify": { "type": "boolean" },
+            "history_dir": { "type": ["string", "null"] },
+            "keep_config_backups": { "type": "integer", "minimum": 1 },
+            "include_reject": { "type": "boolean" },
+            "no_quality": { "type": "boolean" },
+            "no_watch": { "type": "boolean" },
+            "range_lookback_days": { "type": ["integer", "number", "null"] },
+            "log_history_comparison": {
+              "type": "boolean",
+              "description": "网格得到最优后与当前阈值在同一 enriched 样本上做回溯对比，写入 data/auto_tune.log"
+            },
+            "notify_history_comparison": {
+              "type": "boolean",
+              "description": "将回溯对比另发邮件（与 notify 独立）"
+            },
+            "rollback_guard_enabled": {
+              "type": "boolean",
+              "description": "写入新阈值后：满 delay 日在锚定子集上若 trial mean_ret 明显低于 baseline 则自动回滚"
+            },
+            "rollback_eval_delay_calendar_days": { "type": "integer", "minimum": 1 },
+            "rollback_min_eval_samples": { "type": "integer", "minimum": 1 },
+            "rollback_mean_ret_drop": { "type": ["integer", "number"], "minimum": 0 },
+            "rollback_notify": { "type": "boolean" },
+            "rollback_notify_on_accept": { "type": "boolean" }
+          }
+        },
+        "watchlist_auto_replenish": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "启用 watchlist 少于阈值时从 daily_picks 优质/观察高分补入",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "min_watchlist_count": { "type": "integer", "minimum": 1 },
+            "target_count": { "type": "integer", "minimum": 1 },
+            "max_add_per_run": { "type": "integer", "minimum": 1 },
+            "min_quality_score": { "type": ["integer", "number"] },
+            "min_watch_score": { "type": ["integer", "number"] },
+            "note": { "type": "string" },
+            "notify": { "type": "boolean" }
+          }
+        },
+        "watchlist_liquidity_prune": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "收盘后：非持仓 watchlist 标的近 N 日成交额均值过低且连续多日则从 config 移除",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "lookback_days": { "type": "integer", "minimum": 1 },
+            "min_avg_amount_wan": { "type": ["integer", "number"], "minimum": 0 },
+            "consecutive_days_below": { "type": "integer", "minimum": 1 },
+            "state_path": { "type": "string" },
+            "log_path": { "type": "string" },
+            "notify": { "type": "boolean" }
+          }
+        }
       }
     },
     "email_command_bot": {
@@ -554,11 +894,11 @@
         "poll_interval_sec": { "type": ["integer", "number"], "minimum": 0.1 },
         "ws_enabled": {
           "type": "boolean",
-          "description": "为 true 且 ws_transport=eastmoney_sse 时启用东财 SSE 推送（与 poll 轮询并存）"
+          "description": "为 true 时需配置 ws_url + ws_transport=websocket（东财 SSE 已移除）"
         },
         "ws_transport": {
           "type": "string",
-          "description": "eastmoney_sse / em_sse / sse 为东财 SSE；留空且配 ws_url+websocket-client 可走自定义 WS"
+          "description": "websocket / ws 配合 ws_url；eastmoney_sse 等旧值将被忽略"
         },
         "ws_url": { "type": "string" },
         "em_sse_url": { "type": "string" },
@@ -572,8 +912,6 @@
       "type": "object",
       "additionalProperties": true,
       "required": [
-        "api_hosts",
-        "industry_clist_fs",
         "cache_filename",
         "industry_map_ttl_sec"
       ],
@@ -628,14 +966,26 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "index_mood_mult_override": { "type": ["integer", "number"] }
+        "index_mood_mult_override": { "type": ["integer", "number"] },
+        "index_list": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "多指数日 K 缓存默认列表；macro_risk.get_index_closes_cached(ts_code) 可拉任意 ts_code"
+        }
       }
     },
     "sources": {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "eastmoney_ut": { "type": "string" },
+        "eastmoney_ut": {
+          "type": "string",
+          "description": "已废弃，请用 quote_ut"
+        },
+        "quote_ut": {
+          "type": "string",
+          "description": "传给 resolve_ut 的占位 token（历史字段名 eastmoney_ut 仍兼容）"
+        },
         "ssl_verify": { "type": ["boolean", "string"] },
         "ssl_ca_bundle": { "type": ["string", "null"] },
         "proxy": {
@@ -648,36 +998,71 @@
           "type": "object",
           "additionalProperties": true,
           "properties": {
-            "eastmoney_only": {
-              "type": "boolean",
-              "description": "为 true 时现价仅请求东财 push2 stock/get（无其他托底源）"
-            },
             "live_sources": {
               "type": "array",
               "items": { "type": "string" },
-              "description": "现价按序尝试；合法键：eastmoney,akshare,sina,qq,xueqiu,baidu,163。未配置时默认东财优先、其余托底。仅当本列表首项为 sina 时启用新浪 hq.sinajs 批量预取（避免批量抢在东财前面）"
+              "description": "现价按序尝试：sina,qq,xueqiu,akshare,baidu,163；不含 eastmoney。首项为 sina 时启用新浪 hq.sinajs 批量预取"
             }
           }
         },
         "tushare": {
           "type": "object",
           "additionalProperties": true,
-          "description": "Tushare Pro：上证主路径为 index_daily 历史 + rt_idx_k 最新；未开 Tushare 或 sh_index_free_fallback 时用新浪/腾讯/东财。个股仍尝试 daily，失败回退东财",
+          "description": "Tushare：指数 index_daily+rt_idx_k；个股 pro_bar(qfq)/daily+rt_k；申万 sw_daily（回退 sw_index_daily）+rt_sw_idx_k",
           "properties": {
             "enabled": { "type": "boolean" },
             "token": { "type": "string" },
             "token_env": { "type": "string" },
+            "daily_max_per_minute": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 500,
+              "description": "全进程 pro_bar / daily / daily_basic(trade_date) 滑动窗口限流：每分钟最多次数（默认 500，与官方 daily 额度一致；0=不限制）"
+            },
             "sh_index_free_fallback": {
               "type": "boolean",
-              "description": "为 true 且 index_daily 失败时，上证历史仍从新浪/腾讯/东财拉取（仅持 rt_idx_k、无 index_daily 积分时建议开）"
+              "description": "已废弃：上证仅走 Tushare"
             },
             "stock_rt_k_enabled": {
               "type": "boolean",
-              "description": "为 true 且 Tushare 已启用时，个股日 K 在历史序列上合并 rt_k（A 股日线 RT）；默认 true"
+              "description": "为 true 且 Tushare 已启用时，个股日 K 合并 rt_k"
             },
             "stock_rt_k_fallback": {
               "type": "boolean",
-              "description": "为 true 且 rt_k 失败时，用东财再取最新一根补最后一根；默认 false（保持历史最后一根）"
+              "description": "已废弃：不再使用东财补最后一根"
+            },
+            "sw_enabled": {
+              "type": "boolean",
+              "description": "申万行业指数 K 线（sw_daily，回退 sw_index_daily；合并 rt_sw_idx_k）"
+            },
+            "stock_basic_cache_path": {
+              "type": "string",
+              "description": "stock_basic 本地 JSON，供选股与名称表"
+            },
+            "stock_to_sw_path": {
+              "type": "string",
+              "description": "股票→申万一级指数 ts_code 映射 JSON"
+            },
+            "pro_dataapi_base": {
+              "type": "string",
+              "description": "Tushare Pro DataApi 基址（无尾斜杠），实际请求为 {base}/{api_name}。默认可解析域名 https://api.tushare.pro/dataapi；亦可设环境变量 TUSHARE_PRO_DATAAPI_BASE 覆盖"
+            },
+            "pro_dataapi_fallbacks": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "主基址失败时的额外候选 URL（无尾斜杠）。亦可用环境变量 TUSHARE_PRO_DATAAPI_FALLBACKS 逗号分隔。默认会在链中自动加入 api.tushare.pro 与 api.waditu.com（去重）"
+            },
+            "dataapi_connect_retries": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "description": "每个 DataApi 基址上，对连接重置/断管/DNS/HTTP 非 2xx/服务端繁忙文案等的重试次数（默认 5）"
+            },
+            "dataapi_retry_base_delay_sec": {
+              "type": "number",
+              "minimum": 0.05,
+              "maximum": 5,
+              "description": "重试退避基数秒，实际 sleep = 基数 × 2^attempt（默认 0.45）"
             }
           }
         }
@@ -769,6 +1154,7 @@
     "kline_store",
     "realtime_hub",
     "ml_filter",
+    "ml_forward4",
     "ops_automation",
     "email_command_bot",
     "sector_em",

@@ -237,6 +237,54 @@ def read_last_trade_date_for_secid(db_path: Path, secid: str) -> str | None:
     return str(row[0] or "")[:10] or None
 
 
+def read_ohlcv_tail_rows(
+    db_path: Path,
+    secid: str,
+    *,
+    lmt: int,
+) -> list[tuple[str, float, float, float, float, float]] | None:
+    """
+    最近 lmt 根日 K，(trade_date YYYY-MM-DD, open, high, low, close, volume) 按日期升序。
+    与 sync_daily_klines 写入的口径一致（Tushare pro_bar 前复权经 fetch_kline_rows_unified）。
+    不足 lmt 根则返回 None。
+    """
+    eff = max(40, int(lmt))
+    if not db_path.is_file():
+        return None
+    sid = str(secid).strip()
+    with _DB_LOCK:
+        conn = _connect(db_path)
+        try:
+            init_schema(conn)
+            rows = conn.execute(
+                """
+                SELECT trade_date, open, high, low, close, volume FROM daily_klines
+                WHERE secid = ?
+                ORDER BY trade_date DESC
+                LIMIT ?
+                """,
+                (sid, eff),
+            ).fetchall()
+        finally:
+            conn.close()
+    if len(rows) < eff:
+        return None
+    out: list[tuple[str, float, float, float, float, float]] = []
+    for r in reversed(rows):
+        td = str(r["trade_date"] or "")[:10]
+        out.append(
+            (
+                td,
+                float(r["open"]),
+                float(r["high"]),
+                float(r["low"]),
+                float(r["close"]),
+                float(r["volume"] or 0),
+            )
+        )
+    return out
+
+
 def read_ohlcv_lists(
     db_path: Path,
     secid: str,

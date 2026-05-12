@@ -23,7 +23,12 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     p1 = sub.add_parser("daily-select", help="Run pre-market selection for all strategies")
-    p1.add_argument("--limit", type=int, default=250)
+    p1.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="评分回测抽样上限；省略则用 config scan_pool_max（0=全市场）",
+    )
     p1.add_argument("--top", type=int, default=20, help="Top picks per strategy")
     p1.add_argument("--output", type=Path, default=Path(__file__).parent / "daily_picks.json")
 
@@ -38,8 +43,23 @@ def main() -> int:
     setup_app_logging(cfg, root=root)
 
     if args.cmd == "daily-select":
-        result = run_daily_selector(cfg, limit=args.limit, top_n_per_strategy=args.top)
+        lim = args.limit
+        if lim is None:
+            raw = cfg.get("scan_pool_max", 0)
+            try:
+                lim = int(raw)
+            except (TypeError, ValueError):
+                lim = 0
+        result = run_daily_selector(
+            cfg,
+            limit=lim,
+            top_n_per_strategy=args.top,
+            config_parent=args.config.parent,
+        )
         save_daily_selector_result(result, args.output)
+        from run_alert import _maybe_snapshot_daily_picks_json
+
+        _maybe_snapshot_daily_picks_json(cfg, args.output.resolve())
         emit_select_tool_line(
             f"[ok] daily picks saved: {args.output}",
             event="quant_cli_daily_select_done",

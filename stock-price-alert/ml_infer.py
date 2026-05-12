@@ -103,6 +103,29 @@ def predict_bearish_probability(
     if "0" not in priors or "1" not in priors:
         return None
 
+    s0 = stats.get("0") or {}
+    s1 = stats.get("1") or {}
+
+    def _impute_x(f: str) -> float:
+        """训练维度在推理向量中缺失时（如未开 external_flow），用两类均值中点，避免全填 0 扭曲分布。"""
+        if f in feats:
+            return _safe_float(feats.get(f), 0.0)
+        m0 = _safe_float((s0.get(f) or {}).get("mean"), 0.0)
+        m1 = _safe_float((s1.get(f) or {}).get("mean"), 0.0)
+        return 0.5 * (m0 + m1)
+
+    def _eff_var(fname: str, mu: float, var_raw: float) -> float:
+        """
+        小样训练时方差常被估得过小；实盘特征略出训练簇则两类似然同时崩、概率塌成常数（如下跌概率恒≈0）。
+        对方差做温和下限，使价格等尺度特征仍具区分度。
+        """
+        v = max(1e-12, _safe_float(var_raw, 1e-8))
+        if fname == "anchor_price":
+            return max(v, 400.0, (max(abs(mu), 5.0) * 0.45) ** 2)
+        scale = max(abs(mu), 0.25)
+        floor = max(1e-3, (scale * 0.08) ** 2)
+        return max(v, floor)
+
     def _logp(cls: str) -> float:
         p0 = max(1e-12, _safe_float(priors.get(cls), 1e-12))
         s = math.log(p0)
@@ -110,8 +133,8 @@ def predict_bearish_probability(
         for f in features:
             sf = cls_stats.get(f) or {}
             mu = _safe_float(sf.get("mean"), 0.0)
-            var = max(1e-8, _safe_float(sf.get("var"), 1e-4))
-            x = _safe_float(feats.get(f), 0.0)
+            var = _eff_var(f, mu, _safe_float(sf.get("var"), 1e-4))
+            x = _impute_x(f)
             s += -0.5 * math.log(2.0 * math.pi * var) - ((x - mu) ** 2) / (2.0 * var)
         return s
 

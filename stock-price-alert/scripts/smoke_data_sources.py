@@ -30,9 +30,8 @@ def main() -> int:
     cfg = merge_full_config(json.loads(cfg_path.read_text(encoding="utf-8")))
     configure_ssl_from_sources(cfg.get("sources"))
 
-    mr._index_closes = None
-    mr._index_volumes = None
-    mr._index_closes_ts = 0.0
+    with mr._INDEX_KLINE_LOCK:
+        mr._index_bar_cache.clear()
 
     bars = mr._fetch_sh_index_closes_network()
     print(
@@ -50,7 +49,12 @@ def main() -> int:
     tu_hist = fetch_sh_index_hist_index_daily(limit=30)
     print("Tushare index_daily(30)", "ok" if tu_hist else "fail/无权限")
 
-    ut = resolve_ut((cfg.get("sources") or {}).get("eastmoney_ut"))
+    src = cfg.get("sources") or {}
+    ut = resolve_ut(
+        (src.get("quote_ut") or src.get("eastmoney_ut") or "ea")
+        if isinstance(src, dict)
+        else "ea"
+    )
     rows = fetch_kline_rows_for_secid(secid_for("600000", "sh"), ut, lmt=40)
     print("个股 600000 日K行数", len(rows) if rows else None)
     return 0

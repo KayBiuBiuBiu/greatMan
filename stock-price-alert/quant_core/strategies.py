@@ -85,6 +85,11 @@ def range_arbitrage_strategy(price: float, kline: dict[str, Any]) -> StrategySig
     return None
 
 
+_SELL_LIKE_ACTIONS = frozenset(
+    {"sell_range_high", "stop_loss_alert", "risk_reduce"}
+)
+
+
 def evaluate_all_strategies(
     price: float,
     kline: dict[str, Any],
@@ -109,4 +114,46 @@ def evaluate_all_strategies(
             continue
         signals.append(sig)
     return signals
+
+
+def precompute_signal_proximity_hints(
+    price: float,
+    kline: dict[str, Any],
+    *,
+    min_score_by_strategy: dict[str, float] | None = None,
+    up_pct: float = 2.0,
+    down_pct: float = 2.0,
+) -> list[str]:
+    """
+    用现价附近的假设价格跑一遍三策略，提示「再涨跌约 x% 时可能触发的卖出/风控类信号」。
+    kline 为日 K 特征（ma5/ma20/low20/high20 等），与 evaluate_all_strategies 一致。
+    """
+    if price <= 0 or not isinstance(kline, dict):
+        return []
+    cur = evaluate_all_strategies(
+        price, kline, min_score_by_strategy=min_score_by_strategy
+    )
+    cur_sellish = {s.action for s in cur if s.action in _SELL_LIKE_ACTIONS}
+    hints: list[str] = []
+    for label, pct in (("上涨", float(up_pct)), ("下跌", float(down_pct))):
+        if pct <= 0:
+            continue
+        sign = 1.0 if label == "上涨" else -1.0
+        px = price * (1.0 + sign * pct / 100.0)
+        if px <= 0:
+            continue
+        fut = evaluate_all_strategies(
+            px, kline, min_score_by_strategy=min_score_by_strategy
+        )
+        for fs in fut:
+            if fs.action not in _SELL_LIKE_ACTIONS:
+                continue
+            if fs.action in cur_sellish:
+                continue
+            hints.append(
+                f"若股价{label}约{pct:g}%（≈{px:.2f}），可能触发 {fs.strategy}·{fs.action} "
+                f"（参考分 {fs.score:.1f}）"
+            )
+            break
+    return hints
 

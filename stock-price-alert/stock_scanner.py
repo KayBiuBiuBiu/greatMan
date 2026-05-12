@@ -6,31 +6,13 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 from position_tags import has_position_tag
-from utils import safe_get
 
-CLIST_URL = "http://77.push2.eastmoney.com/api/qt/clist/get"
-# 沪深主板 + 创业板（不含科创板 fs）
-FS_HS_CY = "m:1+t:2,m:0+t:6,m:0+t:80"
-CLIST_FIELDS = (
-    "f12,f14,f2,f3,f5,f6,f7,f20,f21,f22,f62,f100,f129,f134"
-)
-
-
-def _iter_clist_diff(data: dict[str, Any]) -> Iterator[dict[str, Any]]:
-    diff = (data.get("data") or {}).get("diff") or {}
-    if isinstance(diff, dict):
-        keys = sorted(diff.keys(), key=lambda x: int(x) if str(x).isdigit() else 0)
-        for k in keys:
-            yield diff[k]
-    elif isinstance(diff, list):
-        for x in diff:
-            yield x
+ROOT_DIR = Path(__file__).resolve().parent
 
 
 def _code_board_allowed(code: str) -> bool:
@@ -172,32 +154,27 @@ def _industry_allowed(industry: str, stock_name: str) -> bool:
 
 
 def fetch_all_hs_cy_rows() -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    pn = 1
-    pz = 500
-    while True:
-        params = {
-            "pn": pn,
-            "pz": pz,
-            "fs": FS_HS_CY,
-            "fields": CLIST_FIELDS,
-        }
-        r = safe_get(CLIST_URL, params=params, timeout=30)
-        if r is None:
-            raise RuntimeError("safe_get 请求失败")
-        r.raise_for_status()
-        j = r.json()
-        data = j.get("data") or {}
-        total = int(data.get("total") or 0)
-        batch = list(_iter_clist_diff(j))
-        if not batch:
-            break
-        rows.extend(batch)
-        if pn * pz >= total:
-            break
-        pn += 1
-        time.sleep(0.25)
-    return rows
+    """Tushare：stock_basic 本地缓存 + 最近交易日行情；需 token。"""
+    from quote_tushare import (
+        _get_pro,
+        fetch_hs_cy_scanner_rows_from_cache,
+        fetch_hs_cy_scanner_rows_tushare,
+        resolved_stock_basic_cache_path,
+    )
+
+    pro = _get_pro()
+    if pro is None:
+        raise RuntimeError("未配置 Tushare token，无法拉取全市场扫描数据")
+    path = resolved_stock_basic_cache_path(ROOT_DIR)
+    rows = fetch_hs_cy_scanner_rows_from_cache(path, pro=pro)
+    if rows:
+        return rows
+    rows = fetch_hs_cy_scanner_rows_tushare()
+    if rows:
+        return rows
+    raise RuntimeError(
+        "Tushare 扫描数据为空；请先运行: python3 scripts/update_stock_basic_cache.py"
+    )
 
 
 def _float_mv_yuan(row: dict[str, Any]) -> float:
@@ -381,11 +358,13 @@ def scan_and_save(cfg_path: Path, *, force: bool = False) -> int:
         )
         return 0
 
-    target_n = int(cfg.get("scan_pool_max", 4000))
+    target_n = int(cfg.get("scan_pool_max", 0) or 0)
+    if target_n <= 0:
+        target_n = 800
     target_n = max(200, min(800, target_n))
 
     emit_select_tool_line(
-        "[接口抓取] 正在拉取沪深主板+创业板列表（不含科创板/北交所）…",
+        "[接口抓取] 沪深主板+创业板（Tushare stock_basic 缓存 + 日行情；不含科创板/北交所）…",
         event="stock_scanner_fetch_start",
         section="stock_scanner",
     )

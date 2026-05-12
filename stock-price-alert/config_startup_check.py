@@ -141,8 +141,8 @@ def run_startup_config_checks(
         wt = str(rh.get("ws_transport") or "").strip().lower()
         if not wt:
             warnings.append(
-                "realtime_hub.ws_enabled 为真但 ws_transport 为空，"
-                "SSE/WS 可能未正确配置（纯 HTTP 轮询可关 ws_enabled 或填 eastmoney_sse）。"
+                "realtime_hub.ws_enabled 为真但 ws_transport / ws_url 未配置为可用 WebSocket；"
+                "东财 SSE 已移除，纯 HTTP 轮询请关 ws_enabled 或填写 ws_url + ws_transport=websocket。"
             )
 
     try:

@@ -7,354 +7,166 @@ import threading
 import time
 from typing import Any
 
-from utils import safe_get
-
 _INDEX_KLINE_LOCK = threading.Lock()
-_index_closes_ts: float = 0.0
-_index_closes: list[float] | None = None
-_index_volumes: list[float] | None = None
+# ts_code -> {"closes": list, "vols": list | None, "ts": float}
+_index_bar_cache: dict[str, dict[str, Any]] = {}
 _index_kline_ttl_sec: float = 60.0
-_SH_INDEX_UT = "fa5fd1943c7b386f172d6893dbfba10b"
+# 配置中的默认跟踪列表（供文档/预热；get_index_closes_cached 任意合法 ts_code 均可拉取）
+_index_list_default: list[str] = ["000001.SH", "000300.SH", "399006.SZ"]
 
-# 上证日 K：未启用 Tushare 时为新浪 / 腾讯 / 东财；启用 Tushare 时为 index_daily + rt_idx_k（可选免费回退）
-_EM_SH_INDEX_KLINE_BASES: tuple[str, ...] = (
-    "https://push2his.eastmoney.com/api/qt/stock/kline/get",
-    "https://push2.eastmoney.com/api/qt/stock/kline/get",
-    "http://82.push2his.eastmoney.com/api/qt/stock/kline/get",
-)
-_SINA_SH_INDEX_KLINE_URL = (
-    "https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/"
-    "CN_MarketData.getKLineData"
-)
-_QQ_SH_INDEX_KLINE_URL = "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"
 _SH_INDEX_MIN_BARS = 20
 _SH_INDEX_LMT = 120
 
 
-def configure_index_kline_cache(ttl_sec: float | None = None) -> None:
-    """加载 config 后由 run_alert 调用；上证日 K 在 TTL 内只拉一次，供情绪与 5 日收益共用。"""
-    global _index_kline_ttl_sec
+def configure_index_kline_cache(
+    ttl_sec: float | None = None,
+    *,
+    index_list: list[str] | None = None,
+) -> None:
+    """
+    加载 config 后由 run_alert 调用。
+    index_list：默认跟踪的指数 ts_code 列表（沪深300、创业板指等）。
+    """
+    global _index_kline_ttl_sec, _index_list_default
     if ttl_sec is not None:
         with _INDEX_KLINE_LOCK:
             _index_kline_ttl_sec = max(0.0, float(ttl_sec))
+    if index_list is not None:
+        cleaned: list[str] = []
+        for x in index_list:
+            s = str(x).strip().upper()
+            if s:
+                cleaned.append(s)
+        if cleaned:
+            with _INDEX_KLINE_LOCK:
+                _index_list_default = cleaned
 
 
-def _parse_closes_from_kline_json(j: dict[str, Any]) -> list[float] | None:
-    c, _v = _parse_bars_from_kline_json(j)
-    return c
+def default_index_list() -> list[str]:
+    """当前配置的默认指数列表副本。"""
+    with _INDEX_KLINE_LOCK:
+        return list(_index_list_default)
 
 
-def _parse_bars_from_kline_json(j: dict[str, Any]) -> tuple[list[float], list[float]]:
-    """东财日 K 字符串：日期,开,收,高,低,量,... → 收盘价与成交量（与收盘对齐）。"""
-    klines = (j.get("data") or {}).get("klines") or []
-    closes: list[float] = []
-    vols: list[float] = []
-    for line in klines:
-        parts = line.split(",")
-        if len(parts) >= 3:
-            try:
-                closes.append(float(parts[2]))
-            except ValueError:
-                continue
-            try:
-                vols.append(float(parts[5]) if len(parts) >= 6 else 0.0)
-            except ValueError:
-                vols.append(0.0)
-    if len(vols) != len(closes):
-        vols = [0.0] * len(closes)
-    return closes, vols
+def _normalize_index_ts(ts_code: str) -> str:
+    return str(ts_code or "").strip().upper()
 
 
-def _em_sh_index_kline_params() -> dict[str, str]:
-    return {
-        "secid": "1.000001",
-        "klt": "101",
-        "fqt": "1",
-        "lmt": str(max(40, int(_SH_INDEX_LMT))),
-        "end": "20500101",
-        "fields1": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13",
-        "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
-        "ut": _SH_INDEX_UT,
-    }
-
-
-def _fetch_sh_index_from_em_bases_ex() -> tuple[list[float], list[float], str | None] | None:
-    """东财上证日 K + 最后一根 trade_date（YYYY-MM-DD）。"""
-    params = _em_sh_index_kline_params()
-    for url in _EM_SH_INDEX_KLINE_BASES:
-        base_clean = url.split("?")[0] if "?" in url else url
-        try:
-            r = safe_get(base_clean, params=params, timeout=10.0)
-            if r is None or r.status_code != 200:
-                continue
-            j = r.json()
-            c, v = _parse_bars_from_kline_json(j)
-            if not c or len(c) < _SH_INDEX_MIN_BARS:
-                continue
-            klines = (j.get("data") or {}).get("klines") or []
-            last_d: str | None = None
-            if klines:
-                parts = str(klines[-1]).split(",")
-                if parts and str(parts[0]).strip():
-                    last_d = _normalize_sh_calendar_date(str(parts[0]).strip())
-            return c, v, last_d
-        except Exception:
-            continue
-    return None
-
-
-def _fetch_sh_index_from_em_bases() -> tuple[list[float], list[float]] | None:
-    """东财 kline/get 兜底：多 base 依次尝试（主域 / push2 / 82 镜像）。"""
-    ex = _fetch_sh_index_from_em_bases_ex()
-    if not ex:
+def _fetch_index_closes_network(ts_code: str) -> tuple[list[float], list[float]] | None:
+    """单指数：Tushare index_daily + rt_idx_k。"""
+    tc = _normalize_index_ts(ts_code)
+    if not tc:
         return None
-    return ex[0], ex[1]
-
-
-def _normalize_sh_calendar_date(raw: str | None) -> str | None:
-    if raw is None:
-        return None
-    s = str(raw).strip().replace("/", "-")
-    if len(s) >= 10:
-        return s[:10]
-    if len(s) >= 8 and s[:8].isdigit():
-        s8 = s[:8]
-        return f"{s8[:4]}-{s8[4:6]}-{s8[6:8]}"
-    return None
-
-
-def _parse_bars_from_sina_money_kline_ex(
-    rows: Any,
-) -> tuple[list[float], list[float], str | None] | None:
-    """新浪日 K + 最后一根交易日（供与 rt_idx_k 对齐）。"""
-    if not isinstance(rows, list) or len(rows) < _SH_INDEX_MIN_BARS:
-        return None
-    closes: list[float] = []
-    vols: list[float] = []
-    last_d: str | None = None
-    for item in rows:
-        if not isinstance(item, dict):
-            continue
-        try:
-            c = float(item.get("close") or 0.0)
-            v = float(item.get("volume") or 0.0)
-        except (TypeError, ValueError):
-            continue
-        raw_d = item.get("day") or item.get("date")
-        if raw_d:
-            last_d = _normalize_sh_calendar_date(str(raw_d))
-        closes.append(c)
-        vols.append(max(v, 0.0))
-    if len(closes) < _SH_INDEX_MIN_BARS or len(vols) != len(closes):
-        return None
-    return closes, vols, last_d
-
-
-def _parse_bars_from_sina_money_kline(rows: Any) -> tuple[list[float], list[float]] | None:
-    """新浪 CN_MarketData.getKLineData：对象列表 day,open,high,low,close,volume。"""
-    ex = _parse_bars_from_sina_money_kline_ex(rows)
-    if not ex:
-        return None
-    return ex[0], ex[1]
-
-
-def _fetch_sh_index_from_sina_money_ex() -> tuple[list[float], list[float], str | None] | None:
     try:
-        r = safe_get(
-            _SINA_SH_INDEX_KLINE_URL,
-            params={
-                "symbol": "sh000001",
-                "scale": "240",
-                "ma": "no",
-                "datalen": str(max(40, int(_SH_INDEX_LMT))),
-            },
-            timeout=10.0,
+        from quote_tushare import (
+            fetch_index_hist_index_daily,
+            merge_index_closes_with_rt_idx_k,
         )
-        if r is None or r.status_code != 200:
+
+        tu_hist = fetch_index_hist_index_daily(tc, limit=_SH_INDEX_LMT)
+        if not tu_hist:
             return None
-        rows = r.json()
-        return _parse_bars_from_sina_money_kline_ex(rows)
+        closes, vols, last_d = tu_hist
+        closes, vols = merge_index_closes_with_rt_idx_k(
+            list(closes), list(vols), ts_code=tc, free_last_date=last_d
+        )
+        return closes, vols
     except Exception:
         return None
-
-
-def _fetch_sh_index_from_sina_money() -> tuple[list[float], list[float]] | None:
-    ex = _fetch_sh_index_from_sina_money_ex()
-    if not ex:
-        return None
-    return ex[0], ex[1]
-
-
-def _parse_bars_from_qq_fqkline_ex(
-    j: dict[str, Any],
-) -> tuple[list[float], list[float], str | None] | None:
-    data = j.get("data")
-    if not isinstance(data, dict):
-        return None
-    blk = data.get("sh000001")
-    if not isinstance(blk, dict):
-        blk = data.get("SH000001")
-    if not isinstance(blk, dict):
-        return None
-    raw = blk.get("day") or blk.get("qfqday") or blk.get("hfqday")
-    if not isinstance(raw, list):
-        return None
-    closes: list[float] = []
-    vols: list[float] = []
-    last_d: str | None = None
-    for row in raw:
-        if not isinstance(row, (list, tuple)) or len(row) < 6:
-            continue
-        try:
-            c = float(row[2])
-            v = float(row[5])
-        except (TypeError, ValueError):
-            continue
-        if row:
-            last_d = _normalize_sh_calendar_date(str(row[0]))
-        closes.append(c)
-        vols.append(max(v, 0.0))
-    if len(closes) < _SH_INDEX_MIN_BARS:
-        return None
-    return closes, vols, last_d
-
-
-def _parse_bars_from_qq_fqkline(j: dict[str, Any]) -> tuple[list[float], list[float]] | None:
-    ex = _parse_bars_from_qq_fqkline_ex(j)
-    if not ex:
-        return None
-    return ex[0], ex[1]
-
-
-def _fetch_sh_index_from_qq_ex() -> tuple[list[float], list[float], str | None] | None:
-    try:
-        r = safe_get(
-            _QQ_SH_INDEX_KLINE_URL,
-            params={"param": f"sh000001,day,,,{max(40, int(_SH_INDEX_LMT))},qfq"},
-            timeout=10.0,
-        )
-        if r is None or r.status_code != 200:
-            return None
-        j = r.json()
-        if not isinstance(j, dict):
-            return None
-        return _parse_bars_from_qq_fqkline_ex(j)
-    except Exception:
-        return None
-
-
-def _fetch_sh_index_from_qq() -> tuple[list[float], list[float]] | None:
-    ex = _fetch_sh_index_from_qq_ex()
-    if not ex:
-        return None
-    return ex[0], ex[1]
-
-
-def _fetch_sh_index_hist_with_last_date() -> tuple[list[float], list[float], str | None] | None:
-    """上证历史日 K（≥20 根）+ 最后一根交易日：新浪 → 腾讯 → 东财（仅未走 Tushare 主源或回退时）。"""
-    ex = _fetch_sh_index_from_sina_money_ex()
-    if ex:
-        return ex
-    ex = _fetch_sh_index_from_qq_ex()
-    if ex:
-        return ex
-    return _fetch_sh_index_from_em_bases_ex()
 
 
 def _fetch_sh_index_closes_network() -> tuple[list[float], list[float]] | None:
-    """
-    上证指数日 K：
-    - 已启用 Tushare：index_daily 历史 + rt_idx_k 最新；默认不再请求新浪/腾讯/东财。
-    - 未启用或 sh_index_free_fallback：新浪 → 腾讯 → 东财，并可叠 rt_idx_k（Tushare 开时）。
-    """
-    try:
-        from quote_tushare import (
-            fetch_sh_index_hist_index_daily,
-            merge_sh_index_with_rt_idx_k,
-            sh_index_free_fallback_enabled,
-            tushare_sh_index_primary,
-        )
+    """上证指数；兼容旧调用。"""
+    return _fetch_index_closes_network("000001.SH")
 
-        if tushare_sh_index_primary():
-            tu_hist = fetch_sh_index_hist_index_daily(limit=_SH_INDEX_LMT)
-            if tu_hist:
-                closes, vols, last_d = tu_hist
-                closes, vols = merge_sh_index_with_rt_idx_k(
-                    list(closes), list(vols), free_last_date=last_d
-                )
-                return closes, vols
-            if not sh_index_free_fallback_enabled():
-                return None
-    except Exception:
-        pass
 
-    hist = _fetch_sh_index_hist_with_last_date()
-    if not hist:
+def get_index_closes_cached(ts_code: str) -> list[float] | None:
+    """指定指数日 K 收盘序列（进程内按 ts_code + TTL 缓存）。"""
+    tc = _normalize_index_ts(ts_code)
+    if not tc:
         return None
-    closes, vols, last_d = hist
-    try:
-        from quote_tushare import merge_sh_index_with_rt_idx_k
+    now = time.time()
+    with _INDEX_KLINE_LOCK:
+        ent = _index_bar_cache.get(tc)
+        if (
+            ent
+            and _index_kline_ttl_sec > 0
+            and now - float(ent.get("ts", 0.0)) < _index_kline_ttl_sec
+        ):
+            c = ent.get("closes")
+            return list(c) if isinstance(c, list) else None
+    bars = _fetch_index_closes_network(tc)
+    with _INDEX_KLINE_LOCK:
+        if bars:
+            closes, vols = bars
+            _index_bar_cache[tc] = {
+                "closes": closes,
+                "vols": vols,
+                "ts": time.time(),
+            }
+            return list(closes)
+        return None
 
-        closes, vols = merge_sh_index_with_rt_idx_k(
-            list(closes), list(vols), free_last_date=last_d
-        )
-    except Exception:
-        pass
-    return closes, vols
+
+def get_index_volumes_cached(ts_code: str) -> list[float] | None:
+    """与 get_index_closes_cached 同次拉取的量序列。"""
+    get_index_closes_cached(ts_code)
+    tc = _normalize_index_ts(ts_code)
+    with _INDEX_KLINE_LOCK:
+        ent = _index_bar_cache.get(tc)
+        if not ent:
+            return None
+        v = ent.get("vols")
+        return list(v) if isinstance(v, list) else None
 
 
 def get_sh_index_closes_cached() -> list[float] | None:
-    """上证指数日 K 收盘价序列；带 TTL 的进程内缓存。"""
-    global _index_closes_ts, _index_closes, _index_volumes
-    now = time.time()
-    with _INDEX_KLINE_LOCK:
-        if (
-            _index_closes is not None
-            and _index_kline_ttl_sec > 0
-            and now - _index_closes_ts < _index_kline_ttl_sec
-        ):
-            return list(_index_closes)
-        bars = _fetch_sh_index_closes_network()
-        if bars:
-            closes, vols = bars
-            _index_closes = closes
-            _index_volumes = vols
-            _index_closes_ts = time.time()
-            return list(closes)
-        _index_closes = None
-        _index_volumes = None
-        _index_closes_ts = 0.0
-        return None
+    """上证指数日 K 收盘价序列。"""
+    return get_index_closes_cached("000001.SH")
 
 
 def get_sh_index_volumes_cached() -> list[float] | None:
-    """与 `get_sh_index_closes_cached` 同一次拉取的量序列；无缓存或未拉取时返回 None。"""
-    get_sh_index_closes_cached()
-    with _INDEX_KLINE_LOCK:
-        if _index_volumes is None:
-            return None
-        return list(_index_volumes)
+    """与 `get_sh_index_closes_cached` 同一次拉取的量序列。"""
+    return get_index_volumes_cached("000001.SH")
 
 
-def get_market_regime(
+def get_market_regime_snapshot(
     *,
     ma_period: int = 20,
     dynamic_cfg: dict[str, Any] | None = None,
-) -> str:
+) -> dict[str, Any]:
     """
-    上证日 K：最新收盘是否高于近 ma_period 日简单均线。
-    数据不足或失败时返回 ``bear``（偏保守）。
+    上证日 K 牛熊判定用到的数值快照（与 get_market_regime 一致）。
+
+    规则：最新收盘 > 近 n 根收盘的简单均值（n=min(数据长度, ma_period)，含当日）则倾向 bull；
+    可选 ``use_volume_filter``：量比低于阈值时强制 bear。
+    数据不足或拉取失败时 ``data_ok`` 为 False、``regime`` 为 bear（偏保守）。
     """
-    closes = get_sh_index_closes_cached()
-    if not closes or len(closes) < max(2, int(ma_period)):
-        return "bear"
-    n = min(len(closes), max(2, int(ma_period)))
-    window = closes[-n:]
-    ma_val = sum(window) / float(len(window))
-    latest = closes[-1]
-    if latest <= ma_val:
-        return "bear"
     dc = dynamic_cfg if isinstance(dynamic_cfg, dict) else {}
+    out: dict[str, Any] = {
+        "regime": "bear",
+        "latest": None,
+        "ma_value": None,
+        "ma_period_effective": None,
+        "bars": 0,
+        "volume_demoted": None,
+        "data_ok": False,
+    }
+    closes = get_sh_index_closes_cached()
+    mp = max(2, int(ma_period))
+    if not closes or len(closes) < mp:
+        return out
+    n = min(len(closes), mp)
+    window = closes[-n:]
+    ma_val = sum(float(x) for x in window) / float(len(window))
+    latest = float(closes[-1])
+    out["bars"] = len(closes)
+    out["latest"] = latest
+    out["ma_value"] = ma_val
+    out["ma_period_effective"] = n
+    out["data_ok"] = True
+    regime: str = "bull" if latest > ma_val else "bear"
+    vol_dem: bool | None = None
     if bool(dc.get("use_volume_filter", False)):
         thr = float(dc.get("volume_ratio_active", 1.2) or 1.2)
         vols = get_sh_index_volumes_cached()
@@ -366,8 +178,28 @@ def get_market_regime(
             v_last = float(vols[-1])
             v_ma = sum(float(x) for x in vols[-21:-1]) / 20.0
             if v_ma > 0 and (v_last / v_ma) < thr:
-                return "bear"
-    return "bull"
+                vol_dem = True
+                regime = "bear"
+            else:
+                vol_dem = False
+    out["volume_demoted"] = vol_dem
+    out["regime"] = regime
+    return out
+
+
+def get_market_regime(
+    *,
+    ma_period: int = 20,
+    dynamic_cfg: dict[str, Any] | None = None,
+) -> str:
+    """
+    上证日 K：最新收盘是否高于近 ma_period 日简单均线。
+    数据不足或失败时返回 ``bear``（偏保守）。
+    """
+    snap = get_market_regime_snapshot(
+        ma_period=ma_period, dynamic_cfg=dynamic_cfg
+    )
+    return str(snap.get("regime") or "bear")
 
 
 def _sma_last_window(closes: list[float], n: int) -> float | None:
@@ -427,14 +259,18 @@ def _index_volume_ratio_last(closes: list[float], vols: list[float]) -> float | 
     return v_last / v_ma
 
 
-def get_market_mood_three_tier(*, dynamic_cfg: dict[str, Any] | None = None) -> str:
+def get_index_mood_three_tier(
+    ts_code: str,
+    *,
+    dynamic_cfg: dict[str, Any] | None = None,
+) -> str:
     """
-    三档：strong_bull / range / weak_bear。
+    指定指数三档情绪：strong_bull / range / weak_bear。
     结合 MA、RSI、布林带宽度与可选量能；数据不足时偏保守为 weak_bear。
     """
     dc = dynamic_cfg if isinstance(dynamic_cfg, dict) else {}
     ma_p = max(5, min(120, int(dc.get("ma_period", 20) or 20)))
-    closes = get_sh_index_closes_cached()
+    closes = get_index_closes_cached(ts_code)
     if not closes or len(closes) < max(ma_p, 22):
         return "weak_bear"
     ma_val = _sma_last_window(closes, ma_p)
@@ -459,7 +295,7 @@ def get_market_mood_three_tier(*, dynamic_cfg: dict[str, Any] | None = None) -> 
     )
     use_vol = bool(dc.get("use_volume_filter", False))
     vol_thr = float(dc.get("volume_ratio_active", 1.2) or 1.2)
-    vols = get_sh_index_volumes_cached()
+    vols = get_index_volumes_cached(ts_code)
     vr = (
         _index_volume_ratio_last(closes, vols)
         if use_vol and vols
@@ -484,6 +320,18 @@ def get_market_mood_three_tier(*, dynamic_cfg: dict[str, Any] | None = None) -> 
     if strong:
         return "strong_bull"
     return "range"
+
+
+def get_market_mood_three_tier(*, dynamic_cfg: dict[str, Any] | None = None) -> str:
+    """大盘三档情绪：以上证综指为准（兼容旧逻辑）。"""
+    return get_index_mood_three_tier("000001.SH", dynamic_cfg=dynamic_cfg)
+
+
+def get_index_mood(
+    ts_code: str, *, dynamic_cfg: dict[str, Any] | None = None
+) -> str:
+    """同 get_index_mood_three_tier，供策略按指数查询。"""
+    return get_index_mood_three_tier(ts_code, dynamic_cfg=dynamic_cfg)
 
 
 def sector_rs_bucket(
