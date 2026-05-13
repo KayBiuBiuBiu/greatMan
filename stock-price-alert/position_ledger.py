@@ -46,11 +46,34 @@ def init_ledger_schema(conn: sqlite3.Connection) -> None:
         );
         CREATE INDEX IF NOT EXISTS idx_ledger_day ON ledger_events(day_iso);
         CREATE INDEX IF NOT EXISTS idx_ledger_code ON ledger_events(code);
+        CREATE TABLE IF NOT EXISTS strategy_signal_log (
+          signal_id INTEGER PRIMARY KEY AUTOINCREMENT,
+          code TEXT NOT NULL,
+          signal_type TEXT NOT NULL,
+          strategy_name TEXT NOT NULL,
+          score REAL NOT NULL,
+          timestamp TEXT NOT NULL,
+          expired INTEGER NOT NULL DEFAULT 0,
+          adopted INTEGER NOT NULL DEFAULT 0,
+          adopted_timestamp TEXT,
+          adopted_price REAL,
+          adopted_shares INTEGER,
+          ledger_event_id INTEGER,
+          eval_return_pct REAL,
+          eval_price_end REAL,
+          eval_date_end TEXT
+        );
+        CREATE INDEX IF NOT EXISTS idx_siglog_code_time ON strategy_signal_log(code, timestamp);
+        CREATE INDEX IF NOT EXISTS idx_siglog_open ON strategy_signal_log(code, signal_type, adopted, expired);
         """
     )
     cols = _ledger_columns(conn)
     if "op_type" not in cols:
         conn.execute("ALTER TABLE ledger_events ADD COLUMN op_type TEXT")
+        conn.commit()
+        cols = _ledger_columns(conn)
+    if "related_signal_id" not in cols:
+        conn.execute("ALTER TABLE ledger_events ADD COLUMN related_signal_id INTEGER")
         conn.commit()
 
 
@@ -71,7 +94,8 @@ def append_ledger_event(
     ts: str | None = None,
     day_iso: str | None = None,
     op_type: str | None = None,
-) -> None:
+    related_signal_id: int | None = None,
+) -> int | None:
     now = datetime.now()
     ts_s = (ts or now.strftime("%Y-%m-%d %H:%M:%S")).strip()
     d_iso = (day_iso or ts_s[:10]).strip()[:10]
@@ -82,8 +106,39 @@ def append_ledger_event(
         try:
             init_ledger_schema(conn)
             cols = _ledger_columns(conn)
-            if "op_type" in cols:
-                conn.execute(
+            rid = related_signal_id
+            if "op_type" in cols and "related_signal_id" in cols:
+                cur = conn.execute(
+                    """
+                    INSERT INTO ledger_events (
+                      ts, day_iso, kind, op_type, code, name,
+                      shares_before, shares_after,
+                      avg_cost_before, avg_cost_after,
+                      qty_traded, exec_price, realized_pnl, note, related_signal_id
+                    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    """,
+                    (
+                        ts_s,
+                        d_iso,
+                        str(kind or "").strip(),
+                        ot,
+                        str(code or "").strip().zfill(6)
+                        if str(code or "").strip().isdigit()
+                        else str(code or "").strip(),
+                        str(name or "")[:40],
+                        shares_before,
+                        shares_after,
+                        avg_cost_before,
+                        avg_cost_after,
+                        int(qty_traded),
+                        exec_price,
+                        float(realized_pnl),
+                        str(note or "")[:500],
+                        rid,
+                    ),
+                )
+            elif "op_type" in cols:
+                cur = conn.execute(
                     """
                     INSERT INTO ledger_events (
                       ts, day_iso, kind, op_type, code, name,
@@ -112,7 +167,7 @@ def append_ledger_event(
                     ),
                 )
             else:
-                conn.execute(
+                cur = conn.execute(
                     """
                     INSERT INTO ledger_events (
                       ts, day_iso, kind, code, name,
@@ -139,11 +194,13 @@ def append_ledger_event(
                         str(note or "")[:500],
                     ),
                 )
+            last = int(cur.lastrowid or 0)
             conn.commit()
+            return last if last > 0 else None
         finally:
             conn.close()
     except sqlite3.Error:
-        pass
+        return None
 
 
 def sum_realized_pnl_for_day(db_path: Path, day_iso: str) -> float:

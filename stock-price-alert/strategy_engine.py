@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from quant_core.strategies import evaluate_all_strategies
+from quant_core.strategies import StrategySignal, evaluate_all_strategies
 
 # 大白话说明（内部键为 strategy / action，与 quant_core.strategies 一致）
 _SIGNAL_FRIENDLY: dict[tuple[str, str], str] = {
@@ -17,18 +17,31 @@ _SIGNAL_FRIENDLY: dict[tuple[str, str], str] = {
 }
 
 
+def ma_box_strategy_best_signal(
+    price: float,
+    data: dict[str, Any],
+    *,
+    min_score_by_strategy: dict[str, float] | None = None,
+) -> StrategySignal | None:
+    signals = evaluate_all_strategies(
+        price, data, min_score_by_strategy=min_score_by_strategy
+    )
+    if not signals:
+        return None
+    return max(signals, key=lambda x: float(x.score))
+
+
 def ma_box_strategy(
     price: float,
     data: dict[str, Any],
     *,
     min_score_by_strategy: dict[str, float] | None = None,
 ) -> Optional[str]:
-    signals = evaluate_all_strategies(
+    best = ma_box_strategy_best_signal(
         price, data, min_score_by_strategy=min_score_by_strategy
     )
-    if not signals:
+    if best is None:
         return None
-    best = max(signals, key=lambda x: float(x.score))
     label = {
         "ma_dip": "均线低吸",
         "box_breakout": "箱体突破",

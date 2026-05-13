@@ -9,6 +9,7 @@ import pytest
 
 from pnl_period_report import (
     _due_reports,
+    _last_completed_trading_week_mon_fri,
     aggregate_trades_from_history,
     format_pnl_period_email,
 )
@@ -37,16 +38,42 @@ def test_due_july_first_h1() -> None:
     now = datetime(2026, 7, 1, 16, 0, 0)
     due = _due_reports(now, st, oa)
     kinds = {d.state_key for d in due}
+    assert "__pnl_report_week__" in kinds
     assert "__pnl_report_month__" in kinds  # 6 月
     assert "__pnl_report_h1__" in kinds
+
+
+def test_trading_week_on_friday() -> None:
+    # 2026-01-09 周五：当周交易周 1/5～1/9，state 键为当周周一
+    w0, w1, wk = _last_completed_trading_week_mon_fri(date(2026, 1, 9))
+    assert w0 == date(2026, 1, 5)
+    assert w1 == date(2026, 1, 9)
+    assert wk == "2026-01-05"
+
+
+def test_trading_week_on_monday_is_prior_week() -> None:
+    # 2026-01-05 周一：上一交易周为 2025-12-29～2026-01-02（上周五 1/2）
+    w0, w1, wk = _last_completed_trading_week_mon_fri(date(2026, 1, 5))
+    assert w0 == date(2025, 12, 29)
+    assert w1 == date(2026, 1, 2)
+    assert wk == "2025-12-29"
+
+
+def test_due_week_skipped_on_saturday() -> None:
+    st: dict = {}
+    oa = {"pnl_period_report_catchup_days": 5}
+    now = datetime(2026, 1, 3, 16, 0, 0)  # 周六
+    due = _due_reports(now, st, oa)
+    assert not any(d.state_key == "__pnl_report_week__" for d in due)
 
 
 def test_due_jan_first_h2_and_year() -> None:
     st: dict = {}
     oa = {"pnl_period_report_catchup_days": 5}
-    now = datetime(2027, 1, 4, 16, 0, 0)  # 周三，补发 1 月报告
+    now = datetime(2027, 1, 4, 16, 0, 0)  # 周一，补发 1 月报告
     due = _due_reports(now, st, oa)
     keys = {d.state_key for d in due}
+    assert "__pnl_report_week__" in keys
     assert "__pnl_report_month__" in keys  # 2026-12
     assert "__pnl_report_h2__" in keys
     assert "__pnl_report_year__" in keys

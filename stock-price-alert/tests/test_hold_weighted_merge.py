@@ -40,7 +40,7 @@ def test_upsert_hold_twice_accumulates(tmp_path: Path) -> None:
     cfg = {"watchlist": []}
     cfg_path.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    assert _upsert_hold_in_cfg(
+    ok, _ = _upsert_hold_in_cfg(
         cfg,
         code="600711",
         hold_shares=8600,
@@ -48,8 +48,9 @@ def test_upsert_hold_twice_accumulates(tmp_path: Path) -> None:
         config_path=cfg_path,
         ledger_kind="buy",
     )
+    assert ok
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    assert _upsert_hold_in_cfg(
+    ok2, _ = _upsert_hold_in_cfg(
         cfg,
         code="600711",
         hold_shares=12300,
@@ -57,6 +58,7 @@ def test_upsert_hold_twice_accumulates(tmp_path: Path) -> None:
         config_path=cfg_path,
         ledger_kind="buy",
     )
+    assert ok2
     cfg2 = json.loads(cfg_path.read_text(encoding="utf-8"))
     wl = cfg2["watchlist"]
     assert len(wl) == 1
@@ -87,7 +89,7 @@ def test_upsert_merge_when_old_cost_was_zero(tmp_path: Path) -> None:
     }
     cfg_path.write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
-    assert _upsert_hold_in_cfg(
+    ok, _ = _upsert_hold_in_cfg(
         cfg,
         code="600711",
         hold_shares=12300,
@@ -95,6 +97,7 @@ def test_upsert_merge_when_old_cost_was_zero(tmp_path: Path) -> None:
         config_path=cfg_path,
         ledger_kind="buy",
     )
+    assert ok
     row = json.loads(cfg_path.read_text(encoding="utf-8"))["watchlist"][0]
     assert int(row["hold_shares"]) == 8600 + 12300
     assert abs(float(row["cost_price"]) - (12300 * 13.2 / 20900.0)) < 1e-5

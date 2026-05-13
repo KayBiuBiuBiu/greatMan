@@ -919,7 +919,7 @@ def run_daily_summary_after_close(
         _emit_ops_line(cfg, f"[每日总结] 生成失败（已跳过）: {exc}")
         return False
 
-    if not bool(oa.get("daily_summary_email_enabled", False)):
+    if not bool(oa.get("daily_summary_email_enabled", True)):
         return True
     try:
         text = format_daily_summary_text(summary)

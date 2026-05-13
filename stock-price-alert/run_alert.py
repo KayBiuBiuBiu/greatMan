@@ -222,7 +222,7 @@ from quote_eastmoney import (
 )
 from sector_em import clear_round_cache as sector_clear_round_cache, resolve_sector_bk
 from risk_control import RiskManager
-from strategy_engine import ma_box_strategy
+from strategy_engine import ma_box_strategy, ma_box_strategy_best_signal
 from t1_guard import (
     ack_cli_position_buy_add,
     ack_cli_position_sell_reduce,
@@ -536,7 +536,7 @@ DEFAULT_DATA_HEALTH = {
     "backoff_cap_sec": 16.0,
     "backoff_base_sec": 0.25,
     "full_outage_consecutive_notify_threshold": 0,
-    "full_outage_email_enabled": False,
+    "full_outage_email_enabled": True,
     "recovery_notify_enabled": True,
     "suppress_trend_rounds_after_full_outage": 0,
     # 非空路径且 interval>0 时写入 JSON（相对 stock-price-alert 根目录）
@@ -713,6 +713,21 @@ DEFAULT_WATCHLIST_LIQUIDITY_PRUNE: dict[str, Any] = {
     "notify": False,
 }
 
+DEFAULT_SELF_IMPROVE_OPERATION_FEEDBACK: dict[str, Any] = {
+    "enabled": False,
+    "evaluate_days": 30,
+    "adjust_step": 2,
+    "max_change": 10,
+    "improve_threshold_pct": 2.0,
+    "degrade_threshold_pct": -1.0,
+    "eval_n_days": 5,
+    "min_samples": 5,
+    "match_window_minutes": 10,
+    "run_on": "weekly_friday",
+    "min_score_floor": 50.0,
+    "min_score_ceiling": 90.0,
+}
+
 DEFAULT_OPS_AUTOMATION = {
     "enabled": True,
     "preopen_enabled": True,
@@ -747,12 +762,15 @@ DEFAULT_OPS_AUTOMATION = {
     "ml_forward4_train_min_samples": 2000,
     "ml_forward4_train_max_secids": 0,
     "ml_forward4_train_min_bars": 120,
-    # data/daily_summary.json；发信需单独打开（走 send_email_alert / remote_channel）
-    "daily_summary_email_enabled": False,
-    # 月 / 半年 / 年：按 daily_summary_history 汇总 trades.realized 等（见 pnl_period_report.py）
+    # data/daily_summary.json 仍会写入；true 时另发邮件/企微（走 send_email_alert / remote_channel）
+    "daily_summary_email_enabled": True,
+    # 周 / 月 / 半年 / 年：按 daily_summary_history 汇总 trades.realized 等（见 pnl_period_report.py）
     "pnl_period_report_enabled": True,
-    "pnl_period_report_email_enabled": False,
+    "pnl_period_report_email_enabled": True,
     "pnl_period_report_catchup_days": 5,
+    "self_improve_operation_feedback": copy.deepcopy(
+        DEFAULT_SELF_IMPROVE_OPERATION_FEEDBACK
+    ),
     # true：选股过滤网格目标叠「近 self_improve_lookback_days」锚定子样本，并将调参排期视为 daily
     "self_improve_from_summary_enabled": False,
     "self_improve_lookback_days": 5,
@@ -1747,6 +1765,11 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     if isinstance(_war_u, dict):
         _war_def.update(_war_u)
     oa_m["watchlist_auto_replenish"] = _war_def
+    _siof_def = copy.deepcopy(DEFAULT_SELF_IMPROVE_OPERATION_FEEDBACK)
+    _siof_u = oa_m.get("self_improve_operation_feedback")
+    if isinstance(_siof_u, dict):
+        _siof_def.update(_siof_u)
+    oa_m["self_improve_operation_feedback"] = _siof_def
     cfg["ops_automation"] = oa_m
     cfg.setdefault("email_command_bot", {})
     if not isinstance(cfg["email_command_bot"], dict):
@@ -2665,6 +2688,7 @@ def _cmd_reduce(
     *,
     exec_price_override: float | None = None,
     cli_log_kind: str = "reduce",
+    adopt_sell_signal_id: int | None = None,
 ) -> tuple[bool, str]:
     """减持 qty 股；可选结算价；台账 kind=reduce，若减至 0 额外 kind=close（已实现盈亏仅在 reduce 上）。"""
     if qty <= 0:
@@ -2717,7 +2741,8 @@ def _cmd_reduce(
     if not save_config_atomic(config_path, cfg):
         return False, "写入 config 失败"
     dbp = ledger_db_path(config_path.parent)
-    append_ledger_event(
+    rid = adopt_sell_signal_id
+    lid0 = append_ledger_event(
         dbp,
         kind="reduce",
         op_type="reduce",
@@ -2731,7 +2756,23 @@ def _cmd_reduce(
         exec_price=px,
         realized_pnl=realized,
         note=f"reduce {sell_n} 股 px={px:.4f}({src})",
+        related_signal_id=rid,
     )
+    if rid and lid0:
+        try:
+            from signal_operation_feedback import mark_signal_adopted
+
+            now0 = datetime.now()
+            mark_signal_adopted(
+                config_path.parent,
+                signal_id=int(rid),
+                adopted_ts=now0.strftime("%Y-%m-%d %H:%M:%S"),
+                adopted_price=float(px),
+                adopted_shares=int(sell_n),
+                ledger_event_id=lid0,
+            )
+        except Exception:
+            pass
     if new_hs <= 0:
         append_ledger_event(
             dbp,
@@ -2770,6 +2811,7 @@ def _cmd_sell_close_all(
     config_path: Path,
     *,
     exec_price_override: float | None = None,
+    adopt_sell_signal_id: int | None = None,
 ) -> tuple[bool, str, int]:
     """删除该代码全部 watchlist 行；有仓则按单价结算已实现，台账 kind=close（每行一条）。"""
     c6 = normalize_stock_code(code)
@@ -2796,6 +2838,7 @@ def _cmd_sell_close_all(
         return False, "无法取得结算价（行情与日 K 均无），已中止清仓", 0
     dbp = ledger_db_path(config_path.parent)
     total_r = 0.0
+    rid = adopt_sell_signal_id
     for row in rows:
         hs = int(row.get("hold_shares") or 0)
         try:
@@ -2806,7 +2849,8 @@ def _cmd_sell_close_all(
         if hs > 0 and cp > 0:
             realized = (px0 - cp) * float(hs)
             total_r += realized
-            append_ledger_event(
+            use_rid = rid
+            lid0 = append_ledger_event(
                 dbp,
                 kind="close",
                 op_type="close",
@@ -2820,7 +2864,24 @@ def _cmd_sell_close_all(
                 exec_price=px0,
                 realized_pnl=realized,
                 note=f"close px={px0:.4f}({src0})",
+                related_signal_id=use_rid,
             )
+            if rid and lid0:
+                try:
+                    from signal_operation_feedback import mark_signal_adopted
+
+                    now0 = datetime.now()
+                    mark_signal_adopted(
+                        config_path.parent,
+                        signal_id=int(rid),
+                        adopted_ts=now0.strftime("%Y-%m-%d %H:%M:%S"),
+                        adopted_price=float(px0),
+                        adopted_shares=int(hs),
+                        ledger_event_id=lid0,
+                    )
+                except Exception:
+                    pass
+                rid = None
     new_wl = [
         w
         for w in wl
@@ -2843,6 +2904,20 @@ def _apply_partial_sell_shares(
     cfg: dict[str, Any], code: str, qty: int, config_path: Path
 ) -> tuple[bool, str]:
     """sell 代码 股数：内部走 reduce 台账；CLI 日志仍为 sell_partial 以兼容每日总结。"""
+    adopt_sell = None
+    try:
+        from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+        if feedback_enabled(cfg):
+            adopt_sell = find_latest_open_signal(
+                config_path.parent,
+                code=code,
+                signal_type="sell",
+                now=datetime.now(),
+                cfg=cfg,
+            )
+    except Exception:
+        adopt_sell = None
     return _cmd_reduce(
         cfg,
         code,
@@ -2850,6 +2925,7 @@ def _apply_partial_sell_shares(
         config_path,
         exec_price_override=None,
         cli_log_kind="sell_partial",
+        adopt_sell_signal_id=adopt_sell,
     )
 
 
@@ -2861,7 +2937,8 @@ def _upsert_hold_in_cfg(
     cost_price: float,
     config_path: Path,
     ledger_kind: str | None = None,
-) -> bool:
+    adopt_buy_signal_id: int | None = None,
+) -> tuple[bool, int | None]:
     """
     写入/更新持仓：同代码已存在且原持股>0、本次加仓股数>0 时，与原有仓位合并：
     新总股数=原股数+本次股数；成本=(原股数×原成本+本次股数×本次单价)/新总股数。
@@ -2939,6 +3016,7 @@ def _upsert_hold_in_cfg(
         wl.append(merged)
 
     ok = save_config_atomic(config_path, cfg)
+    lid: int | None = None
     if ok:
         try:
             dbp = ledger_db_path(config_path.parent)
@@ -2951,7 +3029,7 @@ def _upsert_hold_in_cfg(
                 if merged_add
                 else "开仓或覆盖无有效旧成本"
             )
-            append_ledger_event(
+            lid = append_ledger_event(
                 dbp,
                 kind=lk,
                 op_type=op_type,
@@ -2965,10 +3043,26 @@ def _upsert_hold_in_cfg(
                 exec_price=float(delta_cost),
                 realized_pnl=0.0,
                 note=note,
+                related_signal_id=adopt_buy_signal_id,
             )
+            if adopt_buy_signal_id and lid:
+                try:
+                    from signal_operation_feedback import mark_signal_adopted
+
+                    now0 = datetime.now()
+                    mark_signal_adopted(
+                        config_path.parent,
+                        signal_id=int(adopt_buy_signal_id),
+                        adopted_ts=now0.strftime("%Y-%m-%d %H:%M:%S"),
+                        adopted_price=float(delta_cost),
+                        adopted_shares=int(delta_sh),
+                        ledger_event_id=lid,
+                    )
+                except Exception:
+                    pass
         except Exception:
             pass
-    return ok
+    return ok, lid
 
 
 def _remove_hold_from_cfg(
@@ -3289,14 +3383,30 @@ def _handle_runtime_command(
                 else 0
             )
             lk = "buy" if hs0 <= 0 else "add"
-        if not _upsert_hold_in_cfg(
+        adopt_sig = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg):
+                adopt_sig = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="buy",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sig = None
+        ok_upsert, _lid = _upsert_hold_in_cfg(
             cfg,
             code=code,
             hold_shares=shares,
             cost_price=cost,
             config_path=config_path,
             ledger_kind=lk,
-        ):
+            adopt_buy_signal_id=adopt_sig,
+        )
+        if not ok_upsert:
             _emit_cli_subcmd_line(
                 "[buy] 写入 config 失败（请检查磁盘权限）",
                 event="cli_buy_write_failed",
@@ -3395,14 +3505,30 @@ def _handle_runtime_command(
                 event="cli_add_zero_position",
             )
             return
-        if not _upsert_hold_in_cfg(
+        adopt_sig = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg):
+                adopt_sig = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="buy",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sig = None
+        ok_upsert, _lid = _upsert_hold_in_cfg(
             cfg,
             code=code,
             hold_shares=shares,
             cost_price=cost,
             config_path=config_path,
             ledger_kind="add",
-        ):
+            adopt_buy_signal_id=adopt_sig,
+        )
+        if not ok_upsert:
             _emit_cli_subcmd_line(
                 "[add] 写入 config 失败（请检查磁盘权限）",
                 event="cli_add_write_failed",
@@ -3475,6 +3601,20 @@ def _handle_runtime_command(
                     "[reduce] 结算价须 > 0", event="cli_reduce_price_bad"
                 )
                 return
+        adopt_sell = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg):
+                adopt_sell = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="sell",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sell = None
         ok, msg = _cmd_reduce(
             cfg,
             code,
@@ -3482,6 +3622,7 @@ def _handle_runtime_command(
             config_path,
             exec_price_override=px_ov,
             cli_log_kind="reduce",
+            adopt_sell_signal_id=adopt_sell,
         )
         if ok:
             force_include_codes.discard(code)
@@ -3503,7 +3644,27 @@ def _handle_runtime_command(
                 event="cli_unhold_invalid_code",
             )
             return
-        ok, msg, n = _cmd_sell_close_all(cfg, code, config_path, None)
+        adopt_sell = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg):
+                adopt_sell = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="sell",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sell = None
+        ok, msg, n = _cmd_sell_close_all(
+            cfg,
+            code,
+            config_path,
+            exec_price_override=None,
+            adopt_sell_signal_id=adopt_sell,
+        )
         force_include_codes.discard(code)
         force_exclude_codes.discard(code)
         if ok:
@@ -3563,13 +3724,29 @@ def _handle_runtime_command(
         if cost < 0:
             _emit_cli_subcmd_line("[hold] 成本不能为负", event="cli_hold_cost_negative")
             return
-        if not _upsert_hold_in_cfg(
+        adopt_sig = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg) and shares > 0:
+                adopt_sig = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="buy",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sig = None
+        ok_upsert, _lid = _upsert_hold_in_cfg(
             cfg,
             code=code,
             hold_shares=shares,
             cost_price=cost,
             config_path=config_path,
-        ):
+            adopt_buy_signal_id=adopt_sig,
+        )
+        if not ok_upsert:
             _emit_cli_subcmd_line(
                 "[hold] 写入 config 失败（请检查磁盘权限）",
                 event="cli_hold_write_failed",
@@ -3663,8 +3840,26 @@ def _handle_runtime_command(
                 "[sell] 结算价须 > 0", event="cli_sell_close_price_bad"
             )
             return
+        adopt_sell = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg):
+                adopt_sell = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="sell",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sell = None
         ok, msg, n = _cmd_sell_close_all(
-            cfg, code, config_path, exec_price_override=px
+            cfg,
+            code,
+            config_path,
+            exec_price_override=px,
+            adopt_sell_signal_id=adopt_sell,
         )
         if ok:
             force_include_codes.discard(code)
@@ -3724,7 +3919,27 @@ def _handle_runtime_command(
                 event="cli_sell_invalid_code",
             )
             return
-        ok, msg, n = _cmd_sell_close_all(cfg, code, config_path, None)
+        adopt_sell = None
+        try:
+            from signal_operation_feedback import feedback_enabled, find_latest_open_signal
+
+            if feedback_enabled(cfg):
+                adopt_sell = find_latest_open_signal(
+                    config_path.parent,
+                    code=code,
+                    signal_type="sell",
+                    now=datetime.now(),
+                    cfg=cfg,
+                )
+        except Exception:
+            adopt_sell = None
+        ok, msg, n = _cmd_sell_close_all(
+            cfg,
+            code,
+            config_path,
+            exec_price_override=None,
+            adopt_sell_signal_id=adopt_sell,
+        )
         if ok:
             force_include_codes.discard(code)
             force_exclude_codes.discard(code)
@@ -5203,6 +5418,22 @@ def _maybe_run_ops_automation(
                     level=logging.WARNING,
                 )
             try:
+                from auto_tune_strategy_scores import maybe_run_auto_tune_strategy_scores
+
+                maybe_run_auto_tune_strategy_scores(
+                    cfg=cfg,
+                    config_path=config_path,
+                    root=ROOT,
+                    state=state,
+                    now=now,
+                )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] auto_tune_strategy_scores 异常: {exc}",
+                    event="after_close_auto_tune_strategy_scores_fail",
+                    level=logging.WARNING,
+                )
+            try:
                 from maintenance.prune_illiquid import run_watchlist_liquidity_prune
 
                 run_watchlist_liquidity_prune(
@@ -5809,6 +6040,31 @@ def process_watch_pack(
                                 code=code,
                                 rk=rk,
                             )
+                    try:
+                        if "【买入信号】" in sig or "【卖出信号】" in sig:
+                            bs = ma_box_strategy_best_signal(
+                                now_price,
+                                kline,
+                                min_score_by_strategy=min_by
+                                if isinstance(min_by, dict)
+                                else None,
+                            )
+                            if bs:
+                                from signal_operation_feedback import (
+                                    record_emitted_strategy_signal,
+                                )
+
+                                c6r = normalize_stock_code(code) or str(code).strip()
+                                record_emitted_strategy_signal(
+                                    cfg,
+                                    ROOT,
+                                    code=c6r,
+                                    best_strategy=bs.strategy,
+                                    best_score=float(bs.score),
+                                    sig_text=sig,
+                                )
+                    except Exception:
+                        pass
                     log_signal(disp_name, code, sig, now_price, base_dir=log_dir)
                 if valid_code(code6_t1):
                     if plan.commit_side == "buy" and "【买入信号】" in sig:

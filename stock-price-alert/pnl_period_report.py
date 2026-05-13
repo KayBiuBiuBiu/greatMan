@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-月 / 半年 / 年 盈亏汇总：按 data/daily_summary_history/YYYY-MM-DD.json 的 trades 累加已实现，
+周 / 月 / 半年 / 年 盈亏汇总：按 data/daily_summary_history/YYYY-MM-DD.json 的 trades 累加已实现，
 并取区间内「最后一日」的浮盈、净值为快照（非多日浮盈之和）。
+周结为「交易周」周一至周五，以周五盘后为主、次周前几工作日可补发。
 由 run_alert 收盘后 ops_automation 在 daily_summary 写入之后调用。
 """
 
@@ -125,6 +126,26 @@ def _month_key(d0: date) -> str:
     return d0.strftime("%Y-%m")
 
 
+def _last_completed_trading_week_mon_fri(today: date) -> tuple[date, date, str]:
+    """已结束的一个「交易周」周一～周五（A 股周末非交易日，不按自然周日切）。
+
+    - 若 ``today`` 为周五：区间为本周一～今天（本周交易周收盘后结算）。
+    - 若为周一至周四：区间为「上一个周五」所在交易周（该周一～该周五）。
+    调用方应保证 ``today.weekday() < 5``（不在周末跑周结）。
+    """
+    wd = today.weekday()
+    this_monday = today - timedelta(days=wd)
+    if wd == 4:
+        mon0, fri1 = this_monday, today
+    else:
+        prev_friday = this_monday - timedelta(days=3)
+        mon0 = prev_friday - timedelta(days=4)
+        fri1 = prev_friday
+    # state 用该交易周「周一」作键，避免与 ISO 自然周混淆
+    wk = mon0.isoformat()
+    return mon0, fri1, wk
+
+
 @dataclass(frozen=True)
 class _Due:
     state_key: str
@@ -140,6 +161,24 @@ def _due_reports(now: datetime, state: dict[str, Any], oa: dict[str, Any]) -> li
     catch = max(1, min(10, int(oa.get("pnl_period_report_catchup_days", 5) or 5)))
     today = now.date()
     out: list[_Due] = []
+
+    # —— 交易周（周一至周五）：周五盘后结算当周；若漏跑，次周前 catch 个工作日内补发——
+    if now.weekday() < 5:
+        monday_this = today - timedelta(days=today.weekday())
+        days_into_week = (today - monday_this).days
+        if days_into_week == 0 or days_into_week < catch:
+            w0, w1, wk = _last_completed_trading_week_mon_fri(today)
+            if state.get("__pnl_report_week__") != wk:
+                out.append(
+                    _Due(
+                        state_key="__pnl_report_week__",
+                        state_value=wk,
+                        subject_suffix=f"周结盈亏 {w0.isoformat()}_{w1.isoformat()}",
+                        title=f"【周结盈亏】{w0.isoformat()}～{w1.isoformat()}（周一至周五）",
+                        start=w0,
+                        end=w1,
+                    )
+                )
 
     # —— 上月（每月 1 日，或次月前 catch 个工作日内补发）——
     if today.day == 1 or (today.day <= catch and now.weekday() < 5):
@@ -213,7 +252,7 @@ def maybe_run_pnl_period_reports(
     oa: dict[str, Any],
     state_path: Path,
 ) -> None:
-    """收盘后调用：按配置发送月/半年/年盈亏汇总邮件，并更新 state。"""
+    """收盘后调用：按配置发送周/月/半年/年盈亏汇总邮件，并更新 state。"""
     if not bool(oa.get("pnl_period_report_enabled", True)):
         return
     try:
@@ -227,7 +266,7 @@ def maybe_run_pnl_period_reports(
         _LOG.info("pnl_period_report: history dir missing, skip")
         return
 
-    email_on = bool(oa.get("pnl_period_report_email_enabled", False))
+    email_on = bool(oa.get("pnl_period_report_email_enabled", True))
     due_list = _due_reports(now, state, oa)
     if not due_list:
         return

@@ -761,21 +761,43 @@
         "ml_forward4_train_min_bars": { "type": ["integer", "number"], "minimum": 40 },
         "daily_summary_email_enabled": {
           "type": "boolean",
-          "description": "true：每日总结写入后另发邮件/企微（notifications.remote_channel）"
+          "description": "true（默认）：每日总结写入后另发邮件/企微（notifications.remote_channel）；false 则仅写 data/daily_summary.json"
         },
         "pnl_period_report_enabled": {
           "type": "boolean",
-          "description": "true：收盘后检查是否需生成月/半年/年盈亏汇总（依赖 data/daily_summary_history）"
+          "description": "true：收盘后检查是否需生成周/月/半年/年盈亏汇总（依赖 data/daily_summary_history）"
         },
         "pnl_period_report_email_enabled": {
           "type": "boolean",
-          "description": "true：月结/半年报/年结另发邮件/企微（与 daily_summary 邮件独立开关）"
+          "description": "true（默认）：周结/月结/半年报/年结另发邮件/企微（与 daily_summary 开关独立）；false 则仍写 data/pnl_period_reports/*.json 但不推送"
         },
         "pnl_period_report_catchup_days": {
           "type": ["integer", "number"],
           "minimum": 1,
           "maximum": 15,
-          "description": "月初或 7/1、1/1 后若干交易日内若未发过对应报告则补发（防漏跑）"
+          "description": "交易周周五后或月初、7/1、1/1 后若干历日内的工作日若未发过对应报告则补发（防漏跑）"
+        },
+        "self_improve_operation_feedback": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "终端 buy/add/reduce/sell 与策略买卖信号关联、采纳后收益统计并自动调 strategy_signal.min_score_by_strategy（默认关闭）",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "evaluate_days": { "type": ["integer", "number"], "minimum": 7 },
+            "adjust_step": { "type": ["integer", "number"], "minimum": 1 },
+            "max_change": { "type": ["integer", "number"], "minimum": 1 },
+            "improve_threshold_pct": { "type": ["integer", "number"] },
+            "degrade_threshold_pct": { "type": ["integer", "number"] },
+            "eval_n_days": { "type": ["integer", "number"], "minimum": 1 },
+            "min_samples": { "type": ["integer", "number"], "minimum": 2 },
+            "match_window_minutes": { "type": ["integer", "number"], "minimum": 1 },
+            "run_on": {
+              "type": "string",
+              "description": "weekly_friday 或 daily：何时执行调分（回填收益每日在收盘任务内执行）"
+            },
+            "min_score_floor": { "type": ["integer", "number"] },
+            "min_score_ceiling": { "type": ["integer", "number"] }
+          }
         },
         "self_improve_from_summary_enabled": {
           "type": "boolean",
@@ -1106,7 +1128,10 @@
         "backoff_cap_sec": { "type": ["integer", "number"], "minimum": 0 },
         "backoff_base_sec": { "type": ["integer", "number"], "minimum": 0 },
         "full_outage_consecutive_notify_threshold": { "type": ["integer", "number"], "minimum": 0 },
-        "full_outage_email_enabled": { "type": "boolean" },
+        "full_outage_email_enabled": {
+          "type": "boolean",
+          "description": "true（默认）：全源连续不可用达阈值时另发邮件/企微；false 则仅本机通知等"
+        },
         "recovery_notify_enabled": { "type": "boolean" },
         "suppress_trend_rounds_after_full_outage": { "type": ["integer", "number"], "minimum": 0 },
         "heartbeat_path": {

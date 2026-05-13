@@ -473,11 +473,13 @@ def load_afternoon_picks(path: Path) -> dict[str, Any] | None:
         return None
 
 
-def afternoon_anchor_matches_today(path: Path) -> bool:
+def afternoon_anchor_matches_today(path: Path, *, anchor_day: date | None = None) -> bool:
+    """anchor_date 是否与「参考日」一致；默认参考日为本地 date.today()（生产路径）。"""
     j = load_afternoon_picks(path)
     if not isinstance(j, dict):
         return False
-    return str(j.get("anchor_date") or "") == _today_iso()
+    ref = (anchor_day if anchor_day is not None else date.today()).isoformat()
+    return str(j.get("anchor_date") or "") == ref
 
 
 def _opportunity_code_list(j: dict[str, Any]) -> list[str]:
@@ -533,7 +535,7 @@ def quality_codes_for_pm_display(
         return None
     if now.time() < dt_time(13, 0):
         return None
-    if not afternoon_anchor_matches_today(afternoon_path):
+    if not afternoon_anchor_matches_today(afternoon_path, anchor_day=now.date()):
         return None
     j = load_afternoon_picks(afternoon_path)
     if not isinstance(j, dict):
@@ -560,7 +562,7 @@ def afternoon_new_codes_for_pm(
         return set()
     if now.weekday() >= 5 or now.time() < dt_time(13, 0):
         return set()
-    if not afternoon_anchor_matches_today(afternoon_path):
+    if not afternoon_anchor_matches_today(afternoon_path, anchor_day=now.date()):
         return set()
     j = load_afternoon_picks(afternoon_path)
     if not isinstance(j, dict):
