@@ -162,12 +162,15 @@ def grid_search_selector_filters(
     recent_blend_weight: float = 0.0,
     recent_anchor_cutoff: str | None = None,
     min_recent_samples: int = 5,
+    trade_blend_weight: float = 0.0,
 ) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
     """
     对已有 enriched DataFrame 做阈值网格；返回 (grid 行列表, 最优 eligible 组合或 None)。
     无短窗叠合时：mean_ret 主序，其次 win_rate、样本数 n。
     recent_blend_weight>0 且 recent_anchor_cutoff 为 YYYY-MM-DD 时，对 anchor_date≥cutoff 子样本
     与全样本 mean_ret 加权合成 combined_mean_ret，排序以 combined_mean_ret 为先。
+    trade_blend_weight>0 且 df 含 trade_norm 列时：在 combined_mean_ret 与过滤子集 mean_trade_norm 间再加权，
+    得到 combined_objective 作为主排序键（同一格内 mean_trade_norm 随过滤样本变化，可与 forward 目标一起优化）。
     """
     r_grid = np.arange(range_min, range_max + range_step * 0.5, range_step)
     if range_only:
@@ -177,6 +180,7 @@ def grid_search_selector_filters(
     grid_rows: list[dict[str, Any]] = []
     min_n = max(1, int(min_samples))
     w_rec = max(0.0, min(1.0, float(recent_blend_weight)))
+    w_trade = max(0.0, min(1.0, float(trade_blend_weight)))
     df_recent = df
     ts_cut: pd.Timestamp | None = None
     if w_rec > 1e-9 and recent_anchor_cutoff and "anchor_date" in df.columns:
@@ -207,6 +211,8 @@ def grid_search_selector_filters(
                         "mean_ret_recent": None,
                         "n_recent": 0,
                         "combined_mean_ret": None,
+                        "mean_trade_norm": None,
+                        "combined_objective": None,
                         "eligible": False,
                     }
                 )
@@ -240,19 +246,41 @@ def grid_search_selector_filters(
             ev2["mean_ret_recent"] = mrr
             ev2["n_recent"] = n_r
             ev2["combined_mean_ret"] = comb
+            mt_full = float(ev.get("mean_trade_norm", 0.0) or 0.0)
+            mt_blend = mt_full
+            if (
+                w_rec > 1e-9
+                and ev_r is not None
+                and int(ev_r.get("n", 0)) >= max(1, int(min_recent_samples))
+            ):
+                mt_recent = float(ev_r.get("mean_trade_norm", 0.0) or 0.0)
+                mt_blend = (1.0 - w_rec) * mt_full + w_rec * mt_recent
+            ev2["mean_trade_norm"] = mt_blend
+            comb_ret = (
+                float(comb) if comb is not None else (float(mr) if mr is not None else 0.0)
+            )
+            if w_trade > 1e-12:
+                ev2["combined_objective"] = (1.0 - w_trade) * comb_ret + w_trade * mt_blend
+            else:
+                ev2["combined_objective"] = comb_ret
             grid_rows.append(ev2)
     eligible = [g for g in grid_rows if g.get("eligible")]
     if not eligible:
         return grid_rows, None
 
-    def _sort_key(x: dict[str, Any]) -> tuple[float, float, float, int]:
+    def _sort_key(x: dict[str, Any]) -> tuple[float, float, float, float, int]:
+        co = x.get("combined_objective")
         cm = x.get("combined_mean_ret")
         mr = x.get("mean_ret")
         wr = float(x.get("win_rate") or 0.0)
         n = int(x.get("n") or 0)
-        primary = float(cm) if cm is not None else (float(mr) if mr is not None else -1e9)
-        secondary = float(mr) if mr is not None else -1e9
-        return (primary, secondary, wr, n)
+        if co is not None:
+            primary = float(co)
+        else:
+            primary = float(cm) if cm is not None else (float(mr) if mr is not None else -1e9)
+        secondary = float(cm) if cm is not None else (float(mr) if mr is not None else -1e9)
+        tertiary = float(mr) if mr is not None else -1e9
+        return (primary, secondary, tertiary, wr, n)
 
     best = max(eligible, key=_sort_key)
     return grid_rows, best
@@ -331,12 +359,17 @@ def evaluate_mask(
     if n <= 0:
         return None
     r = sub["forward_ret"].astype(float)
+    mt = 0.0
+    if "trade_norm" in sub.columns:
+        tn = pd.to_numeric(sub["trade_norm"], errors="coerce").fillna(0.0)
+        mt = float(tn.mean())
     return {
         "n": n,
         "mean_ret": float(r.mean()),
         "median_ret": float(r.median()),
         "win_rate": float((r > 0).mean()),
         "std_ret": float(r.std(ddof=0)) if n > 1 else 0.0,
+        "mean_trade_norm": mt,
     }
 
 

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import shutil
 import sys
 from datetime import datetime, timedelta
@@ -174,6 +175,94 @@ def _format_threshold_comparison_human(
     return "\n".join(lines)
 
 
+def _summary_trade_net_and_activity(tr: Any) -> tuple[bool, float]:
+    """从 daily_summary 的 trades 块判断是否纳入调参，并取 net_profit（元）。"""
+    if not isinstance(tr, dict):
+        return False, 0.0
+    buys = tr.get("buys") or []
+    sells = tr.get("sells") or []
+    n_b = len(buys) if isinstance(buys, list) else 0
+    n_s = len(sells) if isinstance(sells, list) else 0
+    n_p = len(tr.get("sell_monitor_pauses") or []) if isinstance(tr.get("sell_monitor_pauses"), list) else 0
+    n_hw = len(tr.get("hold_watch_only") or []) if isinstance(tr.get("hold_watch_only"), list) else 0
+    raw_net = tr.get("net_profit", tr.get("realized_profit"))
+    try:
+        net = float(raw_net) if raw_net is not None else 0.0
+    except (TypeError, ValueError):
+        net = 0.0
+    activity = n_b > 0 or n_s > 0 or n_p > 0 or n_hw > 0 or abs(net) > 1e-6
+    return activity, net
+
+
+def _trade_norm_from_daily_summary_file(path: Path, scale_yuan: float) -> tuple[float, bool]:
+    """返回 (tanh 归一化得分, 当日是否有交易/盈亏记录可参与优化)。"""
+    if not path.is_file():
+        return 0.0, False
+    try:
+        j = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return 0.0, False
+    if not isinstance(j, dict):
+        return 0.0, False
+    act, net = _summary_trade_net_and_activity(j.get("trades"))
+    if not act:
+        return 0.0, False
+    sc = max(float(scale_yuan), 1.0)
+    return math.tanh(net / sc), True
+
+
+def _attach_trade_norm_for_dataframe(
+    df: Any,
+    *,
+    config_path: Path,
+    scale_yuan: float,
+    log: logging.Logger,
+) -> tuple[Any, bool]:
+    """
+    按 anchor_date 对齐 data/daily_summary_history/YYYY-MM-DD.json，写入 trade_norm 列。
+    若任意锚点日存在可参与优化的 trades，返回 (df, True)；否则不增列并返回 (df, False)。
+    """
+    import pandas as pd
+
+    if df is None or not isinstance(df, pd.DataFrame) or df.empty:
+        return df, False
+    if "anchor_date" not in df.columns:
+        return df, False
+
+    root = config_path.parent
+    hdir = root / "data" / "daily_summary_history"
+    if not hdir.is_dir():
+        log.info("trade_norm: 无目录 %s", hdir)
+        return df, False
+
+    ad_series = pd.to_datetime(df["anchor_date"], errors="coerce")
+    dates = sorted({d.strftime("%Y-%m-%d") for d in ad_series.dropna().tolist()})
+    norm_by_date: dict[str, float] = {}
+    any_signal = False
+    for d in dates:
+        path = hdir / f"{d}.json"
+        norm, ok = _trade_norm_from_daily_summary_file(path, scale_yuan)
+        norm_by_date[d] = float(norm)
+        if ok:
+            any_signal = True
+
+    if not any_signal:
+        return df, False
+
+    def _map_one(v: Any) -> float:
+        if pd.isna(v):
+            return 0.0
+        try:
+            ds = pd.Timestamp(v).strftime("%Y-%m-%d")
+        except Exception:
+            return 0.0
+        return float(norm_by_date.get(ds, 0.0))
+
+    out = df.copy()
+    out["trade_norm"] = ad_series.map(_map_one).astype(float)
+    return out, True
+
+
 def _self_improve_blend_kwargs(
     oa: dict[str, Any],
     *,
@@ -217,6 +306,49 @@ def _self_improve_blend_kwargs(
         "recent_anchor_cutoff": cutoff,
         "min_recent_samples": min_recent,
     }
+
+
+def _self_improve_trade_blend_weight(
+    oa: dict[str, Any],
+    *,
+    config_path: Path,
+    df: Any,
+    log: logging.Logger,
+) -> tuple[float, float, Any]:
+    """
+    self_improve_use_trade_profit + self_improve_trade_weight；
+    若开启但历史总结中无有效 trades，则权重降为 0（与旧行为一致）。
+    返回 (trade_blend_weight, trade_scale_yuan, df_maybe_augmented)。
+    """
+    if not bool(oa.get("self_improve_use_trade_profit", False)):
+        return 0.0, 5000.0, df
+    try:
+        w = float(oa.get("self_improve_trade_weight", 0.2) or 0.2)
+    except (TypeError, ValueError):
+        w = 0.2
+    w = max(0.0, min(1.0, w))
+    try:
+        scale = float(oa.get("self_improve_trade_scale_yuan", 5000.0) or 5000.0)
+    except (TypeError, ValueError):
+        scale = 5000.0
+    scale = max(1.0, scale)
+    if w <= 1e-12:
+        return 0.0, scale, df
+    df2, ok = _attach_trade_norm_for_dataframe(
+        df, config_path=config_path, scale_yuan=scale, log=log
+    )
+    if not ok:
+        log.info(
+            "self_improve_use_trade_profit: 未在 daily_summary_history 找到含有效 trades 的锚点日，"
+            "本轮仅用 forward 收益目标"
+        )
+        return 0.0, scale, df
+    log.info(
+        "self_improve_use_trade_profit: 已附加 trade_norm（scale_yuan=%s, weight=%s）",
+        scale,
+        w,
+    )
+    return w, scale, df2
 
 
 def _maybe_notify(cfg: dict[str, Any], subject: str, body: str) -> None:
@@ -327,8 +459,11 @@ def run_auto_tune_selector_filters(
     blend_kw = _self_improve_blend_kwargs(
         oa, config_path=config_path, now=now, log=log
     )
+    w_trade, _scale, df_eff = _self_improve_trade_blend_weight(
+        oa, config_path=config_path, df=df, log=log
+    )
     _grid, best = grid_search_selector_filters(
-        df,
+        df_eff,
         range_min=float(box.get("range_min", 0.5)),
         range_max=float(box.get("range_max", 0.85)),
         range_step=float(box.get("range_step", 0.05)),
@@ -338,6 +473,7 @@ def run_auto_tune_selector_filters(
         range_only=range_only,
         require_range_pos=require_rp,
         min_samples=min_grid,
+        trade_blend_weight=w_trade,
         **blend_kw,
     )
     del _grid
@@ -363,7 +499,7 @@ def run_auto_tune_selector_filters(
     old_sm = float(scf.get("strategy_sell_score_max", new_sm))
 
     thr_cmp = validate_new_threshold_on_history(
-        df,
+        df_eff,
         old_range_max=old_rm,
         old_sell_max=old_sm,
         new_range_max=new_rm,

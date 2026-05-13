@@ -783,6 +783,21 @@
           "minimum": 1,
           "description": "短窗子样本上过滤后 n 低于此则该格不采用叠合均值（仍保留全样本 mean_ret）"
         },
+        "self_improve_use_trade_profit": {
+          "type": "boolean",
+          "description": "true：网格排序目标叠 daily_summary trades（net_profit 经 tanh 归一化）；无有效记录时自动退回仅 forward 收益"
+        },
+        "self_improve_trade_weight": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1,
+          "description": "combined_objective = (1−w)×combined_mean_ret + w×mean_trade_norm（过滤子集内按行 trade_norm 均值）"
+        },
+        "self_improve_trade_scale_yuan": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "description": "tanh(net_profit/scale) 中的 scale（元），避免单日大额盈亏主导"
+        },
         "auto_tune_selector_filters": {
           "type": "object",
           "additionalProperties": true,
