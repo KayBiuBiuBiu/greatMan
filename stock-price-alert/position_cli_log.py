@@ -17,6 +17,8 @@ def log_position_cli(
     name: str = "",
     hold_shares: int | None = None,
     cost_price: float | None = None,
+    cmd_shares: int | None = None,
+    cmd_cost: float | None = None,
     removed_rows: int | None = None,
     note: str = "",
 ) -> None:
@@ -54,6 +56,10 @@ def log_position_cli(
         rec["hold_shares"] = int(hold_shares)
     if cost_price is not None:
         rec["cost_price"] = round(float(cost_price), 4)
+    if cmd_shares is not None:
+        rec["cmd_shares"] = int(cmd_shares)
+    if cmd_cost is not None:
+        rec["cmd_cost"] = round(float(cmd_cost), 6)
     if removed_rows is not None:
         rec["removed_rows"] = int(removed_rows)
     if str(note or "").strip():

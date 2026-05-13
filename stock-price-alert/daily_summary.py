@@ -352,26 +352,116 @@ def _partition_trades_from_position_cli(
     return buys, sells, pauses, watch_only
 
 
-def _last_close_on_or_before(
-    conn: sqlite3.Connection, secid: str, day_iso: str
-) -> float | None:
-    """日 K 中 trade_date≤summary 当日 的最后一根收盘（无当日 bar 时用上一交易日，便于盘后未同步当日 K 时仍能估浮盈）。"""
-    row = conn.execute(
-        """
-        SELECT close FROM daily_klines
-        WHERE secid = ? AND trade_date <= ?
-        ORDER BY trade_date DESC
-        LIMIT 1
-        """,
-        (str(secid).strip(), str(day_iso).strip()[:10]),
-    ).fetchone()
-    if not row or row[0] is None:
-        return None
-    try:
-        c = float(row[0])
-    except (TypeError, ValueError):
-        return None
-    return c if c > 0 else None
+def _cli_operation_kind_label_cn(kind: str) -> str:
+    """position_cli_log.kind → 邮件/JSON 用的简短中文标签。"""
+    k = str(kind or "").strip().lower()
+    return {
+        "buy": "买入",
+        "add": "加仓",
+        "hold": "录仓",
+        "reduce": "减持",
+        "sell_partial": "减持",
+        "unhold": "清仓",
+        "sell_clear": "清仓",
+        "sell": "暂停监控",
+        "pause": "暂停监控",
+        "hold_watch": "入监控池",
+        "holdwatch": "入监控池",
+    }.get(k, k or "操作")
+
+
+def _collect_position_operations_today(
+    config_path: Path, day_iso: str
+) -> list[dict[str, Any]]:
+    """当日终端持仓类指令流水（data/position_cli_log.json），按时间升序。"""
+    entries = _position_cli_entries_for_day(config_path, day_iso)
+    entries = sorted(entries, key=lambda r: str(r.get("time") or ""))
+    out: list[dict[str, Any]] = []
+    for row in entries:
+        if not isinstance(row, dict):
+            continue
+        k = str(row.get("kind") or "").strip().lower()
+        c = _z6(str(row.get("code") or ""))
+        if not c:
+            continue
+        item: dict[str, Any] = {
+            "time": row.get("time"),
+            "kind": k,
+            "label": _cli_operation_kind_label_cn(k),
+            "code": c,
+            "name": str(row.get("name") or "").strip(),
+        }
+        for key in (
+            "hold_shares",
+            "cost_price",
+            "cmd_shares",
+            "cmd_cost",
+            "removed_rows",
+            "note",
+        ):
+            if key not in row:
+                continue
+            val = row.get(key)
+            if val is None:
+                continue
+            if key == "cost_price" or key == "cmd_cost":
+                try:
+                    item[key] = round(float(val), 6)
+                except (TypeError, ValueError):
+                    item[key] = val
+            elif key in ("hold_shares", "cmd_shares", "removed_rows"):
+                try:
+                    item[key] = int(val)
+                except (TypeError, ValueError):
+                    item[key] = val
+            else:
+                item[key] = val
+        out.append(item)
+    return out
+
+
+def _format_position_operation_mail_line(entry: dict[str, Any]) -> str:
+    """单行正文：时间 + 类型 + 标的 + 数量/成本等。"""
+    ts = str(entry.get("time") or "").strip()
+    hms = ts[11:19] if len(ts) >= 19 else ts
+    lab = str(entry.get("label") or "")
+    raw_c = str(entry.get("code") or "").strip()
+    code = raw_c.zfill(6) if raw_c.isdigit() and len(raw_c) <= 6 else raw_c[:10]
+    nm = str(entry.get("name") or "").strip()[:10]
+    head = f"  {hms}  [{lab}] {code}"
+    if nm:
+        head += f" {nm}"
+    k = str(entry.get("kind") or "").lower()
+    tail_parts: list[str] = []
+    hs = entry.get("hold_shares")
+    cp = entry.get("cost_price")
+    csr = entry.get("cmd_shares")
+    cco = entry.get("cmd_cost")
+    rr = entry.get("removed_rows")
+    note = str(entry.get("note") or "").strip()
+    if k in ("hold", "buy", "add"):
+        if csr is not None and cco is not None:
+            tail_parts.append(f"指令 {csr} 股 @{cco}")
+        if hs is not None and cp is not None:
+            tail_parts.append(f"录后 {hs} 股 成本 {cp}")
+        elif hs is not None:
+            tail_parts.append(f"录后 {hs} 股")
+        elif cp is not None:
+            tail_parts.append(f"成本 {cp}")
+    elif k in ("reduce", "sell_partial"):
+        if hs is not None and cp is not None:
+            tail_parts.append(f"余 {hs} 股 成本 {cp}")
+        elif hs is not None:
+            tail_parts.append(f"余 {hs} 股")
+    elif k in ("unhold", "sell_clear"):
+        if rr is not None:
+            tail_parts.append(f"删 config {rr} 行")
+    elif k in ("hold_watch", "holdwatch"):
+        tail_parts.append("未改仓位")
+    tail = "  ".join(tail_parts) if tail_parts else ""
+    if note:
+        tail = (tail + " ｜ " if tail else "") + note[:100]
+    return head + (f"  {tail}" if tail else "")
 
 
 def _unrealized_holdings_yuan(
@@ -389,9 +479,9 @@ def _unrealized_holdings_yuan(
     if not dbp.is_absolute():
         dbp = root / dbp
     if not dbp.is_file():
-        notes.append("unrealized_skipped_no_kline_db")
-        return 0.0, notes, positions
+        notes.append("no_local_kline_db_unrealized_uses_tushare_only")
     try:
+        from account_pnl_daily import nominal_last_two_closes
         from backtest_picks_performance import code_to_secid
     except Exception as exc:
         _LOG.warning("daily_summary: code_to_secid import failed: %s", exc)
@@ -400,7 +490,14 @@ def _unrealized_holdings_yuan(
 
     total = 0.0
     n_used = 0
-    conn = sqlite3.connect(str(dbp), timeout=8.0)
+    any_qfq_basis = False
+    conn: sqlite3.Connection | None = None
+    if dbp.is_file():
+        try:
+            conn = sqlite3.connect(str(dbp), timeout=8.0)
+        except OSError as exc:
+            _LOG.warning("daily_summary: unrealized sqlite open failed: %s", exc)
+            notes.append("unrealized_kline_db_open_failed")
     try:
         for h in _collect_holdings(cfg, root):
             hs = int(h.get("hold_shares") or 0)
@@ -423,7 +520,9 @@ def _unrealized_holdings_yuan(
                 sid = code_to_secid(code)
             except Exception:
                 continue
-            cl = _last_close_on_or_before(conn, sid, day_iso)
+            cl, _prev_unused, basis = nominal_last_two_closes(conn, sid, day_iso)
+            if basis == "qfq_db":
+                any_qfq_basis = True
             if cl is None:
                 continue
             pnl = (cl - cost_f) * float(hs)
@@ -439,11 +538,15 @@ def _unrealized_holdings_yuan(
                 }
             )
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
     if n_used > 0:
         notes.append(
-            "浮盈采用日 K 库中 trade_date≤总结日 的最近一根收盘价（当日 K 未入库时等同上一交易日收盘）。"
+            "浮盈估：trade_date≤总结日 的最近收盘；优先 Tushare daily（不复权），"
+            "否则本地日K前复权（与券商绝对金额可能偏差）。"
         )
+        if any_qfq_basis:
+            notes.append("部分持仓浮盈仍以前复权日K估算（未拉到不复权日线时）。")
     if n_used == 0 and _collect_holdings(cfg, root):
         notes.append("unrealized_no_eligible_holdings_row")
     return float(total), notes, positions
@@ -458,7 +561,7 @@ def _collect_trades_summary(
     - sells：unhold 删除 + sell_partial 减仓（均记入 sells 列表，以 removed_rows 区分）
     - sell_monitor_pauses：终端 sell（仅暂停监控，未删 config）
     - hold_watch_only：终端 hold <代码>（仅入池）
-    - realized_profit：当日 position_ledger 已实现盈亏合计（减仓/清仓）
+    - realized_profit：当日 position_ledger 减仓/清仓已实现（kind 为 reduce、close、unhold_settle 等）
     - unrealized_profit / net_profit：持仓浮盈 + 已实现
     - unrealized_positions：各持仓 code/name/float_pnl_est（与浮盈合计一致）
     """
@@ -471,16 +574,22 @@ def _collect_trades_summary(
         cfg, root, day_iso
     )
     try:
-        from position_ledger import ledger_db_path, sum_realized_pnl_for_day
+        from position_ledger import (
+            ledger_db_path,
+            sum_realized_close_reduce_pnl_for_day,
+        )
 
         realized = float(
-            sum_realized_pnl_for_day(ledger_db_path(config_path.parent), day_iso)
+            sum_realized_close_reduce_pnl_for_day(
+                ledger_db_path(config_path.parent), day_iso
+            )
         )
     except Exception:
         realized = 0.0
     net = float(realized) + float(unrealized)
     notes = list(u_notes)
     notes.append(
+        "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。"
         "buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；"
         "sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。"
         "流水见 data/position_ledger.db。"
@@ -554,6 +663,48 @@ def _collect_health(cfg: dict[str, Any], root: Path) -> dict[str, Any]:
     return out
 
 
+def _sell_ledger_rows_for_mail(account_pnl: Any) -> list[dict[str, Any]]:
+    """从 account_pnl.ledger_events 筛出当日减仓/清仓台账行（供邮件正文）。"""
+    kinds = frozenset(
+        {"reduce", "close", "unhold_settle", "sell_clear", "sell_partial"}
+    )
+    out: list[dict[str, Any]] = []
+    if not isinstance(account_pnl, dict):
+        return out
+    raw = account_pnl.get("ledger_events")
+    if not isinstance(raw, list):
+        return out
+    for ev in raw:
+        if not isinstance(ev, dict):
+            continue
+        k = str(ev.get("kind") or "").strip().lower()
+        if k not in kinds:
+            continue
+        try:
+            rp = float(ev.get("realized_pnl") or 0.0)
+        except (TypeError, ValueError):
+            rp = 0.0
+        try:
+            qty = int(ev.get("qty_traded") or 0)
+        except (TypeError, ValueError):
+            qty = 0
+        if k == "close" and abs(rp) < 1e-12 and qty == 0:
+            continue
+        out.append(ev)
+    return out
+
+
+def _sell_kind_label_cn(kind: str) -> str:
+    k = str(kind or "").strip().lower()
+    return {
+        "reduce": "减仓",
+        "close": "清仓",
+        "unhold_settle": "清仓",
+        "sell_clear": "清仓",
+        "sell_partial": "减仓",
+    }.get(k, k or "卖出")
+
+
 def build_daily_summary(
     *,
     cfg: dict[str, Any],
@@ -590,6 +741,11 @@ def build_daily_summary(
         _LOG.warning("daily_summary: account_pnl failed: %s", exc)
         account_pnl = {"notes": [f"account_pnl_error:{exc}"]}
 
+    sell_events_today = _sell_ledger_rows_for_mail(account_pnl)
+    position_operations_today = _collect_position_operations_today(
+        config_path, day_iso
+    )
+
     return {
         "schema_version": 1,
         "date": day_iso,
@@ -604,7 +760,9 @@ def build_daily_summary(
         "backtest_weekly_json": _collect_backtest_weekly(weekly_path),
         "health": _collect_health(cfg, root),
         "trades": _collect_trades_summary(cfg, root, day_iso, config_path),
+        "position_operations_today": position_operations_today,
         "account_pnl": account_pnl,
+        "sell_events_today": sell_events_today,
     }
 
 
@@ -633,147 +791,90 @@ def save_daily_summary_json(
 
 
 def format_daily_summary_text(summary: dict[str, Any]) -> str:
+    """邮件/企微正文：今日终端操作流水 + 减仓清仓台账 + 当前持仓；其余见 daily_summary.json。"""
     lines: list[str] = []
     lines.append(f"【每日总结】{summary.get('date', '')}")
     lines.append(f"生成时间: {summary.get('generated_at', '')}")
+    lines.append("")
+
+    lines.append("— 今日操作记录（终端：买入 / 加仓 / 录仓 / 减持 / 清仓等）—")
+    op_rows = summary.get("position_operations_today") or []
+    if not op_rows:
+        lines.append("  （今日无 position_cli 记录，或未产生 hold/reduce/… 指令）")
+    else:
+        for ev in op_rows[:80]:
+            if isinstance(ev, dict):
+                lines.append(_format_position_operation_mail_line(ev))
+
+    lines.append("")
     tr = summary.get("trades")
+    realized = None
     if isinstance(tr, dict):
-        n_b = len(tr.get("buys") or [])
-        n_s = len(tr.get("sells") or [])
-        n_sp = len(tr.get("sell_monitor_pauses") or [])
-        n_hw = len(tr.get("hold_watch_only") or [])
-        lines.append(
-            "【盈亏摘要】hold写入 "
-            f"{n_b} / 减仓&删配置 {n_s} / sell暂停 {n_sp} / hold仅入池 {n_hw} | "
-            f"已实现 {tr.get('realized_profit')} | 浮盈(估) {tr.get('unrealized_profit')} | "
-            f"净 {tr.get('net_profit')}"
-        )
-    lines.append("")
-    lines.append("— 持仓 —")
-    for h in summary.get("holdings") or []:
-        if isinstance(h, dict):
-            lab = _report_stock_label(
-                str(h.get("name") or ""), str(h.get("code") or "")
-            )
+        realized = tr.get("realized_profit")
+
+    lines.append("— 今日减仓 / 清仓（台账）—")
+    if realized is not None:
+        lines.append(f"  合计已实现：{realized} 元")
+    sell_rows = summary.get("sell_events_today") or []
+    if not sell_rows:
+        lines.append("  （今日无卖出侧台账记录，或账本为空）")
+    else:
+        for ev in sell_rows[:40]:
+            if not isinstance(ev, dict):
+                continue
+            kind = _sell_kind_label_cn(str(ev.get("kind") or ""))
+            raw_c = str(ev.get("code") or "").strip()
+            code = raw_c.zfill(6) if raw_c.isdigit() and len(raw_c) <= 6 else raw_c[:10]
+            nm = str(ev.get("name") or "").strip()[:10]
+            try:
+                qty = int(ev.get("qty_traded") or 0)
+            except (TypeError, ValueError):
+                qty = 0
+            ex = ev.get("exec_price")
+            try:
+                exf = float(ex) if ex is not None and str(ex).strip() != "" else None
+            except (TypeError, ValueError):
+                exf = None
+            try:
+                rp = float(ev.get("realized_pnl") or 0.0)
+            except (TypeError, ValueError):
+                rp = 0.0
+            before_v = ev.get("shares_before")
+            after_v = ev.get("shares_after")
+            px_s = f"{exf:.4f}" if exf is not None and exf > 0 else "—"
+            extra = ""
+            if before_v is not None or after_v is not None:
+                extra = f"  （仓 {before_v} → {after_v}）"
             lines.append(
-                f"  {_padded_label(lab, _REPORT_STOCK_COL_WIDTH)} "
-                f"持仓{h.get('hold_shares')} 成本{h.get('cost_price')}"
+                f"  [{kind}] {code} {nm}  数量 {qty}  结算价≈{px_s}  盈亏 {rp:+.2f} 元{extra}"
             )
+
     lines.append("")
-    lines.append("— 当日终端持仓操作（hold / unhold / sell）—")
-    if isinstance(tr, dict):
+    lines.append("— 当前持仓 —")
+    hs_list = summary.get("holdings") or []
+    npos = 0
+    for h in hs_list:
+        if not isinstance(h, dict):
+            continue
+        try:
+            hs = int(h.get("hold_shares") or 0)
+        except (TypeError, ValueError):
+            hs = 0
+        if hs <= 0:
+            continue
+        npos += 1
+        lab = _report_stock_label(str(h.get("name") or ""), str(h.get("code") or ""))
         lines.append(
-            f"  hold写入 {len(tr.get('buys') or [])} / 减仓&删配置 {len(tr.get('sells') or [])} / "
-            f"sell暂停 {len(tr.get('sell_monitor_pauses') or [])} / "
-            f"hold仅入池 {len(tr.get('hold_watch_only') or [])} | "
-            f"已实现 {tr.get('realized_profit')} | 浮盈(估) {tr.get('unrealized_profit')} | "
-            f"净 {tr.get('net_profit')}"
+            f"  {_padded_label(lab, _REPORT_STOCK_COL_WIDTH)} "
+            f"{hs} 股  成本 {h.get('cost_price')}"
         )
-        for row in (tr.get("buys") or [])[:8]:
-            if isinstance(row, dict):
-                lab = _report_stock_label(
-                    str(row.get("name") or ""), str(row.get("code") or "")
-                )
-                lines.append(
-                    f"  [hold] {_padded_label(lab, _REPORT_STOCK_COL_WIDTH)} "
-                    f"股{row.get('hold_shares')} 成本{row.get('cost_price')}"
-                )
-        for row in (tr.get("sells") or [])[:8]:
-            if isinstance(row, dict):
-                tag = "[减仓]" if row.get("removed_rows") is None else "[unhold]"
-                rr = row.get("removed_rows")
-                extra = f"移除{rr}条" if rr is not None else str(row.get("note") or "")[:60]
-                lab = _report_stock_label(
-                    str(row.get("name") or ""), str(row.get("code") or "")
-                )
-                lines.append(
-                    f"  {tag} {_padded_label(lab, _REPORT_STOCK_COL_WIDTH)} {extra}"
-                )
-        for row in (tr.get("sell_monitor_pauses") or [])[:8]:
-            if isinstance(row, dict):
-                lab = _report_stock_label(
-                    str(row.get("name") or ""), str(row.get("code") or "")
-                )
-                lines.append(
-                    f"  [sell] {_padded_label(lab, _REPORT_STOCK_COL_WIDTH)} 暂停监控"
-                )
-        for n in (tr.get("notes") or [])[:3]:
-            if isinstance(n, str):
-                lines.append(f"  （说明）{n[:120]}")
-    else:
-        lines.append("  （无 trades 字段）")
+    if npos == 0:
+        lines.append("  （无 hold_shares>0 的持仓行）")
+
     lines.append("")
-    ap = summary.get("account_pnl")
-    if isinstance(ap, dict):
-        lines.append("— 账户盈亏（台账+日K）—")
-        lines.append(
-            f"  今日已实现 {ap.get('realized_today')} | 当日浮动估 {ap.get('daily_float_change_est')} | "
-            f"当前浮盈估 {ap.get('unrealized_total_est')} | 今日账户变动估 {ap.get('account_today_change_est')}"
-        )
-        for row in (ap.get("positions") or [])[:25]:
-            if isinstance(row, dict):
-                dp = row.get("daily_pnl_est")
-                fl = row.get("float_pnl_est")
-                lc = row.get("last_close")
-                lab = _report_stock_label(
-                    str(row.get("name") or ""), str(row.get("code") or "")
-                )
-                lines.append(
-                    f"  {_padded_label(lab, _REPORT_STOCK_COL_WIDTH)} "
-                    f"股{row.get('hold_shares')} 均本{row.get('avg_cost')} 收{lc} "
-                    f"当日{dp} 浮盈{fl}"
-                )
-        for n in (ap.get("notes") or [])[:2]:
-            if isinstance(n, str):
-                lines.append(f"  （说明）{n[:100]}")
-    lines.append("")
-    lines.append("— 当日卖出/止盈相关信号（节选）—")
-    sigs = summary.get("signals_today") or []
-    if not sigs:
-        lines.append("  （无或未启用 alert_events）")
-    else:
-        for s in sigs[:12]:
-            if isinstance(s, dict):
-                lines.append(
-                    f"  [{s.get('alert_type')}] {s.get('code')} {s.get('summary', '')[:80]}"
-                )
-    lines.append("")
-    lines.append("— 盘前优质（daily_picks）—")
-    for r in (summary.get("daily_picks_quality") or [])[:40]:
-        if isinstance(r, dict):
-            lines.append(f"  {r.get('code')} score={r.get('score')}")
-    lines.append("")
-    lines.append("— 控制台优质代码（EOD 缓存）—")
     lines.append(
-        "  " + ", ".join(summary.get("console_quality_codes_eod") or [])
-        or "  （空）"
+        "选股、信号、按标的日 K 的浮盈等仍写入 data/daily_summary.json，需要时请打开该文件。"
     )
-    lines.append("")
-    lines.append("— 低吸优选代码（收盘前监控缓存）—")
-    lines.append("  " + ", ".join(summary.get("dip_pick_codes_eod") or []) or "  （空）")
-    lines.append("")
-    lines.append("— 下午机会 —")
-    for a in summary.get("afternoon_opportunities") or []:
-        if isinstance(a, dict):
-            lines.append(
-                f"  {a.get('code')} 涨{a.get('chg_pct')}% "
-                f"日内位{a.get('intraday_position')} 量比{a.get('vol_ratio_proxy')}"
-            )
-    lines.append("")
-    lines.append("— backtest_alerts weekly.json —")
-    bw = summary.get("backtest_weekly_json")
-    if isinstance(bw, dict) and bw:
-        lines.append(f"  updated_rows={bw.get('updated_rows')} keys={list(bw.keys())[:8]}")
-    else:
-        lines.append("  （无）")
-    lines.append("")
-    lines.append("— 健康度 —")
-    h = summary.get("health") or {}
-    if isinstance(h, dict):
-        lines.append(f"  picks_history 快照数: {h.get('picks_history_snapshot_count')}")
-        lines.append(f"  K 线库: {h.get('kline_db_mtime_iso')}")
-        if h.get("notes"):
-            lines.append(f"  备注: {h.get('notes')}")
     return "\n".join(lines)
 
 

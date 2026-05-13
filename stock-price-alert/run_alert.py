@@ -749,6 +749,10 @@ DEFAULT_OPS_AUTOMATION = {
     "ml_forward4_train_min_bars": 120,
     # data/daily_summary.json；发信需单独打开（走 send_email_alert / remote_channel）
     "daily_summary_email_enabled": False,
+    # 月 / 半年 / 年：按 daily_summary_history 汇总 trades.realized 等（见 pnl_period_report.py）
+    "pnl_period_report_enabled": True,
+    "pnl_period_report_email_enabled": False,
+    "pnl_period_report_catchup_days": 5,
     # true：选股过滤网格目标叠「近 self_improve_lookback_days」锚定子样本，并将调参排期视为 daily
     "self_improve_from_summary_enabled": False,
     "self_improve_lookback_days": 5,
@@ -2485,7 +2489,11 @@ def _watchlist_indices_for_code(
 
 
 def _merge_duplicate_watch_rows(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
-    """两条记录视为同一标的时合并为一条（去重 / 扫描合并）。"""
+    """两条记录视为同一标的时合并为一条（去重 / 扫描合并）。
+
+    股数：两条均有持股则相加；仅一条有持股则保留该条股数。
+    成本：两条均有持股时用 (sa*ca+sb*cb)/总股数 加权；仅一条有持股时取该条成本（>0）或另一侧。
+    """
     sa, sb = int(a.get("hold_shares") or 0), int(b.get("hold_shares") or 0)
     ca, cb = float(a.get("cost_price") or 0.0), float(b.get("cost_price") or 0.0)
     if sa > sb or (sa == sb and ca >= cb):
@@ -2493,13 +2501,19 @@ def _merge_duplicate_watch_rows(a: dict[str, Any], b: dict[str, Any]) -> dict[st
     else:
         primary, secondary = b, a
     out = dict(primary)
-    out["hold_shares"] = max(sa, sb)
-    if sb > sa:
-        out["cost_price"] = cb
-    elif sa > sb:
-        out["cost_price"] = ca
+    sa, sb = int(primary.get("hold_shares") or 0), int(secondary.get("hold_shares") or 0)
+    ca, cb = float(primary.get("cost_price") or 0.0), float(secondary.get("cost_price") or 0.0)
+    if sa > 0 and sb > 0:
+        tot = sa + sb
+        out["hold_shares"] = tot
+        out["cost_price"] = round((sa * ca + sb * cb) / float(tot), 6)
     else:
-        out["cost_price"] = cb if cb > 0 else ca
+        if sa > 0:
+            out["hold_shares"] = sa
+            out["cost_price"] = round(ca, 6) if ca > 0 else (round(cb, 6) if cb > 0 else 0.0)
+        else:
+            out["hold_shares"] = sb
+            out["cost_price"] = round(cb, 6) if cb > 0 else (round(ca, 6) if ca > 0 else 0.0)
     for fld in ("name", "industry", "market", "note", "alert_mode"):
         if not str(out.get(fld) or "").strip():
             v = secondary.get(fld)
@@ -2849,10 +2863,13 @@ def _upsert_hold_in_cfg(
     ledger_kind: str | None = None,
 ) -> bool:
     """
-    写入/更新持仓：同代码已存在且原持股、成本有效时，本次股数/成本按「加仓」与原有仓位
-    合并为加权平均成本；否则视为新开/覆盖。去掉重复代码条目。
+    写入/更新持仓：同代码已存在且原持股>0、本次加仓股数>0 时，与原有仓位合并：
+    新总股数=原股数+本次股数；成本=(原股数×原成本+本次股数×本次单价)/新总股数。
 
-    ledger_kind: 写入 position_ledger 的 kind/op_type；默认 hold_add（兼容 hold 命令）。
+    旧逻辑要求旧成本>0 才合并，导致旧成本为 0 或缺失时第二次 buy/hold 会整笔覆盖。
+    去掉同代码重复 watchlist 条目。
+
+    ledger_kind: 写入 position_ledger 的 kind/op_type（如 buy / add / hold_add）；默认 hold_add。
     """
     wl = cfg.get("watchlist")
     if not isinstance(wl, list):
@@ -2882,7 +2899,7 @@ def _upsert_hold_in_cfg(
         merged["code"] = code
         merged["name"] = str(old.get("name") or name)
         merged["market"] = str(old.get("market") or market) or market
-        if old_sh > 0 and old_cp > 0:
+        if old_sh > 0 and delta_sh > 0:
             new_sh = old_sh + delta_sh
             merged["hold_shares"] = int(new_sh)
             merged["cost_price"] = round(
@@ -2926,15 +2943,18 @@ def _upsert_hold_in_cfg(
         try:
             dbp = ledger_db_path(config_path.parent)
             lk = (ledger_kind or "hold_add").strip() or "hold_add"
+            merged_add = bool(indices and old_sh > 0 and delta_sh > 0)
+            # 已有仓加仓：op_type 统一为 add，便于对账；kind 仍反映终端命令来源
+            op_type = "add" if merged_add else lk
             note = (
                 "加权加仓"
-                if indices and old_sh > 0 and old_cp > 0
+                if merged_add
                 else "开仓或覆盖无有效旧成本"
             )
             append_ledger_event(
                 dbp,
                 kind=lk,
-                op_type=lk,
+                op_type=op_type,
                 code=code,
                 name=name[:40],
                 shares_before=old_sh if indices else None,
@@ -3305,6 +3325,8 @@ def _handle_runtime_command(
             name=nm,
             hold_shares=int(tot_sh),
             cost_price=float(tot_cp),
+            cmd_shares=int(shares),
+            cmd_cost=float(cost),
         )
         if state is not None and valid_code(code):
             ack_cli_position_buy_add(code, state)
@@ -3409,6 +3431,8 @@ def _handle_runtime_command(
             name=nm,
             hold_shares=int(tot_sh),
             cost_price=float(tot_cp),
+            cmd_shares=int(shares),
+            cmd_cost=float(cost),
         )
         if state is not None and valid_code(code):
             ack_cli_position_buy_add(code, state)
@@ -3574,6 +3598,8 @@ def _handle_runtime_command(
             name=nm,
             hold_shares=int(tot_sh),
             cost_price=float(tot_cp),
+            cmd_shares=int(shares),
+            cmd_cost=float(cost),
         )
         if state is not None and valid_code(code):
             ack_cli_position_buy_add(code, state)
@@ -5092,6 +5118,23 @@ def _maybe_run_ops_automation(
                 _emit_main_line(
                     f"[自动化] daily_summary 异常: {exc}",
                     event="after_close_daily_summary_fail",
+                    level=logging.WARNING,
+                )
+            try:
+                from pnl_period_report import maybe_run_pnl_period_reports
+
+                maybe_run_pnl_period_reports(
+                    cfg=cfg,
+                    root=ROOT,
+                    state=state,
+                    now=now,
+                    oa=oa,
+                    state_path=state_path(config_path),
+                )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] pnl_period_report 异常: {exc}",
+                    event="after_close_pnl_period_report_fail",
                     level=logging.WARNING,
                 )
             try:

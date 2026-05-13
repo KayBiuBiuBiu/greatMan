@@ -7,7 +7,32 @@ from pathlib import Path
 from typing import Any
 
 from backtest_picks_performance import code_to_secid, resolve_db_path
-from position_ledger import ledger_db_path, list_events_for_day, sum_realized_pnl_for_day
+from position_ledger import (
+    ledger_db_path,
+    list_events_for_day,
+    sum_realized_close_reduce_pnl_for_day,
+)
+
+
+def nominal_last_two_closes(
+    conn: sqlite3.Connection | None,
+    secid: str,
+    day_iso: str,
+) -> tuple[float | None, float | None, str]:
+    """持仓口径：优先 Tushare daily（不复权）；否则本地 daily_klines（前复权）。
+
+    返回 (last_close, prev_close, basis)，basis 为 raw | qfq_db | none。
+    """
+    from quote_tushare import last_two_unadj_closes_on_or_before
+
+    lu, pu = last_two_unadj_closes_on_or_before(secid, day_iso)
+    if lu is not None and lu > 0:
+        return lu, pu, "raw"
+    if conn is not None:
+        lq, pq = _last_two_closes_on_or_before(conn, secid, day_iso)
+        if lq is not None and lq > 0:
+            return lq, pq, "qfq_db"
+    return None, None, "none"
 
 
 def _last_two_closes_on_or_before(
@@ -49,38 +74,27 @@ def build_account_pnl_summary(
     day_iso: str,
     holdings: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    """汇总账户层盈亏（依赖日 K；无 K 的标的跳过当日与浮动估算）。"""
+    """汇总账户层盈亏：收/当日/浮盈优先 Tushare daily（不复权），否则本地日K（前复权）；今日已实现仅减仓/清仓。"""
     db_path = resolve_db_path(cfg)
     ledger_p = ledger_db_path(config_path.parent)
-    realized_today = sum_realized_pnl_for_day(ledger_p, day_iso)
+    realized_today = sum_realized_close_reduce_pnl_for_day(ledger_p, day_iso)
     ledger_preview = list_events_for_day(ledger_p, day_iso, limit=80)
 
     positions: list[dict[str, Any]] = []
     unrealized_total = 0.0
     daily_float_change = 0.0
+    notes: list[str] = []
+    any_qfq_basis = False
 
-    if not db_path.is_file():
-        return {
-            "as_of": day_iso,
-            "positions": [],
-            "realized_today": round(realized_today, 2),
-            "daily_float_change_est": None,
-            "unrealized_total_est": None,
-            "account_today_change_est": round(realized_today, 2),
-            "ledger_events": ledger_preview,
-            "notes": ["no_kline_db_for_account_pnl"],
-        }
+    conn: sqlite3.Connection | None = None
+    if db_path.is_file():
+        try:
+            conn = sqlite3.connect(str(db_path), timeout=10.0)
+        except OSError:
+            notes.append("kline_db_open_failed")
+    else:
+        notes.append("no_kline_db_for_account_pnl")
 
-    try:
-        conn = sqlite3.connect(str(db_path), timeout=10.0)
-    except OSError:
-        return {
-            "as_of": day_iso,
-            "positions": [],
-            "realized_today": round(realized_today, 2),
-            "ledger_events": ledger_preview,
-            "notes": ["kline_db_open_failed"],
-        }
     try:
         for h in holdings:
             if not isinstance(h, dict):
@@ -100,7 +114,9 @@ def build_account_pnl_summary(
                 sid = code_to_secid(code)
             except Exception:
                 continue
-            last_c, prev_c = _last_two_closes_on_or_before(conn, sid, day_iso)
+            last_c, prev_c, basis = nominal_last_two_closes(conn, sid, day_iso)
+            if basis == "qfq_db":
+                any_qfq_basis = True
             if last_c is None or last_c <= 0:
                 positions.append(
                     {
@@ -109,6 +125,7 @@ def build_account_pnl_summary(
                         "hold_shares": hs,
                         "avg_cost": round(cost_f, 4),
                         "last_close": None,
+                        "last_close_basis": basis,
                         "daily_pnl_est": None,
                         "float_pnl_est": None,
                     }
@@ -127,13 +144,20 @@ def build_account_pnl_summary(
                     "hold_shares": hs,
                     "avg_cost": round(cost_f, 4),
                     "last_close": round(last_c, 4),
+                    "last_close_basis": basis,
                     "daily_pnl_est": None if day_chg is None else round(day_chg, 2),
                     "float_pnl_est": round(fl, 2),
                 }
             )
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
 
+    if any_qfq_basis:
+        notes.append(
+            "收/当日/浮盈：部分标的用本地日K库前复权收盘（列尾标*），与券商现价可能不一致；"
+            "配置 Tushare 后优先拉取不复权 daily。"
+        )
     acct_change = realized_today + daily_float_change
     return {
         "as_of": day_iso,
@@ -143,5 +167,5 @@ def build_account_pnl_summary(
         "unrealized_total_est": round(unrealized_total, 2),
         "account_today_change_est": round(acct_change, 2),
         "ledger_events": ledger_preview,
-        "notes": [],
+        "notes": notes,
     }

@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from daily_summary import (
+    _cli_operation_kind_label_cn,
+    _collect_position_operations_today,
+    _format_position_operation_mail_line,
     _partition_trades_from_position_cli,
     _padded_label,
     _report_stock_label,
@@ -72,3 +77,33 @@ def test_partition_sell_partial_goes_to_sells() -> None:
     ]
     buys, sells, pauses, watch = _partition_trades_from_position_cli(entries)
     assert sells and not pauses
+
+
+def test_cli_operation_kind_labels() -> None:
+    assert _cli_operation_kind_label_cn("buy") == "买入"
+    assert _cli_operation_kind_label_cn("ADD") == "加仓"
+    assert _cli_operation_kind_label_cn("reduce") == "减持"
+    assert _cli_operation_kind_label_cn("unhold") == "清仓"
+
+
+def test_collect_position_operations_from_tmp_log(tmp_path: Path) -> None:
+    log_path = tmp_path / "data" / "position_cli_log.json"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text(
+        """[
+  {"time": "2026-05-20 09:00:01", "kind": "buy", "code": "002237", "name": "恒邦",
+   "hold_shares": 100, "cost_price": 10.5, "cmd_shares": 100, "cmd_cost": 10.5},
+  {"time": "2026-05-20 14:00:00", "kind": "reduce", "code": "600711", "name": "盛屯",
+   "hold_shares": 5000, "cost_price": 12.3, "note": "卖200股"}
+]
+""",
+        encoding="utf-8",
+    )
+    cfg_path = tmp_path / "config.json"
+    cfg_path.write_text("{}", encoding="utf-8")
+    rows = _collect_position_operations_today(cfg_path, "2026-05-20")
+    assert len(rows) == 2
+    assert rows[0]["label"] == "买入" and rows[0]["code"] == "002237"
+    assert rows[1]["kind"] == "reduce" and rows[1]["hold_shares"] == 5000
+    line = _format_position_operation_mail_line(rows[1])
+    assert "减持" in line and "600711" in line and "余 5000" in line

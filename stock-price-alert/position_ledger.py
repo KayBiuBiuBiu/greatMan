@@ -147,6 +147,7 @@ def append_ledger_event(
 
 
 def sum_realized_pnl_for_day(db_path: Path, day_iso: str) -> float:
+    """当日台账 realized_pnl 全量求和（含所有 kind；加仓类一般为 0）。"""
     if not db_path.is_file():
         return 0.0
     d0 = str(day_iso).strip()[:10]
@@ -157,6 +158,36 @@ def sum_realized_pnl_for_day(db_path: Path, day_iso: str) -> float:
             row = conn.execute(
                 "SELECT COALESCE(SUM(realized_pnl),0) AS s FROM ledger_events WHERE day_iso = ?",
                 (d0,),
+            ).fetchone()
+            return float(row["s"] or 0.0) if row else 0.0
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return 0.0
+
+
+def sum_realized_close_reduce_pnl_for_day(db_path: Path, day_iso: str) -> float:
+    """当日减仓、清仓等卖出侧已实现盈亏（仅 reduce / close / unhold_settle 等 kind）。
+
+    不含 hold_add、buy、add 等开仓流水；与「只要今天清仓减仓盈亏」口径一致。
+    """
+    if not db_path.is_file():
+        return 0.0
+    d0 = str(day_iso).strip()[:10]
+    kinds = ("reduce", "close", "unhold_settle", "sell_clear", "sell_partial")
+    ph = ",".join("?" * len(kinds))
+    try:
+        conn = _connect(db_path)
+        try:
+            init_ledger_schema(conn)
+            row = conn.execute(
+                f"""
+                SELECT COALESCE(SUM(realized_pnl),0) AS s
+                FROM ledger_events
+                WHERE day_iso = ?
+                  AND lower(trim(kind)) IN ({ph})
+                """,
+                (d0, *kinds),
             ).fetchone()
             return float(row["s"] or 0.0) if row else 0.0
         finally:

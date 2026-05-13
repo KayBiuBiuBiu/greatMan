@@ -763,6 +763,20 @@
           "type": "boolean",
           "description": "true：每日总结写入后另发邮件/企微（notifications.remote_channel）"
         },
+        "pnl_period_report_enabled": {
+          "type": "boolean",
+          "description": "true：收盘后检查是否需生成月/半年/年盈亏汇总（依赖 data/daily_summary_history）"
+        },
+        "pnl_period_report_email_enabled": {
+          "type": "boolean",
+          "description": "true：月结/半年报/年结另发邮件/企微（与 daily_summary 邮件独立开关）"
+        },
+        "pnl_period_report_catchup_days": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "maximum": 15,
+          "description": "月初或 7/1、1/1 后若干交易日内若未发过对应报告则补发（防漏跑）"
+        },
         "self_improve_from_summary_enabled": {
           "type": "boolean",
           "description": "true：选股过滤网格叠近窗 anchor 目标，并将 auto_tune_selector_filters 排期视为 daily（需子项 enabled）"

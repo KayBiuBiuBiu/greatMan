@@ -1326,6 +1326,40 @@ def try_fetch_daily_rows_for_secid(
     return rows
 
 
+def last_two_unadj_closes_on_or_before(
+    secid: str, day_iso: str, *, lmt: int = 160
+) -> tuple[float | None, float | None]:
+    """Tushare pro.daily（不复权）中 trade_date≤day_iso 的最近两根收盘。
+
+    与本地 daily_klines（pro_bar qfq）区分，用于持仓成本与「券商口径」收盘对比。
+    失败返回 (None, None)。
+    """
+    rows = try_fetch_daily_rows_for_secid(str(secid).strip(), lmt=int(lmt))
+    if not rows:
+        return None, None
+    day_s = str(day_iso).strip()[:10]
+    elig = [r for r in rows if str(r[0]).strip()[:10] <= day_s]
+    if not elig:
+        return None, None
+    last = elig[-1]
+    prev = elig[-2] if len(elig) >= 2 else None
+    try:
+        c0 = float(last[4]) if last[4] is not None else None
+    except (TypeError, ValueError):
+        c0 = None
+    if c0 is None or c0 <= 0:
+        return None, None
+    if prev is None:
+        return c0, None
+    try:
+        c1 = float(prev[4]) if prev[4] is not None else None
+    except (TypeError, ValueError):
+        c1 = None
+    if c1 is not None and c1 <= 0:
+        c1 = None
+    return c0, c1
+
+
 def try_get_kline_dict_for_secid(
     secid: str,
     lmt: int,
