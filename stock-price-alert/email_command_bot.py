@@ -107,6 +107,20 @@ def _extract_text(msg: email.message.Message) -> str:
 def _parse_runtime_commands(subject: str, body: str) -> list[str]:
     txt = (subject + "\n" + body).replace("\r", "\n")
     commands: list[str] = []
+    sell_codes_with_qty: set[str] = set()
+    sell_qty_patterns = [
+        r"\bsell\s+([0-9]{6})\s+([0-9]{1,9})\b",
+        r"卖出\s*([0-9]{6})\s+([0-9]{1,9})\s*(?:股)?",
+        r"([0-9]{6})\s*编号?\s*卖出\s*([0-9]{1,9})\s*(?:股)?",
+    ]
+    for p in sell_qty_patterns:
+        for m in re.finditer(p, txt, flags=re.IGNORECASE):
+            code = m.group(1)
+            qty = int(m.group(2))
+            cmd = f"sell {code} {qty}"
+            if cmd not in commands:
+                commands.append(cmd)
+            sell_codes_with_qty.add(code)
     sell_patterns = [
         r"([0-9]{6})\s*编号?\s*卖出",
         r"卖出\s*([0-9]{6})",
@@ -114,6 +128,18 @@ def _parse_runtime_commands(subject: str, body: str) -> list[str]:
         r"\bsell\s*([0-9]{6})\b",
     ]
     for p in sell_patterns:
+        for m in re.finditer(p, txt, flags=re.IGNORECASE):
+            code = m.group(1)
+            if code in sell_codes_with_qty:
+                continue
+            cmd = f"pause {code}"
+            if cmd not in commands:
+                commands.append(cmd)
+    clearout_patterns = [
+        r"清仓\s*([0-9]{6})",
+        r"\bclose\s+([0-9]{6})\b",
+    ]
+    for p in clearout_patterns:
         for m in re.finditer(p, txt, flags=re.IGNORECASE):
             code = m.group(1)
             cmd = f"sell {code}"
@@ -129,7 +155,7 @@ def _parse_runtime_commands(subject: str, body: str) -> list[str]:
     for p in buy_patterns_with_pos:
         for m in re.finditer(p, txt, flags=re.IGNORECASE):
             code, shares, cost = m.group(1), m.group(2), m.group(3)
-            cmd = f"hold {code} {int(shares)} {float(cost)}"
+            cmd = f"buy {code} {int(shares)} {float(cost)}"
             if cmd not in commands:
                 commands.append(cmd)
 

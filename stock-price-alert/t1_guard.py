@@ -107,7 +107,8 @@ def plan_strategy_t1(code6: str, sig: str, state: dict[str, Any]) -> T1StrategyP
                 suppressed_buy=True,
                 suppressed_duplicate_buy=False,
             )
-        if lb == today:
+        ack_buy = str(rec.get("cli_buy_add_ack_date") or "").strip()[:10] == today_s
+        if lb == today and ack_buy:
             return T1StrategyPlan(
                 show_line=False,
                 line_text="",
@@ -151,6 +152,21 @@ def plan_strategy_t1(code6: str, sig: str, state: dict[str, Any]) -> T1StrategyP
                 suppressed_buy=False,
                 suppressed_duplicate_buy=False,
             )
+        ack_sell = str(rec.get("cli_sell_reduce_ack_date") or "").strip()[:10] == today_s
+        ls_d = _parse_iso_date(rec.get("last_sell_emit_date"))
+        if ls_d == today and ack_sell:
+            return T1StrategyPlan(
+                show_line=False,
+                line_text="",
+                allow_notify=False,
+                allow_email_buy=False,
+                allow_email_sell=False,
+                commit_side=None,
+                log_sig=sig,
+                suppressed_sell=False,
+                suppressed_buy=False,
+                suppressed_duplicate_buy=False,
+            )
         return T1StrategyPlan(
             show_line=True,
             line_text=sig,
@@ -187,6 +203,18 @@ def commit_strategy_emit(
         rec["last_buy_emit_date"] = today_s
     elif side == "sell":
         rec["last_sell_emit_date"] = today_s
+
+
+def ack_cli_position_buy_add(code6: str, state: dict[str, Any]) -> None:
+    """终端已 hold（四参数）/buy/add 记仓：当日同标的策略买入提示可收束。"""
+    rec = _rec(state, code6)
+    rec["cli_buy_add_ack_date"] = shanghai_today_iso()
+
+
+def ack_cli_position_sell_reduce(code6: str, state: dict[str, Any]) -> None:
+    """终端已 sell/reduce/unhold 等卖出侧操作：当日同标的策略卖出提示可收束。"""
+    rec = _rec(state, code6)
+    rec["cli_sell_reduce_ack_date"] = shanghai_today_iso()
 
 
 def should_suppress_risk_stop_take(code6: str, state: dict[str, Any]) -> bool:

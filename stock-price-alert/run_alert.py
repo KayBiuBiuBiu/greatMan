@@ -224,11 +224,15 @@ from sector_em import clear_round_cache as sector_clear_round_cache, resolve_sec
 from risk_control import RiskManager
 from strategy_engine import ma_box_strategy
 from t1_guard import (
+    ack_cli_position_buy_add,
+    ack_cli_position_sell_reduce,
     commit_strategy_emit,
     plan_strategy_t1,
     should_suppress_risk_stop_take,
     T1StrategyPlan,
 )
+from position_cli_log import log_position_cli
+from position_ledger import append_ledger_event, ledger_db_path
 from trade_log import log_signal
 from trend_slippage_risk import evaluate_trend_slippage_alert
 from trend_slip_confirm import consecutive_trend_slip_notify_ok
@@ -611,6 +615,8 @@ DEFAULT_ML_FILTER = {
     "external_flow_north_max_lag_days": 120,
     # True：滞后时打 INFO；False：仅 DEBUG（默认安静）
     "external_flow_warn_stale_north": False,
+    # False：不在控制台输出「【ML参考】」行（不影响 ml_filter 对预警/仓位等的其它逻辑）
+    "watch_ml_reference_enabled": True,
     # False：【ML参考】行仅展示 NB 概率，不并列「仓位判定」（避免与【仓位建议】重复、窄屏断行误读）
     "reference_line_include_position_hint": True,
 }
@@ -747,6 +753,10 @@ DEFAULT_OPS_AUTOMATION = {
     "self_improve_from_summary_enabled": False,
     "self_improve_lookback_days": 5,
     "self_improve_blend_weight": 0.25,
+    # true：网格目标叠「当日总结 trades」归一化盈亏（需 daily_summary_history 含对应锚点日且该日有交易/盈亏记录）
+    "self_improve_use_trade_profit": False,
+    "self_improve_trade_weight": 0.2,
+    "self_improve_trade_scale_yuan": 5000.0,
     "watchlist_auto_replenish": copy.deepcopy(DEFAULT_WATCHLIST_AUTO_REPLENISH),
 }
 DEFAULT_MONITORING = {
@@ -1378,7 +1388,14 @@ def _emit_watch_ml_reference_line(
     """
     【ML参考】可含两段：ml_filter 下跌 NB；ml_forward4「第 N 交易日收>今收」收涨 NB（N=FORWARD_UP_HORIZON_TRADING_DAYS）。
     任一段可单独启用。返回通知/邮件用短摘要；全无则 None。
+
+    ml_filter.watch_ml_reference_enabled：为 false 时不输出本行（也不拼进策略通知/邮件附录）。
     """
+    mfc0 = cfg.get("ml_filter") or {}
+    if isinstance(mfc0, dict) and not bool(
+        mfc0.get("watch_ml_reference_enabled", True)
+    ):
+        return None
     kl = pack.get("kline")
     if not isinstance(kl, dict) or not kl:
         return None
@@ -2112,6 +2129,91 @@ def _emit_quality_pick_reason_lines(
     )
 
 
+def _buy_filter_reason_to_plain_cn(br: str) -> str:
+    """把 _strategy_buy_realtime_blocked 返回的技术串翻成短大白话。"""
+    if not br:
+        return "条件没凑齐。"
+    tips: list[str] = []
+    if "weak_bear" in br or "大盘 weak_bear" in br:
+        tips.append("大盘偏弱档，配置里不让轻易买")
+    if "量比" in br:
+        tips.append("量比不够（量能不够配合）")
+    if "日内位置" in br:
+        tips.append("在当天价位区间里位置不合适（怕追高或抄在半山腰）")
+    if "板块" in br:
+        tips.append("和板块强弱那一关没过")
+    return "；".join(tips) if tips else br[:120]
+
+
+def _emit_quality_stock_no_buy_plain_tip(
+    *,
+    quality_pick_row: dict[str, Any] | None,
+    raw_sig: str | None,
+    sig_final: str | None,
+    buy_filter_reason: str | None,
+    plan_from_diag: Any,
+    kline: dict[str, Any] | None,
+    code: str,
+    disp_name: str,
+    rk: str | None,
+) -> None:
+    """仅「今日优质股」分区：大白话解释为何当前没有可跟的买入信号。"""
+    if not isinstance(quality_pick_row, dict):
+        return
+    raw = str(raw_sig or "").strip()
+    fin = str(sig_final or "").strip()
+    pl = plan_from_diag
+
+    if pl is not None and getattr(pl, "suppressed_buy", False) and getattr(
+        pl, "show_line", False
+    ):
+        return
+    if (
+        fin
+        and "【买入信号】" in fin
+        and pl is not None
+        and getattr(pl, "show_line", False)
+        and "【买入信号】" in str(getattr(pl, "line_text", "") or "")
+    ):
+        return
+
+    msg = ""
+    if not kline:
+        msg = "日K不齐，程序算不出均线/箱体规则，所以不会有买入信号。"
+    elif buy_filter_reason:
+        msg = (
+            "程序里其实已经冒出买点，但外面又加了一道「实盘过滤闸」拦住了："
+            + _buy_filter_reason_to_plain_cn(buy_filter_reason)
+        )
+    elif pl is not None and getattr(pl, "suppressed_duplicate_buy", False) and (
+        "【买入信号】" in raw
+    ):
+        msg = (
+            "模型这边仍算买点；你已在终端 hold（带股数成本）/buy/add 记过仓，"
+            "当日该标的买入提示已收束。"
+        )
+    elif "【买入信号】" not in raw:
+        if "【卖出信号】" in raw:
+            msg = "按当前价，规则更像「卖/减仓/风控」一侧，不是买点，优质只代表盘前筛得好、不等于随时该买。"
+        elif raw:
+            msg = (
+                "有策略提示但不是买：多半是观望或别的动作；买点要均线/箱体/震荡三套里至少一套同时过关。"
+            )
+        else:
+            msg = (
+                "三套规则（均线低吸、箱体突破、震荡低位）里，参考分都还没摸到买点门槛，更像继续观望。"
+            )
+    else:
+        return
+
+    _emit_watch_line(
+        f"      └ 【优质股·白话】{msg}",
+        event="watch_quality_no_buy_plain",
+        code=code,
+        rk=rk,
+    )
+
+
 def _emit_afternoon_opportunity_metrics_line(
     row: dict[str, Any],
     *,
@@ -2487,6 +2589,256 @@ def _shuffle_watch_if_multi(watch: list[dict[str, Any]]) -> list[dict[str, Any]]
     return watch
 
 
+def _exec_price_for_position_accounting(code: str, cfg: dict[str, Any]) -> tuple[float, str]:
+    """减仓/清仓结算用单价：优先实时行情，失败则日 K 最近收盘。"""
+    c6 = normalize_stock_code(code) or str(code).strip().zfill(6)
+    mkt = _infer_market(c6)
+    try:
+        ut = resolve_ut(cfg)
+        qm = fetch_quote_metrics(c6, mkt, ut=str(ut))
+        px = float(qm.get("price") or 0)
+        if px > 0:
+            return px, "live_quote"
+    except Exception:
+        pass
+    try:
+        from backtest_picks_performance import code_to_secid, resolve_db_path
+
+        dbp = resolve_db_path(cfg)
+        if not dbp.is_file():
+            return 0.0, "none"
+        sid = code_to_secid(c6)
+        day_iso = datetime.now().strftime("%Y-%m-%d")
+        conn = open_store_connection(dbp)
+        try:
+            row = conn.execute(
+                """
+                SELECT close FROM daily_klines
+                WHERE secid = ? AND trade_date <= ?
+                ORDER BY trade_date DESC LIMIT 1
+                """,
+                (sid, day_iso),
+            ).fetchone()
+            if row and row[0] is not None:
+                c = float(row[0])
+                if c > 0:
+                    return c, "db_close"
+        finally:
+            conn.close()
+    except Exception:
+        pass
+    return 0.0, "none"
+
+
+def _looks_like_sell_price_token(tok: str) -> bool:
+    """区分 sell <code> <qty> 与 sell <code> <price>：含小数点或科学计数法视为价格（清仓结算）。"""
+    t = str(tok or "").strip()
+    if not t:
+        return False
+    if "." in t:
+        return True
+    tl = t.lower()
+    if "e" in tl and any(ch.isdigit() for ch in t):
+        return True
+    return False
+
+
+def _cmd_reduce(
+    cfg: dict[str, Any],
+    code: str,
+    qty: int,
+    config_path: Path,
+    *,
+    exec_price_override: float | None = None,
+    cli_log_kind: str = "reduce",
+) -> tuple[bool, str]:
+    """减持 qty 股；可选结算价；台账 kind=reduce，若减至 0 额外 kind=close（已实现盈亏仅在 reduce 上）。"""
+    if qty <= 0:
+        return False, "减仓股数须 > 0"
+    c6 = normalize_stock_code(code)
+    if not c6:
+        return False, "代码无效"
+    wl = cfg.get("watchlist")
+    if not isinstance(wl, list):
+        return False, "watchlist 异常"
+    idx: int | None = None
+    row: dict[str, Any] | None = None
+    for i, w in enumerate(wl):
+        if not isinstance(w, dict):
+            continue
+        if normalize_stock_code(str(w.get("code") or "")) != c6:
+            continue
+        hs0 = int(w.get("hold_shares") or 0)
+        if hs0 > 0:
+            idx, row = i, dict(w)
+            break
+    if idx is None or row is None:
+        return False, "未找到该代码有持股数的记录"
+    hs = int(row.get("hold_shares") or 0)
+    try:
+        cp = float(row.get("cost_price") or 0)
+    except (TypeError, ValueError):
+        cp = 0.0
+    if cp <= 0:
+        return False, "成本无效，无法结算已实现"
+    if int(qty) > hs:
+        return False, f"持股不足（当前 {hs} 股，请求减 {int(qty)}）"
+    sell_n = min(int(qty), hs)
+    if exec_price_override is not None and float(exec_price_override) > 0:
+        px = float(exec_price_override)
+        src = "user_price"
+    else:
+        px, src = _exec_price_for_position_accounting(c6, cfg)
+    if px <= 0:
+        return False, "无法取得结算价（行情与日 K 均无），已中止减仓"
+    realized = (px - cp) * float(sell_n)
+    new_hs = hs - sell_n
+    nm = str(row.get("name") or get_stock_name(c6))
+    if new_hs <= 0:
+        wl.pop(idx)
+    else:
+        row["hold_shares"] = new_hs
+        row["cost_price"] = cp
+        wl[idx] = row
+    if not save_config_atomic(config_path, cfg):
+        return False, "写入 config 失败"
+    dbp = ledger_db_path(config_path.parent)
+    append_ledger_event(
+        dbp,
+        kind="reduce",
+        op_type="reduce",
+        code=c6,
+        name=nm[:40],
+        shares_before=hs,
+        shares_after=max(new_hs, 0),
+        avg_cost_before=cp,
+        avg_cost_after=cp if new_hs > 0 else None,
+        qty_traded=sell_n,
+        exec_price=px,
+        realized_pnl=realized,
+        note=f"reduce {sell_n} 股 px={px:.4f}({src})",
+    )
+    if new_hs <= 0:
+        append_ledger_event(
+            dbp,
+            kind="close",
+            op_type="close",
+            code=c6,
+            name=nm[:40],
+            shares_before=0,
+            shares_after=0,
+            avg_cost_before=None,
+            avg_cost_after=None,
+            qty_traded=0,
+            exec_price=px,
+            realized_pnl=0.0,
+            note="flat after reduce",
+        )
+    log_position_cli(
+        cli_log_kind,
+        c6,
+        base_dir=config_path.parent,
+        name=nm,
+        hold_shares=max(new_hs, 0),
+        cost_price=float(cp) if new_hs > 0 else None,
+        note=f"卖{sell_n}股 已实现约{realized:.2f}",
+    )
+    return (
+        True,
+        f"已卖 {sell_n} 股（结算价≈{px:.4f}，{src}），已实现约 {realized:.2f} 元；"
+        f"剩余 {max(new_hs, 0)} 股，成本仍为 {cp:.4f}",
+    )
+
+
+def _cmd_sell_close_all(
+    cfg: dict[str, Any],
+    code: str,
+    config_path: Path,
+    *,
+    exec_price_override: float | None = None,
+) -> tuple[bool, str, int]:
+    """删除该代码全部 watchlist 行；有仓则按单价结算已实现，台账 kind=close（每行一条）。"""
+    c6 = normalize_stock_code(code)
+    if not c6:
+        return False, "代码无效", 0
+    wl = cfg.get("watchlist")
+    if not isinstance(wl, list):
+        return False, "watchlist 异常", 0
+    rows: list[dict[str, Any]] = []
+    for w in wl:
+        if not isinstance(w, dict):
+            continue
+        if normalize_stock_code(str(w.get("code") or "")) != c6:
+            continue
+        rows.append(dict(w))
+    if not rows:
+        return False, "未找到该代码", 0
+    if exec_price_override is not None and float(exec_price_override) > 0:
+        px0 = float(exec_price_override)
+        src0 = "user_price"
+    else:
+        px0, src0 = _exec_price_for_position_accounting(c6, cfg)
+    if px0 <= 0:
+        return False, "无法取得结算价（行情与日 K 均无），已中止清仓", 0
+    dbp = ledger_db_path(config_path.parent)
+    total_r = 0.0
+    for row in rows:
+        hs = int(row.get("hold_shares") or 0)
+        try:
+            cp = float(row.get("cost_price") or 0)
+        except (TypeError, ValueError):
+            cp = 0.0
+        nm = str(row.get("name") or get_stock_name(c6))[:40]
+        if hs > 0 and cp > 0:
+            realized = (px0 - cp) * float(hs)
+            total_r += realized
+            append_ledger_event(
+                dbp,
+                kind="close",
+                op_type="close",
+                code=c6,
+                name=nm,
+                shares_before=hs,
+                shares_after=0,
+                avg_cost_before=cp,
+                avg_cost_after=None,
+                qty_traded=hs,
+                exec_price=px0,
+                realized_pnl=realized,
+                note=f"close px={px0:.4f}({src0})",
+            )
+    new_wl = [
+        w
+        for w in wl
+        if not (
+            isinstance(w, dict)
+            and normalize_stock_code(str(w.get("code") or "")) == c6
+        )
+    ]
+    cfg["watchlist"] = new_wl
+    if not save_config_atomic(config_path, cfg):
+        return False, "写入 config 失败", 0
+    return (
+        True,
+        f"已清仓 {c6}（结算价≈{px0:.4f}，{src0}），已实现合计约 {total_r:.2f} 元",
+        len(rows),
+    )
+
+
+def _apply_partial_sell_shares(
+    cfg: dict[str, Any], code: str, qty: int, config_path: Path
+) -> tuple[bool, str]:
+    """sell 代码 股数：内部走 reduce 台账；CLI 日志仍为 sell_partial 以兼容每日总结。"""
+    return _cmd_reduce(
+        cfg,
+        code,
+        qty,
+        config_path,
+        exec_price_override=None,
+        cli_log_kind="sell_partial",
+    )
+
+
 def _upsert_hold_in_cfg(
     cfg: dict[str, Any],
     *,
@@ -2494,10 +2846,13 @@ def _upsert_hold_in_cfg(
     hold_shares: int,
     cost_price: float,
     config_path: Path,
+    ledger_kind: str | None = None,
 ) -> bool:
     """
-    写入/更新持仓：同代码已存在则用本次命令的股数、成本覆盖原记录，并去掉重复条目；
-    否则追加新记录。字段与全站一致：hold_shares、cost_price；tags 为字符串。
+    写入/更新持仓：同代码已存在且原持股、成本有效时，本次股数/成本按「加仓」与原有仓位
+    合并为加权平均成本；否则视为新开/覆盖。去掉重复代码条目。
+
+    ledger_kind: 写入 position_ledger 的 kind/op_type；默认 hold_add（兼容 hold 命令）。
     """
     wl = cfg.get("watchlist")
     if not isinstance(wl, list):
@@ -2508,18 +2863,34 @@ def _upsert_hold_in_cfg(
     indices = _watchlist_indices_for_code(wl, code)
     delta_sh = int(hold_shares)
     delta_cost = float(cost_price)
+    old_sh = old_cp = 0
 
     if indices:
         i0 = indices[0]
         raw_old = wl[i0]
         old = raw_old if isinstance(raw_old, dict) else {}
+        try:
+            old_sh = int(old.get("hold_shares") or 0)
+        except (TypeError, ValueError):
+            old_sh = 0
+        try:
+            old_cp = float(old.get("cost_price") or 0)
+        except (TypeError, ValueError):
+            old_cp = 0.0
         merged = dict(old)
         merged["enabled"] = True
         merged["code"] = code
         merged["name"] = str(old.get("name") or name)
         merged["market"] = str(old.get("market") or market) or market
-        merged["hold_shares"] = delta_sh
-        merged["cost_price"] = delta_cost
+        if old_sh > 0 and old_cp > 0:
+            new_sh = old_sh + delta_sh
+            merged["hold_shares"] = int(new_sh)
+            merged["cost_price"] = round(
+                (old_sh * old_cp + delta_sh * delta_cost) / float(new_sh), 6
+            )
+        else:
+            merged["hold_shares"] = delta_sh
+            merged["cost_price"] = delta_cost
         merged["alert_mode"] = str(old.get("alert_mode") or "breach")
         merged["alert_below"] = old.get("alert_below")
         merged["alert_above"] = old.get("alert_above")
@@ -2534,7 +2905,7 @@ def _upsert_hold_in_cfg(
         for j in reversed(indices[1:]):
             wl.pop(j)
     else:
-        patch = {
+        merged = {
             "enabled": True,
             "code": code,
             "name": name,
@@ -2548,8 +2919,36 @@ def _upsert_hold_in_cfg(
             "note": "终端 hold",
             "industry": "",
         }
-        wl.append(patch)
-    return save_config_atomic(config_path, cfg)
+        wl.append(merged)
+
+    ok = save_config_atomic(config_path, cfg)
+    if ok:
+        try:
+            dbp = ledger_db_path(config_path.parent)
+            lk = (ledger_kind or "hold_add").strip() or "hold_add"
+            note = (
+                "加权加仓"
+                if indices and old_sh > 0 and old_cp > 0
+                else "开仓或覆盖无有效旧成本"
+            )
+            append_ledger_event(
+                dbp,
+                kind=lk,
+                op_type=lk,
+                code=code,
+                name=name[:40],
+                shares_before=old_sh if indices else None,
+                shares_after=int(merged.get("hold_shares") or 0),
+                avg_cost_before=float(old_cp) if indices and old_sh > 0 else None,
+                avg_cost_after=float(merged.get("cost_price") or 0),
+                qty_traded=delta_sh,
+                exec_price=float(delta_cost),
+                realized_pnl=0.0,
+                note=note,
+            )
+        except Exception:
+            pass
+    return ok
 
 
 def _remove_hold_from_cfg(
@@ -2775,6 +3174,16 @@ def _maybe_run_backtest_after_tp_hit_change(
         )
 
 
+def _parse_cli_price_token(tok: str) -> float | None:
+    """终端持仓命令里的单价：支持 10.25 或 10,25（逗号小数）。"""
+    s = str(tok or "").strip().replace(",", ".", 1)
+    try:
+        v = float(s)
+    except ValueError:
+        return None
+    return v
+
+
 def _handle_runtime_command(
     line: str,
     *,
@@ -2782,6 +3191,7 @@ def _handle_runtime_command(
     config_path: Path,
     force_include_codes: set[str],
     force_exclude_codes: set[str],
+    state: dict[str, Any] | None = None,
 ) -> None:
     """
     在**主循环线程**中执行（与行情轮询同线程，不阻塞 input 线程）。
@@ -2810,6 +3220,257 @@ def _handle_runtime_command(
         )
         return
 
+    if cmd == "buy" and len(parts) >= 4:
+        code = normalize_stock_code(parts[1])
+        if code is None:
+            _emit_cli_subcmd_line(
+                f"[buy] 代码无效：{parts[1]!r}",
+                event="cli_buy_invalid_code",
+            )
+            return
+        try:
+            shares = int(parts[2])
+        except ValueError:
+            _emit_cli_subcmd_line(
+                "[buy] 股数须为整数，例：buy 002237 600 16.7085",
+                event="cli_buy_parse_error",
+            )
+            return
+        cost = _parse_cli_price_token(parts[3])
+        if cost is None:
+            _emit_cli_subcmd_line(
+                f"[buy] 价格无效：{parts[3]!r}（例：buy 002237 600 16.7085）",
+                event="cli_buy_parse_error",
+            )
+            return
+        if len(parts) > 4:
+            _emit_cli_subcmd_line(
+                f"[buy] 提示：仅使用前 4 段，已忽略末尾 {' '.join(parts[4:])}",
+                event="cli_buy_extra_tokens",
+            )
+        if shares <= 0:
+            _emit_cli_subcmd_line("[buy] 股数须 > 0", event="cli_buy_shares_bad")
+            return
+        if cost < 0:
+            _emit_cli_subcmd_line("[buy] 价格不能为负", event="cli_buy_cost_bad")
+            return
+        wl0 = cfg.get("watchlist")
+        if not isinstance(wl0, list):
+            _emit_cli_subcmd_line("[buy] watchlist 异常", event="cli_buy_wl_bad")
+            return
+        indices = _watchlist_indices_for_code(wl0, code)
+        if not indices:
+            lk = "buy"
+        else:
+            ent0 = wl0[indices[0]]
+            hs0 = (
+                int(ent0.get("hold_shares") or 0)
+                if isinstance(ent0, dict)
+                else 0
+            )
+            lk = "buy" if hs0 <= 0 else "add"
+        if not _upsert_hold_in_cfg(
+            cfg,
+            code=code,
+            hold_shares=shares,
+            cost_price=cost,
+            config_path=config_path,
+            ledger_kind=lk,
+        ):
+            _emit_cli_subcmd_line(
+                "[buy] 写入 config 失败（请检查磁盘权限）",
+                event="cli_buy_write_failed",
+            )
+            return
+        force_include_codes.add(code)
+        force_exclude_codes.discard(code)
+        nm = get_stock_name(code)
+        tot_sh, tot_cp = shares, cost
+        wl_after = cfg.get("watchlist")
+        if isinstance(wl_after, list):
+            for ix in _watchlist_indices_for_code(wl_after, code)[:1]:
+                ent = wl_after[ix]
+                if isinstance(ent, dict):
+                    tot_sh = int(ent.get("hold_shares") or 0)
+                    tot_cp = float(ent.get("cost_price") or 0.0)
+                    break
+        _emit_cli_subcmd_line(
+            f"[buy] 已写入（台账 {lk}）：{code}（{nm}） 股数 {tot_sh}  成本 {tot_cp:.4f}",
+            event="cli_buy_ok",
+        )
+        log_position_cli(
+            lk,
+            code,
+            base_dir=config_path.parent,
+            name=nm,
+            hold_shares=int(tot_sh),
+            cost_price=float(tot_cp),
+        )
+        if state is not None and valid_code(code):
+            ack_cli_position_buy_add(code, state)
+        _emit_cli_subcmd_line(
+            "       监控池已更新（本轮内下一段 watch 即生效）",
+            event="cli_buy_pool_updated",
+        )
+        return
+
+    if cmd == "buy" and len(parts) < 4:
+        _emit_cli_subcmd_line(
+            "[buy] 用法：buy <代码> <股数> <单价>  例：buy 002237 600 16.7085",
+            event="cli_buy_incomplete",
+        )
+        return
+
+    if cmd == "add" and len(parts) >= 4:
+        code = normalize_stock_code(parts[1])
+        if code is None:
+            _emit_cli_subcmd_line(
+                f"[add] 代码无效：{parts[1]!r}",
+                event="cli_add_invalid_code",
+            )
+            return
+        try:
+            shares = int(parts[2])
+        except ValueError:
+            _emit_cli_subcmd_line(
+                "[add] 股数须为整数，例：add 000537 1000 10.5",
+                event="cli_add_parse_error",
+            )
+            return
+        cost = _parse_cli_price_token(parts[3])
+        if cost is None:
+            _emit_cli_subcmd_line(
+                f"[add] 价格无效：{parts[3]!r}",
+                event="cli_add_parse_error",
+            )
+            return
+        if len(parts) > 4:
+            _emit_cli_subcmd_line(
+                f"[add] 提示：仅使用前 4 段，已忽略末尾 {' '.join(parts[4:])}",
+                event="cli_add_extra_tokens",
+            )
+        if shares <= 0:
+            _emit_cli_subcmd_line("[add] 股数须 > 0", event="cli_add_shares_bad")
+            return
+        if cost < 0:
+            _emit_cli_subcmd_line("[add] 价格不能为负", event="cli_add_cost_bad")
+            return
+        wl0 = cfg.get("watchlist")
+        if not isinstance(wl0, list):
+            _emit_cli_subcmd_line("[add] watchlist 异常", event="cli_add_wl_bad")
+            return
+        indices = _watchlist_indices_for_code(wl0, code)
+        if not indices or not isinstance(wl0[indices[0]], dict):
+            _emit_cli_subcmd_line(
+                "[add] 须先有持仓（watchlist 中该代码 hold_shares>0）",
+                event="cli_add_no_position",
+            )
+            return
+        hs0 = int(wl0[indices[0]].get("hold_shares") or 0)
+        if hs0 <= 0:
+            _emit_cli_subcmd_line(
+                "[add] 须先有持仓（当前 hold_shares==0，请用 buy 开仓）",
+                event="cli_add_zero_position",
+            )
+            return
+        if not _upsert_hold_in_cfg(
+            cfg,
+            code=code,
+            hold_shares=shares,
+            cost_price=cost,
+            config_path=config_path,
+            ledger_kind="add",
+        ):
+            _emit_cli_subcmd_line(
+                "[add] 写入 config 失败（请检查磁盘权限）",
+                event="cli_add_write_failed",
+            )
+            return
+        force_include_codes.add(code)
+        force_exclude_codes.discard(code)
+        nm = get_stock_name(code)
+        tot_sh, tot_cp = shares, cost
+        wl_after = cfg.get("watchlist")
+        if isinstance(wl_after, list):
+            for ix in _watchlist_indices_for_code(wl_after, code)[:1]:
+                ent = wl_after[ix]
+                if isinstance(ent, dict):
+                    tot_sh = int(ent.get("hold_shares") or 0)
+                    tot_cp = float(ent.get("cost_price") or 0.0)
+                    break
+        _emit_cli_subcmd_line(
+            f"[add] 已加仓：{code}（{nm}） 股数 {tot_sh}  成本 {tot_cp:.4f}",
+            event="cli_add_ok",
+        )
+        log_position_cli(
+            "add",
+            code,
+            base_dir=config_path.parent,
+            name=nm,
+            hold_shares=int(tot_sh),
+            cost_price=float(tot_cp),
+        )
+        if state is not None and valid_code(code):
+            ack_cli_position_buy_add(code, state)
+        return
+
+    if cmd == "add" and len(parts) < 4:
+        _emit_cli_subcmd_line(
+            "[add] 用法：add <代码> <股数> <单价>  例：add 002237 600 16.7085",
+            event="cli_add_incomplete",
+        )
+        return
+
+    if cmd == "reduce" and 3 <= len(parts) <= 4:
+        code = normalize_stock_code(parts[1])
+        if code is None:
+            _emit_cli_subcmd_line(
+                f"[reduce] 代码无效：{parts[1]!r}",
+                event="cli_reduce_invalid_code",
+            )
+            return
+        try:
+            sq = int(parts[2])
+        except ValueError:
+            _emit_cli_subcmd_line(
+                f"[reduce] 股数无效：{parts[2]!r}（例：reduce 600711 500 或 reduce 600711 500 12.3）",
+                event="cli_reduce_bad_qty",
+            )
+            return
+        px_ov: float | None = None
+        if len(parts) == 4:
+            px_ov = _parse_cli_price_token(parts[3])
+            if px_ov is None:
+                _emit_cli_subcmd_line(
+                    f"[reduce] 价格无效：{parts[3]!r}",
+                    event="cli_reduce_bad_price",
+                )
+                return
+            if px_ov <= 0:
+                _emit_cli_subcmd_line(
+                    "[reduce] 结算价须 > 0", event="cli_reduce_price_bad"
+                )
+                return
+        ok, msg = _cmd_reduce(
+            cfg,
+            code,
+            sq,
+            config_path,
+            exec_price_override=px_ov,
+            cli_log_kind="reduce",
+        )
+        if ok:
+            force_include_codes.discard(code)
+            force_exclude_codes.discard(code)
+            if state is not None and valid_code(code):
+                ack_cli_position_sell_reduce(code, state)
+            for line in msg.split("；"):
+                if line.strip():
+                    _emit_cli_subcmd_line(line.strip(), event="cli_reduce_ok")
+        else:
+            _emit_cli_subcmd_line(f"[reduce] {msg}", event="cli_reduce_fail")
+        return
+
     if cmd == "unhold" and len(parts) == 2:
         code = normalize_stock_code(parts[1])
         if code is None:
@@ -2818,22 +3479,33 @@ def _handle_runtime_command(
                 event="cli_unhold_invalid_code",
             )
             return
-        n = _remove_hold_from_cfg(cfg, code=code, config_path=config_path)
+        ok, msg, n = _cmd_sell_close_all(cfg, code, config_path, None)
         force_include_codes.discard(code)
         force_exclude_codes.discard(code)
-        if n:
+        if ok:
+            if state is not None and valid_code(code):
+                ack_cli_position_sell_reduce(code, state)
+            log_position_cli(
+                "unhold",
+                code,
+                base_dir=config_path.parent,
+                name=get_stock_name(code),
+                removed_rows=n,
+            )
             _emit_cli_subcmd_line(
-                f"[unhold] 已从 config 删除 {code}（{get_stock_name(code)}），共移除 {n} 条",
+                f"[unhold] {msg}；已从 config 移除 {n} 条",
                 event="cli_unhold_ok",
             )
         else:
             _emit_cli_subcmd_line(
-                f"[unhold] config 中未找到 {code}",
-                event="cli_unhold_not_found",
+                f"[unhold] {msg}",
+                event="cli_unhold_not_found"
+                if "未找到" in msg
+                else "cli_unhold_fail",
             )
         return
 
-    if cmd == "hold" and len(parts) == 4:
+    if cmd == "hold" and len(parts) >= 4:
         code = normalize_stock_code(parts[1])
         if code is None:
             _emit_cli_subcmd_line(
@@ -2843,13 +3515,24 @@ def _handle_runtime_command(
             return
         try:
             shares = int(parts[2])
-            cost = float(parts[3])
         except ValueError:
             _emit_cli_subcmd_line(
-                "[hold] 股数须为整数，成本须为数字，例：hold 000537 3000 10.25",
+                "[hold] 股数须为整数，例：hold 000537 3000 10.25",
                 event="cli_hold_parse_error",
             )
             return
+        cost = _parse_cli_price_token(parts[3])
+        if cost is None:
+            _emit_cli_subcmd_line(
+                f"[hold] 成本无效：{parts[3]!r}",
+                event="cli_hold_parse_error",
+            )
+            return
+        if len(parts) > 4:
+            _emit_cli_subcmd_line(
+                f"[hold] 提示：仅使用前 4 段，已忽略末尾 {' '.join(parts[4:])}",
+                event="cli_hold_extra_tokens",
+            )
         if shares < 0:
             _emit_cli_subcmd_line("[hold] 股数不能为负", event="cli_hold_shares_negative")
             return
@@ -2884,9 +3567,26 @@ def _handle_runtime_command(
             f"[hold] 已写入 config：{code}（{nm}） 股数 {tot_sh}  成本 {tot_cp:.4f}",
             event="cli_hold_saved",
         )
+        log_position_cli(
+            "hold",
+            code,
+            base_dir=config_path.parent,
+            name=nm,
+            hold_shares=int(tot_sh),
+            cost_price=float(tot_cp),
+        )
+        if state is not None and valid_code(code):
+            ack_cli_position_buy_add(code, state)
         _emit_cli_subcmd_line(
             "       监控池已更新（本轮内下一段 watch 即生效）",
             event="cli_hold_pool_updated",
+        )
+        return
+
+    if cmd == "hold" and len(parts) == 3:
+        _emit_cli_subcmd_line(
+            "[hold] 缺少成本。例：hold 002237 600 16.7085",
+            event="cli_hold_incomplete",
         )
         return
 
@@ -2900,6 +3600,13 @@ def _handle_runtime_command(
             return
         force_include_codes.add(code)
         force_exclude_codes.discard(code)
+        log_position_cli(
+            "hold_watch",
+            code,
+            base_dir=config_path.parent,
+            name=get_stock_name(code),
+            note="仅入监控池，未改股数/成本",
+        )
         _emit_cli_subcmd_line(
             f"[hold] 已加入监控池：{code}（{get_stock_name(code)}）（未改 config 股数/成本）",
             event="cli_hold_watch_only",
@@ -2910,6 +3617,79 @@ def _handle_runtime_command(
         )
         return
 
+    if cmd == "sell" and len(parts) == 3 and _looks_like_sell_price_token(parts[2]):
+        code = normalize_stock_code(parts[1])
+        if code is None:
+            _emit_cli_subcmd_line(
+                f"[sell] 代码无效：{parts[1]!r}",
+                event="cli_sell_invalid_code",
+            )
+            return
+        px = _parse_cli_price_token(parts[2])
+        if px is None:
+            _emit_cli_subcmd_line(
+                f"[sell] 结算价无效：{parts[2]!r}",
+                event="cli_sell_close_bad_price",
+            )
+            return
+        if px <= 0:
+            _emit_cli_subcmd_line(
+                "[sell] 结算价须 > 0", event="cli_sell_close_price_bad"
+            )
+            return
+        ok, msg, n = _cmd_sell_close_all(
+            cfg, code, config_path, exec_price_override=px
+        )
+        if ok:
+            force_include_codes.discard(code)
+            force_exclude_codes.discard(code)
+            if state is not None and valid_code(code):
+                ack_cli_position_sell_reduce(code, state)
+            log_position_cli(
+                "sell_clear",
+                code,
+                base_dir=config_path.parent,
+                name=get_stock_name(code),
+                removed_rows=n,
+                note="sell 清仓（指定价）",
+            )
+            for line in msg.split("；"):
+                if line.strip():
+                    _emit_cli_subcmd_line(line.strip(), event="cli_sell_close_ok")
+        else:
+            _emit_cli_subcmd_line(f"[sell] {msg}", event="cli_sell_close_fail")
+        return
+
+    if cmd == "sell" and len(parts) == 3:
+        code = normalize_stock_code(parts[1])
+        if code is None:
+            _emit_cli_subcmd_line(
+                f"[sell] 代码无效：{parts[1]!r}",
+                event="cli_sell_invalid_code",
+            )
+            return
+        try:
+            sq = int(parts[2])
+        except ValueError:
+            _emit_cli_subcmd_line(
+                f"[sell] 股数无效：{parts[2]!r}（示例：sell 600711 500；"
+                "清仓带小数价请写 sell 600711 12.58）",
+                event="cli_sell_partial_bad_qty",
+            )
+            return
+        ok, msg = _apply_partial_sell_shares(cfg, code, sq, config_path)
+        if ok:
+            force_include_codes.discard(code)
+            force_exclude_codes.discard(code)
+            if state is not None and valid_code(code):
+                ack_cli_position_sell_reduce(code, state)
+            for line in msg.split("；"):
+                if line.strip():
+                    _emit_cli_subcmd_line(line.strip(), event="cli_sell_partial_ok")
+        else:
+            _emit_cli_subcmd_line(f"[sell] {msg}", event="cli_sell_partial_fail")
+        return
+
     if cmd == "sell" and len(parts) == 2:
         code = normalize_stock_code(parts[1])
         if code is None:
@@ -2918,15 +3698,51 @@ def _handle_runtime_command(
                 event="cli_sell_invalid_code",
             )
             return
+        ok, msg, n = _cmd_sell_close_all(cfg, code, config_path, None)
+        if ok:
+            force_include_codes.discard(code)
+            force_exclude_codes.discard(code)
+            if state is not None and valid_code(code):
+                ack_cli_position_sell_reduce(code, state)
+            log_position_cli(
+                "sell_clear",
+                code,
+                base_dir=config_path.parent,
+                name=get_stock_name(code),
+                removed_rows=n,
+                note="sell 清仓",
+            )
+            for line in msg.split("；"):
+                if line.strip():
+                    _emit_cli_subcmd_line(line.strip(), event="cli_sell_close_ok")
+        else:
+            _emit_cli_subcmd_line(f"[sell] {msg}", event="cli_sell_close_fail")
+        return
+
+    if cmd == "pause" and len(parts) == 2:
+        code = normalize_stock_code(parts[1])
+        if code is None:
+            _emit_cli_subcmd_line(
+                f"[pause] 代码无效：{parts[1]!r}",
+                event="cli_pause_invalid_code",
+            )
+            return
         force_include_codes.discard(code)
         force_exclude_codes.add(code)
-        _emit_cli_subcmd_line(
-            f"[sell] 已暂停监控：{code}（{get_stock_name(code)}）（未删 config 条目）",
-            event="cli_sell_ok",
+        log_position_cli(
+            "pause",
+            code,
+            base_dir=config_path.parent,
+            name=get_stock_name(code),
+            note="暂停监控，未删 config",
         )
         _emit_cli_subcmd_line(
-            "       删除持仓记录请用：unhold <代码>",
-            event="cli_sell_unhold_hint",
+            f"[pause] 已暂停监控：{code}（{get_stock_name(code)}）（未删 config 条目）",
+            event="cli_pause_ok",
+        )
+        _emit_cli_subcmd_line(
+            "       清仓请用：sell <代码> 或 unhold <代码>",
+            event="cli_pause_sell_hint",
         )
         return
 
@@ -2967,7 +3783,31 @@ def _handle_runtime_command(
 
     _emit_cli_subcmd_line("[命令] 用法：", event="cli_usage_header")
     _emit_cli_subcmd_line(
-        "  hold <代码> <股数> <成本>   例：hold 000537 3000 10.25  （写入 config；同代码再次 hold 覆盖该股数与成本）",
+        "  buy <代码> <股数> <价> …    至少 4 段（后面多余词会忽略）；价可用 16.70 或 16,70；须交互 TTY 或加 --stdin-commands",
+        event="cli_usage_buy",
+    )
+    _emit_cli_subcmd_line(
+        "  add <代码> <股数> <价>       加仓（须已有 hold_shares>0）；台账 add",
+        event="cli_usage_add",
+    )
+    _emit_cli_subcmd_line(
+        "  reduce <代码> <股数> [价]   减仓；无价用现价/日K收盘；台账 reduce，减至 0 另记 close",
+        event="cli_usage_reduce",
+    )
+    _emit_cli_subcmd_line(
+        "  sell <代码> [价]            清仓并删 watchlist；无价用现价/收盘；台账 close",
+        event="cli_usage_sell_close",
+    )
+    _emit_cli_subcmd_line(
+        "  sell <代码> <整数股数>      部分卖出（内部 reduce）；台账 reduce",
+        event="cli_usage_sell_partial",
+    )
+    _emit_cli_subcmd_line(
+        "  pause <代码>                仅暂停监控（runtime，不删 config）",
+        event="cli_usage_pause",
+    )
+    _emit_cli_subcmd_line(
+        "  hold <代码> <股数> <成本>   例：hold 000537 3000 10.25  （台账 hold_add；记仓后同 buy/add 收束当日买入策略提示）",
         event="cli_usage_hold_full",
     )
     _emit_cli_subcmd_line(
@@ -2975,7 +3815,7 @@ def _handle_runtime_command(
         event="cli_usage_hold_code",
     )
     _emit_cli_subcmd_line(
-        "  unhold <代码>               从 config 删除该标的",
+        "  unhold <代码>               清仓并删 config（同 sell 无参；台账 close）",
         event="cli_usage_unhold",
     )
     _emit_cli_subcmd_line(
@@ -2985,10 +3825,6 @@ def _handle_runtime_command(
     _emit_cli_subcmd_line(
         "  dedupewatchlist             合并 watchlist 中同一代码的重复条目并写回 config",
         event="cli_usage_dedupe_watchlist",
-    )
-    _emit_cli_subcmd_line(
-        "  sell <代码>                 暂停监控（runtime，不删 config）",
-        event="cli_usage_sell",
     )
     _emit_cli_subcmd_line(
         "  set take_profit_hit_for_correctness 0|1   止盈回测语义：1=卖对 0=卖飞（写 config；邮件可发同指令）",
@@ -4504,6 +5340,7 @@ def _maybe_poll_email_commands(
             config_path=config_path,
             force_include_codes=force_include_codes,
             force_exclude_codes=force_exclude_codes,
+            state=state,
         )
     for cmd in poll.runtime_commands:
         _emit_main_line(
@@ -4516,6 +5353,7 @@ def _maybe_poll_email_commands(
             config_path=config_path,
             force_include_codes=force_include_codes,
             force_exclude_codes=force_exclude_codes,
+            state=state,
         )
 
 
@@ -4746,6 +5584,7 @@ def process_watch_pack(
         )
 
     strategy_line_shown = False
+    _plain_buy_diag: dict[str, Any] = {}
     _state_cm = state_mut_lock if state_mut_lock is not None else nullcontext()
     with _state_cm:
         min_by = (cfg.get("strategy_signal") or {}).get("min_score_by_strategy")
@@ -4774,14 +5613,18 @@ def process_watch_pack(
                             ip_s = f" 日内位{float(ip_raw):.2f}"
                         except (TypeError, ValueError):
                             ip_s = ""
-                    _emit_watch_line(
+                    _buy_filt_line = (
                         f"      └ 【策略】{code} ({disp_name}) "
-                        f"买入信号未采纳（实时过滤）{ip_s}｜{br}",
+                        f"买入信号未采纳（实时过滤）{ip_s}｜{br}"
+                    )
+                    _emit_watch_line(
+                        color_line(1.0, _buy_filt_line),
                         event="watch_strategy_buy_filtered",
                         code=code,
                         rk=rk,
                         skipped_by_filter=br,
                     )
+                    _plain_buy_diag["buy_filter_reason"] = br
                     strategy_line_shown = True
                     _emit_watch_ml_reference_line(
                         cfg,
@@ -4802,6 +5645,19 @@ def process_watch_pack(
             state.pop(ep_buy_k, None)
         if not sig_has_sell:
             state.pop(ep_sell_k, None)
+        c6a = normalize_stock_code(code) or ""
+        if not sig_has_buy and c6a and valid_code(c6a):
+            t1b = state.get("t1_by_code")
+            if isinstance(t1b, dict):
+                ent0 = t1b.get(c6a)
+                if isinstance(ent0, dict):
+                    ent0.pop("cli_buy_add_ack_date", None)
+        if not sig_has_sell and c6a and valid_code(c6a):
+            t1b = state.get("t1_by_code")
+            if isinstance(t1b, dict):
+                ent0 = t1b.get(c6a)
+                if isinstance(ent0, dict):
+                    ent0.pop("cli_sell_reduce_ack_date", None)
         if sig:
             strategy_ml_notify_note: str | None = None
             sig_k = f"sig_{rk}"
@@ -4821,6 +5677,7 @@ def process_watch_pack(
                     suppressed_buy=False,
                     suppressed_duplicate_buy=False,
                 )
+            _plain_buy_diag["plan"] = plan
             if plan.show_line:
                 _emit_watch_line(
                     f"      └ 【策略】{bold_strategy_buy_sell(plan.line_text)}",
@@ -5416,6 +6273,19 @@ def process_watch_pack(
             state[rk]["last_alert_ts"] = now_ts
             state[rk]["last_reason"] = reason
 
+    if quality_pick_row:
+        _emit_quality_stock_no_buy_plain_tip(
+            quality_pick_row=quality_pick_row,
+            raw_sig=raw_sig,
+            sig_final=sig,
+            buy_filter_reason=_plain_buy_diag.get("buy_filter_reason"),
+            plan_from_diag=_plain_buy_diag.get("plan"),
+            kline=kline if isinstance(kline, dict) else None,
+            code=code,
+            disp_name=disp_name,
+            rk=rk,
+        )
+
     return mv
 
 
@@ -5424,6 +6294,11 @@ def main() -> int:
     ap.add_argument("-c", "--config", type=Path, default=ROOT / "config.json")
     ap.add_argument("--interval", type=int, default=None)
     ap.add_argument("--once", action="store_true")
+    ap.add_argument(
+        "--stdin-commands",
+        action="store_true",
+        help="即使 stdin 非 TTY 也启用 hold/buy/… 行内命令（默认仅交互 TTY 启用；管道/部分 IDE 需加此开关）",
+    )
     ap.add_argument("--no-notify", action="store_true")
     ap.add_argument("--test-notify", action="store_true")
     ap.add_argument(
@@ -5695,10 +6570,17 @@ def main() -> int:
     st_path = state_path(args.config)
     state = load_state(st_path)
     hydrate_runtime_watch_sets(force_include_codes, force_exclude_codes, state)
-    read_cmds = sys.stdin.isatty() and not args.once
+    read_cmds = (
+        sys.stdin.isatty()
+        or bool(getattr(args, "stdin_commands", False))
+        or os.environ.get("STOCK_ALERT_STDIN_COMMANDS", "").strip().lower()
+        in ("1", "true", "yes", "y")
+    ) and not args.once
     if not read_cmds and not args.once and not sys.stdin.isatty():
         _emit_cli_subcmd_line(
-            "[提示] stdin 非交互终端，运行时命令（hold/showhold 等）已禁用。",
+            "[提示] stdin 非交互终端，运行时命令（hold/buy/…）已禁用；"
+            "可改用：python run_alert.py -c <config> --stdin-commands  "
+            "或环境变量 STOCK_ALERT_STDIN_COMMANDS=1",
             event="cli_stdin_not_tty",
         )
     cmd_queue = _start_command_listener(read_stdin_commands=read_cmds)
@@ -5753,7 +6635,7 @@ def main() -> int:
                 event="cli_watch_mode_fallback_all",
             )
         _emit_cli_subcmd_line(
-            "[命令] hold <代码> <股数> <成本> | hold <代码> | unhold | showhold | dedupewatchlist | sell",
+            "[命令] hold/buy/add/…｜非 TTY 请加 --stdin-commands 或 STOCK_ALERT_STDIN_COMMANDS=1",
             event="cli_runtime_commands_hint",
         )
     else:
@@ -5782,6 +6664,7 @@ def main() -> int:
                     config_path=args.config,
                     force_include_codes=force_include_codes,
                     force_exclude_codes=force_exclude_codes,
+                    state=state,
                 )
             _prune_watchlist_sold_position_placeholders(cfg, args.config)
             watch, watch_mode = _build_watch_from_daily_picks_with_overrides(
@@ -6280,6 +7163,8 @@ def main() -> int:
                 _af_new_for_sec = set()
                 _afternoon_m_by_c = {}
 
+            _quality_rows_by_code = _daily_picks_quality_rows_by_code(_picks_path)
+
             quality_items = [
                 x
                 for x in items
@@ -6291,7 +7176,26 @@ def main() -> int:
             quality_items = _filter_watch_packs_by_strategy_sell_score(
                 quality_items, cfg, log_label="优质"
             )
-            quality_items.sort(key=lambda x: x["sort_score"], reverse=True)
+
+            def _quality_items_display_sort_key(
+                pack: dict[str, Any],
+            ) -> tuple[float, float]:
+                """今日优质股：先按盘前选股 score，再按盘中 composite sort_score。"""
+                c = _pack_stock_code(pack) or ""
+                row = _quality_rows_by_code.get(c) if c else None
+                sel_sc = -1e18
+                if isinstance(row, dict) and row.get("score") is not None:
+                    try:
+                        sel_sc = float(row["score"])
+                    except (TypeError, ValueError):
+                        sel_sc = -1e18
+                try:
+                    intraday_ss = float(pack.get("sort_score") or -1e18)
+                except (TypeError, ValueError):
+                    intraday_ss = -1e18
+                return (sel_sc, intraday_ss)
+
+            quality_items.sort(key=_quality_items_display_sort_key, reverse=True)
 
             afternoon_opp_items = [
                 x
@@ -6408,11 +7312,6 @@ def main() -> int:
                 if "其余监控" in sec:
                     return "其余"
                 return "监控"
-
-            _picks_path_for_reason = args.config.parent / "daily_picks.json"
-            _quality_rows_by_code = _daily_picks_quality_rows_by_code(
-                _picks_path_for_reason
-            )
 
             for sec_title, group, show_pick in sections:
                 _emit_main_line(
