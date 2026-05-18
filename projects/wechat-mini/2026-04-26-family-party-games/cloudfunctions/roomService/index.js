@@ -207,6 +207,96 @@ async function closeRoom(event) {
   return { ok: true }
 }
 
+/**
+ * 将主持权移交给聚会组内另一名成员（仅当前主持可调用）。
+ */
+async function transferHost(event) {
+  const openId = await getOpenId()
+  const now = Date.now()
+  const roomCode = normalizeRoomCode(event.roomCode)
+  const targetOpenId = String(event.targetOpenId || '').trim()
+  const room = await findActiveRoom(roomCode)
+  if (!room) {
+    throw new Error('聚会组不存在或已过期')
+  }
+  if (room.hostOpenId !== openId) {
+    throw new Error('只有主持可以移交主持权')
+  }
+  if (!targetOpenId) {
+    throw new Error('请指定新任主持')
+  }
+  if (targetOpenId === openId) {
+    throw new Error('不能交给自己')
+  }
+  const players = room.players || []
+  const ok = players.some(function (p) {
+    return p.openId === targetOpenId
+  })
+  if (!ok) {
+    throw new Error('所选成员不在聚会组内')
+  }
+  const nextPlayers = players.map(function (player) {
+    return Object.assign({}, player, { isHost: player.openId === targetOpenId })
+  })
+  await db.collection(ROOMS).doc(room._id).update({
+    data: {
+      hostOpenId: targetOpenId,
+      players: nextPlayers,
+      updatedAt: now
+    }
+  })
+  const merged = Object.assign({}, room, {
+    hostOpenId: targetOpenId,
+    players: nextPlayers,
+    updatedAt: now
+  })
+  return publicRoom(merged, openId)
+}
+
+/**
+ * 主持主动卸任：按进组时间（joinedAt 升序）将主持交给第一位其他成员。
+ */
+async function abdicateHost(event) {
+  const openId = await getOpenId()
+  const roomCode = normalizeRoomCode(event.roomCode)
+  const room = await findActiveRoom(roomCode)
+  if (!room) {
+    throw new Error('聚会组不存在或已过期')
+  }
+  if (room.hostOpenId !== openId) {
+    throw new Error('只有主持可以移交主持权')
+  }
+  const players = room.players || []
+  const others = players
+    .filter(function (p) {
+      return p.openId !== openId
+    })
+    .sort(function (a, b) {
+      return (a.joinedAt || 0) - (b.joinedAt || 0)
+    })
+  if (!others.length) {
+    throw new Error('组内暂无其他成员可接任主持')
+  }
+  const nextHost = others[0].openId
+  const now = Date.now()
+  const nextPlayers = players.map(function (player) {
+    return Object.assign({}, player, { isHost: player.openId === nextHost })
+  })
+  await db.collection(ROOMS).doc(room._id).update({
+    data: {
+      hostOpenId: nextHost,
+      players: nextPlayers,
+      updatedAt: now
+    }
+  })
+  const merged = Object.assign({}, room, {
+    hostOpenId: nextHost,
+    players: nextPlayers,
+    updatedAt: now
+  })
+  return publicRoom(merged, openId)
+}
+
 function shuffleIds(ids) {
   const a = ids.slice()
   for (let i = a.length - 1; i > 0; i -= 1) {
@@ -502,6 +592,8 @@ exports.main = async function (event) {
   if (action === 'tdVote') return tdVote(event)
   if (action === 'tdTally') return tdTally(event)
   if (action === 'tdGetState') return tdGetState(event)
+  if (action === 'transferHost') return transferHost(event)
+  if (action === 'abdicateHost') return abdicateHost(event)
 
   throw new Error('未知操作')
 }

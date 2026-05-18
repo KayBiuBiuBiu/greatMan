@@ -1,6 +1,6 @@
 <view class="page">
   <view class="h1" wx:if="{{!roomId}}">🎨 你画我猜</view>
-  <view class="hint" wx:if="{{!roomId}}">线下团建纸笔类辅助，同场同步：一人画、全员看画布并抢答。无线上竞技。</view>
+  <view class="hint" wx:if="{{!roomId}}">线下团建纸笔类辅助，同场同步：一人画、全员看画布并抢答。无广域联机。</view>
   <view class="card" wx:if="{{!roomId}}">
     <view class="lab">昵称</view>
     <input class="inp" value="{{nick}}" bindinput="onNick" />

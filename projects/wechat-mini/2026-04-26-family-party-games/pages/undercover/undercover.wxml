@@ -1,6 +1,6 @@
 <view class="page ucv2">
   <view class="h1">谁是卧底 · 同场同步</view>
-  <view class="uc-muted" wx:if="{{!roomId}}">线下团建类纸笔辅助，趣味描述互动，无线上竞技。仅同场亲友、6 位近距离口令，无陌生匹配。每人本机看词、本机投票；与首页「输入口令」一致。</view>
+  <view class="uc-muted" wx:if="{{!roomId}}">线下团建类纸笔辅助，趣味描述互动，无广域联机。仅同场亲友、6 位近距离口令，无陌生匹配。每人本机看词、本机投票；与首页「输入口令」一致。</view>
   <view wx:if="{{!roomId}}" class="uc-panel">
     <input
       class="uc-inp"

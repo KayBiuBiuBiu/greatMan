@@ -1,17 +1,17 @@
 {
   "schema_version": 2,
-  "anchor_date": "2026-05-13",
-  "generated_at": "2026-05-13T11:49:09",
+  "anchor_date": "2026-05-18",
+  "generated_at": "2026-05-18T11:35:23",
   "afternoon_new_codes": [],
   "opportunity_codes": [],
   "quality_display_codes": [],
   "items": [],
   "params": {
-    "min_chg_pct": 0.5,
-    "max_chg_pct": 8.0,
-    "min_vol_ratio": 1.0,
-    "max_intraday_position": 0.85,
-    "max_picks": 20,
+    "min_chg_pct": 0.15,
+    "max_chg_pct": 10.0,
+    "min_vol_ratio": 0.55,
+    "max_intraday_position": 0.93,
+    "max_picks": 30,
     "vol_ratio_method": "近5日完结日K均量×(开盘至当前分钟/240)为期望半日量，与现货成交量比；非交易所精确分时"
   }
 }

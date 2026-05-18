@@ -62,6 +62,22 @@ Page({
       this.loadView()
     }
   },
+  onShareAppMessage() {
+    const code = (this.data.roomCode || '').toString().replace(/\D/g, '')
+    let path = '/pages/index/index'
+    let title = '家庭聚会助手 - 谁是卧底'
+    if (code.length === 6) {
+      path =
+        '/pages/undercover/undercover?config=' +
+        encodeURIComponent(JSON.stringify({ mode: 'v2', roomCode: code }))
+      title = '快来一起玩谁是卧底！口令 ' + code
+    }
+    return {
+      title,
+      path,
+      imageUrl: ''
+    }
+  },
   parseCfg(query) {
     if (!query.config) {
       return {}
@@ -325,6 +341,7 @@ Page({
   },
   startWatch() {
     this.unwatch()
+    this._lastUcWatchSig = ''
     if (!this.data.roomId) {
       return
     }
@@ -341,20 +358,37 @@ Page({
       .watch({
         onChange: (s) => {
           const d = s && (s.data != null ? s.data : s.doc)
-          if (d) {
-            const mp = d.maxPlayers | 0
-            const si = mp > 0 ? SIZ.indexOf(mp) : -1
-            const cph = d.currentPhase || ''
-            this.setData({
-              state: d,
-              logText: (d.publicLog || []).join('\n'),
-              sizeIndex: si >= 0 ? si : 2,
-              inVote: cph === 'vote' || cph === 'vote_tie',
-              inVoteTie: cph === 'vote_tie',
-              inDiscuss: cph === 'discuss',
-              inWord: cph === 'word',
-              inWaiting: cph === 'waiting' || cph === 'lobby' || !cph
-            })
+          if (!d) {
+            return
+          }
+          const pl = d.publicPlayers || []
+          const ackSig = pl.map((p) => (p.wordAck ? '1' : '0')).join('')
+          const sig = [
+            d.currentPhase || '',
+            String(d.currentRound | 0),
+            String(pl.length),
+            String((d.voteProgress && d.voteProgress.cast) | 0),
+            String((d.voteProgress && d.voteProgress.need) | 0),
+            String(d.speakIndex | 0),
+            String((d.publicLog || []).length),
+            JSON.stringify(d.tieBreakOids || []),
+            ackSig
+          ].join('|')
+          const mp = d.maxPlayers | 0
+          const si = mp > 0 ? SIZ.indexOf(mp) : -1
+          const cph = d.currentPhase || ''
+          this.setData({
+            state: d,
+            logText: (d.publicLog || []).join('\n'),
+            sizeIndex: si >= 0 ? si : 2,
+            inVote: cph === 'vote' || cph === 'vote_tie',
+            inVoteTie: cph === 'vote_tie',
+            inDiscuss: cph === 'discuss',
+            inWord: cph === 'word',
+            inWaiting: cph === 'waiting' || cph === 'lobby' || !cph
+          })
+          if (sig !== this._lastUcWatchSig) {
+            this._lastUcWatchSig = sig
             this.loadView()
           }
         },

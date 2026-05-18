@@ -9,7 +9,11 @@
     <view wx:if="{{tdPhase==='none'}}" class="td-block">
       <view class="td-lead">用首页「输入口令」进同一聚会组，满 2 人后由<text class="td-em">主持</text>开一轮。系统会随机 1 位被选中，其余人为其选真心话或趣味任务，主持点结束计票、按票多的一方为准。仅线下同场。</view>
       <button wx:if="{{tdIsHost}}" class="btn btn-primary main-btn" bindtap="tdStartRound">随机选一位 & 开投</button>
-      <view wx:else class="muted">等主持人点「随机选一位」…</view>
+      <view wx:if="{{tdIsHost && tdRoomPlayers.length > 1}}" class="td-host-tools">
+        <button class="btn btn-secondary main-btn" style="margin-top: 16rpx" bindtap="tdShowTransferSheet">指定新任主持…</button>
+        <button class="btn btn-secondary main-btn" style="margin-top: 12rpx" bindtap="tdAbdicateHost">移交给最早进组的一位</button>
+      </view>
+      <view wx:if="{{!tdIsHost}}" class="muted">等主持人点「随机选一位」…</view>
     </view>
     <view wx:if="{{tdPhase==='voting'}}" class="td-block">
       <view class="td-boom">本轮</view>

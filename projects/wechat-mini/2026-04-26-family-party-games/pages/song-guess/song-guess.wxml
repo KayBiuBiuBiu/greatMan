@@ -4,7 +4,7 @@
   <view class="hint" wx:if="{{!roomId}}">6 位聚会组。每题随机一名「主持」用本机外放，其他人听并抢答。也可从首页输入 6 位（按顺序试卧底、身份推理等聚会组后再试猜歌）。仅同场亲友。</view>
   <view class="card" wx:if="{{!roomId}}">
     <view class="lab">本机昵称</view>
-    <input class="inp" placeholder="用于排行榜" value="{{nick}}" bindinput="onNick" />
+    <input class="inp" placeholder="用于本局昵称展示" value="{{nick}}" bindinput="onNick" />
     <button class="btn primary" bindtap="doCreate">创建房间</button>
     <view class="mt">或 6 位进组</view>
     <input class="inp" type="number" value="{{joinCode}}" bindinput="onCode" />
@@ -77,7 +77,7 @@
       class="card"
       wx:if="{{(state && state.status === 'finished') || (state && state.phase === 'finished')}}"
     >
-      <view class="h2">最终排名</view>
+      <view class="h2">本环节得分（同场参考）</view>
       <view
         class="rank"
         wx:for="{{(state && state.publicPlayers) || (view && view.publicPlayers) || []}}"

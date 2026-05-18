@@ -223,7 +223,7 @@ def diversify_quality_by_sw_l1(
     max_stocks = max(1, int(box.get("max_stocks", 25) or 25))
     min_score_raw = box.get("min_score", None)
     if min_score_raw is None:
-        min_score = float(th.get("score_min_quality", 6.5) or 6.5)
+        min_score = float(th.get("score_min_quality", 7.0) or 7.0)
     else:
         min_score = float(min_score_raw)
 
@@ -425,7 +425,7 @@ def cluster_pick_quality_rows(
 
     min_score_raw = box.get("min_score", None)
     if min_score_raw is None:
-        min_score = float(th.get("score_min_quality", 6.5) or 6.5)
+        min_score = float(th.get("score_min_quality", 7.0) or 7.0)
     else:
         min_score = float(min_score_raw)
 
@@ -951,8 +951,8 @@ def _classify(
     w1 = float(bt1.get("win", 0.0))
     p3 = float(bt3.get("profit", 0.0))
     p5 = float(bt5.get("profit", 0.0))
-    sq = float(th.get("score_min_quality", 6.5))
-    sw = float(th.get("score_min_watch", 5.5))
+    sq = float(th.get("score_min_quality", 7.0))
+    sw = float(th.get("score_min_watch", 6.0))
     p1_min = float(th.get("profit_1y_min", 0.0))
     w1_min = float(th.get("win_1y_min", 50.0))
     p3_floor = float(th.get("profit_3y_floor", -8.0))
@@ -1880,8 +1880,8 @@ def run_daily_selector(
     _ms_out = max(0, _ms_out)
 
     out_th = {
-        "score_min": float(th.get("score_min_quality", 6.5)),
-        "score_min_watch": float(th.get("score_min_watch", 5.5)),
+        "score_min": float(th.get("score_min_quality", 7.0)),
+        "score_min_watch": float(th.get("score_min_watch", 6.0)),
         "profit_1y_min": float(th.get("profit_1y_min", 0.0)),
         "win_1y_min": float(th.get("win_1y_min", 50.0)),
         "profit_3y_floor": float(th.get("profit_3y_floor", -8.0)),

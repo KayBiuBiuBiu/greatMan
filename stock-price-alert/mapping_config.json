@@ -1,0 +1,89 @@
+{
+  "broker": "中信证券 PC 交割单",
+  "filename_pattern": "交割单_{YYYYMMDD}_{HHMMSS}.xls",
+  "filename_regex": "^交割单_(\\d{8})_(\\d{6})\\.(xls|xlsx)$",
+  "file_glob": ["交割单_*.xls", "交割单_*.xlsx", "交割单_*.XLS", "交割单_*.XLSX"],
+  "sheet_index": 0,
+  "header_row": 0,
+  "columns": {
+    "code": "证券代码",
+    "name": "证券名称",
+    "settle_date": "交收日期",
+    "business": "业务名称",
+    "price": "成交价格",
+    "quantity": "成交数量",
+    "amount": "成交金额",
+    "commission": "手续费",
+    "stamp_tax": "印花税",
+    "transfer_fee": "过户费",
+    "surcharge": "附加费",
+    "exchange_clearing_fee": "交易所清算费",
+    "fund_fee": "基金手续费",
+    "regulatory_fee": "规费",
+    "fx_diff": "换汇尾差",
+    "settlement_amount": "清算金额",
+    "cash_balance": "资金本次余额",
+    "settle_flag": "交收标志",
+    "order_id": "委托编号",
+    "trade_time": "成交时间",
+    "shareholder_id": "股东代码",
+    "fund_account": "资金账号",
+    "client_id": "客户代码",
+    "currency": "币种",
+    "exchange": "交易所名称",
+    "remark": "备注"
+  },
+  "business_types": {
+    "buy_keywords": [
+      "证券买入",
+      "买入",
+      "融资买入",
+      "担保品买入"
+    ],
+    "sell_keywords": [
+      "证券卖出",
+      "卖出",
+      "融资卖出",
+      "担保品卖出"
+    ],
+    "skip_keywords": [
+      "银证",
+      "银行转",
+      "利息",
+      "结息",
+      "分红",
+      "红利",
+      "股息",
+      "配股缴款",
+      "申购",
+      "赎回",
+      "转托管",
+      "托管",
+      "新股申购",
+      "中签缴款"
+    ]
+  },
+  "currency_allowed": ["人民币", "CNY", "RMB", ""],
+  "output": {
+    "weekly": {
+      "json_dir": "data/weekly_reports",
+      "json_prefix": "weekly_report_"
+    },
+    "monthly": {
+      "json_dir": "data/monthly_reports",
+      "json_prefix": "monthly_report_"
+    },
+    "h1": {
+      "json_dir": "data/halfyear_reports",
+      "json_prefix": "h1_report_"
+    },
+    "h2": {
+      "json_dir": "data/halfyear_reports",
+      "json_prefix": "h2_report_"
+    },
+    "annual": {
+      "json_dir": "data/annual_reports",
+      "json_prefix": "annual_report_"
+    }
+  }
+}

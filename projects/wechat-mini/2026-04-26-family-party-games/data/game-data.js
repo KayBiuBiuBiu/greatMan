@@ -131,7 +131,7 @@ const gameGroups = [
       {
         title: '袋鼠跳跳跳',
         status: '规则辅助',
-        summary: '可扩展秒表、分组和排名。'
+        summary: '可扩展秒表、分组与同场计分参考。'
       },
       {
         title: '爱心接力 / 齐心协力',

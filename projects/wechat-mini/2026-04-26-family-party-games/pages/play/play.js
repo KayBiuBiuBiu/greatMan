@@ -37,7 +37,9 @@ Page({
     tdMyChoice: '',
     tdLastTally: null,
     tdShowQuestion: false,
-    tdRound: 0
+    tdRound: 0,
+    tdRoomPlayers: [],
+    tdMyOpenId: ''
   },
 
   timer: null,
@@ -57,8 +59,10 @@ Page({
       this.setData({ mode: 'truthDareRoom', roomCode: rc })
       this._tdPoll = setInterval(() => {
         this.refreshTdState()
+        this.refreshRoomPlayers()
       }, 2000)
       this.refreshTdState()
+      this.refreshRoomPlayers()
       return
     }
     this.initGame(title)
@@ -98,7 +102,8 @@ Page({
       tdDare: s.dareCount != null ? s.dareCount : 0,
       tdMyChoice: s.myChoice || '',
       tdLastTally: s.lastTally,
-      tdRound: s.round || 0
+      tdRound: s.round || 0,
+      tdMyOpenId: cur || ''
     })
     if (s.phase === 'voting' || s.phase === 'none') {
       this.setData({ tdShowQuestion: false, prompt: null })
@@ -106,6 +111,105 @@ Page({
     if (s.phase === 'resolved' && s.lastTally && s.lastTally.tie) {
       this.setData({ tdShowQuestion: false, prompt: null })
     }
+  },
+
+  refreshRoomPlayers() {
+    if (!this.data.roomCode || this.data.mode !== 'truthDareRoom') {
+      return
+    }
+    callRoomService(
+      { action: 'get', roomCode: this.data.roomCode },
+      {
+        silent: true,
+        onOk: (res) => {
+          const r = res.result || {}
+          this.setData({ tdRoomPlayers: r.players || [] })
+        },
+        onError: () => {}
+      }
+    )
+  },
+
+  tdAbdicateHost() {
+    if (!this.data.tdIsHost) {
+      return
+    }
+    wx.showModal({
+      title: '移交主持',
+      content: '将把主持移交给进组最早的一位其他成员，确定吗？',
+      success: (r) => {
+        if (!r.confirm) {
+          return
+        }
+        wx.showLoading({ title: '…' })
+        callRoomService(
+          { action: 'abdicateHost', roomCode: this.data.roomCode },
+          {
+            onOk: () => {
+              wx.hideLoading()
+              wx.showToast({ title: '已移交', icon: 'success' })
+              this.refreshTdState()
+              this.refreshRoomPlayers()
+            },
+            onError: (err, hint) => {
+              wx.hideLoading()
+              wx.showToast({ title: (hint && hint.text) || '失败', icon: 'none' })
+            }
+          }
+        )
+      }
+    })
+  },
+
+  tdShowTransferSheet() {
+    if (!this.data.tdIsHost) {
+      return
+    }
+    if (!this.data.tdMyOpenId) {
+      wx.showToast({ title: '正在同步身份，请稍候', icon: 'none' })
+      this.refreshTdState()
+      return
+    }
+    const my = this.data.tdMyOpenId
+    const ps = (this.data.tdRoomPlayers || []).filter(function (p) {
+      return p.openId && p.openId !== my
+    })
+    if (!ps.length) {
+      wx.showToast({ title: '暂无其他成员', icon: 'none' })
+      return
+    }
+    wx.showActionSheet({
+      itemList: ps.map(function (p) {
+        return p.nickName || '参与者'
+      }),
+      success: (res) => {
+        const i = res.tapIndex
+        if (i < 0 || i >= ps.length) {
+          return
+        }
+        const targetOpenId = ps[i].openId
+        wx.showLoading({ title: '…' })
+        callRoomService(
+          {
+            action: 'transferHost',
+            roomCode: this.data.roomCode,
+            targetOpenId: targetOpenId
+          },
+          {
+            onOk: () => {
+              wx.hideLoading()
+              wx.showToast({ title: '已移交主持', icon: 'success' })
+              this.refreshTdState()
+              this.refreshRoomPlayers()
+            },
+            onError: (err, hint) => {
+              wx.hideLoading()
+              wx.showToast({ title: (hint && hint.text) || '移交失败', icon: 'none' })
+            }
+          }
+        )
+      }
+    })
   },
 
   tdStartRound() {

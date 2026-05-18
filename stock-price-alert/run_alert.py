@@ -697,8 +697,8 @@ DEFAULT_WATCHLIST_AUTO_REPLENISH: dict[str, Any] = {
     "min_watchlist_count": 50,
     "target_count": 50,
     "max_add_per_run": 15,
-    "min_quality_score": 6.5,
-    "min_watch_score": 6.0,
+    "min_quality_score": 7.0,
+    "min_watch_score": 6.5,
     "note": "自动补充(优质/观察)",
     "notify": False,
 }
@@ -762,11 +762,21 @@ DEFAULT_OPS_AUTOMATION = {
     "ml_forward4_train_min_samples": 2000,
     "ml_forward4_train_max_secids": 0,
     "ml_forward4_train_min_bars": 120,
-    # data/daily_summary.json 仍会写入；true 时另发邮件/企微（走 send_email_alert / remote_channel）
-    "daily_summary_email_enabled": True,
-    # 周 / 月 / 半年 / 年：按 daily_summary_history 汇总 trades.realized 等（见 pnl_period_report.py）
-    "pnl_period_report_enabled": True,
-    "pnl_period_report_email_enabled": True,
+    # true：收盘后仍写 data/daily_summary.json + history；false：完全不生成
+    "daily_summary_enabled": True,
+    # false（默认）：不发每日总结邮件/企微；改由周一券商周报推送
+    "daily_summary_email_enabled": False,
+    # 每周一券商交割单周报（上一交易周 Mon–Fri；见 weekly_report.py）
+    "weekly_broker_report_enabled": True,
+    "weekly_broker_report_hhmm": "09:30",
+    "weekly_broker_report_email_enabled": True,
+    # 月 / 半年 / 年报：券商交割单（broker_xls/ 交割单_YYYYMMDD_HHMMSS.xls）
+    "broker_period_report_enabled": True,
+    "broker_period_report_email_enabled": True,
+    "broker_period_report_catchup_days": 5,
+    # 周 / 月 / 半年 / 年：按 daily_summary_history 汇总（与券商交割单报告二选一，默认关）
+    "pnl_period_report_enabled": False,
+    "pnl_period_report_email_enabled": False,
     "pnl_period_report_catchup_days": 5,
     "self_improve_operation_feedback": copy.deepcopy(
         DEFAULT_SELF_IMPROVE_OPERATION_FEEDBACK
@@ -823,8 +833,8 @@ DEFAULT_AFTERNOON_REFRESH: dict[str, Any] = {
 }
 DEFAULT_QUANT_SELECTOR = {
     # 优质池：因子分 + 回测门槛（见 quant_core.selector._classify）
-    "score_min_quality": 6.5,
-    "score_min_watch": 5.5,
+    "score_min_quality": 7.0,
+    "score_min_watch": 6.0,
     "profit_1y_min": 0.0,
     "win_1y_min": 50.0,
     "profit_3y_floor": -8.0,
@@ -5315,25 +5325,31 @@ def _maybe_run_ops_automation(
                 ],
                 event="after_close_backtest",
             )
-            try:
-                from daily_summary import run_daily_summary_after_close
+            if bool(oa.get("daily_summary_enabled", True)):
+                try:
+                    from daily_summary import run_daily_summary_after_close
 
-                if run_daily_summary_after_close(
-                    cfg=cfg,
-                    config_path=config_path,
-                    state=state,
-                    root=ROOT,
-                    now=now,
-                ):
+                    if run_daily_summary_after_close(
+                        cfg=cfg,
+                        config_path=config_path,
+                        state=state,
+                        root=ROOT,
+                        now=now,
+                    ):
+                        _emit_main_line(
+                            "[自动化] 每日总结已写入 data/daily_summary.json（不发邮件）",
+                            event="after_close_daily_summary_ok",
+                        )
+                except Exception as exc:
                     _emit_main_line(
-                        "[自动化] 每日总结已写入 data/daily_summary.json",
-                        event="after_close_daily_summary_ok",
+                        f"[自动化] daily_summary 异常: {exc}",
+                        event="after_close_daily_summary_fail",
+                        level=logging.WARNING,
                     )
-            except Exception as exc:
+            else:
                 _emit_main_line(
-                    f"[自动化] daily_summary 异常: {exc}",
-                    event="after_close_daily_summary_fail",
-                    level=logging.WARNING,
+                    "[自动化] 已跳过每日总结生成（daily_summary_enabled=false）",
+                    event="after_close_daily_summary_skipped",
                 )
             try:
                 from pnl_period_report import maybe_run_pnl_period_reports
@@ -5350,6 +5366,23 @@ def _maybe_run_ops_automation(
                 _emit_main_line(
                     f"[自动化] pnl_period_report 异常: {exc}",
                     event="after_close_pnl_period_report_fail",
+                    level=logging.WARNING,
+                )
+            try:
+                from broker_period_reports import maybe_run_broker_period_reports
+
+                maybe_run_broker_period_reports(
+                    cfg=cfg,
+                    root=ROOT,
+                    state=state,
+                    now=now,
+                    oa=oa,
+                    state_path=state_path(config_path),
+                )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] broker_period_report 异常: {exc}",
+                    event="after_close_broker_period_report_fail",
                     level=logging.WARNING,
                 )
             try:
@@ -5469,6 +5502,23 @@ def _maybe_run_ops_automation(
                 cfg=cfg, state=state, oa=oa, now=now
             )
             state["__ops_after_close_done__"] = today
+
+    # 每周一券商周报（默认 09:30；统计上一交易周；需 broker_xls/ 交割单）
+    if bool(oa.get("weekly_broker_report_enabled", False)) and now.weekday() == 0:
+        wh, wm = _parse_hhmm(str(oa.get("weekly_broker_report_hhmm") or "09:30"), 9, 30)
+        if (
+            now.time() >= dt_time(wh, wm)
+            and state.get("__weekly_broker_report_done__") != today
+        ):
+            _emit_main_line(
+                "[自动化] 周一券商周报开始（weekly_report.py）",
+                event="weekly_broker_report_start",
+            )
+            _run_local_script(
+                [py, str(ROOT / "weekly_report.py"), "-c", str(config_path)],
+                event="weekly_broker_report",
+            )
+            state["__weekly_broker_report_done__"] = today
 
     # 周五额外任务（每周一次）
     if bool(oa.get("friday_weekly_enabled", True)) and now.weekday() == 4:

@@ -211,7 +211,7 @@ Page({
           })
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位口令告诉身边亲友，他们输入后会进入同一聚会组。无线上对战。',
+            content: '把 6 位口令告诉身边亲友，他们输入后会进入同一聚会组。无广域联机。',
             confirmText: '开始互动',
             showCancel: false,
             success: (res) => {
@@ -275,7 +275,7 @@ Page({
           })
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位口令告诉身边亲友，他们输入后会进入同一聚会组。无线上对战。',
+            content: '把 6 位口令告诉身边亲友，他们输入后会进入同一聚会组。无广域联机。',
             confirmText: '开始互动',
             showCancel: false,
             success: (res) => {

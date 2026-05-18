@@ -5,7 +5,7 @@
  * - 未对 callFunction 使用 setTimeout / Promise.race
  * - 未用 wx.request 调云函数 HTTP
  * - wx.cloud.init 未传 timeout 等参数
- * - 全项目仅此处 wx.cloud.callFunction，统一打 [#序号] 日志便于区分多次点击
+ * - 口令聚会组（roomService）等调用统一经本文件封装，便于日志与错误提示
  *
  * 排障：若已出现「roomService#N callFunction 成功 / complete」、errMsg 为 cloud.callFunction:ok，
  * 之后控制台仍报 Error: timeout，且堆栈在 WAServiceMainContext 或 WAWorker、伴 reportRealtimeAction 等，

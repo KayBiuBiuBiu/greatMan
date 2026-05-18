@@ -127,6 +127,14 @@ Page({
     this.fetchClickRanks()
   },
 
+  onShareAppMessage () {
+    return {
+      title: '家庭聚会助手 - 线下互动神器',
+      path: '/pages/index/index',
+      imageUrl: ''
+    }
+  },
+
   startGame(event) {
     const ds = (event.currentTarget && event.currentTarget.dataset) || {}
     const title = (ds.title != null && ds.title !== '') ? String(ds.title) : ''
