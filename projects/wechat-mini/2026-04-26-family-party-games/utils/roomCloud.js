@@ -121,6 +121,14 @@ function callRoomService(data, opts) {
         )
         /* eslint-enable no-console */
       }
+      const r = (res && res.result) || {}
+      if (r && r.errMsg) {
+        if (!silent) {
+          wx.showToast({ title: String(r.errMsg), icon: 'none', duration: 3500 })
+        }
+        onError && onError(new Error(String(r.errMsg)), { result: r })
+        return
+      }
       onOk && onOk(res)
     },
     fail: (err) => {

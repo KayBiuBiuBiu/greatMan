@@ -1,4 +1,11 @@
 const { callDraw, ensure } = require('../../utils/drawRoomCloud')
+const {
+  memberCountLine,
+  refreshCloudDoc,
+  runStartAction,
+  explainDrawStartFail,
+  showRoomBlockModal
+} = require('../../utils/roomUi')
 const { CATS: CW_CATS } = require('../../data/draw-words')
 const ROUNDS = [5, 6, 8, 9, 10, 12]
 const CAT_ARR = (CW_CATS && CW_CATS.length)
@@ -24,7 +31,8 @@ Page({
     catIdx: 0,
     guessInput: '',
     lineW: 4,
-    remoteCanvasSrc: ''
+    remoteCanvasSrc: '',
+    memberCountLine: ''
   },
   _cvs: null,
   _ctx: null,
@@ -49,7 +57,41 @@ Page({
     }
   },
   onShow () {
-    this.scheduleInitCanvas()
+    if (this.data.roomId) {
+      this._refreshRoomState()
+    } else {
+      this.scheduleInitCanvas()
+    }
+  },
+  onShareAppMessage () {
+    const code = (this.data.roomCode || (this.data.state && this.data.state.roomCode) || '')
+      .toString()
+      .replace(/\D/g, '')
+    let path = '/pages/index/index'
+    let title = '家庭聚会助手 - 你画我猜'
+    if (code.length === 6 && this.data.roomId) {
+      path =
+        '/pages/draw-guess/draw-guess?roomId=' +
+        encodeURIComponent(String(this.data.roomId)) +
+        '&roomCode=' +
+        encodeURIComponent(code)
+      title = '一起来玩你画我猜！口令 ' + code
+    }
+    return { title, path, imageUrl: '' }
+  },
+  _refreshRoomState () {
+    const id = this.data.roomId
+    if (!id || !wx.cloud || !ensure()) {
+      this.loadView()
+      return
+    }
+    refreshCloudDoc('draw_gameState', id).then((d) => {
+      if (d) {
+        this.applyG(d)
+      }
+      this.loadView()
+      this.scheduleInitCanvas()
+    })
   },
   onUnload () {
     this.clearTimers()
@@ -175,17 +217,29 @@ Page({
     )
   },
   doStart () {
-    wx.showLoading({ title: '…' })
-    callDraw(
-      { action: 'startGame', roomId: this.data.roomId },
-      {
-        onOk: () => {
-          wx.hideLoading()
-          this.loadView()
-        },
-        onError: () => { wx.hideLoading() }
+    const st = this.data.state || {}
+    const n = (st.publicPlayers && st.publicPlayers.length) || 0
+    const v = this.data.view || {}
+    const ctx = { playerCount: n }
+    if (!v.isHost) {
+      showRoomBlockModal('无权限', '只有组长可以点击「开始」。')
+      return
+    }
+    if (n < 2) {
+      const box = explainDrawStartFail('至少2人才能开始', ctx)
+      showRoomBlockModal(box.title, box.content)
+      return
+    }
+    runStartAction({
+      kind: 'draw',
+      ctx,
+      callService: callDraw,
+      payload: { action: 'startGame', roomId: this.data.roomId },
+      loadingTitle: '开始',
+      onSuccess: () => {
+        this.loadView()
       }
-    )
+    })
   },
   doReveal () {
     callDraw(
@@ -356,7 +410,12 @@ Page({
     }
   },
   applyG (d) {
-    this.setData({ state: d, roomCode: d.roomCode || this.data.roomCode })
+    const n = (d.publicPlayers && d.publicPlayers.length) || 0
+    this.setData({
+      state: d,
+      roomCode: d.roomCode || this.data.roomCode,
+      memberCountLine: memberCountLine(n, 0, '至少 2 人可开始')
+    })
   },
   loadView () {
     const { roomId } = this.data

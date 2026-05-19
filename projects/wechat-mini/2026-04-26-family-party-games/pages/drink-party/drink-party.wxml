@@ -49,6 +49,7 @@
       <text>口令 <text class="dp-code-num">{{state.roomCode}}</text></text>
       <text class="dp-link" bindtap="onCopy">复制口令</text>
     </view>
+    <button class="btn btn-secondary main-btn" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
     <view wx:if="{{isHost}}">
       <view class="label" style="margin-top: 16rpx">组名（仅组长）</view>
       <input
@@ -62,7 +63,8 @@
   </view>
 
   <view class="card setup-card" wx:if="{{state && state.publicPlayers}}">
-    <view class="section-title">成员 <text class="dp-muted">共 {{state.publicPlayers.length}} 人</text>
+    <view class="section-title">成员
+      <text class="dp-muted" wx:if="{{memberCountLine}}"> {{memberCountLine}}</text>
     </view>
     <view class="player-row">
       <view

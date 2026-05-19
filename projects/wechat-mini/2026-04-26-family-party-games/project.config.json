@@ -19,7 +19,7 @@
     "swc": false,
     "disableSWC": true,
     "babelSetting": {
-      "ignore": [],
+      "ignore": ["scripts/**"],
       "disablePlugins": [],
       "outputPath": ""
     }
@@ -34,7 +34,12 @@
   "condition": {},
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "scripts"
+      }
+    ],
     "include": []
   },
   "editorSetting": {},

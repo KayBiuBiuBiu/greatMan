@@ -29,6 +29,7 @@
   <block wx:else>
     <view class="uc-panel">
       <view class="uc-h2">聚会组口令 {{roomCode || state && state.roomCode}}</view>
+      <button class="uc-btn uc-ghost" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
       <view class="uc-row" wx:if="{{state && state.currentPhase === 'waiting'}}">等待 — 人齐后组长发牌</view>
       <view
         class="uc-row"
@@ -68,10 +69,9 @@
         bindtap="doStart"
       >发牌开始
       </button>
-      <view
-        class="uc-members"
-        wx:if="{{state && state.publicPlayers && state.publicPlayers.length}}"
-      >成员
+      <view class="uc-members" wx:if="{{state}}">成员
+        <text class="uc-muted" wx:if="{{memberCountLine}}"> {{memberCountLine}}</text>
+        <view class="uc-muted" wx:if="{{!state.publicPlayers || !state.publicPlayers.length}}">暂无成员，请分享口令邀请加入</view>
         <view
           class="uc-mi"
           wx:for="{{state.publicPlayers}}"

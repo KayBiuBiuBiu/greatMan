@@ -8,6 +8,11 @@ const {
 } = require('../../data/game-data')
 const { pickOne } = require('../../utils/random')
 const { callRoomService } = require('../../utils/roomCloud')
+const {
+  memberCountLine,
+  runStartAction,
+  explainTruthDareStartFail
+} = require('../../utils/roomUi')
 
 Page({
   data: {
@@ -39,7 +44,8 @@ Page({
     tdShowQuestion: false,
     tdRound: 0,
     tdRoomPlayers: [],
-    tdMyOpenId: ''
+    tdMyOpenId: '',
+    memberCountLine: ''
   },
 
   timer: null,
@@ -66,6 +72,30 @@ Page({
       return
     }
     this.initGame(title)
+  },
+
+  onShow() {
+    if (this.data.mode === 'truthDareRoom' && this.data.roomCode) {
+      this.refreshTdState()
+      this.refreshRoomPlayers()
+    }
+  },
+
+  onShareAppMessage() {
+    const code = (this.data.roomCode || '').toString().replace(/\D/g, '').slice(0, 4)
+    if (code.length !== 4) {
+      return { title: '家庭聚会助手', path: '/pages/index/index' }
+    }
+    const cfg = JSON.stringify({ roomCode: code })
+    return {
+      title: '一起来玩真心话大冒险！口令 ' + code,
+      path:
+        '/pages/play/play?title=' +
+        encodeURIComponent('真心话大冒险') +
+        '&config=' +
+        encodeURIComponent(cfg),
+      imageUrl: ''
+    }
   },
 
   onUnload() {
@@ -123,7 +153,11 @@ Page({
         silent: true,
         onOk: (res) => {
           const r = res.result || {}
-          this.setData({ tdRoomPlayers: r.players || [] })
+          const pl = r.players || []
+          this.setData({
+            tdRoomPlayers: pl,
+            memberCountLine: memberCountLine(pl.length, 0, '至少 2 人可开始')
+          })
         },
         onError: () => {}
       }
@@ -213,23 +247,29 @@ Page({
   },
 
   tdStartRound() {
+    const n = (this.data.tdRoomPlayers || []).length
+    const ctx = { playerCount: n }
+    const checks = []
     if (!this.data.tdIsHost) {
-      return
+      checks.push({ fail: true, title: '无权限', content: '只有主持人可以开始新轮。' })
     }
-    wx.showLoading({ title: '…' })
-    callRoomService(
-      { action: 'tdStart', roomCode: this.data.roomCode },
-      {
-        onOk: () => {
-          wx.hideLoading()
-          wx.showToast({ title: '已随机选人', icon: 'success' })
-          this.refreshTdState()
-        },
-        onError: () => {
-          wx.hideLoading()
-        }
+    if (n < 2) {
+      const box = explainTruthDareStartFail('请至少2位参与者进组再开始', ctx)
+      checks.push({ fail: true, title: box.title, content: box.content })
+    }
+    const callTd = (payload, opts) => callRoomService(payload, opts)
+    runStartAction({
+      kind: 'truthDare',
+      ctx,
+      localChecks: checks,
+      callService: callTd,
+      payload: { action: 'tdStart', roomCode: this.data.roomCode },
+      loadingTitle: '开始',
+      onSuccess: () => {
+        wx.showToast({ title: '已随机选人', icon: 'success' })
+        this.refreshTdState()
       }
-    )
+    })
   },
 
   tdCastVote(e) {

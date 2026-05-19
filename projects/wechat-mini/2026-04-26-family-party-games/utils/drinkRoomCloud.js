@@ -68,7 +68,7 @@ function callDrink(data, opts) {
         if (!silent) {
           wx.showToast({ title: String(r.errMsg), icon: 'none', duration: 3200 })
         }
-        onError && onError(new Error(String(r.errMsg)))
+        onError && onError(new Error(String(r.errMsg)), { result: r })
         return
       }
       onOk && onOk(res)

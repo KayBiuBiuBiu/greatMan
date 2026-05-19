@@ -91,7 +91,7 @@ function callWerewolfService(data, opts) {
         if (!silent) {
           wx.showToast({ title: String(ok.errMsg), icon: 'none' })
         }
-        onError && onError(new Error(String(ok.errMsg)))
+        onError && onError(new Error(String(ok.errMsg)), { result: ok })
         return
       }
       if (debugCloudLog) {

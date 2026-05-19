@@ -1,4 +1,11 @@
 const { callUndercoverService, ensureUndercoverCloud } = require('../../utils/undercoverRoomCloud')
+const {
+  memberCountLine,
+  refreshCloudDoc,
+  showRoomBlockModal,
+  runStartAction,
+  explainUndercoverStartFail
+} = require('../../utils/roomUi')
 const SIZ = [4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 function roleZh(r) {
@@ -31,7 +38,8 @@ Page({
     logText: '',
     sizeIndex: 2,
     sizeList: SIZ,
-    showWord: false
+    showWord: false,
+    memberCountLine: ''
   },
   onLoad(query) {
     this._justOpened = true
@@ -59,7 +67,27 @@ Page({
       return
     }
     if (this.data.roomId) {
-      this.loadView()
+      refreshCloudDoc('uc_state', this.data.roomId).then((d) => {
+        if (d) {
+          const pl = d.publicPlayers || []
+          const mp = d.maxPlayers | 0
+          const si = mp > 0 ? SIZ.indexOf(mp) : -1
+          const needN = mp || SIZ[si >= 0 ? si : this.data.sizeIndex | 0] || 6
+          const cph = d.currentPhase || ''
+          this.setData({
+            state: d,
+            logText: (d.publicLog || []).join('\n'),
+            sizeIndex: si >= 0 ? si : this.data.sizeIndex,
+            memberCountLine: memberCountLine(pl.length, needN),
+            inVote: cph === 'vote' || cph === 'vote_tie',
+            inVoteTie: cph === 'vote_tie',
+            inDiscuss: cph === 'discuss',
+            inWord: cph === 'word',
+            inWaiting: cph === 'waiting' || cph === 'lobby' || !cph
+          })
+        }
+        this.loadView()
+      })
     }
   },
   onShareAppMessage() {
@@ -67,9 +95,13 @@ Page({
     let path = '/pages/index/index'
     let title = '家庭聚会助手 - 谁是卧底'
     if (code.length === 6) {
+      const cfg = { mode: 'v2', roomCode: code }
+      if (this.data.roomId) {
+        cfg.roomId = String(this.data.roomId)
+      }
       path =
         '/pages/undercover/undercover?config=' +
-        encodeURIComponent(JSON.stringify({ mode: 'v2', roomCode: code }))
+        encodeURIComponent(JSON.stringify(cfg))
       title = '快来一起玩谁是卧底！口令 ' + code
     }
     return {
@@ -196,19 +228,34 @@ Page({
     )
   },
   doStart() {
-    wx.showLoading()
-    callUndercoverService(
-      { action: 'startGame', roomId: this.data.roomId },
-      {
-        onOk: () => {
-          wx.hideLoading()
-          this.loadView()
-        },
-        onError: () => {
-          wx.hideLoading()
-        }
+    const st = this.data.state || {}
+    const n = (st.publicPlayers && st.publicPlayers.length) || 0
+    const need = (st.maxPlayers | 0) || SIZ[this.data.sizeIndex | 0] || 6
+    const v = this.data.view || {}
+    const ctx = { playerCount: n, needPlayers: need }
+    const checks = []
+    if (!v.isHost) {
+      checks.push({ fail: true, title: '无权限', content: '只有组长可以发牌开始。' })
+    }
+    if (n < 3) {
+      const box = explainUndercoverStartFail('至少 3 人', ctx)
+      checks.push({ fail: true, title: box.title, content: box.content })
+    }
+    if (need > 0 && n < need) {
+      const box = explainUndercoverStartFail('人未满' + need, ctx)
+      checks.push({ fail: true, title: box.title, content: box.content })
+    }
+    runStartAction({
+      kind: 'undercover',
+      ctx,
+      localChecks: checks,
+      callService: callUndercoverService,
+      payload: { action: 'startGame', roomId: this.data.roomId },
+      loadingTitle: '发牌',
+      onSuccess: () => {
+        this.loadView()
       }
-    )
+    })
   },
   doAckWord() {
     callUndercoverService(
@@ -307,24 +354,29 @@ Page({
             inWord: st === 'word',
             inWaiting: st === 'waiting' || st === 'lobby' || !st
           }
-          if (!this.data.state && v.publicPlayers) {
-            path.logText = (v.publicLog || []).join('\n')
-            const mp = (v.maxPlayers | 0) || 0
-            const si = mp > 0 ? SIZ.indexOf(mp) : -1
-            if (si >= 0) {
-              path.sizeIndex = si
-            }
-            path.state = {
-              currentPhase: v.phase || 'waiting',
-              currentRound: v.currentRound | 0,
-              publicPlayers: v.publicPlayers,
-              publicLog: v.publicLog || [],
-              maxPlayers: v.maxPlayers,
-              roomCode: v.roomCode,
-              roomId: this.data.roomId,
-              voteProgress: v.voteProgress || { cast: 0, need: 0 }
-            }
+          const prevSt = this.data.state || {}
+          const players = v.publicPlayers || prevSt.publicPlayers || []
+          const mp = (v.maxPlayers | 0) || (prevSt.maxPlayers | 0) || 0
+          const si = mp > 0 ? SIZ.indexOf(mp) : -1
+          if (si >= 0) {
+            path.sizeIndex = si
           }
+          path.state = {
+            currentPhase: v.phase || prevSt.currentPhase || 'waiting',
+            currentRound:
+              v.currentRound != null ? v.currentRound | 0 : prevSt.currentRound | 0,
+            publicPlayers: players,
+            publicLog: v.publicLog || prevSt.publicLog || [],
+            maxPlayers: mp || prevSt.maxPlayers,
+            roomCode: v.roomCode || prevSt.roomCode,
+            roomId: this.data.roomId,
+            voteProgress: v.voteProgress || prevSt.voteProgress || { cast: 0, need: 0 }
+          }
+          path.logText = (path.state.publicLog || []).join('\n')
+          const idx = si >= 0 ? si : this.data.sizeIndex | 0
+          const needN = (path.state.maxPlayers | 0) || SIZ[idx] || 6
+          path.memberCountLine =
+            '当前 ' + players.length + ' / ' + needN + ' 人'
           this.setData(path)
           if (v.phase === 'word' && v.myWord && !v.wordAck) {
             this.setData({ showWord: true })
@@ -377,10 +429,12 @@ Page({
           const mp = d.maxPlayers | 0
           const si = mp > 0 ? SIZ.indexOf(mp) : -1
           const cph = d.currentPhase || ''
+          const needN = (mp | 0) || SIZ[si >= 0 ? si : 2] || 6
           this.setData({
             state: d,
             logText: (d.publicLog || []).join('\n'),
             sizeIndex: si >= 0 ? si : 2,
+            memberCountLine: '当前 ' + pl.length + ' / ' + needN + ' 人',
             inVote: cph === 'vote' || cph === 'vote_tie',
             inVoteTie: cph === 'vote_tie',
             inDiscuss: cph === 'discuss',

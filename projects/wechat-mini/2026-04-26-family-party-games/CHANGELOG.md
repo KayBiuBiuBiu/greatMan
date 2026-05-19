@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-05-19 同场聚会组：成员刷新与开始失败说明（闭环）
+
+### 统一能力（`utils/roomUi.js`）
+
+- `memberCountLine` / `refreshCloudDoc` / `runStartAction`：各玩法共用「人数展示、返回页拉取、开始前校验 + 失败弹窗」。
+- `scripts/test-room-ui.js`：Node 单测各玩法失败文案（`node scripts/test-room-ui.js`）。
+
+### 已覆盖的云同场页面
+
+| 玩法 | 成员刷新 | 开始失败弹窗 | 分享带 roomId |
+|------|----------|--------------|---------------|
+| 趣味抽签 | onShow + watch | ✓ | ✓ |
+| 谁是卧底 | onShow + watch + loadView 修复 | ✓ | ✓ |
+| 身份推理 | onShow + watch + loadView 合并成员 | ✓ | ✓ |
+| 你画我猜 | onShow + watch | ✓ | ✓ |
+| 疯狂猜歌 | onShow + watch | ✓ | ✓ |
+
+### 云调用
+
+- `drawRoomCloud` / `musicRoomCloud` / `werewolfCloud` / `drinkRoomCloud`：`onError` 附带 `{ result }` 便于弹窗解析。
+- `roomCloud`：`success` 时若 `result.errMsg` 走 `onError`（与云函数 throw 对齐）。
+
+### 2026-05-19 补充
+
+- 各同场页 + 真心话大冒险：页内 `<button open-type="share">邀请朋友</button>`（沿用各页 `onShareAppMessage`）。
+- `pages/play`：接入 `roomUi`（人数展示、`tdStart` 失败弹窗、`onShow` 刷新）。
+- `musicRoomService`：`startGame` 强制至少 2 人（与前端校验一致）。
+
 ## 0.1.0
 
 - 新建家庭小游戏微信小程序。

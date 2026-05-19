@@ -37,6 +37,7 @@
     <view class="panel" style="margin-bottom: 0">
       <view class="row">
         <view class="title">聚会组口令 {{roomCode || (pub && pub.roomCode) || '—'}}</view>
+        <button class="btn btn-secondary" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
       </view>
       <view class="muted" wx:if="{{!pub}}">正在同步…</view>
     </view>
@@ -78,7 +79,7 @@
         class="muted"
         wx:if="{{pub && pub.status === 'waiting'}}"
         style="margin-top: 12rpx"
-      >等人齐。主持在下方设人数、再发牌开始互动。</view>
+      >等人齐。主持在下方设人数、再发牌开始互动。<text wx:if="{{memberCountLine}}"> {{memberCountLine}}</text></view>
     </view>
     <view class="panel" wx:if="{{pub && pub.status === 'waiting' && view && view.isHost}}">
       <view class="muted">人数</view>

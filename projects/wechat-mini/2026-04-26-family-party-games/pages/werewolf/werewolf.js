@@ -2,6 +2,13 @@ const {
   callWerewolfService,
   ensureWerewolfCloud
 } = require('../../utils/werewolfCloud')
+const {
+  memberCountLine,
+  refreshCloudDoc,
+  runStartAction,
+  explainWerewolfStartFail,
+  showRoomBlockModal
+} = require('../../utils/roomUi')
 const SIZES = [6, 8, 10, 12]
 const RZH = {
   werewolf: '暗位成员',
@@ -46,7 +53,8 @@ Page({
     publicLogText: '',
     lastNightText: '',
     allRolesList: [],
-    playerList: []
+    playerList: [],
+    memberCountLine: ''
   },
   onLoad(q) {
     this._justOpened = true
@@ -89,8 +97,48 @@ Page({
       return
     }
     if (this.data.roomId) {
-      this.loadView()
+      this._refreshRoomState()
     }
+  },
+  onShareAppMessage() {
+    const code = (this.data.roomCode || (this.data.pub && this.data.pub.roomCode) || '')
+      .toString()
+      .replace(/\D/g, '')
+    let path = '/pages/index/index'
+    let title = '家庭聚会助手 - 秘密身份推理'
+    if (code.length === 6) {
+      const cfg = { roomCode: code }
+      if (this.data.roomId) {
+        cfg.roomId = String(this.data.roomId)
+      }
+      path =
+        '/pages/werewolf/werewolf?config=' + encodeURIComponent(JSON.stringify(cfg))
+      title = '一起来玩身份推理！口令 ' + code
+    }
+    return { title, path, imageUrl: '' }
+  },
+  _refreshRoomState() {
+    const id = this.data.roomId
+    if (!id || !wx.cloud || !ensureWerewolfCloud()) {
+      this.loadView()
+      return
+    }
+    refreshCloudDoc('werewolf_state', id).then((d) => {
+      if (d) {
+        const im = SIZES.indexOf(d.maxPlayers)
+        this.setData({
+          pub: d,
+          roomCode: d.roomCode || this.data.roomCode,
+          maxIndex: im >= 0 ? im : this.data.maxIndex,
+          memberCountLine: memberCountLine(
+            (d.players && d.players.length) || 0,
+            d.maxPlayers | 0
+          )
+        })
+        this.syncDisplayText()
+      }
+      this.loadView()
+    })
   },
   onNickIn(e) {
     const nick = (e.detail.value || '').trim().slice(0, 12) || '参与者'
@@ -195,19 +243,30 @@ Page({
     )
   },
   doStart() {
-    wx.showLoading({ title: '发牌' })
-    callWerewolfService(
-      { action: 'start', roomId: this.data.roomId },
-      {
-        onOk: () => {
-          wx.hideLoading()
-          this.loadView()
-        },
-        onError: () => {
-          wx.hideLoading()
-        }
+    const pub = this.data.pub || {}
+    const n = (pub.players && pub.players.length) || (this.data.playerList && this.data.playerList.length) || 0
+    const need = (pub.maxPlayers | 0) || SIZES[this.data.maxIndex | 0] || 6
+    const v = this.data.view || {}
+    const ctx = { playerCount: n, needPlayers: need }
+    if (!v.isHost) {
+      showRoomBlockModal('无权限', '只有组长可以发牌并开始。')
+      return
+    }
+    if (need > 0 && n < need) {
+      const box = explainWerewolfStartFail('人未满' + need + '人，暂不可开', ctx)
+      showRoomBlockModal(box.title, box.content)
+      return
+    }
+    runStartAction({
+      kind: 'werewolf',
+      ctx,
+      callService: callWerewolfService,
+      payload: { action: 'start', roomId: this.data.roomId },
+      loadingTitle: '发牌',
+      onSuccess: () => {
+        this.loadView()
       }
-    )
+    })
   },
   afterHasRoomId(roomId) {
     this.setData({ roomId })
@@ -235,7 +294,11 @@ Page({
               pub: d,
               roomCode: d.roomCode || this.data.roomCode,
               maxIndex: im >= 0 ? im : 0,
-              pzh: phZh(d.currentPhase)
+              pzh: phZh(d.currentPhase),
+              memberCountLine: memberCountLine(
+                (d.players && d.players.length) || 0,
+                d.maxPlayers | 0
+              )
             })
             this.syncDisplayText()
             this.loadView()
@@ -293,42 +356,46 @@ Page({
               (this.data.pub && this.data.pub.currentPhase) || v.phase || 'lobby'
             )
           }
-          if (!this.data.pub) {
-            const pl = (v.players || []).map((m) => ({
-              openId: m.openId,
-              nickName: m.nickName != null ? m.nickName : m.nick,
-              isAlive: m.isAlive,
-              seat: m.seat
-            }))
-            const curPh = v.phase == null || v.phase === '' ? 'lobby' : v.phase
-            const im = SIZES.indexOf(v.maxPlayers)
-            next.pub = {
-              roomCode: v.roomCode,
-              status: v.roomStatus,
-              maxPlayers: v.maxPlayers,
-              currentPhase: curPh,
-              day: v.day | 0,
-              publicLog: v.publicLog || [],
-              lastNightReport: v.lastNightReport,
-              gameEnd: v.gameEnd,
-              winSide: v.winSide,
-              players: pl,
-              speakIndex: v.speakIndex | 0,
-              speakOrder: v.speakOrder || [],
-              voteOpen: !!v.voteOpen,
-              currentVotes: v.currentVotes || {},
-              pendingHunter: v.pendingHunter
-            }
-            next.roomCode = v.roomCode || this.data.roomCode
-            if (im >= 0) {
-              next.maxIndex = im
-            }
-            next.pzh = phZh(curPh)
-          } else {
-            const ph0 =
-              (this.data.pub && this.data.pub.currentPhase) || v.phase
-            next.pzh = phZh(ph0 || 'lobby')
+          const pl = (v.players || []).map((m) => ({
+            openId: m.openId,
+            nickName: m.nickName != null ? m.nickName : m.nick,
+            isAlive: m.isAlive,
+            seat: m.seat
+          }))
+          const prevPub = this.data.pub || {}
+          const curPh =
+            v.phase == null || v.phase === ''
+              ? prevPub.currentPhase || 'lobby'
+              : v.phase
+          const im = SIZES.indexOf(v.maxPlayers)
+          const maxP = v.maxPlayers != null ? v.maxPlayers : prevPub.maxPlayers
+          next.pub = Object.assign({}, prevPub, {
+            roomCode: v.roomCode || prevPub.roomCode,
+            status: v.roomStatus != null ? v.roomStatus : prevPub.status,
+            maxPlayers: maxP,
+            currentPhase: curPh,
+            day: v.day != null ? v.day | 0 : prevPub.day | 0,
+            publicLog: v.publicLog || prevPub.publicLog || [],
+            lastNightReport:
+              v.lastNightReport != null ? v.lastNightReport : prevPub.lastNightReport,
+            gameEnd: v.gameEnd != null ? v.gameEnd : prevPub.gameEnd,
+            winSide: v.winSide != null ? v.winSide : prevPub.winSide,
+            players: pl.length ? pl : prevPub.players || [],
+            speakIndex: v.speakIndex != null ? v.speakIndex | 0 : prevPub.speakIndex | 0,
+            speakOrder: v.speakOrder || prevPub.speakOrder || [],
+            voteOpen: v.voteOpen != null ? !!v.voteOpen : !!prevPub.voteOpen,
+            currentVotes: v.currentVotes || prevPub.currentVotes || {},
+            pendingHunter:
+              v.pendingHunter != null ? v.pendingHunter : prevPub.pendingHunter
+          })
+          next.roomCode = v.roomCode || this.data.roomCode
+          if (im >= 0) {
+            next.maxIndex = im
           }
+          next.pzh = phZh(curPh || 'lobby')
+          const pn = (next.pub.players && next.pub.players.length) || 0
+          const needN = (maxP | 0) || SIZES[next.maxIndex | 0] || 6
+          next.memberCountLine = memberCountLine(pn, needN)
           this.setData(next)
           this.syncDisplayText()
         },

@@ -313,6 +313,9 @@ async function run (e) {
       audioUrl: s.audioUrl
     }))
     const pls0 = await gPlayers(rid)
+    if (pls0.length < 2) {
+      throw new Error('至少2人才能开始')
+    }
     const rh0 = pickRoundHost(pls0, null)
     const now = t()
     const st0 = {

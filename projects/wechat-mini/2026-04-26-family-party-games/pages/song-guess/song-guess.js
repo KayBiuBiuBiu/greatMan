@@ -1,4 +1,11 @@
 const { callMusic, ensure } = require('../../utils/musicRoomCloud')
+const {
+  memberCountLine,
+  refreshCloudDoc,
+  runStartAction,
+  explainMusicStartFail,
+  showRoomBlockModal
+} = require('../../utils/roomUi')
 
 const ROUNDS = [5, 10, 15]
 
@@ -20,7 +27,8 @@ Page({
     showLog: false,
     inputAnswer: '',
     roundLabels: ['5 题', '10 题', '15 题'],
-    roundIndex: 0
+    roundIndex: 0,
+    memberCountLine: ''
   },
 
   onLoad (q) {
@@ -45,7 +53,40 @@ Page({
     this.stopWatch()
   },
 
-  onShow () {},
+  onShow () {
+    if (this.data.roomId) {
+      this._refreshRoomState()
+    }
+  },
+  onShareAppMessage () {
+    const code = (this.data.roomCode || (this.data.state && this.data.state.roomCode) || '')
+      .toString()
+      .replace(/\D/g, '')
+    let path = '/pages/index/index'
+    let title = '家庭聚会助手 - 疯狂猜歌'
+    if (code.length === 6 && this.data.roomId) {
+      path =
+        '/pages/song-guess/song-guess?roomId=' +
+        encodeURIComponent(String(this.data.roomId)) +
+        '&roomCode=' +
+        encodeURIComponent(code)
+      title = '一起来玩疯狂猜歌！口令 ' + code
+    }
+    return { title, path, imageUrl: '' }
+  },
+  _refreshRoomState () {
+    const id = this.data.roomId
+    if (!id || !wx.cloud || !ensure()) {
+      this.loadView()
+      return
+    }
+    refreshCloudDoc('music_gameState', id).then((d) => {
+      if (d) {
+        this.applyState(d)
+      }
+      this.loadView()
+    })
+  },
 
   onHide () {
     this.stopTick()
@@ -166,19 +207,29 @@ Page({
   },
 
   doStart () {
-    wx.showLoading({ title: '开始' })
-    callMusic(
-      { action: 'startGame', roomId: this.data.roomId },
-      {
-        onOk: () => {
-          wx.hideLoading()
-          this.loadView()
-        },
-        onError: () => {
-          wx.hideLoading()
-        }
+    const st = this.data.state || {}
+    const n = (st.publicPlayers && st.publicPlayers.length) || 0
+    const v = this.data.view || {}
+    const ctx = { playerCount: n }
+    if (!v.isHost) {
+      showRoomBlockModal('无权限', '只有组长可以点击「开始互动」。')
+      return
+    }
+    if (n < 2) {
+      const box = explainMusicStartFail('至少2人', ctx)
+      showRoomBlockModal(box.title, box.content)
+      return
+    }
+    runStartAction({
+      kind: 'music',
+      ctx,
+      callService: callMusic,
+      payload: { action: 'startGame', roomId: this.data.roomId },
+      loadingTitle: '开始',
+      onSuccess: () => {
+        this.loadView()
       }
-    )
+    })
   },
 
   doNext () {
@@ -282,13 +333,15 @@ Page({
     const cix = typeof d.currentIndex === 'number' ? d.currentIndex : -1
     const roundNum = cix >= 0 ? cix + 1 : 0
     const rh = d.roundHits || []
+    const pn = (d.publicPlayers && d.publicPlayers.length) || 0
     this.setData({
       state: d,
       roomCode: d.roomCode || this.data.roomCode,
       roundIndex,
       roundNum,
       hasRoundHits: rh.length > 0,
-      showLog: !!(d.publicLog && d.publicLog.length)
+      showLog: !!(d.publicLog && d.publicLog.length),
+      memberCountLine: memberCountLine(pn, 0, '建议至少 2 人')
     })
     this.syncTimeLeft(d)
     this.maybeStartTick(d)

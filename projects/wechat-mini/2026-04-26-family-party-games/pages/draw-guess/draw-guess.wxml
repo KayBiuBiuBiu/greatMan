@@ -12,9 +12,11 @@
   <block wx:else>
     <view class="card top">
       <text class="strong">聚会组口令 {{roomCode || (state && state.roomCode)}}</text>
+      <button class="btn" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
     </view>
     <view class="card" wx:if="{{state && state.status === 'waiting'}}">
-      <view class="h2">成员</view>
+      <view class="h2">成员<text class="muted" wx:if="{{memberCountLine}}"> {{memberCountLine}}</text></view>
+      <view class="muted" wx:if="{{!state.publicPlayers || !state.publicPlayers.length}}">暂无成员，请分享口令邀请加入</view>
       <view class="mem" wx:for="{{state && state.publicPlayers}}" wx:key="openId">{{item.nickName}} · {{item.score}} 分</view>
     </view>
     <view class="card" wx:if="{{state && state.status === 'waiting' && view && view.isHost}}">

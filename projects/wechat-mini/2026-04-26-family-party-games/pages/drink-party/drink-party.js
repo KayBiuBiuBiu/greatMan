@@ -1,4 +1,11 @@
 const { callDrink, ensure } = require('../../utils/drinkRoomCloud')
+const {
+  memberCountLine,
+  refreshCloudDoc,
+  runStartAction,
+  showRoomBlockModal,
+  explainDrinkStartFail
+} = require('../../utils/roomUi')
 function defNick() {
   return (wx.getStorageSync('drink_nick') || '参与者').toString()
 }
@@ -22,7 +29,8 @@ Page({
     deadLeftS: 0,
     wrongNames: '',
     roomNameEdit: '',
-    myOpenId: ''
+    myOpenId: '',
+    memberCountLine: ''
   },
   _w: null,
   _tcd: null,
@@ -53,8 +61,33 @@ Page({
     this.clearT()
     this.unwatch()
   },
+  onShow() {
+    if (this.data.roomId) {
+      this._refreshRoomState()
+    }
+  },
   onHide() {
     this.clearT()
+  },
+  onShareAppMessage() {
+    const code = (
+      (this.data.state && this.data.state.roomCode) ||
+      this.data.roomCode ||
+      ''
+    )
+      .toString()
+      .replace(/\D/g, '')
+    let path = '/pages/index/index'
+    let title = '家庭聚会助手 - 趣味抽签'
+    if (code.length === 6) {
+      path =
+        '/pages/drink-party/drink-party?roomId=' +
+        encodeURIComponent(String(this.data.roomId)) +
+        '&roomCode=' +
+        encodeURIComponent(code)
+      title = '一起来玩趣味抽签！口令 ' + code
+    }
+    return { title, path, imageUrl: '' }
   },
   unwatch() {
     if (this._w) {
@@ -93,6 +126,19 @@ Page({
         }
       } }
     )
+  },
+  _refreshRoomState() {
+    if (!this.data.roomId || !wx.cloud || !ensure()) {
+      return
+    }
+    if (!this._w) {
+      this._startW()
+    }
+    refreshCloudDoc('drink_gameState', this.data.roomId).then((d) => {
+      if (d) {
+        this._applyS(d)
+      }
+    })
   },
   _bootInRoom() {
     this.fetchMyOpenId()
@@ -135,8 +181,14 @@ Page({
   },
   _applyS(d) {
     const rDisp = (d && d.currentRound) | 0
+    const pn = (d && d.publicPlayers && d.publicPlayers.length) || 0
     this.setData(
-      { state: d, roomNameEdit: (d && d.roomName) || '聚会组', roundDisp: rDisp },
+      {
+        state: d,
+        roomNameEdit: (d && d.roomName) || '聚会组',
+        roundDisp: rDisp,
+        memberCountLine: memberCountLine(pn, 0, '至少 2 人可开始')
+      },
       () => {
       const my = this._my || (this.data.myOpenId || '')
       this._my = my
@@ -357,17 +409,40 @@ Page({
     )
   },
   onStart() {
+    const st = this.data.state
+    const n = (st && st.publicPlayers && st.publicPlayers.length) || 0
+    const ph = (st && st.phase) || 'waiting'
+    const ctx = { playerCount: n }
+    const checks = []
+    if (ph === 'result') {
+      const box = explainDrinkStartFail('请先点「下一轮」再开始', ctx)
+      checks.push({ fail: true, title: box.title, content: box.content })
+    }
+    if (ph === 'countdown' || ph === 'voting') {
+      const box = explainDrinkStartFail('请先结束或等待本回合', ctx)
+      checks.push({ fail: true, title: box.title, content: box.content })
+    }
+    if (n < 2) {
+      const box = explainDrinkStartFail('至少 2 人才能开', ctx)
+      checks.push({ fail: true, title: box.title, content: box.content })
+    }
+    if (!this.data.isHost) {
+      checks.push({ fail: true, title: '无权限', content: '只有组长可以开始本轮。' })
+    }
     this.setData({ opBusy: true })
-    callDrink(
-      { action: 'startRound', roomId: this.data.roomId },
-      {
-        onOk: () => {
-          this.setData({ opBusy: false })
-          this._finR = 0
-        },
-        onError: () => { this.setData({ opBusy: false }) }
+    runStartAction({
+      kind: 'drink',
+      ctx,
+      localChecks: checks,
+      callService: callDrink,
+      payload: { action: 'startRound', roomId: this.data.roomId },
+      onSuccess: () => {
+        this._finR = 0
+      },
+      onFinally: () => {
+        this.setData({ opBusy: false })
       }
-    )
+    })
   },
   onForceEnd() {
     this.setData({ opBusy: true })
