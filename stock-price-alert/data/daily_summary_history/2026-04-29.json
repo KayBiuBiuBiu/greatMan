@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "date": "2026-04-29",
+  "generated_at": "2026-05-18T19:03:56",
+  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-18T19:08:05",
+    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_source_files": [
+      "交割单_20260518_184214.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-04-29",
+    "broker_realized_profit": 0.0,
+    "broker_unrealized_change": -58.0,
+    "broker_net_profit": -58.0,
+    "broker_buys": [
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "quantity": 200,
+        "price": 10.46,
+        "source": "broker_xls",
+        "trade_time": "﻿09:41:48"
+      },
+      {
+        "code": "000762",
+        "name": "西藏矿业",
+        "quantity": 100,
+        "price": 38.93,
+        "source": "broker_xls",
+        "trade_time": "﻿13:31:08"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "quantity": 100,
+        "price": 10.23,
+        "source": "broker_xls",
+        "trade_time": "﻿13:37:02"
+      }
+    ],
+    "broker_sells": [],
+    "broker_day_trades": [
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "event": "buy",
+        "quantity": 200,
+        "price": 10.46,
+        "settlement_amount": -2097.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:41:48"
+      },
+      {
+        "code": "000762",
+        "name": "西藏矿业",
+        "event": "buy",
+        "quantity": 100,
+        "price": 38.93,
+        "settlement_amount": -3898.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿13:31:08"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "event": "buy",
+        "quantity": 100,
+        "price": 10.23,
+        "settlement_amount": -1028.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿13:37:02"
+      }
+    ],
+    "broker_closed_positions": [],
+    "realized_profit": 0.0,
+    "unrealized_profit": -58.0,
+    "net_profit": -58.0,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ]
+  }
+}

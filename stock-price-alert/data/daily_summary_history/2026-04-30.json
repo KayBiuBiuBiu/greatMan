@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "date": "2026-04-30",
+  "generated_at": "2026-05-18T19:03:56",
+  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-18T19:08:05",
+    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_source_files": [
+      "交割单_20260518_184214.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-04-30",
+    "broker_realized_profit": 77.01,
+    "broker_unrealized_change": -164.0,
+    "broker_net_profit": -86.99,
+    "broker_buys": [
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "quantity": 100,
+        "price": 10.0,
+        "source": "broker_xls",
+        "trade_time": "﻿09:42:20"
+      },
+      {
+        "code": "000811",
+        "name": "冰轮环境",
+        "quantity": 100,
+        "price": 24.85,
+        "source": "broker_xls",
+        "trade_time": "﻿09:50:16"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "quantity": 300,
+        "price": 9.0,
+        "source": "broker_xls",
+        "trade_time": "﻿09:59:09"
+      },
+      {
+        "code": "000767",
+        "name": "晋控电力",
+        "quantity": 600,
+        "price": 3.83,
+        "source": "broker_xls",
+        "trade_time": "﻿10:09:17"
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "quantity": 300,
+        "price": 7.6,
+        "source": "broker_xls",
+        "trade_time": "﻿10:42:59"
+      },
+      {
+        "code": "001258",
+        "name": "立新能源",
+        "quantity": 300,
+        "price": 8.97,
+        "source": "broker_xls",
+        "trade_time": "﻿10:56:05"
+      },
+      {
+        "code": "002176",
+        "name": "江特电机",
+        "quantity": 100,
+        "price": 16.06,
+        "source": "broker_xls",
+        "trade_time": "﻿14:25:19"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "quantity": 100,
+        "price": 9.9,
+        "source": "broker_xls",
+        "trade_time": "﻿14:31:49"
+      },
+      {
+        "code": "000155",
+        "name": "川能动力",
+        "quantity": 100,
+        "price": 17.61,
+        "source": "broker_xls",
+        "trade_time": "﻿14:42:29"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "000762",
+        "name": "西藏矿业",
+        "quantity": 100,
+        "price": 39.82,
+        "source": "broker_xls",
+        "trade_time": "﻿09:55:20",
+        "realized_profit": 77.01
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "event": "buy",
+        "quantity": 100,
+        "price": 10.0,
+        "settlement_amount": -1005.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:42:20"
+      },
+      {
+        "code": "000811",
+        "name": "冰轮环境",
+        "event": "buy",
+        "quantity": 100,
+        "price": 24.85,
+        "settlement_amount": -2490.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:50:16"
+      },
+      {
+        "code": "000762",
+        "name": "西藏矿业",
+        "event": "sell",
+        "quantity": 100,
+        "price": 39.82,
+        "settlement_amount": 3975.01,
+        "realized_profit": 77.01,
+        "trade_time": "﻿09:55:20"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "event": "buy",
+        "quantity": 300,
+        "price": 9.0,
+        "settlement_amount": -2705.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:59:09"
+      },
+      {
+        "code": "000767",
+        "name": "晋控电力",
+        "event": "buy",
+        "quantity": 600,
+        "price": 3.83,
+        "settlement_amount": -2303.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:09:17"
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "event": "buy",
+        "quantity": 300,
+        "price": 7.6,
+        "settlement_amount": -2285.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:42:59"
+      },
+      {
+        "code": "001258",
+        "name": "立新能源",
+        "event": "buy",
+        "quantity": 300,
+        "price": 8.97,
+        "settlement_amount": -2696.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:56:05"
+      },
+      {
+        "code": "002176",
+        "name": "江特电机",
+        "event": "buy",
+        "quantity": 100,
+        "price": 16.06,
+        "settlement_amount": -1611.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:25:19"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "event": "buy",
+        "quantity": 100,
+        "price": 9.9,
+        "settlement_amount": -995.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:31:49"
+      },
+      {
+        "code": "000155",
+        "name": "川能动力",
+        "event": "buy",
+        "quantity": 100,
+        "price": 17.61,
+        "settlement_amount": -1766.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:42:29"
+      }
+    ],
+    "broker_closed_positions": [
+      {
+        "code": "000762",
+        "name": "西藏矿业",
+        "shares": 100,
+        "avg_sell_price": 39.7501,
+        "realized_profit": 77.01,
+        "last_settle_date": "2026-04-30"
+      }
+    ],
+    "realized_profit": 77.01,
+    "unrealized_profit": -164.0,
+    "net_profit": -86.99,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ]
+  }
+}

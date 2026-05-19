@@ -11,10 +11,13 @@ import pytest
 from weekly_report import (
     _biz_kind,
     closed_positions_in_week,
+    format_broker_daily_text,
     format_weekly_summary_text,
     load_mapping_config,
     parse_ledger_from_df,
     positions_at_date,
+    resolve_period_bounds,
+    trades_on_day,
     week_realized_sum,
 )
 
@@ -88,6 +91,62 @@ def test_biz_kind(mapping: dict) -> None:
     assert _biz_kind("证券买入", mapping) == "buy"
     assert _biz_kind("证券卖出", mapping) == "sell"
     assert _biz_kind("银行转证券", mapping) == "skip"
+
+
+def test_resolve_daily_bounds() -> None:
+    d = date(2026, 5, 16)
+    assert resolve_period_bounds("daily", d) == (d, d)
+
+
+def test_trades_on_day(mapping: dict) -> None:
+    _, events, _, _ = parse_ledger_from_df(_sample_df(), mapping)
+    trades = trades_on_day(events, date(2026, 5, 16))
+    assert len(trades) == 1
+    assert trades[0]["event"] == "sell"
+    assert trades[0]["realized_profit"] == pytest.approx(985.0, rel=0.01)
+
+
+def test_format_daily_summary() -> None:
+    report = {
+        "period": "daily",
+        "period_range": {"start": "2026-05-16", "end": "2026-05-16"},
+        "source_file": "test.xlsx",
+        "day_trades": [
+            {
+                "code": "600000",
+                "name": "浦发银行",
+                "event": "sell",
+                "quantity": 1000,
+                "price": 11.0,
+                "realized_profit": 985.0,
+            }
+        ],
+        "closed_positions": [
+            {
+                "code": "600000",
+                "name": "浦发银行",
+                "shares": 1000,
+                "avg_sell_price": 11.0,
+                "realized_profit": 985.0,
+            }
+        ],
+        "holdings": [],
+        "totals": {
+            "realized_profit_period": 985.0,
+            "unrealized_change": 0.0,
+            "unrealized_period_end": 0.0,
+            "unrealized_period_start": 0.0,
+            "total_pnl_day": 985.0,
+            "cash_available": 60990.0,
+            "market_value": 0.0,
+            "total_assets": 60990.0,
+        },
+        "warnings": [],
+    }
+    text = format_broker_daily_text(report)
+    assert "券商交割单日结" in text
+    assert "当日合计" in text
+    assert "600000" in text
 
 
 def test_format_summary() -> None:

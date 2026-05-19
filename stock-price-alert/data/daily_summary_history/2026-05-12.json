@@ -1710,9 +1710,9 @@
     "sells": [],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": 0.0,
-    "unrealized_profit": 5068.36,
-    "net_profit": 5068.36,
+    "realized_profit": 240.18,
+    "unrealized_profit": 266.0,
+    "net_profit": 506.18,
     "unrealized_positions": [
       {
         "code": "000537",
@@ -1754,7 +1754,136 @@
     "notes": [
       "浮盈采用日 K 库中 trade_date≤总结日 的最近一根收盘价（当日 K 未入库时等同上一交易日收盘）。",
       "hold=加仓合并加权成本；sell 代码 股数=减仓结算；sell 代码=仅暂停监控；unhold=删配置并清仓结算。流水见 data/position_ledger.db。",
-      "尚无 position_cli_log.json；升级后新产生的 hold/unhold/sell 会写入该文件。"
+      "尚无 position_cli_log.json；升级后新产生的 hold/unhold/sell 会写入该文件。",
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-18T19:08:05",
+    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_source_files": [
+      "交割单_20260518_184214.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-05-12",
+    "broker_realized_profit": 240.18,
+    "broker_unrealized_change": 266.0,
+    "broker_net_profit": 506.18,
+    "broker_buys": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 700,
+        "price": 14.27,
+        "source": "broker_xls",
+        "trade_time": "﻿10:31:17"
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "quantity": 700,
+        "price": 7.39,
+        "source": "broker_xls",
+        "trade_time": "﻿13:40:22"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "quantity": 100,
+        "price": 58.3,
+        "source": "broker_xls",
+        "trade_time": "﻿09:31:42",
+        "realized_profit": 60.08
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 700,
+        "price": 14.63,
+        "source": "broker_xls",
+        "trade_time": "﻿09:37:58",
+        "realized_profit": 173.68
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "quantity": 300,
+        "price": 3.88,
+        "source": "broker_xls",
+        "trade_time": "﻿09:51:48",
+        "realized_profit": 6.42
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "event": "sell",
+        "quantity": 100,
+        "price": 58.3,
+        "settlement_amount": 5822.08,
+        "realized_profit": 60.08,
+        "trade_time": "﻿09:31:42"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "sell",
+        "quantity": 700,
+        "price": 14.63,
+        "settlement_amount": 10230.78,
+        "realized_profit": 173.68,
+        "trade_time": "﻿09:37:58"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "event": "sell",
+        "quantity": 300,
+        "price": 3.88,
+        "settlement_amount": 1158.42,
+        "realized_profit": 6.42,
+        "trade_time": "﻿09:51:48"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 700,
+        "price": 14.27,
+        "settlement_amount": -9994.1,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:31:17"
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "event": "buy",
+        "quantity": 700,
+        "price": 7.39,
+        "settlement_amount": -5178.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿13:40:22"
+      }
+    ],
+    "broker_closed_positions": [
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "shares": 300,
+        "avg_sell_price": 3.8614,
+        "realized_profit": 6.42,
+        "last_settle_date": "2026-05-12"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "shares": 100,
+        "avg_sell_price": 58.2208,
+        "realized_profit": 60.08,
+        "last_settle_date": "2026-05-12"
+      }
     ]
   },
   "account_pnl": {
@@ -1821,5 +1950,6 @@
     "account_today_change_est": -1196.0,
     "ledger_events": [],
     "notes": []
-  }
+  },
+  "broker_summary_synced_at": "2026-05-18T19:08:05"
 }

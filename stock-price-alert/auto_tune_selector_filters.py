@@ -185,12 +185,27 @@ def _summary_trade_net_and_activity(tr: Any) -> tuple[bool, float]:
     n_s = len(sells) if isinstance(sells, list) else 0
     n_p = len(tr.get("sell_monitor_pauses") or []) if isinstance(tr.get("sell_monitor_pauses"), list) else 0
     n_hw = len(tr.get("hold_watch_only") or []) if isinstance(tr.get("hold_watch_only"), list) else 0
-    raw_net = tr.get("net_profit", tr.get("realized_profit"))
+    broker_buys = tr.get("broker_buys") or []
+    broker_sells = tr.get("broker_sells") or []
+    n_bb = len(broker_buys) if isinstance(broker_buys, list) else 0
+    n_bs = len(broker_sells) if isinstance(broker_sells, list) else 0
+    raw_net = tr.get("broker_net_profit")
+    if raw_net is None:
+        raw_net = tr.get("net_profit", tr.get("realized_profit"))
     try:
         net = float(raw_net) if raw_net is not None else 0.0
     except (TypeError, ValueError):
         net = 0.0
-    activity = n_b > 0 or n_s > 0 or n_p > 0 or n_hw > 0 or abs(net) > 1e-6
+    activity = (
+        n_b > 0
+        or n_s > 0
+        or n_p > 0
+        or n_hw > 0
+        or n_bb > 0
+        or n_bs > 0
+        or tr.get("source") == "broker_xls"
+        or abs(net) > 1e-6
+    )
     return activity, net
 
 

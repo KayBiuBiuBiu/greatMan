@@ -65,6 +65,10 @@
   },
   "currency_allowed": ["人民币", "CNY", "RMB", ""],
   "output": {
+    "daily": {
+      "json_dir": "data/daily_broker_reports",
+      "json_prefix": "daily_report_"
+    },
     "weekly": {
       "json_dir": "data/weekly_reports",
       "json_prefix": "weekly_report_"

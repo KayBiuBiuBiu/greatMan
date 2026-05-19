@@ -7,85 +7,121 @@
       "code": "000537",
       "name": "绿发电力",
       "hold_shares": 300,
-      "cost_price": 9.7991,
-      "tags": "持仓"
+      "cost_price": 10.3383,
+      "close_price": 10.55,
+      "unrealized_profit": 63.5,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "000967",
       "name": "盈峰环境",
       "hold_shares": 400,
-      "cost_price": 13.94,
-      "tags": "持仓"
+      "cost_price": 13.9525,
+      "close_price": 13.23,
+      "unrealized_profit": -289.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "001234",
       "name": "泰慕士",
       "hold_shares": 900,
-      "cost_price": 28.276778,
-      "tags": "持仓"
+      "cost_price": 28.2878,
+      "close_price": 27.63,
+      "unrealized_profit": -592.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "002237",
       "name": "恒邦股份",
       "hold_shares": 1200,
-      "cost_price": 16.31925,
-      "tags": "持仓"
+      "cost_price": 16.3275,
+      "close_price": 15.23,
+      "unrealized_profit": -1317.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "002386",
       "name": "天原股份",
       "hold_shares": 1000,
-      "cost_price": 6.6001,
-      "tags": "持仓"
+      "cost_price": 6.6,
+      "close_price": 6.46,
+      "unrealized_profit": -140.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "002718",
       "name": "友邦吊顶",
       "hold_shares": 100,
-      "cost_price": 75.0,
-      "tags": "持仓"
+      "cost_price": 75.05,
+      "close_price": 74.85,
+      "unrealized_profit": -20.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "300687",
       "name": "赛意信息",
       "hold_shares": 100,
-      "cost_price": 30.1955,
-      "tags": "持仓"
+      "cost_price": 30.195,
+      "close_price": 27.38,
+      "unrealized_profit": -281.5,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "300798",
       "name": "锦鸡股份",
       "hold_shares": 800,
-      "cost_price": 10.6,
-      "tags": "持仓"
+      "cost_price": 10.6125,
+      "close_price": 10.03,
+      "unrealized_profit": -466.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "300955",
       "name": "嘉亨家化",
       "hold_shares": 300,
-      "cost_price": 39.9,
-      "tags": "持仓"
+      "cost_price": 39.9167,
+      "close_price": 42.65,
+      "unrealized_profit": 820.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 7300,
-      "cost_price": 13.185887,
-      "tags": "持仓"
+      "hold_shares": 4400,
+      "cost_price": 13.3188,
+      "close_price": 12.92,
+      "unrealized_profit": -1754.58,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "603380",
       "name": "易德龙",
       "hold_shares": 300,
-      "cost_price": 37.1006,
-      "tags": "持仓"
+      "cost_price": 37.1171,
+      "close_price": 37.1,
+      "unrealized_profit": -5.12,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "603657",
       "name": "春光科技",
-      "hold_shares": 200,
-      "cost_price": 30.468,
-      "tags": "持仓"
+      "hold_shares": 300,
+      "cost_price": 30.4153,
+      "close_price": 29.94,
+      "unrealized_profit": -142.59,
+      "tags": "持仓",
+      "source": "broker_xls"
     }
   ],
   "signals_today": [
@@ -1512,87 +1548,251 @@
     ],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": -20.4,
-    "unrealized_profit": 5137.6647,
-    "net_profit": 5117.26,
+    "realized_profit": -14.24,
+    "unrealized_profit": -2750.88,
+    "net_profit": -2765.12,
     "unrealized_positions": [
       {
         "code": "000537",
         "name": "绿发电力",
         "hold_shares": 300,
-        "float_pnl_est": 333.27
+        "cost_price": 10.3383,
+        "close_price": 10.55,
+        "float_pnl_est": 63.5,
+        "source": "broker_xls"
       },
       {
         "code": "000967",
         "name": "盈峰环境",
         "hold_shares": 400,
-        "float_pnl_est": 124.0
+        "cost_price": 13.9525,
+        "close_price": 13.23,
+        "float_pnl_est": -289.0,
+        "source": "broker_xls"
       },
       {
         "code": "001234",
         "name": "泰慕士",
         "hold_shares": 900,
-        "float_pnl_est": -654.1
+        "cost_price": 28.2878,
+        "close_price": 27.63,
+        "float_pnl_est": -592.0,
+        "source": "broker_xls"
       },
       {
         "code": "002237",
         "name": "恒邦股份",
         "hold_shares": 1200,
-        "float_pnl_est": -239.1
+        "cost_price": 16.3275,
+        "close_price": 15.23,
+        "float_pnl_est": -1317.0,
+        "source": "broker_xls"
       },
       {
         "code": "002386",
         "name": "天原股份",
         "hold_shares": 1000,
-        "float_pnl_est": -170.1
+        "cost_price": 6.6,
+        "close_price": 6.46,
+        "float_pnl_est": -140.0,
+        "source": "broker_xls"
       },
       {
         "code": "002718",
         "name": "友邦吊顶",
         "hold_shares": 100,
-        "float_pnl_est": 9.0
+        "cost_price": 75.05,
+        "close_price": 74.85,
+        "float_pnl_est": -20.0,
+        "source": "broker_xls"
       },
       {
         "code": "300687",
         "name": "赛意信息",
         "hold_shares": 100,
-        "float_pnl_est": 165.45
+        "cost_price": 30.195,
+        "close_price": 27.38,
+        "float_pnl_est": -281.5,
+        "source": "broker_xls"
       },
       {
         "code": "300798",
         "name": "锦鸡股份",
         "hold_shares": 800,
-        "float_pnl_est": -168.0
+        "cost_price": 10.6125,
+        "close_price": 10.03,
+        "float_pnl_est": -466.0,
+        "source": "broker_xls"
       },
       {
         "code": "300955",
         "name": "嘉亨家化",
         "hold_shares": 300,
-        "float_pnl_est": 108.0
+        "cost_price": 39.9167,
+        "close_price": 42.65,
+        "float_pnl_est": 820.0,
+        "source": "broker_xls"
       },
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 7300,
-        "float_pnl_est": 5797.02
+        "hold_shares": 4400,
+        "cost_price": 13.3188,
+        "close_price": 12.92,
+        "float_pnl_est": -1754.58,
+        "source": "broker_xls"
       },
       {
         "code": "603380",
         "name": "易德龙",
         "hold_shares": 300,
-        "float_pnl_est": -42.18
+        "cost_price": 37.1171,
+        "close_price": 37.1,
+        "float_pnl_est": -5.12,
+        "source": "broker_xls"
       },
       {
         "code": "603657",
         "name": "春光科技",
-        "hold_shares": 200,
-        "float_pnl_est": -125.6
+        "hold_shares": 300,
+        "cost_price": 30.4153,
+        "close_price": 29.94,
+        "float_pnl_est": -142.59,
+        "source": "broker_xls"
       }
     ],
     "notes": [
       "浮盈估：trade_date≤总结日 的最近收盘；优先 Tushare daily（不复权），否则本地日K前复权（与券商绝对金额可能偏差）。",
-      "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。流水见 data/position_ledger.db。"
-    ]
+      "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。流水见 data/position_ledger.db。",
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-19T07:59:50",
+    "broker_source_file": "交割单_20260519_074224.xls",
+    "broker_source_files": [
+      "交割单_20260519_074224.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-05-15",
+    "broker_realized_profit": -14.24,
+    "broker_unrealized_change": -2750.88,
+    "broker_net_profit": -2765.12,
+    "broker_buys": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 1500,
+        "price": 13.48,
+        "source": "broker_xls",
+        "trade_time": "﻿09:39:24"
+      },
+      {
+        "code": "002237",
+        "name": "恒邦股份",
+        "quantity": 300,
+        "price": 15.6,
+        "source": "broker_xls",
+        "trade_time": "﻿09:58:08"
+      },
+      {
+        "code": "000967",
+        "name": "盈峰环境",
+        "quantity": 400,
+        "price": 13.94,
+        "source": "broker_xls",
+        "trade_time": "﻿10:16:45"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 800,
+        "price": 13.0,
+        "source": "broker_xls",
+        "trade_time": "﻿13:39:09"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 1300,
+        "price": 12.9,
+        "source": "broker_xls",
+        "trade_time": "﻿14:53:35"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "603657",
+        "name": "春光科技",
+        "quantity": 300,
+        "price": 30.4,
+        "source": "broker_xls",
+        "trade_time": "﻿13:23:50",
+        "realized_profit": -14.24
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 1500,
+        "price": 13.48,
+        "settlement_amount": -20225.2,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:39:24"
+      },
+      {
+        "code": "002237",
+        "name": "恒邦股份",
+        "event": "buy",
+        "quantity": 300,
+        "price": 15.6,
+        "settlement_amount": -4685.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:58:08"
+      },
+      {
+        "code": "000967",
+        "name": "盈峰环境",
+        "event": "buy",
+        "quantity": 400,
+        "price": 13.94,
+        "settlement_amount": -5581.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:16:45"
+      },
+      {
+        "code": "603657",
+        "name": "春光科技",
+        "event": "sell",
+        "quantity": 300,
+        "price": 30.4,
+        "settlement_amount": 9110.35,
+        "realized_profit": -14.24,
+        "trade_time": "﻿13:23:50"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 800,
+        "price": 13.0,
+        "settlement_amount": -10405.1,
+        "realized_profit": 0.0,
+        "trade_time": "﻿13:39:09"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 1300,
+        "price": 12.9,
+        "settlement_amount": -16775.17,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:53:35"
+      }
+    ],
+    "broker_closed_positions": []
   },
   "position_operations_today": [
     {
@@ -1920,5 +2120,226 @@
       "op_type": "reduce",
       "related_signal_id": null
     }
+  ],
+  "broker_summary_synced_at": "2026-05-19T07:59:50",
+  "holdings_watchlist": [
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 300,
+      "cost_price": 9.7991,
+      "tags": "持仓"
+    },
+    {
+      "code": "000967",
+      "name": "盈峰环境",
+      "hold_shares": 400,
+      "cost_price": 13.94,
+      "tags": "持仓"
+    },
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.276778,
+      "tags": "持仓"
+    },
+    {
+      "code": "002237",
+      "name": "恒邦股份",
+      "hold_shares": 1200,
+      "cost_price": 16.31925,
+      "tags": "持仓"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6001,
+      "tags": "持仓"
+    },
+    {
+      "code": "002718",
+      "name": "友邦吊顶",
+      "hold_shares": 100,
+      "cost_price": 75.0,
+      "tags": "持仓"
+    },
+    {
+      "code": "300687",
+      "name": "赛意信息",
+      "hold_shares": 100,
+      "cost_price": 30.1955,
+      "tags": "持仓"
+    },
+    {
+      "code": "300798",
+      "name": "锦鸡股份",
+      "hold_shares": 800,
+      "cost_price": 10.6,
+      "tags": "持仓"
+    },
+    {
+      "code": "300955",
+      "name": "嘉亨家化",
+      "hold_shares": 300,
+      "cost_price": 39.9,
+      "tags": "持仓"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 7300,
+      "cost_price": 13.185887,
+      "tags": "持仓"
+    },
+    {
+      "code": "603380",
+      "name": "易德龙",
+      "hold_shares": 300,
+      "cost_price": 37.1006,
+      "tags": "持仓"
+    },
+    {
+      "code": "603657",
+      "name": "春光科技",
+      "hold_shares": 200,
+      "cost_price": 30.468,
+      "tags": "持仓"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 300,
+      "cost_price": 10.3383,
+      "close_price": 10.55,
+      "unrealized_profit": 63.5,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000967",
+      "name": "盈峰环境",
+      "hold_shares": 400,
+      "cost_price": 13.9525,
+      "close_price": 13.23,
+      "unrealized_profit": -289.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.2878,
+      "close_price": 27.63,
+      "unrealized_profit": -592.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002237",
+      "name": "恒邦股份",
+      "hold_shares": 1200,
+      "cost_price": 16.3275,
+      "close_price": 15.23,
+      "unrealized_profit": -1317.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6,
+      "close_price": 6.46,
+      "unrealized_profit": -140.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002718",
+      "name": "友邦吊顶",
+      "hold_shares": 100,
+      "cost_price": 75.05,
+      "close_price": 74.85,
+      "unrealized_profit": -20.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "300687",
+      "name": "赛意信息",
+      "hold_shares": 100,
+      "cost_price": 30.195,
+      "close_price": 27.38,
+      "unrealized_profit": -281.5,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "300798",
+      "name": "锦鸡股份",
+      "hold_shares": 800,
+      "cost_price": 10.6125,
+      "close_price": 10.03,
+      "unrealized_profit": -466.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "300955",
+      "name": "嘉亨家化",
+      "hold_shares": 300,
+      "cost_price": 39.9167,
+      "close_price": 42.65,
+      "unrealized_profit": 820.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 4400,
+      "cost_price": 13.3188,
+      "close_price": 12.92,
+      "unrealized_profit": -1754.58,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "603380",
+      "name": "易德龙",
+      "hold_shares": 300,
+      "cost_price": 37.1171,
+      "close_price": 37.1,
+      "unrealized_profit": -5.12,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "603657",
+      "name": "春光科技",
+      "hold_shares": 300,
+      "cost_price": 30.4153,
+      "close_price": 29.94,
+      "unrealized_profit": -142.59,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-05-15",
+  "account_pnl_broker": {
+    "as_of": "2026-05-15",
+    "cash_available": 555.53,
+    "market_value": 166062.0,
+    "total_assets": 166617.53,
+    "position_count": 12,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
   ]
 }

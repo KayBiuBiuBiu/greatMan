@@ -648,3 +648,106 @@ def run_min_score_tune_from_feedback(
         f"[{iso}] operation_feedback wrote min_score_by_strategy: {json.dumps(ms, ensure_ascii=False)}",
     )
     return out
+
+
+def find_open_signal_near_trade_day(
+    root: Path,
+    *,
+    code: str,
+    signal_type: str,
+    trade_day: date,
+    lookback_days: int,
+) -> int | None:
+    """交收日前 lookback_days 个自然日内发出的未采纳同向信号（后验匹配交割单）。"""
+    db_path = _db_path(root)
+    if not db_path.is_file():
+        return None
+    c6 = (
+        str(code or "").strip().zfill(6)
+        if str(code or "").strip().isdigit()
+        else str(code or "").strip()
+    )
+    start = (trade_day - timedelta(days=max(1, lookback_days))).isoformat()
+    end = trade_day.isoformat()
+    try:
+        conn = _connect(db_path)
+        try:
+            init_signal_log_schema(conn)
+            row = conn.execute(
+                """
+                SELECT signal_id FROM strategy_signal_log
+                WHERE code = ? AND signal_type = ? AND adopted = 0 AND expired = 0
+                  AND date(substr(timestamp, 1, 10)) >= date(?)
+                  AND date(substr(timestamp, 1, 10)) <= date(?)
+                ORDER BY signal_id DESC LIMIT 1
+                """,
+                (c6, signal_type, start, end),
+            ).fetchone()
+            return int(row[0]) if row else None
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return None
+
+
+def adopt_signals_from_broker_day_trades(
+    cfg: dict[str, Any],
+    root: Path,
+    *,
+    trade_day: date,
+    day_trades: list[dict[str, Any]],
+    lookback_days: int = 5,
+) -> int:
+    """
+    按交割单当日买卖后验标记 strategy_signal_log 采纳（未走过 CLI 10 分钟窗口时补闭环）。
+    返回新采纳条数。
+    """
+    if not feedback_enabled(cfg):
+        return 0
+    adopted_n = 0
+    adopt_ts = f"{trade_day.isoformat()} 15:00:00"
+    for row in day_trades:
+        ev = row.get("event")
+        code = str(row.get("code") or "").strip()
+        if not code:
+            continue
+        try:
+            qty = int(row.get("quantity") or 0)
+        except (TypeError, ValueError):
+            qty = 0
+        try:
+            px = float(row.get("price") or 0.0)
+        except (TypeError, ValueError):
+            px = 0.0
+        if qty <= 0:
+            continue
+        st = "buy" if ev == "buy" else "sell" if ev == "sell" else None
+        if st is None:
+            continue
+        sid = find_open_signal_near_trade_day(
+            root,
+            code=code,
+            signal_type=st,
+            trade_day=trade_day,
+            lookback_days=lookback_days,
+        )
+        if sid is None:
+            continue
+        mark_signal_adopted(
+            root,
+            signal_id=sid,
+            adopted_ts=adopt_ts,
+            adopted_price=px,
+            adopted_shares=qty,
+            ledger_event_id=None,
+        )
+        adopted_n += 1
+        _LOG.info(
+            "broker_signal_adopt: signal_id=%s %s %s %s股 @%s",
+            sid,
+            code,
+            st,
+            qty,
+            px,
+        )
+    return adopted_n

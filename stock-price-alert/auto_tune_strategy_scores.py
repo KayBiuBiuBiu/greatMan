@@ -27,7 +27,12 @@ def maybe_run_auto_tune_strategy_scores(
         feedback_section,
         run_min_score_tune_from_feedback,
     )
-    run_on = str(oa.get("run_on", "weekly_friday") or "weekly_friday").strip().lower()
+
+    now = now or datetime.now()
+    if not feedback_enabled(cfg):
+        return
+    s = feedback_section(cfg)
+    run_on = str(s.get("run_on", "weekly_friday") or "weekly_friday").strip().lower()
     try:
         backfill_buy_eval_returns(cfg, root, now=now)
     except Exception as exc:

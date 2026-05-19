@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-06",
+  "generated_at": "2026-05-18T19:03:56",
+  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-18T19:08:05",
+    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_source_files": [
+      "交割单_20260518_184214.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-05-06",
+    "broker_realized_profit": 7311.19,
+    "broker_unrealized_change": 872.0,
+    "broker_net_profit": 8183.19,
+    "broker_buys": [
+      {
+        "code": "000155",
+        "name": "川能动力",
+        "quantity": 100,
+        "price": 17.2,
+        "source": "broker_xls",
+        "trade_time": "﻿13:00:36"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "001258",
+        "name": "立新能源",
+        "quantity": 1100,
+        "price": 9.15,
+        "source": "broker_xls",
+        "trade_time": "﻿09:53:48",
+        "realized_profit": 7358.97
+      },
+      {
+        "code": "002176",
+        "name": "江特电机",
+        "quantity": 100,
+        "price": 15.69,
+        "source": "broker_xls",
+        "trade_time": "﻿14:01:28",
+        "realized_profit": -47.78
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "001258",
+        "name": "立新能源",
+        "event": "sell",
+        "quantity": 1100,
+        "price": 9.15,
+        "settlement_amount": 10054.97,
+        "realized_profit": 7358.97,
+        "trade_time": "﻿09:53:48"
+      },
+      {
+        "code": "000155",
+        "name": "川能动力",
+        "event": "buy",
+        "quantity": 100,
+        "price": 17.2,
+        "settlement_amount": -1725.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿13:00:36"
+      },
+      {
+        "code": "002176",
+        "name": "江特电机",
+        "event": "sell",
+        "quantity": 100,
+        "price": 15.69,
+        "settlement_amount": 1563.22,
+        "realized_profit": -47.78,
+        "trade_time": "﻿14:01:28"
+      }
+    ],
+    "broker_closed_positions": [
+      {
+        "code": "001258",
+        "name": "立新能源",
+        "shares": 300,
+        "avg_sell_price": 33.5166,
+        "realized_profit": 7358.97,
+        "last_settle_date": "2026-05-06"
+      },
+      {
+        "code": "002176",
+        "name": "江特电机",
+        "shares": 100,
+        "avg_sell_price": 15.6322,
+        "realized_profit": -47.78,
+        "last_settle_date": "2026-05-06"
+      }
+    ],
+    "realized_profit": 7311.19,
+    "unrealized_profit": 872.0,
+    "net_profit": 8183.19,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ]
+  }
+}

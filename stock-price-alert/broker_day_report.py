@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-券商交割单周期报告：周报 / 月报 / 半年报 / 年报（均基于 broker_xls/ 交割单）。
+券商交割单日结：任意交易日查询当日盈亏，邮件 + 企业微信（走 config.notifications）。
 
-命名约定：交割单_YYYYMMDD_HHMMSS.xls（如 交割单_20260518_154126.xls）
+默认统计今天。broker_xls/ 放「全历史」交割单（整体替换即可，文件名时间为导出时刻）；
+按 --date 从文件中筛该交收日。替换文件后建议：broker_summary_sync.py --all-days。
 
 示例：
-  .venv/bin/python3 broker_period_report.py -c config.json --period weekly
-  .venv/bin/python3 broker_period_report.py -c config.json --period monthly
-  .venv/bin/python3 broker_period_report.py -c config.json --period h1
-  .venv/bin/python3 broker_period_report.py -c config.json --period h2
-  .venv/bin/python3 broker_period_report.py -c config.json --period annual
-  .venv/bin/python3 broker_period_report.py -c config.json --period daily --as-of 2026-05-16
-  # 日结快捷命令：broker_day_report.py（等同 --period daily）
+  .venv/bin/python3 broker_day_report.py -c config.json
+  .venv/bin/python3 broker_day_report.py -c config.json --date 2026-05-16
+  .venv/bin/python3 broker_day_report.py -c config.json --no-send
+  .venv/bin/python3 broker_day_report.py -c config.json --xls broker_xls/交割单_20260518_154126.xls
 """
 
 from __future__ import annotations
@@ -28,23 +26,24 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from weekly_report import PERIOD_LABELS, run_broker_period_report
+from weekly_report import run_broker_period_report
 
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    ap = argparse.ArgumentParser(description="券商交割单周期报告（周/月/半年/年）")
+    ap = argparse.ArgumentParser(description="券商交割单日结盈亏（邮件+企微）")
     ap.add_argument("-c", "--config", type=Path, default=ROOT / "config.json")
     ap.add_argument(
-        "--period",
-        choices=sorted(PERIOD_LABELS.keys()),
-        default="weekly",
-        help="报告周期",
+        "--date",
+        "--as-of",
+        dest="as_of",
+        type=str,
+        default="",
+        help="交易日 YYYY-MM-DD（默认今天）",
     )
-    ap.add_argument("--as-of", type=str, default="", help="锚定日 YYYY-MM-DD")
     ap.add_argument("--xls", type=Path, default=None, help="指定交割单文件")
     ap.add_argument("--mapping", type=Path, default=None)
-    ap.add_argument("--no-send", action="store_true")
+    ap.add_argument("--no-send", action="store_true", help="只打印/写 JSON，不发送")
     args = ap.parse_args()
 
     if not args.config.is_file():
@@ -59,12 +58,12 @@ def main() -> int:
         try:
             as_of = datetime.strptime(args.as_of.strip()[:10], "%Y-%m-%d").date()
         except ValueError:
-            print("--as-of 须为 YYYY-MM-DD", file=sys.stderr)
+            print("--date 须为 YYYY-MM-DD", file=sys.stderr)
             return 1
 
     try:
         run_broker_period_report(
-            period=args.period,
+            period="daily",
             cfg=cfg,
             root=ROOT,
             as_of=as_of,
@@ -76,8 +75,8 @@ def main() -> int:
         print(str(exc), file=sys.stderr)
         return 2
     except Exception as exc:
-        logging.exception("broker_period_report failed")
-        print(f"生成失败: {exc}", file=sys.stderr)
+        logging.exception("broker_day_report failed")
+        print(f"日结生成失败: {exc}", file=sys.stderr)
         return 1
     return 0
 

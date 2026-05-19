@@ -714,7 +714,7 @@ DEFAULT_WATCHLIST_LIQUIDITY_PRUNE: dict[str, Any] = {
 }
 
 DEFAULT_SELF_IMPROVE_OPERATION_FEEDBACK: dict[str, Any] = {
-    "enabled": False,
+    "enabled": True,
     "evaluate_days": 30,
     "adjust_step": 2,
     "max_change": 10,
@@ -767,6 +767,20 @@ DEFAULT_OPS_AUTOMATION = {
     # false（默认）：不发每日总结邮件/企微；改由周一券商周报推送
     "daily_summary_email_enabled": False,
     # 每周一券商交割单周报（上一交易周 Mon–Fri；见 weekly_report.py）
+    "broker_daily_report_email_enabled": True,
+    # 日结后回灌 daily_summary_history，并后验匹配 strategy_signal_log（见 broker_summary_sync.py）
+    "broker_sync_to_summary_enabled": True,
+    "broker_sync_adopt_signals_enabled": True,
+    "broker_sync_overwrite_profit": True,
+    "broker_signal_match_days": 5,
+    # true：broker_xls/ 只解析最新导出的一份全历史交割单（整体替换文件时）
+    "broker_xls_use_latest_only": True,
+    "broker_sync_align_holdings": True,
+    # 每天早上 run_alert 启动时自动回灌近 N 个交易日（需 broker_xls 已放最新全历史交割单）
+    "broker_sync_on_startup_enabled": True,
+    "broker_sync_startup_lookback_days": 3,
+    # 收盘 daily_summary 后尝试回灌当日（若交割单已导出）
+    "broker_sync_after_close_enabled": True,
     "weekly_broker_report_enabled": True,
     "weekly_broker_report_hhmm": "09:30",
     "weekly_broker_report_email_enabled": True,
@@ -782,11 +796,11 @@ DEFAULT_OPS_AUTOMATION = {
         DEFAULT_SELF_IMPROVE_OPERATION_FEEDBACK
     ),
     # true：选股过滤网格目标叠「近 self_improve_lookback_days」锚定子样本，并将调参排期视为 daily
-    "self_improve_from_summary_enabled": False,
+    "self_improve_from_summary_enabled": True,
     "self_improve_lookback_days": 5,
     "self_improve_blend_weight": 0.25,
-    # true：网格目标叠「当日总结 trades」归一化盈亏（需 daily_summary_history 含对应锚点日且该日有交易/盈亏记录）
-    "self_improve_use_trade_profit": False,
+    # true：网格目标叠「当日总结 trades」归一化盈亏（需 daily_summary_history 含券商回灌 broker_net_profit）
+    "self_improve_use_trade_profit": True,
     "self_improve_trade_weight": 0.2,
     "self_improve_trade_scale_yuan": 5000.0,
     "watchlist_auto_replenish": copy.deepcopy(DEFAULT_WATCHLIST_AUTO_REPLENISH),
@@ -5278,6 +5292,41 @@ def _maybe_run_ops_automation(
         py=py,
     )
 
+    # 交割单 → daily_summary_history / 持仓对齐（每个交易日启动后一次，不依赖 09:20 前）
+    if state.get("__broker_sync_startup_done__") != today:
+        try:
+            from broker_summary_sync import run_broker_sync_startup
+
+            br = run_broker_sync_startup(cfg, ROOT, now=now)
+            state["__broker_sync_startup_done__"] = today
+            if br.get("synced"):
+                ds = ", ".join(
+                    f"{x['date']}({x.get('holdings_aligned', '?')}只)"
+                    for x in br["synced"]
+                )
+                _emit_main_line(
+                    f"[自动化] 交割单校准：{br.get('source_file', '?')} → {ds}",
+                    event="broker_sync_startup_ok",
+                )
+            elif br.get("skipped") == "no_trade_dates":
+                _emit_main_line(
+                    "[自动化] 交割单校准跳过：broker_xls 无交收日或文件缺失",
+                    event="broker_sync_startup_skip",
+                    level=logging.INFO,
+                )
+            elif br.get("error"):
+                _emit_main_line(
+                    f"[自动化] 交割单校准失败：{br.get('error')}",
+                    event="broker_sync_startup_fail",
+                    level=logging.WARNING,
+                )
+        except Exception as exc:
+            _emit_main_line(
+                f"[自动化] 交割单校准异常: {exc}",
+                event="broker_sync_startup_fail",
+                level=logging.WARNING,
+            )
+
     # 开盘前任务（每天一次）
     if bool(oa.get("preopen_enabled", True)):
         ph, pm = _parse_hhmm(str(oa.get("preopen_cutoff_hhmm") or "09:20"), 9, 20)
@@ -5350,6 +5399,23 @@ def _maybe_run_ops_automation(
                 _emit_main_line(
                     "[自动化] 已跳过每日总结生成（daily_summary_enabled=false）",
                     event="after_close_daily_summary_skipped",
+                )
+            try:
+                from broker_summary_sync import run_broker_sync_after_close
+
+                br_close = run_broker_sync_after_close(cfg, ROOT, now=now)
+                if br_close.get("ok"):
+                    _emit_main_line(
+                        f"[自动化] 交割单收盘回灌 {today}："
+                        f"net={br_close.get('broker_net_profit')} "
+                        f"持仓={br_close.get('holdings_aligned')}只",
+                        event="broker_sync_after_close_ok",
+                    )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] 交割单收盘回灌异常: {exc}",
+                    event="broker_sync_after_close_fail",
+                    level=logging.WARNING,
                 )
             try:
                 from pnl_period_report import maybe_run_pnl_period_reports

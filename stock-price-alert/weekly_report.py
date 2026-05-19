@@ -6,6 +6,8 @@
 不依赖 watchlist 成本；持仓成本由交割单流水加权推算（买入按 |清算金额|，卖出按清算金额 - 成本）。
 
 手动运行（项目根目录）：
+  .venv/bin/python3 broker_day_report.py -c config.json              # 任意交易日日结
+  .venv/bin/python3 broker_day_report.py -c config.json --date 2026-05-16
   .venv/bin/python3 weekly_report.py -c config.json
   .venv/bin/python3 weekly_report.py -c config.json --as-of 2026-05-16
   .venv/bin/python3 weekly_report.py -c config.json --xls broker_xls/交割单.xlsx --no-send
@@ -16,7 +18,8 @@ macOS 定时（每周一 09:30，统计上一交易周 Mon–Fri）：
 
 说明：
   - data/daily_summary.json 仍会由 run_alert 写入，本脚本不删除；默认关闭每日总结邮件（见 ops_automation.daily_summary_email_enabled）。
-  - 请将券商导出的「全部历史」或至少含本周的交割单放入 broker_xls/；脚本默认取该目录下最新修改的文件。
+  - broker_xls/ 放一份「全部历史」交割单即可（常整体替换）；默认只解析最新导出的 xls，
+    按交收日筛选单日/周报；批量回灌见 broker_summary_sync.py --all-days。
 """
 
 from __future__ import annotations
@@ -49,6 +52,7 @@ _DELIVERY_FILENAME_RE = re.compile(
 )
 
 PERIOD_LABELS = {
+    "daily": "日结",
     "weekly": "周报",
     "monthly": "月报",
     "h1": "半年报（上半年）",
@@ -192,22 +196,68 @@ def list_broker_files(
     return files
 
 
-def pick_primary_broker_file(
-    files: list[Path], *, as_of: date | None = None
-) -> Path:
-    """优先 交割单_YYYYMMDD_HHMMSS.xls 命名；默认取导出时间最新的一份。"""
+def pick_primary_broker_file(files: list[Path]) -> Path:
+    """取导出时间最新的一份（文件名中的日期为 PC 导出时刻，不是交易日）。"""
     if not files:
         raise FileNotFoundError("无交割单文件")
     tagged = [(p, _file_export_datetime(p)) for p in files]
     with_dt = [(p, dt) for p, dt in tagged if dt is not None]
-    if as_of is not None:
-        tag = as_of.strftime("%Y%m%d")
-        day_files = [(p, dt) for p, dt in with_dt if tag in p.name]
-        if day_files:
-            return max(day_files, key=lambda x: x[1])[0]
     if with_dt:
         return max(with_dt, key=lambda x: x[1])[0]
     return files[-1]
+
+
+def resolve_broker_files(
+    broker_dir: Path,
+    mapping: dict[str, Any],
+    *,
+    xls_path: Path | None = None,
+    cfg: dict[str, Any] | None = None,
+) -> list[Path]:
+    """
+    解析用交割单文件列表。
+    默认仅读 broker_xls/ 内「最新导出」的一份全历史 XLS（用户常整体替换该文件）；
+    设 ops_automation.broker_xls_use_latest_only=false 可合并目录内多文件。
+    """
+    files = list_broker_files(broker_dir, mapping, xls_path=xls_path)
+    if xls_path is not None or len(files) <= 1:
+        return files
+    oa = cfg.get("ops_automation") if isinstance(cfg, dict) else {}
+    if not bool((oa or {}).get("broker_xls_use_latest_only", True)):
+        return files
+    primary = pick_primary_broker_file(files)
+    _LOG.info(
+        "broker_xls: 仅解析最新导出 %s（目录共 %d 个文件；内含多交易日流水，按 --date 筛选）",
+        primary.name,
+        len(files),
+    )
+    return [primary]
+
+
+@dataclass
+class BrokerLedger:
+    """一次解析的全历史交割单台账（供多日日报复用）。"""
+
+    events: list[dict[str, Any]]
+    positions_eod: dict[str, PositionState]
+    last_cash: float | None
+    meta: dict[str, Any]
+
+
+def load_broker_ledger(files: list[Path], mapping: dict[str, Any]) -> BrokerLedger:
+    df = load_broker_frames(files, mapping)
+    positions_eod, events, last_cash, meta = parse_ledger_from_df(df, mapping)
+    return BrokerLedger(
+        events=events,
+        positions_eod=positions_eod,
+        last_cash=last_cash,
+        meta=meta,
+    )
+
+
+def trade_dates_in_events(events: list[dict[str, Any]]) -> list[date]:
+    """交割单内出现过的全部交收日（升序）。"""
+    return sorted({ev["settle_date"] for ev in events if ev.get("settle_date")})
 
 
 def load_broker_frames(
@@ -667,6 +717,104 @@ def closed_positions_in_period(
     return closed_positions_in_week(events, period_start, period_end)
 
 
+def broker_holdings_for_daily_summary(report: dict[str, Any]) -> list[dict[str, Any]]:
+    """
+    将券商日结 report.holdings 转为 daily_summary_history.holdings 行格式。
+    成本/股数来自交割单流水加权，与 watchlist 可能对不齐时以券商为准。
+    """
+    rows: list[dict[str, Any]] = []
+    for raw in report.get("holdings") or []:
+        if not isinstance(raw, dict):
+            continue
+        code = _z6(str(raw.get("code") or ""))
+        if not code:
+            continue
+        try:
+            sh = int(raw.get("hold_shares") or 0)
+        except (TypeError, ValueError):
+            sh = 0
+        if sh <= 0:
+            continue
+        cp = raw.get("cost_price")
+        cl = raw.get("close_price")
+        u = raw.get("unrealized_profit")
+        rows.append(
+            {
+                "code": code,
+                "name": str(raw.get("name") or code),
+                "hold_shares": sh,
+                "cost_price": round(float(cp), 4) if cp is not None else None,
+                "close_price": round(float(cl), 4) if cl is not None else None,
+                "unrealized_profit": round(float(u), 2) if u is not None else None,
+                "tags": "持仓",
+                "source": "broker_xls",
+            }
+        )
+    rows.sort(key=lambda x: x["code"])
+    return rows
+
+
+def broker_unrealized_positions_from_holdings(
+    holdings: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """对齐 daily_summary.trades.unrealized_positions 结构。"""
+    out: list[dict[str, Any]] = []
+    for h in holdings:
+        out.append(
+            {
+                "code": h.get("code"),
+                "name": h.get("name"),
+                "hold_shares": h.get("hold_shares"),
+                "cost_price": h.get("cost_price"),
+                "close_price": h.get("close_price"),
+                "float_pnl_est": h.get("unrealized_profit"),
+                "source": "broker_xls",
+            }
+        )
+    return out
+
+
+def trades_on_day(
+    events: list[dict[str, Any]], on_day: date
+) -> list[dict[str, Any]]:
+    """指定交收日的买卖流水（用于日结）。"""
+    rows: list[dict[str, Any]] = []
+    for ev in events:
+        if ev.get("settle_date") != on_day:
+            continue
+        if ev.get("event") not in ("buy", "sell"):
+            continue
+        rows.append(
+            {
+                "code": ev["code"],
+                "name": ev.get("name") or ev["code"],
+                "event": ev["event"],
+                "quantity": ev.get("quantity") or ev.get("sell_qty") or 0,
+                "price": ev.get("price"),
+                "settlement_amount": ev.get("settlement_amount"),
+                "realized_profit": ev.get("realized_profit"),
+                "trade_time": ev.get("trade_time") or "",
+            }
+        )
+    rows.sort(key=lambda x: (str(x.get("trade_time") or ""), x["code"]))
+    return rows
+
+
+def cash_balance_at_date(
+    events: list[dict[str, Any]], as_of: date
+) -> float | None:
+    """截至 as_of（含）交割单流水中的最近资金余额。"""
+    cash: float | None = None
+    for ev in events:
+        if ev["settle_date"] > as_of:
+            break
+        cb = ev.get("cash_balance")
+        if cb is None or (isinstance(cb, float) and pd.isna(cb)):
+            continue
+        cash = float(cb)
+    return cash
+
+
 def _output_cfg(mapping: dict[str, Any], period: str) -> dict[str, str]:
     out = mapping.get("output") or {}
     if isinstance(out.get(period), dict):
@@ -674,6 +822,7 @@ def _output_cfg(mapping: dict[str, Any], period: str) -> dict[str, str]:
     if period == "weekly" and out.get("json_dir"):
         return {"json_dir": out["json_dir"], "json_prefix": out.get("json_prefix", "weekly_report_")}
     defaults = {
+        "daily": ("data/daily_broker_reports", "daily_report_"),
         "weekly": ("data/weekly_reports", "weekly_report_"),
         "monthly": ("data/monthly_reports", "monthly_report_"),
         "h1": ("data/halfyear_reports", "h1_report_"),
@@ -684,8 +833,102 @@ def _output_cfg(mapping: dict[str, Any], period: str) -> dict[str, str]:
     return {"json_dir": d, "json_prefix": p}
 
 
+def format_broker_daily_text(report: dict[str, Any]) -> str:
+    pr = report.get("period_range") or {}
+    day_s = pr.get("end") or pr.get("start") or ""
+    tot = report.get("totals") or {}
+    realized = tot.get("realized_profit_period", tot.get("realized_profit_week", 0))
+    unreal_ch = tot.get("unrealized_change")
+    total_day = tot.get("total_pnl_day")
+    lines = [
+        f"【券商交割单日结】{day_s}",
+        f"数据源：{report.get('source_file', '—')}",
+        "",
+        "一、当日盈亏",
+        f"  已实现盈亏：{realized:+.2f} 元（当日卖出落袋）",
+    ]
+    if unreal_ch is not None:
+        lines.append(
+            f"  持仓浮盈变化：{unreal_ch:+.2f} 元"
+            f"（{day_s} 收盘浮盈 {tot.get('unrealized_period_end', '—')} "
+            f"− 前一日 {tot.get('unrealized_period_start', '—')}）"
+        )
+    else:
+        lines.append("  持仓浮盈变化：—")
+    if total_day is not None:
+        lines.append(f"  当日合计：{total_day:+.2f} 元")
+    lines.extend(
+        [
+            f"  可用资金：{tot.get('cash_available', '—')} 元",
+            f"  持仓市值：{tot.get('market_value', '—')} 元",
+            f"  总资产：{tot.get('total_assets', '—')} 元",
+            "",
+            "二、当日成交",
+        ]
+    )
+    day_trades = report.get("day_trades") or []
+    if not day_trades:
+        lines.append("  （当日无买卖成交）")
+    else:
+        for row in day_trades:
+            lbl = row.get("name") or row.get("code")
+            ev = "买入" if row.get("event") == "buy" else "卖出"
+            px = row.get("price")
+            px_s = f"{px:.4f}" if px is not None else "—"
+            extra = ""
+            if row.get("event") == "sell" and row.get("realized_profit") is not None:
+                extra = f"  盈亏 {row['realized_profit']:+.2f} 元"
+            lines.append(
+                f"  {ev} {row.get('code')} {lbl}  {row.get('quantity')}股  "
+                f"价 {px_s}{extra}"
+            )
+    lines.extend(["", "三、当日清仓（全部卖出）"])
+    closed = report.get("closed_positions") or []
+    if not closed:
+        lines.append("  （当日无清仓）")
+    else:
+        for row in closed:
+            lbl = row.get("name") or row.get("code")
+            sp = row.get("avg_sell_price")
+            sp_s = f"{sp:.4f}" if sp is not None else "—"
+            lines.append(
+                f"  {row.get('code')} {lbl}  卖价 {sp_s}  "
+                f"{row.get('shares')}股  盈亏 {row.get('realized_profit'):+.2f} 元"
+            )
+    lines.extend(["", "四、日终持仓（当日收盘）"])
+    holdings = report.get("holdings") or []
+    if not holdings:
+        lines.append("  （无持仓）")
+    else:
+        for row in holdings:
+            lbl = row.get("name") or row.get("code")
+            cp = row.get("cost_price")
+            cl = row.get("close_price")
+            u = row.get("unrealized_profit")
+            cp_s = f"{cp:.4f}" if cp is not None else "—"
+            cl_s = f"{cl:.4f}" if cl is not None else "—"
+            u_s = f"{u:+.2f}" if u is not None else "—"
+            lines.append(
+                f"  {row.get('code')} {lbl}  {row.get('hold_shares')}股  "
+                f"成本 {cp_s}  收盘 {cl_s}  浮盈 {u_s}"
+            )
+    lines.extend(
+        [
+            "",
+            "说明：成本与已实现盈亏均来自券商交割单流水，非 watchlist 成本。",
+        ]
+    )
+    warnings = report.get("warnings") or []
+    if warnings:
+        lines.append("")
+        lines.append("⚠️ " + "；".join(str(x) for x in warnings))
+    return "\n".join(lines)
+
+
 def format_broker_period_text(report: dict[str, Any]) -> str:
     period = str(report.get("period") or "weekly")
+    if period == "daily":
+        return format_broker_daily_text(report)
     label = PERIOD_LABELS.get(period, "报告")
     pr = report.get("period_range") or report.get("week") or {}
     tot = report.get("totals") or {}
@@ -769,9 +1012,14 @@ def build_broker_period_report(
     period: str,
     period_start: date,
     period_end: date,
+    ledger: BrokerLedger | None = None,
 ) -> dict[str, Any]:
-    df = load_broker_frames(files, mapping)
-    positions_eod, events, last_cash, ledger_meta = parse_ledger_from_df(df, mapping)
+    if ledger is None:
+        ledger = load_broker_ledger(files, mapping)
+    events = ledger.events
+    positions_eod = ledger.positions_eod
+    last_cash = ledger.last_cash
+    ledger_meta = ledger.meta
 
     pos_start = positions_at_date(events, period_start - timedelta(days=1))
     pos_end = positions_at_date(events, period_end)
@@ -800,10 +1048,19 @@ def build_broker_period_report(
             market_value += cl * sh
     market_value = round(market_value, 2)
 
-    cash = last_cash
+    if period == "daily":
+        cash = cash_balance_at_date(events, period_end)
+        if cash is None:
+            cash = last_cash
+    else:
+        cash = last_cash
     total_assets = round((cash or 0.0) + market_value, 2) if cash is not None else None
 
     realized_period = period_realized_sum(events, period_start, period_end)
+    total_pnl_day: float | None = None
+    if period == "daily":
+        if unreal_change is not None:
+            total_pnl_day = round(realized_period + unreal_change, 2)
     closed = closed_positions_in_period(events, period_start, period_end)
     closed_rows = [
         {
@@ -828,7 +1085,7 @@ def build_broker_period_report(
     if cash is None:
         warnings.append("未能从交割单解析资金余额")
 
-    return {
+    report: dict[str, Any] = {
         "schema_version": 1,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "source_file": primary_file.name,
@@ -861,6 +1118,11 @@ def build_broker_period_report(
         },
         "warnings": warnings,
     }
+    if period == "daily":
+        report["day_trades"] = trades_on_day(events, period_end)
+        if total_pnl_day is not None:
+            report["totals"]["total_pnl_day"] = total_pnl_day
+    return report
 
 
 def build_weekly_report(
@@ -901,7 +1163,9 @@ def save_broker_period_json(
     out_dir.mkdir(parents=True, exist_ok=True)
     pr = report.get("period_range") or report.get("week") or {}
     end_s = pr.get("end") or date.today().isoformat()
-    if period == "monthly":
+    if period == "daily":
+        fname = f"{prefix}{end_s}.json"
+    elif period == "monthly":
         fname = f"{prefix}{str(end_s)[:7]}.json"
     elif period in ("h1", "h2"):
         fname = f"{prefix}{str(end_s)[:4]}_{period}.json"
@@ -926,6 +1190,8 @@ def _prev_month_bounds(today: date) -> tuple[date, date]:
 
 def resolve_period_bounds(period: str, as_of: date) -> tuple[date, date]:
     p = period.strip().lower()
+    if p == "daily":
+        return as_of, as_of
     if p == "weekly":
         return resolve_week_bounds(as_of)
     if p == "monthly":
@@ -984,8 +1250,25 @@ def run_broker_period_report(
             "as_of 为周末，周报区间按上一交易周: %s ~ %s", period_start, period_end
         )
 
-    files = list_broker_files(broker_dir, mapping, xls_path=xls_path)
-    primary = pick_primary_broker_file(files, as_of=today)
+    files = resolve_broker_files(
+        broker_dir, mapping, xls_path=xls_path, cfg=cfg
+    )
+    primary = pick_primary_broker_file(files)
+    ledger = load_broker_ledger(files, mapping)
+    if period == "daily":
+        known = trade_dates_in_events(ledger.events)
+        if known and period_end > known[-1]:
+            _LOG.warning(
+                "交易日 %s 晚于交割单最后交收日 %s，盈亏可能不完整（请更新 broker_xls 导出）",
+                period_end,
+                known[-1],
+            )
+        if known and period_end < known[0]:
+            _LOG.warning(
+                "交易日 %s 早于交割单首条交收日 %s",
+                period_end,
+                known[0],
+            )
 
     report = build_broker_period_report(
         cfg=cfg,
@@ -998,7 +1281,11 @@ def run_broker_period_report(
         period=period,
         period_start=period_start,
         period_end=period_end,
+        ledger=ledger,
     )
+    report["ledger_trade_dates"] = [
+        d.isoformat() for d in trade_dates_in_events(ledger.events)
+    ]
     json_path = save_broker_period_json(report, mapping, root, period)
     report["json_path"] = str(json_path)
     text = format_broker_period_text(report)
@@ -1009,21 +1296,36 @@ def run_broker_period_report(
 
     oa = cfg.get("ops_automation") if isinstance(cfg.get("ops_automation"), dict) else {}
     key = f"broker_{period}_report_email_enabled"
-    if period == "weekly":
+    if period == "daily":
+        email_on = bool(oa.get("broker_daily_report_email_enabled", oa.get(key, True)))
+    elif period == "weekly":
         email_on = bool(oa.get("weekly_broker_report_email_enabled", oa.get(key, True)))
     else:
         email_on = bool(oa.get(key, oa.get("broker_period_report_email_enabled", True)))
     if send and email_on:
         label = PERIOD_LABELS.get(period, "报告")
-        subj = (
-            f"[股价监控] 券商{label} "
-            f"{period_start.isoformat()}～{period_end.isoformat()}"
-        )
+        if period == "daily":
+            subj = f"[股价监控] 券商{label} {period_end.isoformat()}"
+        else:
+            subj = (
+                f"[股价监控] 券商{label} "
+                f"{period_start.isoformat()}～{period_end.isoformat()}"
+            )
         ok = notify_weekly_report(cfg, subject=subj, body=text)
         _LOG.info("broker_%s_report: notify %s", period, "ok" if ok else "failed")
         report["notified"] = ok
     else:
         report["notified"] = False
+
+    if period == "daily":
+        try:
+            from broker_summary_sync import maybe_sync_daily_broker_loop
+
+            report["broker_sync"] = maybe_sync_daily_broker_loop(cfg, root, report)
+        except Exception as exc:
+            _LOG.warning("broker daily sync to summary failed: %s", exc)
+            report["broker_sync"] = {"ok": False, "error": str(exc)}
+
     return report
 
 

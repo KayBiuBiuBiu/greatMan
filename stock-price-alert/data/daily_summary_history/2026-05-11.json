@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-11",
+  "generated_at": "2026-05-18T19:03:56",
+  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-18T19:08:05",
+    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_source_files": [
+      "交割单_20260518_184214.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-05-11",
+    "broker_realized_profit": 195.63,
+    "broker_unrealized_change": -283.6,
+    "broker_net_profit": -87.97,
+    "broker_buys": [
+      {
+        "code": "002576",
+        "name": "通达动力",
+        "quantity": 300,
+        "price": 19.21,
+        "source": "broker_xls",
+        "trade_time": "﻿09:31:50"
+      },
+      {
+        "code": "300687",
+        "name": "赛意信息",
+        "quantity": 200,
+        "price": 30.17,
+        "source": "broker_xls",
+        "trade_time": "﻿09:33:54"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "quantity": 300,
+        "price": 3.74,
+        "source": "broker_xls",
+        "trade_time": "﻿09:40:16"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "quantity": 100,
+        "price": 57.74,
+        "source": "broker_xls",
+        "trade_time": "﻿09:48:41"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 700,
+        "price": 14.36,
+        "source": "broker_xls",
+        "trade_time": "﻿13:45:56"
+      },
+      {
+        "code": "002386",
+        "name": "天原股份",
+        "quantity": 500,
+        "price": 6.53,
+        "source": "broker_xls",
+        "trade_time": "﻿14:49:17"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "quantity": 200,
+        "price": 9.49,
+        "source": "broker_xls",
+        "trade_time": "﻿09:53:21",
+        "realized_profit": 83.05
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "quantity": 300,
+        "price": 10.9,
+        "source": "broker_xls",
+        "trade_time": "﻿10:07:32",
+        "realized_profit": 161.86
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "quantity": 100,
+        "price": 58.23,
+        "source": "broker_xls",
+        "trade_time": "﻿13:16:03",
+        "realized_profit": 53.09
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "quantity": 900,
+        "price": 3.84,
+        "source": "broker_xls",
+        "trade_time": "﻿13:52:48",
+        "realized_profit": -6.73
+      },
+      {
+        "code": "000007",
+        "name": "全新好",
+        "quantity": 200,
+        "price": 16.42,
+        "source": "broker_xls",
+        "trade_time": "﻿14:28:56",
+        "realized_profit": -95.64
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "002576",
+        "name": "通达动力",
+        "event": "buy",
+        "quantity": 300,
+        "price": 19.21,
+        "settlement_amount": -5768.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:31:50"
+      },
+      {
+        "code": "300687",
+        "name": "赛意信息",
+        "event": "buy",
+        "quantity": 200,
+        "price": 30.17,
+        "settlement_amount": -6039.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:33:54"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "event": "buy",
+        "quantity": 300,
+        "price": 3.74,
+        "settlement_amount": -1127.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:40:16"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "event": "buy",
+        "quantity": 100,
+        "price": 57.74,
+        "settlement_amount": -5779.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:48:41"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "event": "sell",
+        "quantity": 200,
+        "price": 9.49,
+        "settlement_amount": 1892.05,
+        "realized_profit": 83.05,
+        "trade_time": "﻿09:53:21"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "event": "sell",
+        "quantity": 300,
+        "price": 10.9,
+        "settlement_amount": 3263.36,
+        "realized_profit": 161.86,
+        "trade_time": "﻿10:07:32"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "event": "sell",
+        "quantity": 100,
+        "price": 58.23,
+        "settlement_amount": 5815.09,
+        "realized_profit": 53.09,
+        "trade_time": "﻿13:16:03"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 700,
+        "price": 14.36,
+        "settlement_amount": -10057.1,
+        "realized_profit": 0.0,
+        "trade_time": "﻿13:45:56"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "event": "sell",
+        "quantity": 900,
+        "price": 3.84,
+        "settlement_amount": 3449.27,
+        "realized_profit": -6.73,
+        "trade_time": "﻿13:52:48"
+      },
+      {
+        "code": "000007",
+        "name": "全新好",
+        "event": "sell",
+        "quantity": 200,
+        "price": 16.42,
+        "settlement_amount": 3277.36,
+        "realized_profit": -95.64,
+        "trade_time": "﻿14:28:56"
+      },
+      {
+        "code": "002386",
+        "name": "天原股份",
+        "event": "buy",
+        "quantity": 500,
+        "price": 6.53,
+        "settlement_amount": -3270.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:49:17"
+      }
+    ],
+    "broker_closed_positions": [
+      {
+        "code": "000007",
+        "name": "全新好",
+        "shares": 200,
+        "avg_sell_price": 16.3868,
+        "realized_profit": -95.64,
+        "last_settle_date": "2026-05-11"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "shares": 200,
+        "avg_sell_price": 9.4603,
+        "realized_profit": 83.05,
+        "last_settle_date": "2026-05-11"
+      }
+    ],
+    "realized_profit": 195.63,
+    "unrealized_profit": -283.6,
+    "net_profit": -87.97,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ]
+  }
+}

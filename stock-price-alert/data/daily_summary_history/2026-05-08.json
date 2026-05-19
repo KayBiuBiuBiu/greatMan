@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "date": "2026-05-08",
+  "generated_at": "2026-05-18T19:03:56",
+  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-18T19:08:05",
+    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_source_files": [
+      "交割单_20260518_184214.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-05-08",
+    "broker_realized_profit": 498.84,
+    "broker_unrealized_change": 126.5,
+    "broker_net_profit": 625.34,
+    "broker_buys": [
+      {
+        "code": "000007",
+        "name": "全新好",
+        "quantity": 100,
+        "price": 17.23,
+        "source": "broker_xls",
+        "trade_time": "﻿09:39:44"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "quantity": 600,
+        "price": 3.87,
+        "source": "broker_xls",
+        "trade_time": "﻿09:50:49"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "quantity": 100,
+        "price": 57.4,
+        "source": "broker_xls",
+        "trade_time": "﻿09:56:54"
+      },
+      {
+        "code": "002386",
+        "name": "天原股份",
+        "quantity": 500,
+        "price": 6.65,
+        "source": "broker_xls",
+        "trade_time": "﻿14:30:58"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "quantity": 100,
+        "price": 10.73,
+        "source": "broker_xls",
+        "trade_time": "﻿14:50:42"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "quantity": 300,
+        "price": 3.83,
+        "source": "broker_xls",
+        "trade_time": "﻿14:52:00"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "000767",
+        "name": "晋控电力",
+        "quantity": 300,
+        "price": 4.28,
+        "source": "broker_xls",
+        "trade_time": "﻿09:39:04",
+        "realized_profit": 126.86
+      },
+      {
+        "code": "000811",
+        "name": "冰轮环境",
+        "quantity": 200,
+        "price": 25.96,
+        "source": "broker_xls",
+        "trade_time": "﻿09:39:50",
+        "realized_profit": 69.4
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "quantity": 200,
+        "price": 9.79,
+        "source": "broker_xls",
+        "trade_time": "﻿09:40:37",
+        "realized_profit": 143.02
+      },
+      {
+        "code": "000553",
+        "name": "安道麦A",
+        "quantity": 100,
+        "price": 7.16,
+        "source": "broker_xls",
+        "trade_time": "﻿09:48:16",
+        "realized_profit": -29.36
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "quantity": 400,
+        "price": 7.78,
+        "source": "broker_xls",
+        "trade_time": "﻿10:45:38",
+        "realized_profit": 34.44
+      },
+      {
+        "code": "000593",
+        "name": "德龙汇能",
+        "quantity": 300,
+        "price": 26.4,
+        "source": "broker_xls",
+        "trade_time": "﻿13:16:36",
+        "realized_profit": 6.04
+      },
+      {
+        "code": "001234",
+        "name": "泰慕士",
+        "quantity": 100,
+        "price": 31.2,
+        "source": "broker_xls",
+        "trade_time": "﻿14:28:13",
+        "realized_profit": 148.44
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "000767",
+        "name": "晋控电力",
+        "event": "sell",
+        "quantity": 300,
+        "price": 4.28,
+        "settlement_amount": 1278.36,
+        "realized_profit": 126.86,
+        "trade_time": "﻿09:39:04"
+      },
+      {
+        "code": "000007",
+        "name": "全新好",
+        "event": "buy",
+        "quantity": 100,
+        "price": 17.23,
+        "settlement_amount": -1728.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:39:44"
+      },
+      {
+        "code": "000811",
+        "name": "冰轮环境",
+        "event": "sell",
+        "quantity": 200,
+        "price": 25.96,
+        "settlement_amount": 5184.4,
+        "realized_profit": 69.4,
+        "trade_time": "﻿09:39:50"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "event": "sell",
+        "quantity": 200,
+        "price": 9.79,
+        "settlement_amount": 1952.02,
+        "realized_profit": 143.02,
+        "trade_time": "﻿09:40:37"
+      },
+      {
+        "code": "000553",
+        "name": "安道麦A",
+        "event": "sell",
+        "quantity": 100,
+        "price": 7.16,
+        "settlement_amount": 710.64,
+        "realized_profit": -29.36,
+        "trade_time": "﻿09:48:16"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "event": "buy",
+        "quantity": 600,
+        "price": 3.87,
+        "settlement_amount": -2327.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:50:49"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "event": "buy",
+        "quantity": 100,
+        "price": 57.4,
+        "settlement_amount": -5745.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:56:54"
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "event": "sell",
+        "quantity": 400,
+        "price": 7.78,
+        "settlement_amount": 3105.44,
+        "realized_profit": 34.44,
+        "trade_time": "﻿10:45:38"
+      },
+      {
+        "code": "000593",
+        "name": "德龙汇能",
+        "event": "sell",
+        "quantity": 300,
+        "price": 26.4,
+        "settlement_amount": 7911.04,
+        "realized_profit": 6.04,
+        "trade_time": "﻿13:16:36"
+      },
+      {
+        "code": "001234",
+        "name": "泰慕士",
+        "event": "sell",
+        "quantity": 100,
+        "price": 31.2,
+        "settlement_amount": 3113.44,
+        "realized_profit": 148.44,
+        "trade_time": "﻿14:28:13"
+      },
+      {
+        "code": "002386",
+        "name": "天原股份",
+        "event": "buy",
+        "quantity": 500,
+        "price": 6.65,
+        "settlement_amount": -3330.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:30:58"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "event": "buy",
+        "quantity": 100,
+        "price": 10.73,
+        "settlement_amount": -1078.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:50:42"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "event": "buy",
+        "quantity": 300,
+        "price": 3.83,
+        "settlement_amount": -1154.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:52:00"
+      }
+    ],
+    "broker_closed_positions": [
+      {
+        "code": "000553",
+        "name": "安道麦A",
+        "shares": 100,
+        "avg_sell_price": 7.1064,
+        "realized_profit": -29.36,
+        "last_settle_date": "2026-05-08"
+      },
+      {
+        "code": "000593",
+        "name": "德龙汇能",
+        "shares": 300,
+        "avg_sell_price": 26.3701,
+        "realized_profit": 6.04,
+        "last_settle_date": "2026-05-08"
+      },
+      {
+        "code": "000767",
+        "name": "晋控电力",
+        "shares": 300,
+        "avg_sell_price": 4.2612,
+        "realized_profit": 126.86,
+        "last_settle_date": "2026-05-08"
+      },
+      {
+        "code": "000811",
+        "name": "冰轮环境",
+        "shares": 200,
+        "avg_sell_price": 25.922,
+        "realized_profit": 69.4,
+        "last_settle_date": "2026-05-08"
+      }
+    ],
+    "realized_profit": 498.84,
+    "unrealized_profit": 126.5,
+    "net_profit": 625.34,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ]
+  }
+}
