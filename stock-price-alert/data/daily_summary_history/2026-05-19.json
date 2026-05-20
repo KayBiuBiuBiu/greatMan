@@ -1494,9 +1494,9 @@
     ],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": 2165.16,
-    "unrealized_profit": -9604.0802,
-    "net_profit": -7438.92,
+    "realized_profit": 1885.01,
+    "unrealized_profit": -1901.46,
+    "net_profit": -16.45,
     "unrealized_positions": [
       {
         "code": "000967",
@@ -1564,7 +1564,154 @@
     ],
     "notes": [
       "浮盈估：trade_date≤总结日 的最近收盘；优先 Tushare daily（不复权），否则本地日K前复权（与券商绝对金额可能偏差）。",
-      "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。流水见 data/position_ledger.db。"
+      "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。流水见 data/position_ledger.db。",
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "source": "broker_xls",
+    "broker_synced_at": "2026-05-20T08:22:41",
+    "broker_source_file": "交割单_20260520_074309.xls",
+    "broker_source_files": [
+      "交割单_20260520_074309.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-05-19",
+    "broker_realized_profit": 1885.01,
+    "broker_unrealized_change": -1901.46,
+    "broker_net_profit": -16.45,
+    "broker_buys": [
+      {
+        "code": "301149",
+        "name": "隆华新材",
+        "quantity": 400,
+        "price": 13.7,
+        "source": "broker_xls",
+        "trade_time": "﻿10:05:27"
+      },
+      {
+        "code": "603717",
+        "name": "天域生物",
+        "quantity": 700,
+        "price": 7.43,
+        "source": "broker_xls",
+        "trade_time": "﻿10:26:43"
+      },
+      {
+        "code": "000967",
+        "name": "盈峰环境",
+        "quantity": 400,
+        "price": 13.2,
+        "source": "broker_xls",
+        "trade_time": "﻿11:15:16"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "300955",
+        "name": "嘉亨家化",
+        "quantity": 300,
+        "price": 44.4733,
+        "source": "broker_xls",
+        "trade_time": "﻿09:33:15",
+        "realized_profit": 1355.33
+      },
+      {
+        "code": "603657",
+        "name": "春光科技",
+        "quantity": 300,
+        "price": 33.11,
+        "source": "broker_xls",
+        "trade_time": "﻿09:52:15",
+        "realized_profit": 798.34
+      },
+      {
+        "code": "000967",
+        "name": "盈峰环境",
+        "quantity": 400,
+        "price": 13.3,
+        "source": "broker_xls",
+        "trade_time": "﻿10:49:12",
+        "realized_profit": -268.66
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "300955",
+        "name": "嘉亨家化",
+        "event": "sell",
+        "quantity": 300,
+        "price": 44.4733,
+        "settlement_amount": 13330.33,
+        "realized_profit": 1355.33,
+        "trade_time": "﻿09:33:15"
+      },
+      {
+        "code": "603657",
+        "name": "春光科技",
+        "event": "sell",
+        "quantity": 300,
+        "price": 33.11,
+        "settlement_amount": 9922.93,
+        "realized_profit": 798.34,
+        "trade_time": "﻿09:52:15"
+      },
+      {
+        "code": "301149",
+        "name": "隆华新材",
+        "event": "buy",
+        "quantity": 400,
+        "price": 13.7,
+        "settlement_amount": -5485.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:05:27"
+      },
+      {
+        "code": "603717",
+        "name": "天域生物",
+        "event": "buy",
+        "quantity": 700,
+        "price": 7.43,
+        "settlement_amount": -5206.05,
+        "realized_profit": 0.0,
+        "trade_time": "﻿10:26:43"
+      },
+      {
+        "code": "000967",
+        "name": "盈峰环境",
+        "event": "sell",
+        "quantity": 400,
+        "price": 13.3,
+        "settlement_amount": 5312.34,
+        "realized_profit": -268.66,
+        "trade_time": "﻿10:49:12"
+      },
+      {
+        "code": "000967",
+        "name": "盈峰环境",
+        "event": "buy",
+        "quantity": 400,
+        "price": 13.2,
+        "settlement_amount": -5285.0,
+        "realized_profit": 0.0,
+        "trade_time": "﻿11:15:16"
+      }
+    ],
+    "broker_closed_positions": [
+      {
+        "code": "300955",
+        "name": "嘉亨家化",
+        "shares": 300,
+        "avg_sell_price": 44.4344,
+        "realized_profit": 1355.33,
+        "last_settle_date": "2026-05-19"
+      },
+      {
+        "code": "603657",
+        "name": "春光科技",
+        "shares": 300,
+        "avg_sell_price": 33.0764,
+        "realized_profit": 798.34,
+        "last_settle_date": "2026-05-19"
+      }
     ]
   },
   "position_operations_today": [
@@ -1811,6 +1958,65 @@
       "related_signal_id": 15
     }
   ],
+  "broker_summary_synced_at": "2026-05-20T08:22:41",
+  "holdings_watchlist": [
+    {
+      "code": "000967",
+      "name": "盈峰环境",
+      "hold_shares": 400,
+      "cost_price": 13.94,
+      "tags": "持仓"
+    },
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.276778,
+      "tags": "持仓"
+    },
+    {
+      "code": "002237",
+      "name": "恒邦股份",
+      "hold_shares": 1200,
+      "cost_price": 16.31925,
+      "tags": "持仓"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6001,
+      "tags": "持仓"
+    },
+    {
+      "code": "300798",
+      "name": "锦鸡股份",
+      "hold_shares": 800,
+      "cost_price": 10.6,
+      "tags": "持仓"
+    },
+    {
+      "code": "301149",
+      "name": "隆华新材",
+      "hold_shares": 400,
+      "cost_price": 13.7,
+      "tags": "持仓"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 8100,
+      "cost_price": 13.1838,
+      "tags": "持仓"
+    },
+    {
+      "code": "603717",
+      "name": "天域生物",
+      "hold_shares": 700,
+      "cost_price": 7.43,
+      "tags": "持仓"
+    }
+  ],
   "holdings_broker": [
     {
       "code": "000967",
@@ -1884,5 +2090,15 @@
     }
   ],
   "holdings_broker_as_of": "2026-05-19",
-  "broker_summary_synced_at": "2026-05-20T08:22:41"
+  "account_pnl_broker": {
+    "as_of": "2026-05-19",
+    "cash_available": 38498.26,
+    "market_value": 120724.0,
+    "total_assets": 159222.26,
+    "position_count": 7,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
 }

@@ -34,16 +34,6 @@
       "source": "broker_xls"
     },
     {
-      "code": "002386",
-      "name": "天原股份",
-      "hold_shares": 1000,
-      "cost_price": 6.6,
-      "close_price": 6.58,
-      "unrealized_profit": -20.0,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
       "code": "300798",
       "name": "锦鸡股份",
       "hold_shares": 800,
@@ -1764,9 +1754,9 @@
     ],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": 592.06,
-    "unrealized_profit": -1390.88,
-    "net_profit": -798.82,
+    "realized_profit": 491.18,
+    "unrealized_profit": -1728.88,
+    "net_profit": -1237.7,
     "unrealized_positions": [
       {
         "code": "000967",
@@ -1793,15 +1783,6 @@
         "cost_price": 16.3275,
         "close_price": 14.86,
         "float_pnl_est": -1761.0,
-        "source": "broker_xls"
-      },
-      {
-        "code": "002386",
-        "name": "天原股份",
-        "hold_shares": 1000,
-        "cost_price": 6.6,
-        "close_price": 6.58,
-        "float_pnl_est": -20.0,
         "source": "broker_xls"
       },
       {
@@ -1847,36 +1828,18 @@
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
     ],
     "source": "broker_xls",
-    "broker_synced_at": "2026-05-19T07:59:50",
-    "broker_source_file": "交割单_20260519_074224.xls",
+    "broker_synced_at": "2026-05-20T08:22:41",
+    "broker_source_file": "交割单_20260520_074309.xls",
     "broker_source_files": [
-      "交割单_20260519_074224.xls"
+      "交割单_20260520_074309.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-05-18",
-    "broker_realized_profit": 592.06,
-    "broker_unrealized_change": -1390.88,
-    "broker_net_profit": -798.82,
+    "broker_realized_profit": 491.18,
+    "broker_unrealized_change": -1728.88,
+    "broker_net_profit": -1237.7,
     "broker_buys": [],
     "broker_sells": [
-      {
-        "code": "300687",
-        "name": "赛意信息",
-        "quantity": 100,
-        "price": 29.23,
-        "source": "broker_xls",
-        "trade_time": "﻿10:09:45",
-        "realized_profit": -102.96
-      },
-      {
-        "code": "000537",
-        "name": "绿发电力",
-        "quantity": 300,
-        "price": 11.04,
-        "source": "broker_xls",
-        "trade_time": "﻿10:37:31",
-        "realized_profit": 203.84
-      },
       {
         "code": "603380",
         "name": "易德龙",
@@ -1897,26 +1860,6 @@
       }
     ],
     "broker_day_trades": [
-      {
-        "code": "300687",
-        "name": "赛意信息",
-        "event": "sell",
-        "quantity": 100,
-        "price": 29.23,
-        "settlement_amount": 2916.54,
-        "realized_profit": -102.96,
-        "trade_time": "﻿10:09:45"
-      },
-      {
-        "code": "000537",
-        "name": "绿发电力",
-        "event": "sell",
-        "quantity": 300,
-        "price": 11.04,
-        "settlement_amount": 3305.34,
-        "realized_profit": 203.84,
-        "trade_time": "﻿10:37:31"
-      },
       {
         "code": "603380",
         "name": "易德龙",
@@ -1940,27 +1883,11 @@
     ],
     "broker_closed_positions": [
       {
-        "code": "000537",
-        "name": "绿发电力",
-        "shares": 300,
-        "avg_sell_price": 11.0178,
-        "realized_profit": 203.84,
-        "last_settle_date": "2026-05-18"
-      },
-      {
         "code": "002718",
         "name": "友邦吊顶",
         "shares": 100,
         "avg_sell_price": 76.0719,
         "realized_profit": 102.19,
-        "last_settle_date": "2026-05-18"
-      },
-      {
-        "code": "300687",
-        "name": "赛意信息",
-        "shares": 100,
-        "avg_sell_price": 29.1654,
-        "realized_profit": -102.96,
         "last_settle_date": "2026-05-18"
       },
       {
@@ -2249,7 +2176,7 @@
       "related_signal_id": null
     }
   ],
-  "broker_summary_synced_at": "2026-05-19T07:59:50",
+  "broker_summary_synced_at": "2026-05-20T08:22:41",
   "holdings_watchlist": [
     {
       "code": "000967",
@@ -2340,16 +2267,6 @@
       "source": "broker_xls"
     },
     {
-      "code": "002386",
-      "name": "天原股份",
-      "hold_shares": 1000,
-      "cost_price": 6.6,
-      "close_price": 6.58,
-      "unrealized_profit": -20.0,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
       "code": "300798",
       "name": "锦鸡股份",
       "hold_shares": 800,
@@ -2394,9 +2311,9 @@
   "account_pnl_broker": {
     "as_of": "2026-05-18",
     "cash_available": 25908.71,
-    "market_value": 139910.0,
-    "total_assets": 165818.71,
-    "position_count": 8,
+    "market_value": 133330.0,
+    "total_assets": 159238.71,
+    "position_count": 7,
     "source": "broker_xls"
   },
   "holdings_notes": [

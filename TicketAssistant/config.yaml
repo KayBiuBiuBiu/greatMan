@@ -1,0 +1,42 @@
+# 抢票助手配置
+
+target_url: "https://detail.damai.cn/item.htm?id=000000000000"
+item_id: "000000000000"
+target_price: 380
+query_interval: [1, 3]
+
+user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# 下单模式: api（mtop+sign，快）| browser（Selenium 全自动，无需逆向 sign，慢 2-3 秒）
+order_mode: browser
+
+# mtop 签名（阿里 H5 默认 mtop_h5：MD5(token&t&appKey&data)，token 来自 Cookie _m_h5_tk）
+sign:
+  method: mtop_h5          # mtop_h5 | params_md5 | hmac_sha256
+  app_key: "12574478"
+  secret: ""               # params_md5 / hmac_sha256 时使用；mtop_h5 留空
+  cookie_token_name: "_m_h5_tk"
+
+damai_api:
+  base_url: "https://mtop.damai.cn/h5/mtop.damai.wireless.item.get/1.0/"
+  api: "mtop.damai.wireless.item.get"
+  version: "1.0"
+  app_key: "12574478"
+  order_base_url: "https://mtop.damai.cn/h5/mtop.damai.wireless.order.build/1.0/"
+  order_api: "mtop.damai.wireless.order.build"
+  order_version: "1.0"
+  # order_data_extra: {}   # 抓包后补充额外字段
+
+# 浏览器下单（order_mode=browser）
+browser_order:
+  wait_timeout: 15
+  headless: false
+  keep_browser_open: true   # 提交后保持窗口便于支付
+  selectors:
+    buy_button: ".buy__button,.buybtn"
+    confirm_button: ".submit-button"
+    submit_order: ""
+    # price_tier_xpath: "//*[contains(.,'{price}')]"
+
+cookies_file: "cookies.json"
+log_level: "INFO"
