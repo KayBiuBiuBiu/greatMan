@@ -5,7 +5,7 @@ const {
   runStartAction,
   buildStartChecks
 } = require('../../utils/roomUi')
-const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { patchLobbyUi } = require('../../utils/roomMemberUi')
 const {
   enableShareMenus,
   handleShareAppMessage,
@@ -17,11 +17,15 @@ const {
   onPageShowUnlock,
   onPageHideUnlock,
   closeAiShareModal,
-  showShareGuide
+  showShareGuide,
+  openAiShareModal
 } = require('../../utils/aiUnlock')
-const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const { TOAST_ROOM_CODE_6, copyRoomCodeToClipboard } = require('../../utils/roomCopy')
 const { runAi, SYSTEM_MUSIC_HOST } = require('../../utils/aiHelper')
 const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
+const { stepIndex, vibrateBoundary } = require('../../utils/listStepper')
+
+const ROUND_STEP_HINT = '可选 5 / 10 / 15 题'
 
 const ROUNDS = [5, 10, 15]
 
@@ -44,11 +48,13 @@ Page({
     inputAnswer: '',
     roundLabels: ['5 题', '10 题', '15 题'],
     roundIndex: 0,
+    roundStepHint: ROUND_STEP_HINT,
     memberCountLine: '',
     displayPlayers: [],
     statusHint: '',
+    statusBannerWarn: false,
     playerProgressPct: 0,
-    aiPanelOpen: false,
+    canStart: false,
     aiBusy: false,
     aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
     showAiShareModal: false,
@@ -110,6 +116,10 @@ Page({
     closeAiShareModal(this)
     showShareGuide()
   },
+  onCopyRoomCode () {
+    const c = this.data.roomCode || (this.data.state && this.data.state.roomCode)
+    copyRoomCodeToClipboard(c)
+  },
   _refreshRoomState () {
     const id = this.data.roomId
     if (!id || !wx.cloud || !ensure()) {
@@ -140,27 +150,26 @@ Page({
     this.setData({ joinCode: d })
   },
 
-  onRoundChange (e) {
-    const i = Number((e.detail && e.detail.value) | 0)
-    this.setData({ roundIndex: i >= 0 && i < ROUNDS.length ? i : 0 }, () => {
-      this._saveRounds(false)
-    })
-  },
-  onRoundStep (e) {
-    const delta = Number((e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.delta) | 0)
-    const cur = this.data.roundIndex | 0
-    const next = Math.max(0, Math.min(ROUNDS.length - 1, cur + delta))
-    if (next === cur) {
+  onRoundDecrease () {
+    const r = stepIndex(this.data.roundIndex, -1, ROUNDS.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
       return
     }
-    this.setData({ roundIndex: next }, () => {
-      this._saveRounds(false)
+    this.setData({ roundIndex: r.index }, () => {
+      this._saveRounds()
     })
   },
-  toggleAiPanel () {
-    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
+  onRoundIncrease () {
+    const r = stepIndex(this.data.roundIndex, 1, ROUNDS.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this.setData({ roundIndex: r.index }, () => {
+      this._saveRounds()
+    })
   },
-
   onInputAns (e) {
     this.setData({ inputAnswer: (e.detail && e.detail.value) || '' })
   },
@@ -245,7 +254,10 @@ Page({
     )
   },
 
-  _saveRounds (silent) {
+  onAiUnlockTap () {
+    openAiShareModal(this)
+  },
+  _saveRounds () {
     if (!this.data.view || !this.data.view.isHost) {
       return
     }
@@ -258,22 +270,14 @@ Page({
       return
     }
     this._lastSavedRounds = n
-    if (!silent) {
-      wx.showLoading({ title: '保存题数', mask: true })
-    }
     callMusic(
       { action: 'setRounds', roomId: this.data.roomId, totalRounds: n },
       {
         onOk: () => {
-          if (!silent) {
-            wx.hideLoading()
-          }
+          wx.showToast({ title: '已保存', icon: 'none' })
           this.loadView()
         },
         onError: () => {
-          if (!silent) {
-            wx.hideLoading()
-          }
           this._lastSavedRounds = null
         }
       }
@@ -416,15 +420,17 @@ Page({
       roundIndex,
       roundNum,
       hasRoundHits: rh.length > 0,
-      showLog: !!(d.publicLog && d.publicLog.length),
-      memberCountLine: memberCountLine(pn, 0, '建议至少 2 人')
+      showLog: !!(d.publicLog && d.publicLog.length)
     }
-    patchMemberDisplay(patch, {
+    patchLobbyUi(patch, {
+      state: d,
+      view: v,
       players: d.publicPlayers || [],
-      phase: d.status === 'waiting' ? 'waiting' : 'playing',
+      phase: d.status || 'waiting',
+      minPlayers: 2,
       maxPlayers: 0,
       isHost: v.isHost,
-      fallbackNeed: 2
+      hostOpenId: d.hostOpenId || ''
     })
     this.setData(patch)
     this.syncTimeLeft(d)
@@ -494,13 +500,14 @@ Page({
             a && a.length ? a.join('、') : ''
           const st = this.data.state || {}
           const patch = { view: v }
-          const stStatus = st.status || v.roomStatus
-          patchMemberDisplay(patch, {
+          patchLobbyUi(patch, {
+            state: st,
+            view: v,
             players: st.publicPlayers || v.publicPlayers || [],
-            phase: stStatus === 'waiting' ? 'waiting' : 'playing',
+            phase: st.status || v.roomStatus || 'waiting',
+            minPlayers: 2,
             maxPlayers: 0,
-            isHost: v.isHost,
-            fallbackNeed: 2
+            isHost: v.isHost
           })
           this.setData(patch)
         },

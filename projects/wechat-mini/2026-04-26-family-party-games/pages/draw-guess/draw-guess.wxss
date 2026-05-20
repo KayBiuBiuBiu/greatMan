@@ -1,123 +1,90 @@
 @import '../../styles/room-game.wxss';
 
-.page {
-  min-height: 100vh;
-  background: #fef8f0;
-  padding: 28rpx 24rpx 64rpx;
+/* 页面沿用 app.wxss .page 安全边距；仅补充画猜专属 */
+.draw-page-inroom {
+  padding-bottom: calc(var(--page-pad-bottom) + constant(safe-area-inset-bottom));
+  padding-bottom: calc(var(--page-pad-bottom) + env(safe-area-inset-bottom));
+}
+
+.draw-lobby-hero {
+  margin-bottom: var(--space-md);
+}
+
+.draw-lobby-hero-compact {
+  margin-bottom: var(--space-sm);
+}
+
+.draw-lobby-hero-compact .hero-title {
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+}
+
+.draw-label,
+.rg-lobby-label {
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-accent);
+  margin-bottom: var(--space-xs);
+}
+
+.draw-inp,
+.rg-lobby-inp {
+  min-height: var(--btn-secondary-height);
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  margin: var(--space-sm) 0;
+  width: 100%;
   box-sizing: border-box;
+  font-size: var(--font-body-size);
 }
 
-.h1 {
-  font-size: 44rpx;
-  font-weight: 800;
-  color: #23212a;
+.draw-members-inner {
+  margin-top: 0;
 }
 
-.hint,
-.wait {
-  font-size: 26rpx;
-  color: #5f5966;
-  margin: 16rpx 0 24rpx;
-  line-height: 1.5;
+.draw-empty-members {
+  text-align: center;
+  padding: var(--space-sm) 0;
+  color: var(--color-text-secondary);
 }
 
-.card {
-  background: #fff;
-  border-radius: 20rpx;
-  padding: 24rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
-}
-
-.top {
+.draw-guest-wait {
   text-align: center;
 }
 
-.strong {
-  color: #ff7a2f;
-  font-size: 40rpx;
-  font-weight: 800;
-  letter-spacing: 2rpx;
-}
-
-.h2 {
-  font-size: 32rpx;
-  font-weight: 700;
-  margin-bottom: 8rpx;
-  color: #1f1c24;
-}
-
-.lab,
-.row {
-  font-size: 28rpx;
-  color: #4b4652;
-  margin: 6rpx 0;
+.draw-play-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 8rpx;
+  gap: var(--space-sm);
 }
 
-.mt {
-  margin-top: 20rpx;
-}
-
-.mem {
-  font-size: 28rpx;
-  color: #333;
-  padding: 4rpx 0;
-}
-
-.pill {
-  display: inline-block;
-  padding: 6rpx 20rpx;
-  border-radius: 999rpx;
-  background: #fff0e0;
-  color: #8a3a0a;
-  font-weight: 600;
-}
-
-.inp {
-  min-height: 80rpx;
-  padding: 0 20rpx;
-  border-radius: 16rpx;
-  background: #f3f0f5;
-  margin: 12rpx 0;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 30rpx;
-}
-
-.btn,
-button.btn {
+.draw-host-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 8rpx 0;
-  min-height: 76rpx;
-  padding: 0 24rpx;
-  line-height: 1.35;
-  border-radius: 16rpx;
-  background: #ece8e3;
-  font-size: 28rpx;
-  box-sizing: border-box;
-}
-.btn::after {
-  border: none;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
 }
 
-.btn.primary {
-  background: linear-gradient(90deg, #ff9a4a, #ff7a2f);
-  color: #fff;
-  font-weight: 600;
+.draw-host-actions .btn {
+  flex: 1;
+  min-width: 140rpx;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 .draw-wrap {
   position: relative;
   overflow: hidden;
-  border: 1rpx solid #e8e4de;
-  border-radius: 16rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-md);
   background: #faf7ff;
 }
 
@@ -130,9 +97,7 @@ button.btn {
 }
 
 .tools {
-  flex-wrap: wrap;
-  margin-top: 8rpx;
-  gap: 8rpx;
+  margin-top: var(--space-sm);
 }
 
 .tbtn {
@@ -141,38 +106,36 @@ button.btn {
 
 .sli {
   width: 180rpx;
-  margin-left: 8rpx;
+  margin-left: var(--space-xs);
   flex: 1;
   min-width: 120rpx;
 }
 
 .tlab {
-  font-size: 24rpx;
-  color: #6b6470;
+  color: var(--color-text-secondary);
 }
 
 .word-big {
-  font-size: 40rpx;
-  font-weight: 900;
-  color: #1a6;
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+  font-weight: var(--font-weight-semibold);
+  color: #15803d;
   text-align: center;
-  margin: 12rpx 0 8rpx;
-  padding: 0 8rpx;
-  line-height: 1.4;
+  margin: var(--space-sm) 0;
+  padding: 0 var(--space-xs);
 }
 
 .remote-wrap {
   min-height: 200rpx;
   text-align: center;
   background: #faf7ff;
-  border-radius: 12rpx;
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1rpx solid #eee5ff;
+  border: 1rpx solid var(--color-border-soft);
 }
 
 .remote {
   max-width: 100%;
-  vertical-align: top;
   display: block;
   margin: 0 auto;
 }
@@ -181,45 +144,41 @@ button.btn {
   min-height: 200rpx;
   line-height: 200rpx;
   text-align: center;
-  color: #9a93a0;
-  font-size: 26rpx;
+  color: var(--color-text-secondary);
 }
 
 .ans {
-  font-size: 40rpx;
-  font-weight: 800;
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+  font-weight: var(--font-weight-medium);
   color: #15803d;
   text-align: center;
-  margin: 12rpx 0;
+  margin: var(--space-sm) 0;
 }
 
 .hits {
-  font-size: 26rpx;
   color: #166534;
-  margin-top: 8rpx;
+  margin-top: var(--space-xs);
 }
 
 .log {
-  font-size: 24rpx;
-  color: #6b6470;
   line-height: 1.5;
   padding: 2rpx 0;
   word-break: break-all;
+  color: var(--color-text-secondary);
 }
 
 .ok {
-  color: #166534;
   text-align: center;
-  font-size: 28rpx;
-  margin: 8rpx 0 16rpx;
+  margin: var(--space-sm) 0 var(--space-md);
 }
 
 .rank {
-  font-size: 30rpx;
-  line-height: 1.5;
-  padding: 4rpx 0;
-  border-bottom: 1rpx solid #f0ebe5;
-  color: #1f1c24;
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  padding: var(--space-xs) 0;
+  border-bottom: 1rpx solid var(--color-border);
+  color: var(--color-text);
 }
 
 .rank:last-child {

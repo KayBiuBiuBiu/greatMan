@@ -204,10 +204,14 @@ async function run(event) {
       }
       code = mk6()
     }
+    let maxPlayers = parseInt(event.maxPlayers, 10) || 6
+    if (MAXN.indexOf(maxPlayers) < 0) {
+      maxPlayers = 6
+    }
     const d = {
       roomCode: code,
       hostOpenId: o,
-      maxPlayers: 6,
+      maxPlayers,
       status: 'waiting',
       members: [{ openId: o, nickName: '房主', joinedAt: now() }],
       game: { phase: 'lobby', day: 0, publicLog: [] },

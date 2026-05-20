@@ -8,25 +8,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48rpx 40rpx;
+  padding: var(--space-xl) var(--space-lg);
   box-sizing: border-box;
-  background: rgba(20, 12, 8, 0.45);
+  background: var(--color-mask, rgba(0, 0, 0, 0.5));
 }
 
 .ai-share-sheet {
   width: 100%;
   max-width: 620rpx;
-  padding: 36rpx 32rpx 28rpx;
-  border-radius: 28rpx;
-  background: #fef8f0;
+  padding: var(--space-lg) var(--space-lg) var(--space-md);
+  border-radius: var(--radius-xl, 32rpx);
+  background: var(--color-bg-page, #fef8f0);
   box-shadow: 0 24rpx 64rpx rgba(138, 58, 10, 0.18);
   box-sizing: border-box;
 }
 
 .ai-share-tip {
-  margin-bottom: 28rpx;
-  padding: 20rpx 24rpx;
-  border-radius: 16rpx;
+  margin-bottom: var(--space-lg, 32rpx);
+  padding: var(--space-md, 24rpx);
+  border-radius: var(--radius-md, 16rpx);
   background: rgba(255, 255, 255, 0.72);
   text-align: center;
 }
@@ -34,18 +34,18 @@
 .ai-share-tip-main {
   display: block;
   color: #166534;
-  font-size: 28rpx;
-  font-weight: 700;
-  line-height: 1.45;
+  font-size: var(--font-body-size, 28rpx);
+  line-height: var(--font-body-lh, 40rpx);
+  font-weight: var(--font-weight-medium, 500);
 }
 
 .ai-share-tip-sub {
   display: block;
-  margin-top: 10rpx;
-  color: #4b5563;
-  font-size: 24rpx;
-  font-weight: 600;
-  line-height: 1.4;
+  margin-top: var(--space-xs, 8rpx);
+  color: var(--color-text-secondary, #4b5563);
+  font-size: var(--font-caption-size, 24rpx);
+  line-height: var(--font-caption-lh, 34rpx);
+  font-weight: var(--font-weight-regular, 400);
 }
 
 .ai-share-btn {
@@ -54,16 +54,21 @@
   justify-content: center !important;
   box-sizing: border-box;
   width: 100% !important;
-  height: 80rpx !important;
-  line-height: 1.35 !important;
-  margin: 0 0 16rpx !important;
-  padding: 0 28rpx !important;
-  border-radius: 16rpx !important;
-  font-size: 30rpx !important;
-  font-weight: 700 !important;
-  background: #07c160 !important;
-  color: #fff !important;
+  min-height: var(--btn-small-height, 64rpx) !important;
+  line-height: var(--font-body-lh, 40rpx) !important;
+  margin: 0 0 var(--space-sm, 16rpx) !important;
+  padding: 0 var(--space-lg, 32rpx) !important;
+  border-radius: var(--radius-lg, 24rpx) !important;
+  font-size: var(--btn-small-font, 26rpx) !important;
+  font-weight: var(--font-weight-medium, 500) !important;
+  background: var(--color-wechat, #07c160) !important;
+  color: var(--color-text-inverse, #fff) !important;
   border: none;
+}
+
+.ai-share-btn:active {
+  opacity: 0.85;
+  transform: scale(0.98);
 }
 
 .ai-share-btn::after {
@@ -71,10 +76,11 @@
 }
 
 .ai-share-close {
-  margin-top: 8rpx;
-  padding: 16rpx;
+  margin-top: var(--space-xs, 8rpx);
+  padding: var(--space-sm, 16rpx);
   text-align: center;
-  color: #7b7280;
-  font-size: 28rpx;
-  font-weight: 600;
+  color: var(--color-text-secondary, #7b7280);
+  font-size: var(--font-body-size, 28rpx);
+  line-height: var(--font-body-lh, 40rpx);
+  font-weight: var(--font-weight-medium, 500);
 }

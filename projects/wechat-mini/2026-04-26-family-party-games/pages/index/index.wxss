@@ -25,8 +25,8 @@
   flex: 1 1 0;
   min-height: 0;
   box-sizing: border-box;
-  margin-top: 24rpx;
-  border-radius: 36rpx;
+  margin-top: var(--space-md);
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.62);
   box-shadow: inset 0 0 0 2rpx rgba(255, 255, 255, 0.75);
 }
@@ -48,8 +48,8 @@
   min-height: 310rpx;
   margin-bottom: 22rpx;
   padding: 28rpx 22rpx 22rpx;
-  border-radius: 36rpx;
-  background: #ffffff;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
   box-shadow: 0 14rpx 36rpx rgba(138, 58, 10, 0.10);
   text-align: center;
 }
@@ -75,9 +75,10 @@
 }
 
 .item-name {
-  margin-top: 18rpx;
-  font-size: 32rpx;
-  font-weight: 900;
+  margin-top: var(--space-sm);
+  font-size: var(--font-card-title-size);
+  line-height: var(--font-card-title-lh);
+  font-weight: var(--font-weight-medium);
 }
 
 .item-desc {
@@ -85,10 +86,10 @@
   min-height: 72rpx;
   width: 100%;
   box-sizing: border-box;
-  margin-top: 14rpx;
-  color: #7b7280;
-  font-size: 24rpx;
-  line-height: 1.5;
+  margin-top: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-lh);
   text-align: left;
 }
 

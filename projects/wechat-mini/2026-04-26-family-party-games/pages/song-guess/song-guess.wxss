@@ -1,235 +1,73 @@
 @import '../../styles/room-game.wxss';
 
-.page {
-  min-height: 100vh;
-  box-sizing: border-box;
-  padding: 32rpx 28rpx 60rpx;
-  background: #FEF8F0;
+.sg-page-inroom {
+  padding-bottom: calc(var(--page-pad-bottom) + constant(safe-area-inset-bottom));
+  padding-bottom: calc(var(--page-pad-bottom) + env(safe-area-inset-bottom));
 }
 
-.h1 {
-  font-size: 44rpx;
-  font-weight: 800;
-  color: #23212a;
-  margin-bottom: 16rpx;
-}
-
-.h2 {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #1f1c24;
-  margin-bottom: 12rpx;
-}
-
-.hint {
-  font-size: 26rpx;
-  color: #5f5966;
-  line-height: 1.5;
-  margin-bottom: 24rpx;
-}
-
-.hint-top {
-  margin-bottom: 12rpx;
-  color: #6b6470;
-  font-size: 25rpx;
-  border-left: 6rpx solid #ffcc9e;
-  padding-left: 16rpx;
-}
-
-.card {
-  background: #fff;
-  border-radius: 24rpx;
-  padding: 28rpx 24rpx;
-  margin-bottom: 22rpx;
-  box-shadow: 0 4rpx 20rpx rgba(35, 32, 42, 0.05);
-}
-
-.card.top {
-  text-align: center;
-}
-
-.strong {
-  font-size: 40rpx;
-  font-weight: 800;
-  color: #FF7A2F;
-  letter-spacing: 2rpx;
-}
-
-.lab {
-  font-size: 24rpx;
-  color: #6b6470;
-  margin-bottom: 8rpx;
-}
-
-.row {
+.sg-play-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12rpx;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  background: #fff4e8;
-  color: #8a3a0a;
-  font-size: 28rpx;
-  font-weight: 600;
+.sg-host-line {
+  margin: var(--space-sm) 0;
 }
 
-.inp {
-  width: 100%;
-  min-height: 80rpx;
-  padding: 0 20rpx;
-  border-radius: 20rpx;
-  background: #f7f5f8;
-  font-size: 30rpx;
-  box-sizing: border-box;
-  margin-top: 12rpx;
+.sg-em {
+  color: var(--color-brand-deep);
+  font-weight: var(--font-weight-medium);
 }
 
-.inp-wrap {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-}
-
-.inp-wrap .inp {
-  flex: 1;
-  margin-top: 0;
-}
-
-.btn,
-button.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 16rpx;
-  min-height: 80rpx;
-  padding: 0 24rpx;
-  line-height: 1.35;
-  font-size: 30rpx;
-  border-radius: 20rpx;
-  background: #eee8e1;
-  color: #1f1c24;
-  box-sizing: border-box;
-}
-.btn::after {
-  border: none;
-}
-
-.btn.primary {
-  background: linear-gradient(90deg, #ff9a4a, #ff7a2f);
-  color: #fff;
-  font-weight: 600;
-}
-
-.btn[size='mini'] {
-  min-height: 64rpx;
-  line-height: 64rpx;
-  margin-top: 0;
-}
-
-.mt {
-  margin-top: 28rpx;
-  color: #7b7280;
-  font-size: 26rpx;
-}
-
-.ok {
-  color: #15803d;
-  font-size: 28rpx;
-  font-weight: 600;
-  margin-top: 8rpx;
-}
-
-.round-hits {
-  margin-top: 20rpx;
-  padding: 20rpx;
-  border-radius: 16rpx;
-  background: #f0fdf4;
-  color: #166534;
-  font-size: 26rpx;
-}
-
-.round-hits .lab {
-  color: #15803d;
-}
-
-.rank {
-  font-size: 30rpx;
-  color: #23212a;
-  line-height: 1.6;
-  padding: 6rpx 0;
-  border-bottom: 1rpx solid #f1eee9;
-}
-
-.rank:last-child {
-  border-bottom: none;
-}
-
-.log .log-line {
-  font-size: 24rpx;
-  color: #5f5966;
-  line-height: 1.6;
-  padding: 4rpx 0;
-  word-break: break-all;
-}
-
-.mem-list {
-  margin-top: 12rpx;
-}
-
-.mem {
-  font-size: 28rpx;
-  color: #1f1c24;
-  padding: 6rpx 0;
-}
-
-.wait-hint {
+.sg-song-title {
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand);
+  margin: var(--space-sm) 0;
   text-align: center;
-  color: #7b7280;
-  font-size: 28rpx;
-  margin-top: 8rpx;
 }
 
-.host-line {
-  margin-top: 16rpx;
-  font-size: 28rpx;
-  color: #5f5966;
-  line-height: 1.5;
+.sg-hits {
+  margin-top: var(--space-md);
 }
 
-.host-line .em {
-  color: #ff7a2f;
-  font-weight: 700;
+.sg-ans-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 
-.host-card {
-  background: linear-gradient(160deg, #fff8f0, #fff);
-  border: 2rpx solid #ffe4cc;
-}
-
-.song-title {
-  font-size: 40rpx;
-  font-weight: 800;
-  color: #1f1c24;
-  margin: 16rpx 0 8rpx;
-}
-
-.host-card .hint {
-  color: #5f5966;
-  background: transparent;
-  padding: 0;
+.sg-ans-inp {
+  flex: 1;
   margin: 0;
 }
 
-.alias-line {
-  margin-top: 12rpx;
-  font-size: 24rpx;
-  color: #6b6470;
-  line-height: 1.5;
+.sg-ans-row .btn {
+  flex-shrink: 0;
+  min-height: var(--btn-secondary-height);
+  padding: 0 var(--space-md);
+}
+
+.sg-rank {
+  padding: var(--space-xs) 0;
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.sg-rank:last-child {
+  border-bottom: none;
+}
+
+.sg-log-line {
+  padding: 2rpx 0;
+  word-break: break-all;
+}
+
+.sg-host-card {
+  text-align: center;
 }

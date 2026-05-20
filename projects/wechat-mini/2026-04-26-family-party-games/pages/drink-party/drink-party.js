@@ -6,7 +6,7 @@ const {
   buildStartChecks,
   explainDrinkStartFail
 } = require('../../utils/roomUi')
-const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { patchLobbyUi, enrichPlayers } = require('../../utils/roomMemberUi')
 const {
   enableShareMenus,
   handleShareAppMessage,
@@ -18,9 +18,12 @@ const {
   onPageShowUnlock,
   onPageHideUnlock,
   closeAiShareModal,
-  showShareGuide
+  showShareGuide,
+  openAiShareModal,
+  ensureAiUnlock,
+  LEVEL
 } = require('../../utils/aiUnlock')
-const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const { TOAST_ROOM_CODE_6, copyRoomCodeToClipboard } = require('../../utils/roomCopy')
 const { runAi, SYSTEM_DRINK_COMMENT, SYSTEM_DRINK_TASK } = require('../../utils/aiHelper')
 const { runPlayerAssist, runHostTick, runGameRecap } = require('../../utils/agentHelper')
 const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
@@ -29,6 +32,55 @@ function defNick() {
 }
 function fromWatch(s) {
   return s && (s.data != null ? s.data : s.doc)
+}
+
+function buildDrinkPhaseHint(phase, isHost) {
+  const ph = phase || 'waiting'
+  if (ph === 'waiting') {
+    return isHost ? '⏳ 等待组长「开始本轮」' : '👥 等待组长开始本轮'
+  }
+  if (ph === 'countdown') {
+    return '🎲 倒计时中，即将揭晓响铃者'
+  }
+  if (ph === 'voting') {
+    return '🗳️ 投票阶段，指认响铃者'
+  }
+  if (ph === 'result') {
+    return isHost ? '📊 结果揭晓，组长可继续下一轮' : '📊 结果揭晓'
+  }
+  return ''
+}
+
+function enrichDrinkDisplayPlayers(list, state, myOpenId) {
+  const d = state || {}
+  const ph = d.phase || ''
+  const votes = d.votesByVoter && typeof d.votesByVoter === 'object' ? d.votesByVoter : {}
+  const hostOpenId = d.hostOpenId || ''
+  const base = enrichPlayers(
+    (list || []).map((p) => ({
+      openId: p.openId,
+      nickName: p.nickName,
+      isHost: p.isHost,
+      isAlive: true
+    })),
+    ph === 'waiting' ? 'waiting' : 'playing',
+    hostOpenId
+  )
+  return base.map((p) => {
+    const voted = votes[p.openId] != null && votes[p.openId] !== ''
+    let readyLabel = p.readyLabel
+    if (ph === 'voting') {
+      readyLabel = voted ? '已投票' : '点击指认'
+      if (myOpenId && p.openId === myOpenId && voted) {
+        readyLabel = '你已投票'
+      }
+    }
+    return Object.assign({}, p, {
+      hasVoted: voted,
+      ready: ph === 'voting' ? voted : p.ready,
+      readyLabel
+    })
+  })
 }
 Page({
   data: {
@@ -51,8 +103,14 @@ Page({
     memberCountLine: '',
     displayPlayers: [],
     statusHint: '',
+    phaseHint: '',
+    statusBannerWarn: false,
     playerProgressPct: 0,
-    aiPanelOpen: false,
+    inWaiting: false,
+    canStart: false,
+    voteProgressCast: 0,
+    voteProgressNeed: 0,
+    voteProgressPct: 0,
     aiBusy: false,
     agentBusy: false,
     agentHostOn: true,
@@ -101,6 +159,7 @@ Page({
   onShow() {
     enableShareMenus()
     onPageShowUnlock(this)
+    refreshAiUnlockPage(this)
     if (this.data.roomId) {
       this._refreshRoomState()
     }
@@ -176,6 +235,7 @@ Page({
   _bootInRoom() {
     if (this.data.roomId) {
       onRoomEntered(this, String(this.data.roomId), 'drink')
+      refreshAiUnlockPage(this)
     }
     this.fetchMyOpenId()
     setTimeout(() => this.fetchMyOpenId(), 200)
@@ -215,8 +275,8 @@ Page({
         }
       })
   },
-  toggleAiPanel() {
-    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
+  onAiUnlockTap() {
+    openAiShareModal(this)
   },
   _applyS(d) {
     const rDisp = (d && d.currentRound) | 0
@@ -229,18 +289,32 @@ Page({
       state: d,
       roomNameEdit: (d && d.roomName) || '聚会组',
       roundDisp: rDisp,
-      memberCountLine: memberCountLine(pn, 0, '至少 2 人可开始'),
       isHost
     }
-    patchMemberDisplay(patch, {
+    const phase = rPh || 'waiting'
+    patchLobbyUi(patch, {
+      state: d,
       players: (d && d.publicPlayers) || [],
-      phase: rPh === 'waiting' ? 'waiting' : rPh || 'playing',
+      phase: phase === 'waiting' ? 'waiting' : phase,
+      minPlayers: 2,
       maxPlayers: 0,
       isHost,
-      fallbackNeed: 2,
-      hostWaiting: '⏳ 点击「开始本轮」',
+      hostWaiting: '⏳ 等待组长「开始本轮」',
       guestWaiting: '👥 等待组长开始本轮'
     })
+    if (phase === 'waiting') {
+      patch.phaseHint = patch.statusHint || buildDrinkPhaseHint(phase, isHost)
+    } else {
+      patch.phaseHint = buildDrinkPhaseHint(phase, isHost)
+    }
+    const vp = (d && d.voteProgress) || {}
+    patch.voteProgressCast = vp.cast | 0
+    patch.voteProgressNeed = vp.need | 0
+    patch.voteProgressPct =
+      patch.voteProgressNeed > 0
+        ? Math.min(100, Math.round((patch.voteProgressCast / patch.voteProgressNeed) * 100))
+        : 0
+    patch.displayPlayers = enrichDrinkDisplayPlayers((d && d.publicPlayers) || [], d, my)
     this.setData(patch, () => {
       const iAmRinger =
         !!(my && d && d.targetOpenId && d.targetOpenId === my && rPh === 'voting')
@@ -467,12 +541,9 @@ Page({
       }
     )
   },
-  onCopy() {
+  onCopyRoomCode() {
     const c = (this.data.state && this.data.state.roomCode) || this.data.roomCode
-    if (!c) {
-      return
-    }
-    wx.setClipboardData({ data: String(c) })
+    copyRoomCodeToClipboard(c)
   },
   onSaveRoomName() {
     if (!this.data.isHost) {
@@ -544,28 +615,48 @@ Page({
       }
     )
   },
-  onCompPick(e) {
-    if (this.data.voteDone) {
+  onMemberVoteTap(e) {
+    const oid = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.oid) || ''
+    if (!oid) {
       return
     }
-    const oid = (e && e.detail && e.detail.toOpenId) || ''
-    if (oid) {
-      this.setData({ pick: oid })
-    }
+    this.submitMyVote(oid)
   },
-  onSubmitVote() {
-    if (!this.data.pick || this.data.voteDone) {
+  submitMyVote(toOpenId) {
+    const oid = toOpenId || this.data.pick
+    const st = this.data.state
+    if (!oid || !st || st.phase !== 'voting' || this.data.voteDone || this.data.opBusy) {
       return
     }
+    this.setData({ pick: oid, opBusy: true })
     callDrink(
-      { action: 'submitVote', roomId: this.data.roomId, toOpenId: this.data.pick }
+      { action: 'submitVote', roomId: this.data.roomId, toOpenId: oid },
+      {
+        onOk: () => {
+          this.setData({ opBusy: false, voteDone: true })
+        },
+        onError: () => {
+          this.setData({ opBusy: false })
+        }
+      }
     )
   },
   onAbstain() {
-    if (this.data.voteDone) {
+    if (this.data.voteDone || this.data.opBusy) {
       return
     }
-    callDrink({ action: 'submitAbstain', roomId: this.data.roomId })
+    this.setData({ opBusy: true })
+    callDrink(
+      { action: 'submitAbstain', roomId: this.data.roomId },
+      {
+        onOk: () => {
+          this.setData({ opBusy: false, voteDone: true, pick: '' })
+        },
+        onError: () => {
+          this.setData({ opBusy: false })
+        }
+      }
+    )
   },
   _resultCtx() {
     const st = this.data.state || {}
@@ -580,6 +671,9 @@ Page({
     }
   },
   onAiCommentResult() {
+    if (!ensureAiUnlock(LEVEL.GEN, 'AI 解说', this)) {
+      return
+    }
     const c = this._resultCtx()
     runAi(this, {
       cacheTag: 'drink-comment',
@@ -593,6 +687,9 @@ Page({
     })
   },
   onAiFunTask() {
+    if (!ensureAiUnlock(LEVEL.GEN, 'AI 趣味任务', this)) {
+      return
+    }
     const c = this._resultCtx()
     runAi(this, {
       cacheTag: 'drink-task',

@@ -1,61 +1,61 @@
-<view class="page ucv2">
-  <view class="h1">谁是卧底 · 同场同步</view>
-  <view class="uc-muted" wx:if="{{!roomId}}">同场猜词互动。凭 6 位数字口令进组（房号，不是人数）；至少 3 人，且需凑满你设的人数。每人本机看词、投票。</view>
-  <view wx:if="{{!roomId}}" class="uc-panel">
-    <input
-      class="uc-inp"
-      placeholder="本机昵称"
-      value="{{nick}}"
-      bindinput="onNick"
-    />
-    <button
-      class="uc-btn uc-primary"
-      bindtap="doCreate"
-      disabled="{{opBusy}}"
-    >创建聚会组</button>
-    <view class="uc-muted" style="margin-top: 24rpx">或输入 6 位数字口令进房</view>
-    <input
-      class="uc-inp"
-      type="number"
-      value="{{joinCode}}"
-      bindinput="onCode"
-    />
-    <button
-      class="uc-btn uc-ghost"
-      bindtap="doJoin"
-      disabled="{{opBusy}}"
-    >加入互动组</button>
+<!-- 未进房 -->
+<view class="page ucv2" wx:if="{{!roomId}}">
+  <view class="hero rg-lobby-hero">
+    <view class="hero-title">🕵️ 谁是卧底</view>
+    <view class="hero-subtitle">同场猜词：每人本机看词、投票。凭 6 位数字口令进组，至少 3 人且需凑满目标人数。</view>
   </view>
-  <block wx:else>
-    <view class="uc-panel uc-room-card">
-      <view class="uc-h2">聚会组口令 {{roomCode || state && state.roomCode}}</view>
-      <button class="btn-wechat-invite uc-btn-compact" open-type="share">邀请朋友</button>
+  <view class="rg-room-card">
+    <view class="rg-lobby-label">昵称</view>
+    <input class="rg-lobby-inp" placeholder="输入昵称" value="{{nick}}" bindinput="onNick" />
+    <button class="btn btn-primary main-btn" bindtap="doCreate" disabled="{{opBusy}}">创建聚会组</button>
+    <view class="rg-lobby-label" style="margin-top: var(--space-md)">已有口令</view>
+    <input class="rg-lobby-inp" type="number" maxlength="6" value="{{joinCode}}" bindinput="onCode" placeholder="6 位数字" />
+    <button class="btn btn-secondary main-btn" bindtap="doJoin" disabled="{{opBusy}}">加入互动组</button>
+  </view>
+</view>
 
-      <view class="rg-status-banner" wx:if="{{statusHint}}">{{statusHint}}</view>
+<!-- 已进房 · 大厅 -->
+<block wx:else>
+  <view class="page ucv2 ucv2-inroom">
+    <view class="hero rg-lobby-hero rg-lobby-hero-compact">
+      <view class="hero-title">🕵️ 谁是卧底</view>
+      <view class="hero-subtitle text-caption" wx:if="{{state && state.currentPhase && state.currentPhase !== 'waiting' && state.currentPhase !== 'ended'}}">
+        第 {{state.currentRound || 0}} 轮 · {{state.currentPhase}}
+      </view>
+    </view>
+
+    <view class="rg-room-card">
+      <view class="rg-code-row">
+        <view class="rg-code-main">
+          <text class="rg-code-label">聚会组口令</text>
+          <view class="rg-code-num-row rg-code-tap" bindtap="onCopyRoomCode">
+            <text class="rg-code-num">{{roomCode || (state && state.roomCode)}}</text>
+          </view>
+        </view>
+        <button class="btn-wechat-invite rg-invite-btn" open-type="share">邀请朋友</button>
+      </view>
       <view
-        class="uc-phase-line"
-        wx:if="{{state && state.currentPhase && state.currentPhase !== 'waiting' && state.currentPhase !== 'ended'}}"
-      >阶段：{{state.currentPhase}} · 第 {{state.currentRound || 0}} 轮</view>
+        class="rg-status-banner {{statusBannerWarn ? 'rg-banner-warn' : ''}}"
+        wx:if="{{statusHint}}"
+      >{{statusHint}}</view>
+    </view>
 
-      <!-- 成员列表 -->
-      <view class="rg-members-card">
+    <view class="rg-room-card" wx:if="{{state}}">
+      <view class="rg-members-card rg-members-inner">
         <view class="rg-members-head">
           <text class="rg-members-title">成员</text>
-          <text class="uc-muted rg-members-count">{{memberCountLine}}</text>
+          <text class="rg-members-count muted">{{memberCountLine}}</text>
         </view>
-        <view class="rg-progress-wrap" wx:if="{{state && (state.maxPlayers || sizeList[sizeIndex])}}">
+        <view class="rg-progress-wrap" wx:if="{{inWaiting && (state.maxPlayers || sizeList[sizeIndex])}}">
           <view class="rg-progress-bar">
             <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
           </view>
         </view>
-        <view class="uc-muted" style="text-align:center;padding:12rpx 0" wx:if="{{!displayPlayers || !displayPlayers.length}}">暂无成员，请分享口令邀请加入</view>
+        <view class="rg-empty-members text-caption" wx:if="{{!displayPlayers || !displayPlayers.length}}">
+          暂无成员，请点「邀请朋友」或分享口令
+        </view>
         <view class="rg-member-list">
-          <view
-            class="rg-member-item"
-            wx:for="{{displayPlayers}}"
-            wx:for-item="p"
-            wx:key="openId"
-          >
+          <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
             <view class="rg-avatar">{{p.avatarText}}</view>
             <view class="rg-member-body">
               <view class="rg-member-name-row">
@@ -68,103 +68,81 @@
           </view>
         </view>
       </view>
+    </view>
 
-      <!-- 等待阶段：组长设置 -->
-      <block wx:if="{{inWaiting && view && view.isHost}}">
-        <view class="rg-section">
-          <view class="rg-section-label">目标人数</view>
-          <view class="rg-stepper">
-            <button class="rg-step-btn" size="mini" data-delta="-1" bindtap="onSizeStep" disabled="{{sizeIndex <= 0}}">−</button>
-            <picker
-              mode="selector"
-              range="{{sizeList}}"
-              value="{{sizeIndex}}"
-              bindchange="onSizeCh"
-            >
-              <view class="rg-step-value">{{sizeList[sizeIndex]}} 人</view>
-            </picker>
-            <button
-              class="rg-step-btn"
-              size="mini"
-              data-delta="1"
-              bindtap="onSizeStep"
-              disabled="{{sizeIndex >= sizeList.length - 1}}"
-            >+</button>
-          </view>
-          <view class="rg-tip">调整人数后自动保存</view>
-        </view>
-
-        <view class="rg-section">
-          <view class="rg-section-label">词库来源</view>
-          <view class="rg-seg-row">
+    <block wx:if="{{inWaiting && view && view.isHost}}">
+      <view class="rg-settings-card">
+        <view class="rg-setting-item">
+          <text class="rg-label">目标人数</text>
+          <view class="rg-stepper-board">
             <view
-              class="rg-seg {{wordSource === 'system' ? 'active' : ''}}"
-              data-src="system"
-              bindtap="onWordSourceTap"
-            >系统词库</view>
+              class="stepper-btn {{sizeIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
+              bindtap="onSizeDecrease"
+            >-</view>
+            <text class="stepper-value">{{sizeList[sizeIndex]}}</text>
             <view
-              class="rg-seg {{wordSource === 'ai' ? 'active' : ''}}"
-              data-src="ai"
-              bindtap="onWordSourceTap"
-            >AI 词对</view>
+              class="stepper-btn {{sizeIndex >= sizeList.length - 1 ? 'stepper-btn-disabled' : ''}}"
+              bindtap="onSizeIncrease"
+            >+</view>
           </view>
-          <view class="rg-preview-card" wx:if="{{wordSource === 'ai' && aiPreviewPair}}">
-            <view class="rg-preview-title">已生成词对（预览）</view>
-            <view class="rg-preview-words">平民：{{aiPreviewPair.civilianWord}} · 卧底：{{aiPreviewPair.undercoverWord}}</view>
-          </view>
-          <view class="rg-tip" wx:if="{{wordSource === 'system'}}">开局时从系统词库随机发牌</view>
-          <view class="rg-tip" wx:elif="{{wordSource === 'ai' && !aiPreviewPair}}">请先在下方生成 AI 词对</view>
         </view>
-
-        <view class="rg-ai-panel">
-          <view class="rg-ai-panel-head" bindtap="toggleAiPanel">
-            <text>🤖 AI 辅助</text>
-            <text class="rg-ai-chevron">{{aiPanelOpen ? '▲' : '▼'}}</text>
-          </view>
-          <view class="rg-ai-panel-body" wx:if="{{aiPanelOpen}}">
-            <view class="rg-section-label">难度</view>
-            <view class="rg-diff-row">
-              <view
-                class="rg-diff-btn {{aiDiffIdx === 0 ? 'active' : ''}}"
-                data-idx="0"
-                bindtap="onAiDiffTap"
-              >简单</view>
-              <view
-                class="rg-diff-btn {{aiDiffIdx === 1 ? 'active' : ''}}"
-                data-idx="1"
-                bindtap="onAiDiffTap"
-              >中等</view>
-              <view
-                class="rg-diff-btn {{aiDiffIdx === 2 ? 'active' : ''}}"
-                data-idx="2"
-                bindtap="onAiDiffTap"
-              >困难</view>
+        <view class="rg-stepper-hint">{{ucSizeHint}}</view>
+        <view class="rg-setting-item">
+          <text class="rg-label">词库来源</text>
+          <picker
+            mode="selector"
+            range="{{wordSourceOptions}}"
+            value="{{wordSourceIdx}}"
+            bindchange="onWordSourceChange"
+          >
+            <view class="rg-picker">{{wordSourceLabel}}</view>
+          </picker>
+        </view>
+        <view class="rg-settings-row rg-settings-row-last" wx:if="{{wordSource === 'ai'}}">
+          <view class="rg-settings-item rg-settings-item-full">
+            <text class="rg-label">难度</text>
+            <view class="rg-seg-row">
+              <view class="rg-seg {{aiDiffIdx === 0 ? 'active' : ''}}" data-idx="0" bindtap="onAiDiffTap">简单</view>
+              <view class="rg-seg {{aiDiffIdx === 1 ? 'active' : ''}}" data-idx="1" bindtap="onAiDiffTap">中等</view>
+              <view class="rg-seg {{aiDiffIdx === 2 ? 'active' : ''}}" data-idx="2" bindtap="onAiDiffTap">困难</view>
             </view>
-            <button
-              class="uc-btn uc-ghost btn-ai rg-btn-ghost {{aiUnlock.canGen ? '' : 'ai-locked'}}"
-              bindtap="doAiGenWords"
-              disabled="{{aiBusy}}"
-            >✨ AI 生成词对{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
-            <view class="rg-tip">仅生成并预览，不会自动开局</view>
           </view>
         </view>
-
-        <button
-          class="rg-btn-primary"
-          bindtap="doStart"
-          disabled="{{opBusy}}"
-        >开始互动</button>
-      </block>
-
-      <view
-        class="uc-muted"
-        wx:if="{{view && view.isHost && state && state.currentPhase === 'word' && view.wordProgress}}"
-      >发词已读：{{view.wordProgress.acked}} / {{view.wordProgress.need}}
+        <view class="rg-preview-inline" wx:if="{{wordSource === 'ai' && aiPreviewPair}}">
+          <text class="rg-preview-inline-title">已生成词对（预览）</text>
+          <text class="rg-preview-inline-word">平民：{{aiPreviewPair.civilianWord}} · 卧底：{{aiPreviewPair.undercoverWord}}</text>
+        </view>
+        <view class="rg-ai-action" wx:if="{{aiUnlock.canGen}}">
+          <button class="btn-ai" bindtap="doAiGenWords" disabled="{{aiBusy}}">✨ AI 生成词对</button>
+        </view>
+        <view class="rg-ai-locked" wx:else>
+          <button class="btn-ai ai-locked" bindtap="onAiUnlockTap">🔒 AI 生成词对</button>
+        </view>
+        <view class="rg-settings-tip">仅生成预览，点「开始互动」后使用</view>
       </view>
       <button
-        class="uc-btn uc-ghost"
-        wx:if="{{view && !view.isAlive && state && state.currentPhase && state.currentPhase !== 'ended'}}"
-      >你已暂离本环节，可旁观日志</button>
+        class="rg-btn-primary main-btn rg-start-btn {{canStart ? '' : 'rg-start-muted'}}"
+        bindtap="doStart"
+        disabled="{{opBusy}}"
+      >开始互动</button>
+    </block>
+
+    <view class="rg-room-card rg-guest-wait" wx:if="{{inWaiting && view && !view.isHost}}">
+      <view class="text-body muted">👥 等待组长开始互动，可先邀请更多朋友进组</view>
+      <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)">邀请朋友</button>
+    </view>
+
+    <view
+      class="rg-room-card"
+      wx:if="{{view && view.isHost && state && state.currentPhase === 'word' && view.wordProgress}}"
+    >
+      <view class="text-caption muted">发词已读：{{view.wordProgress.acked}} / {{view.wordProgress.need}}</view>
+    </view>
+    <view
+      class="rg-room-card"
+      wx:if="{{view && !view.isAlive && state && state.currentPhase && state.currentPhase !== 'ended'}}"
+    >
+      <view class="text-body muted">你已暂离本环节，可旁观日志</view>
     </view>
 
     <view class="uc-panel" wx:if="{{state && state.currentPhase === 'word'}}">
@@ -273,17 +251,17 @@
         >{{g.n}}: {{g.r === 'undercover' ? '卧底' : '平民'}}{{!g.dead ? '' : ' 出局'}}</view>
       </block>
     </view>
-  </block>
 
-  <view class="uc-mask" wx:if="{{showWord && view && view.myWord}}" catchtouchmove="onMask">
-    <view class="uc-modal">
-      <view class="uc-h2">本机词</view>
-      <view class="uc-secr">{{rzh || (view && view.myRole)}}</view>
-      <view class="uc-secr">{{(view && view.myWord) || '—'}}</view>
-      <button class="uc-btn uc-primary" bindtap="doAckWord" style="margin-top: 24rpx">我知道了</button>
+    <view class="uc-mask" wx:if="{{showWord && view && view.myWord}}" catchtouchmove="onMask">
+      <view class="uc-modal">
+        <view class="uc-h2">本机词</view>
+        <view class="uc-secr">{{rzh || (view && view.myRole)}}</view>
+        <view class="uc-secr">{{(view && view.myWord) || '—'}}</view>
+        <button class="uc-btn uc-primary" bindtap="doAckWord" style="margin-top: 24rpx">我知道了</button>
+      </view>
     </view>
   </view>
-</view>
+</block>
 
 <ai-share-modal
   visible="{{showAiShareModal}}"

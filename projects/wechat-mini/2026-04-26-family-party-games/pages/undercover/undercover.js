@@ -17,9 +17,10 @@ const {
   onPageShowUnlock,
   onPageHideUnlock,
   closeAiShareModal,
-  showShareGuide
+  showShareGuide,
+  openAiShareModal
 } = require('../../utils/aiUnlock')
-const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const { TOAST_ROOM_CODE_6, copyRoomCodeToClipboard } = require('../../utils/roomCopy')
 const {
   runAi,
   runAiPoster,
@@ -29,9 +30,27 @@ const {
   SYSTEM_RECAP
 } = require('../../utils/aiHelper')
 const { runPlayerAssist, runGameRecap } = require('../../utils/agentHelper')
-const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { patchLobbyUi } = require('../../utils/roomMemberUi')
+const { stepIndex, vibrateBoundary } = require('../../utils/listStepper')
+const UC_SIZE_HINT = '人数 4～12，需凑满开局'
 const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
 const SIZ = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+const WORD_SOURCE_OPTIONS = ['系统词库', 'AI 词对']
+const WORD_SOURCE_VALUES = ['system', 'ai']
+
+function ucSettingsDisplay(data) {
+  const d = data || {}
+  const ws = d.wordSource || 'system'
+  let wordSourceIdx = WORD_SOURCE_VALUES.indexOf(ws)
+  if (wordSourceIdx < 0) {
+    wordSourceIdx = 0
+  }
+  return {
+    wordSourceOptions: WORD_SOURCE_OPTIONS,
+    wordSourceIdx,
+    wordSourceLabel: WORD_SOURCE_OPTIONS[wordSourceIdx] || WORD_SOURCE_OPTIONS[0]
+  }
+}
 
 function roleZh(r) {
   if (r === 'undercover') {
@@ -65,15 +84,19 @@ Page({
     logText: '',
     sizeIndex: 2,
     sizeList: SIZ,
+    ucSizeHint: UC_SIZE_HINT,
     showWord: false,
     memberCountLine: '',
     playerProgressPct: 0,
     displayPlayers: [],
     statusHint: '',
+    statusBannerWarn: false,
+    canStart: false,
     wordSource: 'system',
-    wordSourceLabels: ['系统词库', 'AI 词对'],
+    wordSourceOptions: WORD_SOURCE_OPTIONS,
+    wordSourceIdx: 0,
+    wordSourceLabel: WORD_SOURCE_OPTIONS[0],
     aiPreviewPair: null,
-    aiPanelOpen: false,
     aiBusy: false,
     agentBusy: false,
     aiDiffIdx: 1,
@@ -144,6 +167,10 @@ Page({
     closeAiShareModal(this)
     showShareGuide()
   },
+  onCopyRoomCode() {
+    const c = this.data.roomCode || (this.data.state && this.data.state.roomCode)
+    copyRoomCodeToClipboard(c)
+  },
   parseCfg(query) {
     if (!query.config) {
       return {}
@@ -180,15 +207,35 @@ Page({
       memberCountLine: memberCountLine(pl.length, needN),
       ...flags
     }
-    patchMemberDisplay(patch, {
+    patchLobbyUi(patch, {
+      state: d,
+      view,
       players: pl,
       phase: cph,
       maxPlayers: needN,
+      minPlayers: 3,
       isHost: view.isHost,
+      hostOpenId: d.hostOpenId || ''
     })
+    this.setData(Object.assign(patch, ucSettingsDisplay(Object.assign({}, this.data, patch))))
+  },
+  onWordSourceChange(e) {
+    const i = parseInt((e.detail && e.detail.value) || 0, 10) || 0
+    const src = WORD_SOURCE_VALUES[i] || 'system'
+    const patch = {
+      wordSource: src,
+      wordSourceIdx: i,
+      wordSourceLabel: WORD_SOURCE_OPTIONS[i] || WORD_SOURCE_OPTIONS[0]
+    }
+    if (src === 'system') {
+      patch.aiPreviewPair = null
+    }
     this.setData(patch)
   },
-  _saveMaxPlayers(silent) {
+  onAiUnlockTap() {
+    openAiShareModal(this)
+  },
+  _saveMaxPlayers() {
     if (!this.data.view || !this.data.view.isHost) {
       return
     }
@@ -202,26 +249,25 @@ Page({
       return
     }
     this._lastSavedMax = n
-    if (!silent) {
-      wx.showLoading({ title: '保存人数', mask: true })
-    }
     callUndercoverService(
       { action: 'setConfig', roomId: this.data.roomId, maxPlayers: n },
       {
         onOk: () => {
-          if (!silent) {
-            wx.hideLoading()
-          }
+          wx.showToast({ title: '已保存', icon: 'none' })
           const pl = (this.data.state && this.data.state.publicPlayers) || []
-          this.setData({
-            memberCountLine: memberCountLine(pl.length, n),
-            playerProgressPct: computeProgressPct(pl.length, n)
+          const patch = {}
+          patchLobbyUi(patch, {
+            state: this.data.state,
+            view: this.data.view,
+            players: pl,
+            phase: (this.data.state && this.data.state.currentPhase) || 'waiting',
+            maxPlayers: n,
+            minPlayers: 3,
+            isHost: this.data.view && this.data.view.isHost
           })
+          this.setData(patch)
         },
         onError: () => {
-          if (!silent) {
-            wx.hideLoading()
-          }
           this._lastSavedMax = null
         }
       }
@@ -271,33 +317,25 @@ Page({
       }
     )
   },
-  onSizeCh(e) {
-    const i = parseInt(e.detail.value, 10) || 0
-    this.setData({ sizeIndex: i }, () => {
-      this._saveMaxPlayers(false)
-    })
-  },
-  onSizeStep(e) {
-    const delta = parseInt((e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.delta) || 0, 10)
-    const cur = this.data.sizeIndex | 0
-    const next = Math.max(0, Math.min(SIZ.length - 1, cur + delta))
-    if (next === cur) {
+  onSizeDecrease() {
+    const r = stepIndex(this.data.sizeIndex, -1, SIZ.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
       return
     }
-    this.setData({ sizeIndex: next }, () => {
-      this._saveMaxPlayers(false)
+    this.setData({ sizeIndex: r.index }, () => {
+      this._saveMaxPlayers()
     })
   },
-  toggleAiPanel() {
-    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
-  },
-  onWordSourceTap(e) {
-    const src = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.src) || 'system'
-    const patch = { wordSource: src }
-    if (src === 'system') {
-      patch.aiPreviewPair = null
+  onSizeIncrease() {
+    const r = stepIndex(this.data.sizeIndex, 1, SIZ.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
     }
-    this.setData(patch)
+    this.setData({ sizeIndex: r.index }, () => {
+      this._saveMaxPlayers()
+    })
   },
   onAiDiffTap(e) {
     const i = parseInt((e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.idx) || 0, 10)
@@ -328,14 +366,18 @@ Page({
           showAiModal('解析失败', v.err + '，请重试')
           return
         }
-        page.setData({
-          wordSource: 'ai',
-          aiPreviewPair: {
-            civilianWord: v.civilianWord,
-            undercoverWord: v.undercoverWord
-          },
-          aiPanelOpen: true
-        })
+        page.setData(
+          Object.assign(
+            {
+              wordSource: 'ai',
+              aiPreviewPair: {
+                civilianWord: v.civilianWord,
+                undercoverWord: v.undercoverWord
+              }
+            },
+            ucSettingsDisplay({ wordSource: 'ai' })
+          )
+        )
         wx.showToast({
           title: '词对已生成，可开始互动',
           icon: 'none',
@@ -585,12 +627,14 @@ Page({
           path.logText = (path.state.publicLog || []).join('\n')
           const idx = si >= 0 ? si : this.data.sizeIndex | 0
           const needN = (path.state.maxPlayers | 0) || SIZ[idx] || 6
-          path.memberCountLine = memberCountLine(players.length, needN)
-          patchMemberDisplay(path, {
+          patchLobbyUi(path, {
+            state: path.state,
+            view: v,
             players,
             phase: path.state.currentPhase,
             maxPlayers: needN,
-            isHost: v.isHost,
+            minPlayers: 3,
+            isHost: v.isHost
           })
           this.setData(path)
           if (v.phase === 'word' && v.myWord && !v.wordAck) {

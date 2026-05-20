@@ -5,49 +5,125 @@ const { callMusic } = require('../../utils/musicRoomCloud')
 const { callDraw } = require('../../utils/drawRoomCloud')
 const { callDrink } = require('../../utils/drinkRoomCloud')
 
-const WOLF_SIZES = [6, 8, 10, 12]
+const {
+  SIZES: WOLF_SIZES,
+  HINT: WOLF_SIZE_HINT,
+  indexOfSize,
+  stepSizeIndex,
+  vibrateBoundary,
+  loadStoredSize,
+  saveStoredSize
+} = require('../../utils/wolfBoardSize')
+const { stepIndex } = require('../../utils/listStepper')
+
+const UC_SIZES = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+const UC_SIZE_HINT = '人数 4～12，需凑满开局'
 Page({
   data: {
     title: '',
     screen: 'play',
     playerCount: 4,
-    undercoverCount: 1
+    undercoverCount: 1,
+    wolfSizeHint: WOLF_SIZE_HINT,
+    wolfSizeIndex: 0,
+    ucSizeHint: UC_SIZE_HINT,
+    ucSizeIndex: 2
   },
 
   onLoad(query) {
     const title = decodeURIComponent(query.title || '')
     const screen = query.screen || 'play'
+    const wolfInit = screen === 'werewolf' ? loadStoredSize() : 6
+    const ucInit = 6
+    const ucIdx = UC_SIZES.indexOf(ucInit) >= 0 ? UC_SIZES.indexOf(ucInit) : 2
     this.setData({
       title,
       screen,
       playerCount:
-        screen === 'undercover' || screen === 'werewolf' || screen === 'songGuess' || screen === 'drawGuess' || screen === 'drinkParty'
-          ? 6
-          : 4,
-      undercoverCount: 1
+        screen === 'werewolf'
+          ? wolfInit
+          : screen === 'undercover'
+            ? ucInit
+            : screen === 'songGuess' || screen === 'drawGuess' || screen === 'drinkParty'
+              ? 6
+              : 4,
+      undercoverCount: 1,
+      wolfSizeIndex: screen === 'werewolf' ? indexOfSize(wolfInit) : 0,
+      ucSizeIndex: screen === 'undercover' ? ucIdx : 0
     })
   },
 
-  changePlayersWolf(e) {
-    const delta = Number((e && e.currentTarget && e.currentTarget.dataset) ? e.currentTarget.dataset.delta : 0)
-    if (delta === 0) {
+  onWolfDecrease() {
+    const r = stepSizeIndex(this.data.wolfSizeIndex, -1)
+    if (r.atBoundary) {
+      vibrateBoundary()
       return
     }
-    const i = WOLF_SIZES.indexOf(this.data.playerCount)
-    const k = (i < 0 ? 0 : i) + (delta > 0 ? 1 : -1)
-    this.setData({ playerCount: WOLF_SIZES[Math.max(0, Math.min(3, k))] || 6 })
+    this._setWolfBoardSize(r.index)
   },
 
-  changePlayers(event) {
-    const delta = Number(event.currentTarget.dataset.delta)
-    const min = this.data.screen === 'undercover' ? 4 : 1
-    const maxG = this.data.screen === 'undercover' ? 12 : 20
-    const playerCount = Math.max(min, Math.min(maxG, this.data.playerCount + delta))
-    const maxUndercover = this.maxUndercover(playerCount)
+  onWolfIncrease() {
+    const r = stepSizeIndex(this.data.wolfSizeIndex, 1)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this._setWolfBoardSize(r.index)
+  },
+
+  _setWolfBoardSize(index) {
+    const n = WOLF_SIZES[index] || 6
+    saveStoredSize(n)
+    this.setData({ wolfSizeIndex: index, playerCount: n })
+  },
+
+  onUcDecrease() {
+    const r = stepIndex(this.data.ucSizeIndex, -1, UC_SIZES.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this._setUcBoardSize(r.index)
+  },
+
+  onUcIncrease() {
+    const r = stepIndex(this.data.ucSizeIndex, 1, UC_SIZES.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this._setUcBoardSize(r.index)
+  },
+
+  _setUcBoardSize(index) {
+    const n = UC_SIZES[index] || 6
+    const maxUndercover = this.maxUndercover(n)
     this.setData({
-      playerCount,
+      ucSizeIndex: index,
+      playerCount: n,
       undercoverCount: Math.min(this.data.undercoverCount, maxUndercover)
     })
+  },
+
+  onGenericDecrease() {
+    const min = 1
+    const maxG = 20
+    const next = Math.max(min, (this.data.playerCount | 0) - 1)
+    if (next === this.data.playerCount) {
+      vibrateBoundary()
+      return
+    }
+    this.setData({ playerCount: next })
+  },
+
+  onGenericIncrease() {
+    const maxG = 20
+    const next = Math.min(maxG, (this.data.playerCount | 0) + 1)
+    if (next === this.data.playerCount) {
+      vibrateBoundary()
+      return
+    }
+    this.setData({ playerCount: next })
   },
 
   changeUndercover(event) {
@@ -187,8 +263,10 @@ Page({
       return
     }
     wx.showLoading({ title: '建房' })
+    const maxPlayers = this.data.playerCount | 0
+    saveStoredSize(maxPlayers)
     callWerewolfService(
-      { action: 'create' },
+      { action: 'create', maxPlayers },
       {
         onOk: (res) => {
           wx.hideLoading()

@@ -11,6 +11,42 @@ function showRoomBlockModal(title, content) {
   })
 }
 
+/** 人数/权限不足时轻提示（Toast），供「开始互动」可点但未达标时反馈 */
+function showStartBlockTip(check) {
+  const c = check || {}
+  let tip = ''
+  const title = c.title || ''
+  const body = String(c.content || '')
+  if (title === '人未满') {
+    const m = body.match(/还差\s*(\d+)\s*人/)
+    tip = m ? '还差 ' + m[1] + ' 人，请邀请朋友进组' : '人数未满，请邀请朋友进组'
+  } else if (title === '人数不足') {
+    const m = body.match(/当前\s*(\d+)\s*人/)
+    tip = m ? '当前 ' + m[1] + ' 人，人数不足，请邀请进组' : '人数不足，请邀请朋友进组'
+  } else if (title === '无权限') {
+    tip = body.split('\n')[0] || '仅组长可操作'
+  } else {
+    tip = body.split('\n')[0] || title || '暂时无法开始'
+  }
+  wx.showToast({
+    title: tip.length > 36 ? tip.slice(0, 36) + '…' : tip,
+    icon: 'none',
+    duration: 2800
+  })
+}
+
+/** 用页面 statusHint 提示（与横幅文案一致） */
+function showLobbyStartBlockTip(page) {
+  const d = (page && page.data) || {}
+  if (d.canStart) {
+    return false
+  }
+  const raw = String(d.statusHint || '').trim()
+  const tip = raw.replace(/^⚠️\s*/, '') || '人数未满，请邀请朋友进组'
+  wx.showToast({ title: tip, icon: 'none', duration: 2800 })
+  return true
+}
+
 function errMsgFromCloud(err, extra) {
   if (extra && extra.result && extra.result.errMsg) {
     return String(extra.result.errMsg)
@@ -327,7 +363,7 @@ function runStartAction(opts) {
   for (let i = 0; i < list.length; i++) {
     const c = list[i]
     if (c && c.fail) {
-      showRoomBlockModal(c.title, c.content)
+      showStartBlockTip(c)
       onFinally && onFinally(false)
       return
     }
@@ -363,6 +399,8 @@ function runStartAction(opts) {
 
 module.exports = {
   showRoomBlockModal,
+  showStartBlockTip,
+  showLobbyStartBlockTip,
   showStartFail,
   memberCountLine,
   refreshCloudDoc,

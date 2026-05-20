@@ -22,10 +22,19 @@ const {
   showShareGuide
 } = require('../../utils/aiUnlock')
 const { runAi, runAiPoster, SYSTEM_RECAP } = require('../../utils/aiHelper')
-const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { patchLobbyUi } = require('../../utils/roomMemberUi')
 const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
+const { copyRoomCodeToClipboard } = require('../../utils/roomCopy')
 const { markPartyFinishedOnce } = require('../../utils/partySession')
-const SIZES = [6, 8, 10, 12]
+const {
+  SIZES,
+  HINT: WOLF_SIZE_HINT,
+  indexOfSize,
+  stepSizeIndex,
+  vibrateBoundary,
+  loadStoredSize,
+  saveStoredSize
+} = require('../../utils/wolfBoardSize')
 const RZH = {
   werewolf: '暗位成员',
   seer: '线索员',
@@ -64,6 +73,7 @@ Page({
     view: {},
     maxList: SIZES,
     maxIndex: 0,
+    wolfSizeHint: WOLF_SIZE_HINT,
     wolfMatesLine: '',
     seerLine: '',
     publicLogText: '',
@@ -73,7 +83,9 @@ Page({
     memberCountLine: '',
     displayPlayers: [],
     statusHint: '',
+    statusBannerWarn: false,
     playerProgressPct: 0,
+    canStart: false,
     aiBusy: false,
     aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
     showAiShareModal: false,
@@ -104,10 +116,16 @@ Page({
       .replace(/\D/g, '')
       .slice(0, 6)
     const roomId0 = (q.roomId || config.roomId || '').toString()
+    const prefSize =
+      (config.wolfDefaultSize | 0) > 0
+        ? config.wolfDefaultSize
+        : loadStoredSize()
+    const maxIndex = indexOfSize(prefSize)
     this.setData({
       title,
       nick: nick0,
-      joinCode: code
+      joinCode: code,
+      maxIndex
     })
     if (roomId0) {
       this.setData({
@@ -145,6 +163,10 @@ Page({
   },
   onCloseAiShareModal() {
     closeAiShareModal(this)
+  },
+  onCopyRoomCode() {
+    const c = this.data.roomCode || (this.data.pub && this.data.pub.roomCode)
+    copyRoomCodeToClipboard(c)
   },
   onAiShareTimeline() {
     closeAiShareModal(this)
@@ -197,8 +219,10 @@ Page({
     this.setData({ opBusy: true })
     this.saveNick()
     wx.showLoading({ title: '创建中' })
+    const maxPlayers = SIZES[this.data.maxIndex | 0] || 6
+    saveStoredSize(maxPlayers)
     callWerewolfService(
-      { action: 'create' },
+      { action: 'create', maxPlayers },
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -256,24 +280,32 @@ Page({
       }
     )
   },
-  onMaxChange(e) {
-    const i = parseInt(e.detail.value, 10) || 0
-    this.setData({ maxIndex: i }, () => {
-      this._saveMaxPlayers(false)
-    })
-  },
-  onSizeStep(e) {
-    const delta = parseInt((e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.delta) || 0, 10)
-    const cur = this.data.maxIndex | 0
-    const next = Math.max(0, Math.min(SIZES.length - 1, cur + delta))
-    if (next === cur) {
+  onDecrease() {
+    const r = stepSizeIndex(this.data.maxIndex, -1)
+    if (r.atBoundary) {
+      vibrateBoundary()
       return
     }
-    this.setData({ maxIndex: next }, () => {
-      this._saveMaxPlayers(false)
+    this._applyBoardSize(r.index)
+  },
+  onIncrease() {
+    const r = stepSizeIndex(this.data.maxIndex, 1)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this._applyBoardSize(r.index)
+  },
+  _applyBoardSize(index) {
+    const n = SIZES[index] || 6
+    saveStoredSize(n)
+    this.setData({ maxIndex: index }, () => {
+      if (this.data.roomId) {
+        this._saveMaxPlayers()
+      }
     })
   },
-  _saveMaxPlayers(silent) {
+  _saveMaxPlayers() {
     if (!this.data.view || !this.data.view.isHost) {
       return
     }
@@ -286,21 +318,14 @@ Page({
       return
     }
     this._lastSavedMax = n
-    if (!silent) {
-      wx.showLoading({ title: '保存人数', mask: true })
-    }
     callWerewolfService(
       { action: 'setSize', roomId: this.data.roomId, maxPlayers: n },
       {
         onOk: () => {
-          if (!silent) {
-            wx.hideLoading()
-          }
+          wx.showToast({ title: '已保存', icon: 'none' })
+          this.syncDisplayText()
         },
         onError: () => {
-          if (!silent) {
-            wx.hideLoading()
-          }
           this._lastSavedMax = null
         }
       }
@@ -407,10 +432,14 @@ Page({
       allRolesList: v && v.allRoles && v.allRoles.length ? v.allRoles : [],
       playerList: pl
     }
-    patchMemberDisplay(patch, {
+    const needN = (p.maxPlayers | 0) || SIZES[this.data.maxIndex | 0] || 6
+    patchLobbyUi(patch, {
+      state: p,
+      view: v,
       players: pl,
       phase,
-      maxPlayers: p.maxPlayers | 0,
+      maxPlayers: needN,
+      minPlayers: 6,
       isHost: v.isHost,
       hostOpenId: p.hostOpenId || ''
     })

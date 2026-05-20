@@ -1,131 +1,175 @@
-<view class="page">
-  <view class="h1" wx:if="{{!roomId}}">🎵 疯狂猜歌</view>
-  <view class="hint hint-top" wx:if="{{!roomId}}">因开发无预算购买曲库，故未在小程序里统一放歌，改由当轮主持用本机音乐 App 外放。</view>
-  <view class="hint" wx:if="{{!roomId}}">凭 6 位数字口令进组（房号，不是人数）。每题随机一人本机外放，其他人抢答；至少 2 人可开始。</view>
-  <view class="card" wx:if="{{!roomId}}">
-    <view class="lab">本机昵称</view>
-    <input class="inp" placeholder="用于本局昵称展示" value="{{nick}}" bindinput="onNick" />
-    <button class="btn primary" bindtap="doCreate">创建房间</button>
-    <view class="mt">或输入 6 位数字口令进组</view>
-    <input class="inp" type="number" value="{{joinCode}}" bindinput="onCode" />
-    <button class="btn" bindtap="doJoin">加入</button>
+<!-- 未进房 -->
+<view class="page sg-page" wx:if="{{!roomId}}">
+  <view class="hero rg-lobby-hero">
+    <view class="hero-title">🎵 疯狂猜歌</view>
+    <view class="hero-subtitle">当轮主持用本机音乐 App 外放，其他人听并抢答。凭 6 位数字口令进组，至少 2 人可开始。</view>
+    <view class="text-caption muted" style="margin-top: var(--space-sm)">因无曲库授权，小程序内不放歌，由主持本机外放。</view>
   </view>
-  <block wx:else>
-    <view class="card top">
-      <view class="strong">房号 {{roomCode || (state && state.roomCode) || '—'}}</view>
-      <button class="btn-wechat-invite" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
-      <view class="rg-status-banner" wx:if="{{statusHint}}">{{statusHint}}</view>
+  <view class="rg-room-card">
+    <view class="rg-lobby-label">昵称</view>
+    <input class="rg-lobby-inp" placeholder="输入昵称" value="{{nick}}" bindinput="onNick" />
+    <button class="btn btn-primary main-btn" bindtap="doCreate">创建聚会组</button>
+    <view class="rg-lobby-label" style="margin-top: var(--space-md)">已有口令</view>
+    <input class="rg-lobby-inp" type="number" maxlength="6" value="{{joinCode}}" bindinput="onCode" placeholder="6 位数字" />
+    <button class="btn btn-secondary main-btn" bindtap="doJoin">加入互动组</button>
+  </view>
+</view>
+
+<!-- 已进房 -->
+<view class="page sg-page sg-page-inroom" wx:else>
+  <view class="hero rg-lobby-hero rg-lobby-hero-compact">
+    <view class="hero-title">🎵 疯狂猜歌</view>
+    <view class="hero-subtitle text-caption" wx:if="{{state && state.status === 'playing'}}">
+      第 {{roundNum || 1}} / {{state.totalRounds || 0}} 题 · ⏱ {{timeLeft}}s
     </view>
-    <view class="card" wx:if="{{state}}">
-      <view class="rg-members-card" style="margin-top:0;background:transparent;border:none;padding:0">
-        <view class="rg-members-head">
-          <text class="rg-members-title">成员</text>
-          <text class="rg-members-count muted">{{memberCountLine}}</text>
+  </view>
+
+  <view class="rg-room-card">
+    <view class="rg-code-row">
+      <view class="rg-code-main">
+        <text class="rg-code-label">聚会组口令</text>
+        <view class="rg-code-num-row rg-code-tap" bindtap="onCopyRoomCode">
+          <text class="rg-code-num">{{roomCode || (state && state.roomCode) || '—'}}</text>
         </view>
-        <view class="rg-member-list">
-          <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
-            <view class="rg-avatar">{{p.avatarText}}</view>
-            <view class="rg-member-body">
-              <view class="rg-member-name-row">
-                <text class="rg-member-name">{{p.nickName}}</text>
-                <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
-                <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
-              </view>
-              <text class="rg-ready-label">{{p.score != null ? p.score + ' 分 · ' : ''}}{{p.readyLabel}}</text>
+      </view>
+      <button class="btn-wechat-invite rg-invite-btn" open-type="share">邀请朋友</button>
+    </view>
+    <view
+      class="rg-status-banner {{statusBannerWarn ? 'rg-banner-warn' : ''}}"
+      wx:if="{{statusHint}}"
+    >{{statusHint}}</view>
+  </view>
+
+  <view class="rg-room-card" wx:if="{{state}}">
+    <view class="rg-members-card rg-members-inner">
+      <view class="rg-members-head">
+        <text class="rg-members-title">成员</text>
+        <text class="rg-members-count muted">{{memberCountLine}}</text>
+      </view>
+      <view class="rg-progress-wrap" wx:if="{{inWaiting}}">
+        <view class="rg-progress-bar">
+          <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
+        </view>
+      </view>
+      <view class="rg-member-list">
+        <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
+          <view class="rg-avatar">{{p.avatarText}}</view>
+          <view class="rg-member-body">
+            <view class="rg-member-name-row">
+              <text class="rg-member-name">{{p.nickName}}</text>
+              <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+              <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
             </view>
+            <text class="rg-ready-label">{{p.score != null ? p.score + ' 分 · ' : ''}}{{p.readyLabel}}</text>
           </view>
         </view>
       </view>
     </view>
-    <view class="card" wx:if="{{state && state.status === 'waiting' && view && view.isHost}}">
-      <view class="rg-section" style="margin-top:0">
-        <view class="rg-section-label">本局题数</view>
-        <view class="rg-stepper">
-          <button class="rg-step-btn" size="mini" data-delta="-1" bindtap="onRoundStep" disabled="{{roundIndex <= 0}}">−</button>
-          <picker range="{{roundLabels}}" value="{{roundIndex}}" bindchange="onRoundChange">
-            <view class="rg-step-value">{{roundLabels[roundIndex] || '5 题'}}</view>
-          </picker>
-          <button class="rg-step-btn" size="mini" data-delta="1" bindtap="onRoundStep" disabled="{{roundIndex >= roundLabels.length - 1}}">+</button>
-        </view>
-        <view class="rg-tip">调整题数后自动保存</view>
-      </view>
-      <view class="rg-ai-panel">
-        <view class="rg-ai-panel-head" bindtap="toggleAiPanel">
-          <text>🤖 AI 辅助</text>
-          <text class="rg-ai-chevron">{{aiPanelOpen ? '▲' : '▼'}}</text>
-        </view>
-        <view class="rg-ai-panel-body" wx:if="{{aiPanelOpen}}">
-          <button class="btn btn-ai rg-btn-ghost {{aiUnlock.canGen ? '' : 'ai-locked'}}" bindtap="doAiHostTip" disabled="{{aiBusy}}">AI 主持开场词{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
+  </view>
+
+  <block wx:if="{{state && state.status === 'waiting' && view && view.isHost}}">
+    <view class="rg-settings-card">
+      <view class="rg-setting-item">
+        <text class="rg-label">本局题数</text>
+        <view class="rg-stepper-board">
+          <view
+            class="stepper-btn {{roundIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
+            bindtap="onRoundDecrease"
+          >-</view>
+          <text class="stepper-value">{{roundLabels[roundIndex] || '5 题'}}</text>
+          <view
+            class="stepper-btn {{roundIndex >= roundLabels.length - 1 ? 'stepper-btn-disabled' : ''}}"
+            bindtap="onRoundIncrease"
+          >+</view>
         </view>
       </view>
-      <button class="rg-btn-primary" bindtap="doStart">开始互动</button>
-    </view>
-    <view class="card" wx:if="{{state && state.status === 'playing'}}">
-      <view class="row" style="margin-bottom: 8rpx" wx:if="{{view && view.myScore != null}}">
-        <view class="lab" style="margin:0">我的分数</view>
-        <view class="pill">{{view.myScore}} 分</view>
+      <view class="rg-stepper-hint">{{roundStepHint}}</view>
+      <view class="rg-ai-action" wx:if="{{aiUnlock.canGen}}">
+        <button class="btn-ai" bindtap="doAiHostTip" disabled="{{aiBusy}}">✨ AI 主持开场词</button>
       </view>
-      <view class="row" wx:if="{{(state && state.currentIndex) >= 0 || roundNum > 0}}">
-        <view class="strong" style="font-size: 34rpx">第 {{roundNum || 1}} / {{state.totalRounds || 0}} 题</view>
-        <view class="pill">⏱ {{timeLeft}}s</view>
-      </view>
-      <view class="host-line" wx:if="{{state && state.status === 'playing' && state.roundHostNickName}}">
-        本轮主持：<text class="em">{{state.roundHostNickName}}</text>（用 ta 手机外放，大家听）</view>
-      <button
-        wx:if="{{view && view.isRoundHost && state && state.status === 'playing'}}"
-        class="btn btn-ai {{aiUnlock.canGen ? '' : 'ai-locked'}}"
-        bindtap="doAiHostTip"
-        disabled="{{aiBusy}}"
-      >AI 主持提示{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
-      <view class="round-hits" wx:if="{{hasRoundHits}}">
-        <view class="lab">本轮答中</view>
-        <view wx:for="{{state && state.roundHits}}" wx:for-item="rh" wx:for-index="hidx" wx:key="openId">{{rh.nickName}} +{{rh.points}}</view>
+      <view class="rg-ai-locked" wx:else>
+        <button class="btn-ai ai-locked" bindtap="onAiUnlockTap">🔒 AI 主持开场词</button>
       </view>
     </view>
-    <view class="card host-card" wx:if="{{view && view.isRoundHost && state && state.status === 'playing' && state.phase === 'round_playing'}}">
-      <view class="h2">本轮由你主持</view>
-      <view class="song-title" wx:if="{{view.hostPlayTitle}}">《{{view.hostPlayTitle}}》</view>
-      <view class="hint">用本机音乐/视频 App 搜索并外放该歌的一小段，其他人听并抢答；你不可抢答本首。</view>
-      <view class="alias-line" wx:if="{{view.hostPlayAliases && view.hostPlayAliases.length}}">别名：{{view.hostPlayAliasesString}}</view>
-    </view>
-    <view
-      class="card"
-      wx:if="{{state && state.status === 'playing' && state.phase === 'round_playing' && view && !view.isRoundHost}}"
-    >
-      <view class="wait-hint" style="text-align:left">听上面对话里「主持」外放，在下方抢答</view>
-    </view>
-    <view class="card" wx:if="{{state && state.status === 'playing' && state.phase === 'round_playing' && view && !view.isRoundHost}}">
-      <view class="inp-wrap" wx:if="{{!view.hasAnswered}}">
-        <input class="inp" value="{{inputAnswer}}" bindinput="onInputAns" placeholder="输入歌名" />
-        <button class="btn primary" size="mini" bindtap="doSubmit">提交</button>
-      </view>
-      <view class="ok" wx:if="{{view && view.hasAnswered}}">本首已答</view>
-    </view>
-    <view
-      class="card"
-      wx:if="{{view && view.isHost && state && state.status === 'playing' && state.phase === 'round_playing'}}"
-    >
-      <view class="lab" style="margin-bottom: 12rpx">房主控场</view>
-      <button class="btn" bindtap="doNext">下一题 / 结束本局</button>
-    </view>
-    <view
-      class="card"
-      wx:if="{{(state && state.status === 'finished') || (state && state.phase === 'finished')}}"
-    >
-      <view class="h2">本环节得分（同场参考）</view>
-      <view
-        class="rank"
-        wx:for="{{(state && state.publicPlayers) || (view && view.publicPlayers) || []}}"
-        wx:for-item="u"
-        wx:for-index="ri"
-        wx:key="openId"
-      >{{ri + 1}}. {{u.nickName}} — {{u.score}} 分</view>
-    </view>
-    <view class="card log" wx:if="{{showLog}}">
-      <view class="h2">记录</view>
-      <view class="log-line" wx:for="{{state && state.publicLog}}" wx:key="*this">{{item}}</view>
-    </view>
+    <button
+      class="rg-btn-primary main-btn rg-start-btn {{canStart ? '' : 'rg-start-muted'}}"
+      bindtap="doStart"
+    >开始互动</button>
   </block>
+
+  <view class="rg-room-card rg-guest-wait" wx:if="{{state && state.status === 'waiting' && view && !view.isHost}}">
+    <view class="text-body muted">👥 等待组长开始互动，可先邀请更多朋友进组</view>
+    <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)">邀请朋友</button>
+  </view>
+
+  <view class="rg-room-card" wx:if="{{state && state.status === 'playing'}}">
+    <view class="sg-play-meta" wx:if="{{view && view.myScore != null}}">
+      <text class="text-caption muted">我的分数 {{view.myScore}}</text>
+      <text class="pill" wx:if="{{state.phase === 'round_playing'}}">⏱ {{timeLeft}}s</text>
+    </view>
+    <view class="text-card-title" wx:if="{{(state && state.currentIndex) >= 0 || roundNum > 0}}">
+      第 {{roundNum || 1}} / {{state.totalRounds || 0}} 题
+    </view>
+    <view class="text-body sg-host-line" wx:if="{{state.roundHostNickName}}">
+      本轮主持：<text class="sg-em">{{state.roundHostNickName}}</text>（用 ta 手机外放，大家听）
+    </view>
+    <button
+      wx:if="{{view && view.isRoundHost && state.phase === 'round_playing'}}"
+      class="btn-ai {{aiUnlock.canGen ? '' : 'ai-locked'}}"
+      bindtap="doAiHostTip"
+      disabled="{{aiBusy}}"
+    >AI 主持提示{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
+    <view class="sg-hits" wx:if="{{hasRoundHits}}">
+      <view class="rg-label">本轮答中</view>
+      <view class="text-body" wx:for="{{state.roundHits}}" wx:for-item="rh" wx:key="openId">{{rh.nickName}} +{{rh.points}}</view>
+    </view>
+  </view>
+
+  <view class="rg-room-card sg-host-card" wx:if="{{view && view.isRoundHost && state && state.status === 'playing' && state.phase === 'round_playing'}}">
+    <view class="text-card-title">本轮由你主持</view>
+    <view class="sg-song-title" wx:if="{{view.hostPlayTitle}}">《{{view.hostPlayTitle}}》</view>
+    <view class="text-caption muted">用本机音乐/视频 App 搜索并外放该歌的一小段，其他人听并抢答；你不可抢答本首。</view>
+    <view class="text-caption muted" wx:if="{{view.hostPlayAliases && view.hostPlayAliases.length}}">别名：{{view.hostPlayAliasesString}}</view>
+  </view>
+
+  <view
+    class="rg-room-card"
+    wx:if="{{state && state.status === 'playing' && state.phase === 'round_playing' && view && !view.isRoundHost}}"
+  >
+    <view class="text-body">听上面对话里「主持」外放，在下方抢答</view>
+    <view class="sg-ans-row" wx:if="{{!view.hasAnswered}}">
+      <input class="rg-lobby-inp sg-ans-inp" value="{{inputAnswer}}" bindinput="onInputAns" placeholder="输入歌名" />
+      <button class="btn btn-primary" bindtap="doSubmit">提交</button>
+    </view>
+    <view class="text-success" wx:if="{{view && view.hasAnswered}}">本首已答</view>
+  </view>
+
+  <view
+    class="rg-room-card"
+    wx:if="{{view && view.isHost && state && state.status === 'playing' && state.phase === 'round_playing'}}"
+  >
+    <view class="rg-label">组长控场</view>
+    <button class="btn btn-secondary main-btn" bindtap="doNext">下一题 / 结束本局</button>
+  </view>
+
+  <view
+    class="rg-room-card"
+    wx:if="{{(state && state.status === 'finished') || (state && state.phase === 'finished')}}"
+  >
+    <view class="text-card-title">本环节得分（同场参考）</view>
+    <view
+      class="sg-rank text-body"
+      wx:for="{{(state && state.publicPlayers) || (view && view.publicPlayers) || []}}"
+      wx:for-item="u"
+      wx:for-index="ri"
+      wx:key="openId"
+    >{{ri + 1}}. {{u.nickName}} — {{u.score}} 分</view>
+  </view>
+
+  <view class="rg-room-card" wx:if="{{showLog}}">
+    <view class="text-card-title">记录</view>
+    <view class="text-caption muted sg-log-line" wx:for="{{state && state.publicLog}}" wx:key="*this">{{item}}</view>
+  </view>
 </view>
 
 <ai-share-modal

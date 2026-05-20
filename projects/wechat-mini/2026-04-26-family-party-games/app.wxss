@@ -1,55 +1,108 @@
+@import './styles/tokens.wxss';
+
 page {
   min-height: 100%;
-  background: #FEF8F0;
-  color: #23212a;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: var(--color-bg-page);
+  color: var(--color-text);
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  font-weight: var(--font-weight-regular);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* ---------- 字号工具类 ---------- */
+.text-display {
+  font-size: var(--font-display-size);
+  line-height: var(--font-display-lh);
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-title {
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+  font-weight: var(--font-weight-medium);
+}
+
+.text-card-title {
+  font-size: var(--font-card-title-size);
+  line-height: var(--font-card-title-lh);
+  font-weight: var(--font-weight-medium);
+}
+
+.text-body {
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-caption {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-lh);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-tiny {
+  font-size: var(--font-tiny-size);
+  line-height: var(--font-tiny-lh);
+  font-weight: var(--font-weight-regular);
+}
+
+/* ---------- 布局 ---------- */
 .page {
   box-sizing: border-box;
   min-height: 100vh;
-  padding: 28rpx;
+  max-width: var(--page-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--page-pad-top) var(--page-pad-x) var(--page-pad-bottom);
+  padding-top: calc(var(--page-pad-top) + constant(safe-area-inset-top));
+  padding-top: calc(var(--page-pad-top) + env(safe-area-inset-top));
+  padding-bottom: calc(var(--page-pad-bottom) + constant(safe-area-inset-bottom));
+  padding-bottom: calc(var(--page-pad-bottom) + env(safe-area-inset-bottom));
 }
 
 .hero {
-  padding: 44rpx 34rpx;
-  border-radius: 44rpx;
-  background: linear-gradient(135deg, #ffb86b, #ffd166);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--color-hero-grad-start), var(--color-hero-grad-end));
   box-shadow: 0 18rpx 44rpx rgba(255, 122, 47, 0.18);
   text-align: center;
 }
 
 .hero-title {
-  font-size: 48rpx;
-  font-weight: 900;
+  font-size: var(--font-display-size);
+  line-height: var(--font-display-lh);
+  font-weight: var(--font-weight-semibold);
 }
 
 .hero-subtitle {
-  margin-top: 16rpx;
-  color: #8a3a0a;
-  font-size: 28rpx;
-  font-weight: 700;
-  line-height: 1.5;
+  margin-top: var(--space-sm);
+  color: var(--color-text-accent);
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  font-weight: var(--font-weight-medium);
   text-align: center;
 }
 
 .hero-subtitle .hero-subtitle-line + .hero-subtitle-line {
-  margin-top: 10rpx;
+  margin-top: var(--space-xs);
 }
 
 .btn-ai {
-  margin-top: 16rpx;
+  margin-top: var(--space-sm);
   background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
-  color: #fff !important;
+  color: var(--color-text-inverse) !important;
   border: none;
 }
 
 .card {
-  border-radius: 36rpx;
-  background: #fff;
-  box-shadow: 0 14rpx 36rpx rgba(138, 58, 10, 0.10);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  box-shadow: 0 14rpx 36rpx rgba(138, 58, 10, 0.1);
+  margin-bottom: var(--space-md);
 }
 
+/* ---------- 按钮基类 ---------- */
 .btn {
   display: block;
   box-sizing: border-box;
@@ -57,56 +110,112 @@ page {
   margin-right: 0;
   padding-left: 0;
   padding-right: 0;
-  border-radius: 999rpx;
-  font-size: 28rpx;
-  font-weight: 800;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  font-weight: var(--font-weight-medium);
+  min-height: var(--btn-tap-min);
 }
 
 .btn::after {
   border: none;
 }
 
-/* 主操作按钮用 flex 居中，避免基础库用 line-height 时文字视觉上偏上 */
-/* min-height/width：未在单页再写 .main-btn 时（如 drink-party）也保证高度，避免成一条细线 */
 button.btn.main-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  min-height: 88rpx;
+  min-height: var(--btn-primary-height);
   width: 100%;
-  padding: 0 28rpx;
-  line-height: 1.35;
+  padding: 0 var(--space-lg);
+  line-height: var(--font-body-lh);
+  font-size: var(--btn-primary-font);
+  border-radius: var(--radius-lg);
 }
 
 .btn-primary {
-  color: #fff;
-  background: #FF7A2F;
+  color: var(--color-text-on-brand);
+  background: var(--color-brand);
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.btn-primary[disabled],
+button.btn-primary[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .btn-secondary {
-  color: #8a3a0a;
-  background: #ffedd5;
+  color: var(--color-text-accent);
+  background: var(--color-secondary-bg);
+}
+
+.btn-secondary:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+.btn-secondary[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 次高度按钮（内联/双栏） */
+.btn.btn-md {
+  min-height: var(--btn-secondary-height);
+  font-size: var(--btn-secondary-font);
+}
+
+/* 小按钮：分享、关闭 */
+.btn.btn-sm {
+  min-height: var(--btn-small-height);
+  font-size: var(--btn-small-font);
+  border-radius: var(--radius-xl);
+  padding: 0 var(--space-md);
 }
 
 .muted {
-  color: #7b7280;
+  color: var(--color-text-secondary);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-error {
+  color: var(--color-error);
+}
+
+.text-info {
+  color: var(--color-info);
 }
 
 .section-title {
-  margin: 34rpx 0 18rpx;
-  font-size: 34rpx;
-  font-weight: 900;
+  margin: var(--space-lg) 0 var(--space-sm);
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+  font-weight: var(--font-weight-medium);
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  color: #8a3a0a;
-  background: #ffedd5;
-  font-size: 24rpx;
-  font-weight: 800;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  color: var(--color-text-accent);
+  background: var(--color-secondary-bg);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-lh);
+  font-weight: var(--font-weight-medium);
 }

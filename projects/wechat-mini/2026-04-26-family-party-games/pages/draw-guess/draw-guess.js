@@ -5,7 +5,29 @@ const {
   runStartAction,
   buildStartChecks
 } = require('../../utils/roomUi')
-const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { patchLobbyUi } = require('../../utils/roomMemberUi')
+const { stepIndex, vibrateBoundary } = require('../../utils/listStepper')
+const AI_DIFF_LABELS = ['简单', '中等', '困难']
+const WORD_SOURCE_OPTIONS = ['系统词库', 'AI 题目']
+const WORD_SOURCE_VALUES = ['system', 'ai']
+
+function settingsDisplayFromPage(data) {
+  const d = data || {}
+  const roundIdx = d.roundIdx | 0
+  const catIdx = d.catIdx | 0
+  const ws = d.wordSource || 'system'
+  let wordSourceIdx = WORD_SOURCE_VALUES.indexOf(ws)
+  if (wordSourceIdx < 0) {
+    wordSourceIdx = 0
+  }
+  return {
+    rounds: ROUNDS[roundIdx] || 6,
+    wordSourceIdx,
+    wordSourceLabel: WORD_SOURCE_OPTIONS[wordSourceIdx] || WORD_SOURCE_OPTIONS[0],
+    currentCategoryName:
+      (CAT_ARR[catIdx] && CAT_ARR[catIdx].name) || CAT_ARR[0].name
+  }
+}
 const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
 const {
   enableShareMenus,
@@ -18,9 +40,10 @@ const {
   onPageShowUnlock,
   onPageHideUnlock,
   closeAiShareModal,
-  showShareGuide
+  showShareGuide,
+  openAiShareModal
 } = require('../../utils/aiUnlock')
-const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const { TOAST_ROOM_CODE_6, copyRoomCodeToClipboard } = require('../../utils/roomCopy')
 const {
   watchDocument,
   stopDevtoolsPoll
@@ -33,6 +56,7 @@ const {
 } = require('../../utils/aiHelper')
 const { CATS: CW_CATS } = require('../../data/draw-words')
 const ROUNDS = [5, 6, 8, 9, 10, 12]
+const ROUND_STEP_HINT = '可选 ' + ROUNDS.join(' / ') + ' 轮'
 const CAT_ARR = (CW_CATS && CW_CATS.length)
   ? CW_CATS
   : [{ id: 'all', name: '随机（全部分类）' }]
@@ -51,18 +75,28 @@ Page({
     view: null,
     timeLeft: 0,
     roundOptions: ROUNDS,
+    roundStepHint: ROUND_STEP_HINT,
     roundIdx: 1,
+    rounds: 6,
     catNames: CAT_ARR.map((c) => c.name),
     catIdx: 0,
+    currentCategoryName: CAT_ARR[0].name,
+    wordSourceOptions: WORD_SOURCE_OPTIONS,
+    wordSourceIdx: 0,
+    wordSourceLabel: WORD_SOURCE_OPTIONS[0],
     guessInput: '',
     lineW: 4,
     remoteCanvasSrc: '',
     memberCountLine: '',
     displayPlayers: [],
     statusHint: '',
+    statusBannerWarn: false,
     playerProgressPct: 0,
+    inWaiting: false,
+    canStart: false,
     wordSource: 'system',
-    aiPanelOpen: false,
+    aiDiffIdx: 1,
+    aiDiffLabels: AI_DIFF_LABELS,
     aiBusy: false,
     aiPendingWord: '',
     aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
@@ -86,7 +120,10 @@ Page({
     enableShareMenus()
     tryRedeemShareFromQuery(q || {})
     const ridx = ROUNDS.indexOf(6)
-    this.setData({ roundIdx: ridx >= 0 ? ridx : 0 })
+    const roundIdx = ridx >= 0 ? ridx : 0
+    this.setData(
+      Object.assign({ roundIdx }, settingsDisplayFromPage({ roundIdx, catIdx: 0, wordSource: 'system' }))
+    )
     const roomId = (q && q.roomId) ? String(q.roomId) : ''
     const code = (q && q.roomCode) ? decodeURIComponent(String(q.roomCode)) : ''
     this.setData({
@@ -112,6 +149,7 @@ Page({
   onShow () {
     enableShareMenus()
     onPageShowUnlock(this)
+    refreshAiUnlockPage(this)
     if (this.data.roomId) {
       this._refreshRoomState()
     } else {
@@ -130,6 +168,10 @@ Page({
   onAiShareTimeline () {
     closeAiShareModal(this)
     showShareGuide()
+  },
+  onCopyRoomCode () {
+    const c = this.data.roomCode || (this.data.state && this.data.state.roomCode)
+    copyRoomCodeToClipboard(c)
   },
   _refreshRoomState () {
     const id = this.data.roomId
@@ -165,26 +207,47 @@ Page({
         .slice(0, 6)
     })
   },
-  onRoundPick (e) {
-    this.setData({ roundIdx: Number((e.detail && e.detail.value) | 0) || 0 }, () => {
-      this._saveConfig(true)
-    })
+  _applySettingsDisplay (patch) {
+    return Object.assign(patch || {}, settingsDisplayFromPage(Object.assign({}, this.data, patch)))
   },
-  onCatPick (e) {
-    this.setData({ catIdx: Number((e.detail && e.detail.value) | 0) || 0 }, () => {
-      this._saveConfig(true)
-    })
+  onRoundsMinus () {
+    const r = stepIndex(this.data.roundIdx, -1, ROUNDS.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this.setData(this._applySettingsDisplay({ roundIdx: r.index }), () => this._saveConfig())
   },
-  onWordSourceTap (e) {
-    const src = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.src) || 'system'
-    const patch = { wordSource: src }
-    if (src === 'system') {
+  onRoundsPlus () {
+    const r = stepIndex(this.data.roundIdx, 1, ROUNDS.length)
+    if (r.atBoundary) {
+      vibrateBoundary()
+      return
+    }
+    this.setData(this._applySettingsDisplay({ roundIdx: r.index }), () => this._saveConfig())
+  },
+  onWordSourceChange (e) {
+    const i = Number((e.detail && e.detail.value) | 0) || 0
+    const wordSource = WORD_SOURCE_VALUES[i] || 'system'
+    const patch = {
+      wordSourceIdx: i,
+      wordSource,
+      wordSourceLabel: WORD_SOURCE_OPTIONS[i] || WORD_SOURCE_OPTIONS[0]
+    }
+    if (wordSource === 'system') {
       patch.aiPendingWord = ''
     }
     this.setData(patch)
   },
-  toggleAiPanel () {
-    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
+  onCategoryChange (e) {
+    const catIdx = Number((e.detail && e.detail.value) | 0) || 0
+    this.setData(this._applySettingsDisplay({ catIdx }), () => this._saveConfig())
+  },
+  onAiGenerateWord () {
+    this.doAiWord()
+  },
+  onAiUnlockTap () {
+    openAiShareModal(this)
   },
   onGuessI (e) {
     this.setData({ guessInput: (e.detail && e.detail.value) || '' })
@@ -263,7 +326,21 @@ Page({
       }
     )
   },
-  _saveConfig (silent) {
+  _patchRoomUi (patch, opts) {
+    const o = opts || {}
+    const st = o.state || this.data.state || {}
+    const v = o.view || this.data.view || {}
+    return patchLobbyUi(patch, {
+      state: st,
+      view: v,
+      players: o.players || st.publicPlayers || [],
+      phase: st.status || (v && v.roomStatus) || 'waiting',
+      minPlayers: 2,
+      maxPlayers: 0,
+      hostOpenId: st.hostOpenId || (v && v.hostOpenId) || ''
+    })
+  },
+  _saveConfig () {
     if (!this.data.view || !this.data.view.isHost) {
       return
     }
@@ -287,9 +364,7 @@ Page({
       },
       {
         onOk: () => {
-          if (!silent) {
-            wx.showToast({ title: '已保存', icon: 'none' })
-          }
+          wx.showToast({ title: '已保存', icon: 'none' })
         },
         onError: () => {
           this._configSig = null
@@ -302,14 +377,16 @@ Page({
       return
     }
     const cat = (CAT_ARR[this.data.catIdx | 0] && CAT_ARR[this.data.catIdx | 0].name) || '随机'
+    const diff = AI_DIFF_LABELS[this.data.aiDiffIdx | 0] || '中等'
     const page = this
     runAi(this, {
       cacheTag: 'draw-word',
       roomId: this.data.roomId,
       round: (this.data.state && this.data.state.currentRound) | 0,
       loadingTitle: 'AI 生成题目',
+      aiUnlockName: 'AI 出题',
       system: SYSTEM_DRAW_WORD,
-      buildPrompt: () => '你画我猜，词库风格：' + cat + '。',
+      buildPrompt: () => '你画我猜，词库风格：' + cat + '，难度：' + diff + '。',
       onOk: (text) => {
         const v = validateDrawWord(text)
         if (!v.ok) {
@@ -317,11 +394,14 @@ Page({
           return
         }
         const w = v.word
-        page.setData({
-          wordSource: 'ai',
-          aiPendingWord: w,
-          aiPanelOpen: true
-        })
+        page.setData(
+          page._applySettingsDisplay({
+            wordSource: 'ai',
+            wordSourceIdx: 1,
+            wordSourceLabel: WORD_SOURCE_OPTIONS[1],
+            aiPendingWord: w
+          })
+        )
         wx.showToast({ title: '题目已生成', icon: 'none' })
       }
     })
@@ -442,6 +522,7 @@ Page({
   afterHasRoomId (roomId) {
     this.setData({ roomId: String(roomId) })
     onRoomEntered(this, String(roomId), 'draw')
+    refreshAiUnlockPage(this)
     this.startWatchG(String(roomId))
     this.startWatchC(String(roomId))
     if (wx.cloud && ensure()) {
@@ -582,20 +663,11 @@ Page({
     }
   },
   applyG (d) {
-    const n = (d.publicPlayers && d.publicPlayers.length) || 0
-    const patch = {
+    const patch = this._applySettingsDisplay({
       state: d,
-      roomCode: d.roomCode || this.data.roomCode,
-      memberCountLine: memberCountLine(n, 0, '至少 2 人可开始')
-    }
-    const v = this.data.view || {}
-    patchMemberDisplay(patch, {
-      players: d.publicPlayers || [],
-      phase: d.status === 'waiting' ? 'waiting' : 'playing',
-      maxPlayers: 0,
-      isHost: v.isHost,
-      fallbackNeed: 2
+      roomCode: d.roomCode || this.data.roomCode
     })
+    this._patchRoomUi(patch, { state: d })
     this.setData(patch)
   },
   loadView () {
@@ -611,14 +683,12 @@ Page({
           const v = (res && res.result) || {}
           const st = this.data.state || {}
           const patch = { view: v }
-          const stStatus = st.status || v.roomStatus
-          patchMemberDisplay(patch, {
-            players: (st.publicPlayers || v.publicPlayers) || [],
-            phase: stStatus === 'waiting' ? 'waiting' : 'playing',
-            maxPlayers: 0,
-            isHost: v.isHost,
-            fallbackNeed: 2
+          this._patchRoomUi(patch, {
+            state: st,
+            view: v,
+            players: (st.publicPlayers || v.publicPlayers) || []
           })
+          refreshAiUnlockPage(this)
           this.setData(patch, () => {
             this.tryAutoReveal()
             this.scheduleInitCanvas()

@@ -28,6 +28,7 @@ const {
   showShareGuide
 } = require('../../utils/aiUnlock')
 const { runAi, SYSTEM_PARTY, SYSTEM_TRUTH_DARE, SYSTEM_STORY } = require('../../utils/aiHelper')
+const { copyRoomCodeToClipboard } = require('../../utils/roomCopy')
 const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
 
 Page({
@@ -63,6 +64,8 @@ Page({
     tdMyOpenId: '',
     displayPlayers: [],
     statusHint: '',
+    canStart: false,
+    statusBannerWarn: false,
     memberCountLine: '',
     aiBusy: false,
     aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
@@ -116,6 +119,9 @@ Page({
     return { roomCode: this.data.roomCode }
   },
 
+  onCopyRoomCode() {
+    copyRoomCodeToClipboard(this.data.roomCode)
+  },
   onShareAppMessage() {
     if (this.data.mode === 'truthDareRoom') {
       return handleShareAppMessage(this, 'truthDare', this._shareCtx())
@@ -215,6 +221,11 @@ Page({
             hostWaiting: '⏳ 点击「开始本轮」',
             guestWaiting: '👥 等待主持人开始'
           })
+          patch.canStart = !!this.data.tdIsHost && pl.length >= 2
+          if (ph === 'waiting' && pl.length < 2) {
+            patch.statusHint = '⚠️ 至少需要 2 人，当前 ' + pl.length + ' 人'
+            patch.statusBannerWarn = true
+          }
           this.setData(patch)
         },
         onError: () => {}

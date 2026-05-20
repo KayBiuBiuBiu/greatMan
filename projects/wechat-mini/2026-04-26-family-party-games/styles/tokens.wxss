@@ -1,0 +1,103 @@
+/**
+ * 设计令牌 — 在 app.wxss 首行 @import，全项目 page 级生效
+ * 规范见 docs/UI与逻辑规范.md §2
+ */
+page {
+  /* 间距（8rpx 阶梯） */
+  --space-xs: 8rpx;
+  --space-sm: 16rpx;
+  --space-md: 24rpx;
+  --space-lg: 32rpx;
+  --space-xl: 48rpx;
+  --space-2xl: 64rpx;
+
+  /* 圆角 */
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+  --radius-full: 9999rpx;
+
+  /* 品牌与背景 */
+  --color-brand: #ff7a2f;
+  --color-brand-deep: #ea580c;
+  --color-bg-page: #fef8f0;
+  --color-bg-card: #ffffff;
+  --color-bg-muted: #fafafa;
+  --color-border: #f0f0f0;
+  --color-border-soft: #f3f4f6;
+  --color-mask: rgba(0, 0, 0, 0.5);
+
+  /* 文字 */
+  --color-text: #23212a;
+  --color-text-secondary: #7b7280;
+  --color-text-inverse: #ffffff;
+  --color-text-accent: #8a3a0a;
+  --color-text-on-brand: #ffffff;
+
+  /* 功能色 */
+  --color-success: #07c160;
+  --color-warning: #ff9f00;
+  --color-error: #fa5151;
+  --color-info: #1485ee;
+  --color-wechat: #07c160;
+
+  /* 次色 / 强调底 */
+  --color-secondary-bg: #ffedd5;
+  --color-hero-grad-start: #ffb86b;
+  --color-hero-grad-end: #ffd166;
+
+  /* 字号 + 行高（行高约 1.43–1.5 倍字号） */
+  --font-display-size: 48rpx;
+  --font-display-lh: 64rpx;
+  --font-title-size: 40rpx;
+  --font-title-lh: 56rpx;
+  --font-card-title-size: 32rpx;
+  --font-card-title-lh: 44rpx;
+  --font-body-size: 28rpx;
+  --font-body-lh: 40rpx;
+  --font-caption-size: 24rpx;
+  --font-caption-lh: 34rpx;
+  --font-tiny-size: 22rpx;
+  --font-tiny-lh: 30rpx;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* 按钮尺寸 */
+  --btn-primary-height: 96rpx;
+  --btn-secondary-height: 72rpx;
+  --btn-small-height: 64rpx;
+  --btn-primary-font: 32rpx;
+  --btn-secondary-font: 28rpx;
+  --btn-small-font: 26rpx;
+  --btn-tap-min: 64rpx;
+
+  /* 页面安全边距 */
+  --page-pad-top: 28rpx;
+  --page-pad-x: 32rpx;
+  --page-pad-bottom: 48rpx;
+
+  /* 大屏居中（约 540px 内容区） */
+  --page-max-width: 540px;
+}
+
+/* 暗色模式：跟随系统（真机有效；开发者工具可切换外观） */
+@media (prefers-color-scheme: dark) {
+  page {
+    --color-bg-page: #1a1816;
+    --color-bg-card: #2a2622;
+    --color-bg-muted: #322e2a;
+    --color-border: #3d3834;
+    --color-border-soft: #3d3834;
+    --color-text: #f5f0e8;
+    --color-text-secondary: #a8a29e;
+    --color-text-accent: #fdba74;
+    --color-secondary-bg: #3d2f1f;
+    --color-hero-grad-start: #7c4a1a;
+    --color-hero-grad-end: #5c3d14;
+    --color-brand: #ff8f4d;
+    --color-brand-deep: #fb923c;
+  }
+}

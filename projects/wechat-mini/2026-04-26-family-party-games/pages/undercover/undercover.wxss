@@ -1,6 +1,8 @@
-.page {
-  padding: 24rpx 24rpx 64rpx;
-  box-sizing: border-box;
+@import '../../styles/room-game.wxss';
+
+.ucv2-inroom {
+  padding-bottom: calc(var(--page-pad-bottom) + constant(safe-area-inset-bottom));
+  padding-bottom: calc(var(--page-pad-bottom) + env(safe-area-inset-bottom));
 }
 
 .panel {
@@ -188,20 +190,7 @@ button.vote-btn.btn {
   line-height: 1.75;
 }
 
-@import '../../styles/room-game.wxss';
-
-/* v2 同场同步 */
-.page.ucv2 {
-  padding: 20rpx 24rpx 100rpx;
-  background: #fef8f0;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-.ucv2 .h1 {
-  font-size: 40rpx;
-  font-weight: 900;
-  margin: 8rpx 0 16rpx;
-}
+/* v2 同场同步 · 阶段面板 */
 .uc-muted {
   font-size: 24rpx;
   color: #6b7280;

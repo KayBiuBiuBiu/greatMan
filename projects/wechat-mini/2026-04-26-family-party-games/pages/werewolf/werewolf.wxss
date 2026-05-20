@@ -1,132 +1,95 @@
 @import '../../styles/room-game.wxss';
 
-.page {
-  padding: 24rpx 24rpx 100rpx;
-  box-sizing: border-box;
-  min-height: 100vh;
-  background: #fef8f0;
+.ww-page-inroom {
+  padding-bottom: calc(var(--page-pad-bottom) + constant(safe-area-inset-bottom));
+  padding-bottom: calc(var(--page-pad-bottom) + env(safe-area-inset-bottom));
 }
-.panel {
-  margin-top: 20rpx;
-  padding: 32rpx;
-  border-radius: 24rpx;
-  background: #fff;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+
+.ww-end-banner {
+  text-align: center;
+  color: var(--color-brand);
 }
-.title {
-  font-size: 36rpx;
-  font-weight: 800;
-  margin-bottom: 8rpx;
+
+.ww-ai-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
-.muted {
-  font-size: 24rpx;
-  color: #6b7280;
-  line-height: 1.5;
-  margin-bottom: 16rpx;
-}
-.row {
+
+.ww-ai-row .btn-ai {
   display: flex;
   align-items: center;
-  margin-bottom: 16rpx;
+  justify-content: center;
+  width: 100%;
+  min-height: 80rpx;
+  padding: 0 var(--space-md);
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #a855f7, #7c3aed) !important;
+  color: var(--color-text-inverse) !important;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-body-size);
+  font-weight: var(--font-weight-medium);
+  border: none;
+  line-height: var(--font-body-lh);
+}
+
+.ww-ai-row .btn-ai::after {
+  border: none;
+}
+
+.ww-ai-row .btn-ai.ai-locked {
+  opacity: 0.6;
+}
+
+.ww-phase-card .title {
+  font-size: var(--font-card-title-size);
+  line-height: var(--font-card-title-lh);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-sm);
+}
+
+.ww-phase-card .priv {
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  color: var(--color-text);
+}
+
+.ww-phase-card .muted {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-lh);
+  color: var(--color-text-secondary);
+}
+
+.log-box {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-caption-size);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  word-break: break-all;
+}
+
+.host-btns {
+  display: flex;
   flex-wrap: wrap;
-  gap: 12rpx;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
 }
-.input {
-  flex: 1;
-  min-width: 200rpx;
-  padding: 20rpx 24rpx;
-  border: 1rpx solid #e5e7eb;
-  border-radius: 16rpx;
-  font-size: 28rpx;
-  background: #fafafa;
-}
-.btn,
-button.btn {
+
+.ww-phase-card .btn,
+.ww-phase-card button.btn {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0;
-  padding: 0 32rpx;
-  min-height: 80rpx;
-  line-height: 1.35;
-  font-size: 28rpx;
-  border-radius: 16rpx;
   box-sizing: border-box;
 }
-.btn::after {
-  border: none;
-}
-.btn-primary {
-  background: #ea580c;
-  color: #fff;
-  border: none;
-}
-.btn-ghost {
-  background: #fff1e5;
-  color: #9a3412;
-  border: 1rpx solid #fed7aa;
-}
-.btn-small {
-  height: 64rpx;
-  line-height: 64rpx;
-  font-size: 24rpx;
-  padding: 0 20rpx;
-  margin: 0;
-}
-.pill {
-  display: inline-block;
-  padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  background: #fff1e5;
-  color: #7c2d12;
-  font-size: 24rpx;
-  margin: 0 8rpx 8rpx 0;
-}
-.log-box {
-  max-height: 320rpx;
-  margin-top: 12rpx;
-  padding: 20rpx;
-  background: #f9fafb;
-  border-radius: 12rpx;
-  font-size: 24rpx;
-  line-height: 1.5;
-  color: #374151;
-}
-.priv {
-  margin-top: 16rpx;
-  padding: 20rpx;
-  background: #0f172a;
-  color: #e2e8f0;
-  border-radius: 12rpx;
-  font-size: 26rpx;
-}
-.host-btns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
-  margin-top: 12rpx;
-}
-.p-list {
-  margin-top: 12rpx;
-}
-.p-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 12rpx 0;
-  border-bottom: 1rpx solid #f3f4f6;
-  font-size: 28rpx;
-}
-.away {
-  color: #9ca3af;
-  text-decoration: line-through;
-}
-.end-banner {
-  margin-top: 16rpx;
-  padding: 24rpx;
-  text-align: center;
-  color: #991b1b;
-  background: #fef2f2;
-  border-radius: 12rpx;
-  font-size: 30rpx;
-  font-weight: 800;
+
+.ww-phase-card .btn-small {
+  min-height: 64rpx;
+  padding: 0 var(--space-md);
+  font-size: var(--font-caption-size);
 }
