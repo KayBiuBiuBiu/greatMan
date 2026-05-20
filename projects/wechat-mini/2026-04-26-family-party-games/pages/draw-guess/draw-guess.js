@@ -3,9 +3,34 @@ const {
   memberCountLine,
   refreshCloudDoc,
   runStartAction,
-  explainDrawStartFail,
-  showRoomBlockModal
+  buildStartChecks
 } = require('../../utils/roomUi')
+const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
+const {
+  enableShareMenus,
+  handleShareAppMessage,
+  handleShareTimeline
+} = require('../../utils/shareHelper')
+const {
+  refreshAiUnlockPage,
+  tryRedeemShareFromQuery,
+  onPageShowUnlock,
+  onPageHideUnlock,
+  closeAiShareModal,
+  showShareGuide
+} = require('../../utils/aiUnlock')
+const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const {
+  watchDocument,
+  stopDevtoolsPoll
+} = require('../../utils/cloudRealtime')
+const {
+  runAi,
+  validateDrawWord,
+  showAiModal,
+  SYSTEM_DRAW_WORD
+} = require('../../utils/aiHelper')
 const { CATS: CW_CATS } = require('../../data/draw-words')
 const ROUNDS = [5, 6, 8, 9, 10, 12]
 const CAT_ARR = (CW_CATS && CW_CATS.length)
@@ -32,7 +57,17 @@ Page({
     guessInput: '',
     lineW: 4,
     remoteCanvasSrc: '',
-    memberCountLine: ''
+    memberCountLine: '',
+    displayPlayers: [],
+    statusHint: '',
+    playerProgressPct: 0,
+    wordSource: 'system',
+    aiPanelOpen: false,
+    aiBusy: false,
+    aiPendingWord: '',
+    aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
+    showAiShareModal: false,
+    shareCopy: {}
   },
   _cvs: null,
   _ctx: null,
@@ -41,7 +76,15 @@ Page({
   _uploadTimer: null,
   _ticker: null,
   _cseq: 0,
+  _shareCtx () {
+    return {
+      roomId: this.data.roomId,
+      roomCode: this.data.roomCode || (this.data.state && this.data.state.roomCode)
+    }
+  },
   onLoad (q) {
+    enableShareMenus()
+    tryRedeemShareFromQuery(q || {})
     const ridx = ROUNDS.indexOf(6)
     this.setData({ roundIdx: ridx >= 0 ? ridx : 0 })
     const roomId = (q && q.roomId) ? String(q.roomId) : ''
@@ -56,7 +99,19 @@ Page({
       this.afterHasRoomId(roomId)
     }
   },
+  onHide () {
+    onPageHideUnlock(this)
+    this.clearTimers()
+  },
+  onUnload () {
+    onRoomLeft(this)
+    this.clearTimers()
+    this.stopWatchG()
+    this.stopWatchC()
+  },
   onShow () {
+    enableShareMenus()
+    onPageShowUnlock(this)
     if (this.data.roomId) {
       this._refreshRoomState()
     } else {
@@ -64,20 +119,17 @@ Page({
     }
   },
   onShareAppMessage () {
-    const code = (this.data.roomCode || (this.data.state && this.data.state.roomCode) || '')
-      .toString()
-      .replace(/\D/g, '')
-    let path = '/pages/index/index'
-    let title = '家庭聚会助手 - 你画我猜'
-    if (code.length === 6 && this.data.roomId) {
-      path =
-        '/pages/draw-guess/draw-guess?roomId=' +
-        encodeURIComponent(String(this.data.roomId)) +
-        '&roomCode=' +
-        encodeURIComponent(code)
-      title = '一起来玩你画我猜！口令 ' + code
-    }
-    return { title, path, imageUrl: '' }
+    return handleShareAppMessage(this, 'draw', this._shareCtx())
+  },
+  onShareTimeline () {
+    return handleShareTimeline(this, 'draw', this._shareCtx())
+  },
+  onCloseAiShareModal () {
+    closeAiShareModal(this)
+  },
+  onAiShareTimeline () {
+    closeAiShareModal(this)
+    showShareGuide()
   },
   _refreshRoomState () {
     const id = this.data.roomId
@@ -92,14 +144,6 @@ Page({
       this.loadView()
       this.scheduleInitCanvas()
     })
-  },
-  onUnload () {
-    this.clearTimers()
-    this.stopWatchG()
-    this.stopWatchC()
-  },
-  onHide () {
-    this.clearTimers()
   },
   clearTimers () {
     if (this._ticker) {
@@ -122,10 +166,25 @@ Page({
     })
   },
   onRoundPick (e) {
-    this.setData({ roundIdx: Number((e.detail && e.detail.value) | 0) || 0 })
+    this.setData({ roundIdx: Number((e.detail && e.detail.value) | 0) || 0 }, () => {
+      this._saveConfig(true)
+    })
   },
   onCatPick (e) {
-    this.setData({ catIdx: Number((e.detail && e.detail.value) | 0) || 0 })
+    this.setData({ catIdx: Number((e.detail && e.detail.value) | 0) || 0 }, () => {
+      this._saveConfig(true)
+    })
+  },
+  onWordSourceTap (e) {
+    const src = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.src) || 'system'
+    const patch = { wordSource: src }
+    if (src === 'system') {
+      patch.aiPendingWord = ''
+    }
+    this.setData(patch)
+  },
+  toggleAiPanel () {
+    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
   },
   onGuessI (e) {
     this.setData({ guessInput: (e.detail && e.detail.value) || '' })
@@ -180,7 +239,7 @@ Page({
       .replace(/\D/g, '')
       .slice(0, 6)
     if (code.length !== 6) {
-      wx.showToast({ title: '6位房号', icon: 'none' })
+      wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
     const nick = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
@@ -204,42 +263,121 @@ Page({
       }
     )
   },
-  doSetConfig () {
+  _saveConfig (silent) {
+    if (!this.data.view || !this.data.view.isHost) {
+      return
+    }
+    const st = this.data.state || {}
+    if (st.status !== 'waiting') {
+      return
+    }
     const c = (CAT_ARR[this.data.catIdx | 0] && CAT_ARR[this.data.catIdx | 0].id) || 'all'
+    const rounds = ROUNDS[this.data.roundIdx | 0] || 6
+    const sig = rounds + '|' + c
+    if (this._configSig === sig) {
+      return
+    }
+    this._configSig = sig
     callDraw(
       {
         action: 'setConfig',
         roomId: this.data.roomId,
-        totalRounds: ROUNDS[this.data.roundIdx | 0] || 6,
+        totalRounds: rounds,
         wordCategory: c
       },
-      { onOk: () => { wx.showToast({ title: '已保存', icon: 'none' }) } }
+      {
+        onOk: () => {
+          if (!silent) {
+            wx.showToast({ title: '已保存', icon: 'none' })
+          }
+        },
+        onError: () => {
+          this._configSig = null
+        }
+      }
     )
+  },
+  doAiWord () {
+    if (!this.data.view || !this.data.view.isHost) {
+      return
+    }
+    const cat = (CAT_ARR[this.data.catIdx | 0] && CAT_ARR[this.data.catIdx | 0].name) || '随机'
+    const page = this
+    runAi(this, {
+      cacheTag: 'draw-word',
+      roomId: this.data.roomId,
+      round: (this.data.state && this.data.state.currentRound) | 0,
+      loadingTitle: 'AI 生成题目',
+      system: SYSTEM_DRAW_WORD,
+      buildPrompt: () => '你画我猜，词库风格：' + cat + '。',
+      onOk: (text) => {
+        const v = validateDrawWord(text)
+        if (!v.ok) {
+          showAiModal('失败', v.err)
+          return
+        }
+        const w = v.word
+        page.setData({
+          wordSource: 'ai',
+          aiPendingWord: w,
+          aiPanelOpen: true
+        })
+        wx.showToast({ title: '题目已生成', icon: 'none' })
+      }
+    })
   },
   doStart () {
     const st = this.data.state || {}
     const n = (st.publicPlayers && st.publicPlayers.length) || 0
     const v = this.data.view || {}
     const ctx = { playerCount: n }
-    if (!v.isHost) {
-      showRoomBlockModal('无权限', '只有组长可以点击「开始」。')
-      return
-    }
-    if (n < 2) {
-      const box = explainDrawStartFail('至少2人才能开始', ctx)
-      showRoomBlockModal(box.title, box.content)
-      return
-    }
-    runStartAction({
+    const checks = buildStartChecks({
+      isHost: v.isHost,
+      playerCount: n,
+      minPlayers: 2,
       kind: 'draw',
       ctx,
-      callService: callDraw,
-      payload: { action: 'startGame', roomId: this.data.roomId },
-      loadingTitle: '开始',
-      onSuccess: () => {
-        this.loadView()
-      }
+      startVerb: '开始互动'
     })
+    const page = this
+    const useAi = this.data.wordSource === 'ai'
+    if (useAi && !(this.data.aiPendingWord || '').trim()) {
+      wx.showToast({ title: '请先生成 AI 题目', icon: 'none' })
+      return
+    }
+    const runGameStart = () => {
+      runStartAction({
+        kind: 'draw',
+        ctx,
+        localChecks: checks,
+        callService: callDraw,
+        payload: { action: 'startGame', roomId: page.data.roomId },
+        loadingTitle: '开始互动',
+        onSuccess: () => {
+          page.setData({ aiPendingWord: '' })
+          page.loadView()
+        }
+      })
+    }
+    if (useAi) {
+      const w = (this.data.aiPendingWord || '').trim()
+      runStartAction({
+        kind: 'draw',
+        ctx,
+        localChecks: [],
+        callService: callDraw,
+        payload: { action: 'setPendingWord', roomId: page.data.roomId, word: w },
+        loadingTitle: '准备题目',
+        onSuccess: runGameStart,
+        onFinally: (ok) => {
+          if (!ok) {
+            return
+          }
+        }
+      })
+      return
+    }
+    runGameStart()
   },
   doReveal () {
     callDraw(
@@ -303,6 +441,7 @@ Page({
   },
   afterHasRoomId (roomId) {
     this.setData({ roomId: String(roomId) })
+    onRoomEntered(this, String(roomId), 'draw')
     this.startWatchG(String(roomId))
     this.startWatchC(String(roomId))
     if (wx.cloud && ensure()) {
@@ -325,24 +464,31 @@ Page({
       return
     }
     const db = wx.cloud.database()
-    this._wg = db
-      .collection('draw_gameState')
-      .doc(String(id))
-      .watch({
-        onChange: (s) => {
-          const d = s && (s.data != null ? s.data : s.doc)
-          if (d) {
-            this.applyG(d)
-            this.onCanvasResetBySeq()
-            this.loadView()
-            this.setupTicker()
-            this.setupUploadLoop()
-            this.tryAutoReveal()
-            this.scheduleInitCanvas()
-          }
-        },
-        onError: (e) => { console.error('watch draw state', e) }
-      })
+    const rid = String(id)
+    const onG = (s) => {
+      const d = s && (s.data != null ? s.data : s.doc)
+      if (d) {
+        this.applyG(d)
+        this.onCanvasResetBySeq()
+        this.loadView()
+        this.setupTicker()
+        this.setupUploadLoop()
+        this.tryAutoReveal()
+        this.scheduleInitCanvas()
+      }
+    }
+    this._wg = watchDocument(this, {
+      db,
+      collection: 'draw_gameState',
+      docId: rid,
+      onChange: onG,
+      pollTimerKey: '_devtoolsPollG',
+      pollFn: () => {
+        if (this.data.roomId) {
+          this._refreshRoomState()
+        }
+      }
+    })
   },
   onCanvasResetBySeq () {
     const st = this.data.state
@@ -372,6 +518,7 @@ Page({
     }
   },
   stopWatchG () {
+    stopDevtoolsPoll(this, '_devtoolsPollG')
     if (this._wg) {
       this._wg.close()
       this._wg = null
@@ -383,27 +530,52 @@ Page({
       return
     }
     const db = wx.cloud.database()
-    this._wc = db
-      .collection('draw_canvas')
-      .doc(String(id))
-      .watch({
-        onChange: (s) => {
-          const d = s && (s.data != null ? s.data : s.doc)
-          if (d) {
+    const rid = String(id)
+    this._wc = watchDocument(this, {
+      db,
+      collection: 'draw_canvas',
+      docId: rid,
+      onChange: (s) => {
+        const d = s && (s.data != null ? s.data : s.doc)
+        if (d) {
+          const im = d.image
+          if (im && im.length > 20) {
+            this.setData({
+              remoteCanvasSrc: im.indexOf('data:') === 0 ? im : 'data:image/jpeg;base64,' + im
+            })
+          } else {
+            this.setData({ remoteCanvasSrc: '' })
+          }
+        }
+      },
+      pollTimerKey: '_devtoolsPollC',
+      pollFn: () => {
+        if (!this.data.roomId || !wx.cloud) {
+          return
+        }
+        wx.cloud
+          .database()
+          .collection('draw_canvas')
+          .doc(rid)
+          .get()
+          .then((res) => {
+            const d = res && res.data
+            if (!d) {
+              return
+            }
             const im = d.image
             if (im && im.length > 20) {
               this.setData({
                 remoteCanvasSrc: im.indexOf('data:') === 0 ? im : 'data:image/jpeg;base64,' + im
               })
-            } else {
-              this.setData({ remoteCanvasSrc: '' })
             }
-          }
-        },
-        onError: (e) => { console.error('watch canvas', e) }
-      })
+          })
+          .catch(() => {})
+      }
+    })
   },
   stopWatchC () {
+    stopDevtoolsPoll(this, '_devtoolsPollC')
     if (this._wc) {
       this._wc.close()
       this._wc = null
@@ -411,11 +583,20 @@ Page({
   },
   applyG (d) {
     const n = (d.publicPlayers && d.publicPlayers.length) || 0
-    this.setData({
+    const patch = {
       state: d,
       roomCode: d.roomCode || this.data.roomCode,
       memberCountLine: memberCountLine(n, 0, '至少 2 人可开始')
+    }
+    const v = this.data.view || {}
+    patchMemberDisplay(patch, {
+      players: d.publicPlayers || [],
+      phase: d.status === 'waiting' ? 'waiting' : 'playing',
+      maxPlayers: 0,
+      isHost: v.isHost,
+      fallbackNeed: 2
     })
+    this.setData(patch)
   },
   loadView () {
     const { roomId } = this.data
@@ -427,7 +608,18 @@ Page({
       {
         silent: true,
         onOk: (res) => {
-          this.setData({ view: (res && res.result) || {} }, () => {
+          const v = (res && res.result) || {}
+          const st = this.data.state || {}
+          const patch = { view: v }
+          const stStatus = st.status || v.roomStatus
+          patchMemberDisplay(patch, {
+            players: (st.publicPlayers || v.publicPlayers) || [],
+            phase: stStatus === 'waiting' ? 'waiting' : 'playing',
+            maxPlayers: 0,
+            isHost: v.isHost,
+            fallbackNeed: 2
+          })
+          this.setData(patch, () => {
             this.tryAutoReveal()
             this.scheduleInitCanvas()
             this.setupUploadLoop()

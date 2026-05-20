@@ -1,21 +1,40 @@
 <view class="page play-page">
   <view class="hero">
     <view class="hero-title">{{title}}</view>
-    <view class="hero-subtitle">{{mode === 'truthDareRoom' ? '进聚会组后随机选人，大家投票' : '面对面辅助互动'}}</view>
+    <view class="hero-subtitle">{{mode === 'truthDareRoom' ? '进聚会组后随机选人，大家投票' : '随机题与计时辅助'}}</view>
   </view>
 
   <!-- 同场同步·真心话大冒险 -->
   <view wx:if="{{mode === 'truthDareRoom'}}" class="card td-card">
     <view wx:if="{{tdPhase==='none'}}" class="td-block">
-      <view class="td-lead">用首页「输入口令」进同一聚会组，满 2 人后由<text class="td-em">主持</text>开一轮。系统会随机 1 位被选中，其余人为其选真心话或趣味任务，主持点结束计票、按票多的一方为准。仅线下同场。</view>
-      <view class="td-code" wx:if="{{roomCode}}">聚会组口令 <text class="td-em">{{roomCode}}</text><text class="muted" wx:if="{{memberCountLine}}"> · {{memberCountLine}}</text></view>
-      <button class="btn btn-secondary main-btn" open-type="share">邀请朋友</button>
-      <button wx:if="{{tdIsHost}}" class="btn btn-primary main-btn" bindtap="tdStartRound">随机选一位 & 开投</button>
+      <view class="td-lead">用首页「输入口令」进同一聚会组，满 2 人后由<text class="td-em">主持</text>开一轮。系统会随机 1 位被选中，其余人为其选真心话或趣味任务，主持点结束计票、按票多的一方为准。</view>
+      <view class="td-code" wx:if="{{roomCode}}">聚会组口令 <text class="td-em">{{roomCode}}</text></view>
+      <button class="btn-wechat-invite main-btn" open-type="share">邀请朋友</button>
+      <view class="rg-status-banner" wx:if="{{statusHint && tdPhase==='none'}}">{{statusHint}}</view>
+      <view class="rg-members-card" wx:if="{{displayPlayers && displayPlayers.length}}" style="margin-top:20rpx">
+        <view class="rg-members-head">
+          <text class="rg-members-title">成员</text>
+          <text class="muted rg-members-count">{{memberCountLine}}</text>
+        </view>
+        <view class="rg-member-list">
+          <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
+            <view class="rg-avatar">{{p.avatarText}}</view>
+            <view class="rg-member-body">
+              <view class="rg-member-name-row">
+                <text class="rg-member-name">{{p.nickName}}</text>
+                <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+                <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
+              </view>
+              <text class="rg-ready-label">{{p.readyLabel}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <button wx:if="{{tdIsHost}}" class="btn btn-primary main-btn rg-btn-primary" bindtap="tdStartRound">开始本轮</button>
       <view wx:if="{{tdIsHost && tdRoomPlayers.length > 1}}" class="td-host-tools">
         <button class="btn btn-secondary main-btn" style="margin-top: 16rpx" bindtap="tdShowTransferSheet">指定新任主持…</button>
         <button class="btn btn-secondary main-btn" style="margin-top: 12rpx" bindtap="tdAbdicateHost">移交给最早进组的一位</button>
       </view>
-      <view wx:if="{{!tdIsHost}}" class="muted">等主持人点「随机选一位」…</view>
     </view>
     <view wx:if="{{tdPhase==='voting'}}" class="td-block">
       <view class="td-boom">本轮</view>
@@ -50,8 +69,10 @@
       <view wx:else>
         <view class="td-q-title">{{prompt.title}}</view>
         <view class="td-q-detail">{{prompt.detail}}</view>
+        <button class="btn btn-secondary main-btn btn-ai" bindtap="onAiSpicePrompt" disabled="{{aiBusy}}">AI 加码</button>
         <button class="btn btn-secondary main-btn" bindtap="tdDrawQuestion">同类型再换一题</button>
       </view>
+      <button class="btn btn-secondary main-btn btn-ai" bindtap="onAiTdComment" disabled="{{aiBusy}}">AI 点评本轮</button>
       <button wx:if="{{tdIsHost}}" class="btn btn-primary main-btn" bindtap="tdNextRound">进入下一轮</button>
     </view>
   </view>
@@ -60,6 +81,7 @@
     <button class="btn {{questionType === 'truth' ? 'btn-primary' : 'btn-secondary'}} tab" data-type="truth" bindtap="switchQuestionType">真心话</button>
     <button class="btn {{questionType === 'dare' ? 'btn-primary' : 'btn-secondary'}} tab" data-type="dare" bindtap="switchQuestionType">大冒险</button>
   </view>
+  <button wx:if="{{mode === 'truthDare'}}" class="btn btn-secondary main-btn btn-ai" bindtap="onAiGenTruthDare" disabled="{{aiBusy}}">AI 出新题</button>
 
   <view wx:if="{{mode === 'number'}}" class="card prompt-card">
     <view class="prompt-title">范围 {{numberLow}} - {{numberHigh}}</view>
@@ -75,6 +97,8 @@
     <view wx:if="{{prompt.hint}}" class="hint">提示：{{prompt.hint}}</view>
     <view wx:if="{{showAnswer && prompt.answer}}" class="answer">答案：{{prompt.answer}}</view>
     <button class="btn btn-primary main-btn" bindtap="nextPrompt">换一个</button>
+    <button wx:if="{{mode === 'truthDare' || (mode === 'truthDareRoom' && tdShowQuestion && prompt.detail)}}" class="btn btn-secondary main-btn btn-ai" bindtap="onAiSpicePrompt" disabled="{{aiBusy}}">AI 加码</button>
+    <button wx:if="{{mode === 'story'}}" class="btn btn-secondary main-btn btn-ai" bindtap="onAiStoryLine" disabled="{{aiBusy}}">AI 接一句</button>
     <button wx:if="{{prompt.answer}}" class="btn btn-secondary main-btn" bindtap="toggleAnswer">{{showAnswer ? '隐藏答案' : '看答案'}}</button>
   </view>
 
@@ -101,3 +125,11 @@
     <button class="btn btn-primary main-btn" bindtap="addStoryLine">记录一句</button>
   </view>
 </view>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

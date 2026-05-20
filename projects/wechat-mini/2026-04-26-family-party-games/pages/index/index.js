@@ -3,21 +3,35 @@ const { callRoomService } = require('../../utils/roomCloud')
 const { callWerewolfService } = require('../../utils/werewolfCloud')
 const { callUndercoverService } = require('../../utils/undercoverRoomCloud')
 const { callGameStats } = require('../../utils/gameStatsCloud')
+const { shouldSkipGameStatsInDevtools } = require('../../utils/cloudRealtime')
 const { callMusic } = require('../../utils/musicRoomCloud')
 const { callDraw } = require('../../utils/drawRoomCloud')
 const { callDrink } = require('../../utils/drinkRoomCloud')
+const {
+  enableShareMenus,
+  handleShareAppMessage,
+  handleShareTimeline
+} = require('../../utils/shareHelper')
+const {
+  refreshAiUnlockPage,
+  showShareGuide,
+  tryRedeemShareFromQuery,
+  onPageShowUnlock,
+  onPageHideUnlock,
+  closeAiShareModal
+} = require('../../utils/aiUnlock')
 
 const meta = {
-  趣味抽签: ['🎫', '同场同步', 'drinkParty', '趣味抽签', '6 位聚会组：倒计时、响铃、投票、趣味小任务记数，同屏同步。'],
-  '谁是卧底': ['探', '同场同步', 'undercover', '谁是卧底', '6 位+同场同步，本机词与票。'],
+  趣味抽签: ['🎫', '同场同步', 'drinkParty', '趣味抽签', '至少 2 人；倒计时、响铃、投票，同屏同步。'],
+  '谁是卧底': ['探', '同场同步', 'undercover', '谁是卧底', '至少 3 人；本机看词与投票。'],
   '真心话大冒险': ['🎲', '抽题', 'play', '真心话', '随机问答题，同场可大家投票。'],
   '海龟汤': ['🧩', '推理', 'play', '海龟汤', '看汤面，推理汤底。'],
   '优点轰炸': ['🌟', '夸夸', 'play', '优点轰炸', '轮流夸人，记录金句。'],
   '大瞎话': ['🙈', '指令', 'play', '大瞎话', '随机抽搞怪任务。'],
   '猜数字': ['🔢', '竞猜', 'play', '猜数字', '范围提示，猜中记一分。'],
   '十五二十': ['✋', '互动', 'play', '十五二十', '双人喊数计分。'],
-  '你画我猜轮流传词版': ['🎨', '传词', 'drawGuess', '你画我猜', '6 位+同场同步画布抢答。'],
-  '疯狂猜歌': ['🎵', '听歌', 'songGuess', '猜歌', '6 位+同场，随机主持外放、他人抢答。'],
+  '你画我猜轮流传词版': ['🎨', '传词', 'drawGuess', '你画我猜', '至少 2 人；同屏画布抢答。'],
+  '疯狂猜歌': ['🎵', '听歌', 'songGuess', '猜歌', '随机主持外放、他人抢答。'],
   '倒着说': ['🔁', '反应', 'play', '倒着说', '短句倒序挑战。'],
   '默契大考验': ['💞', '默契', 'play', '默契考验', '同时指人看默契。'],
   '故事接龙': ['📖', '接龙', 'play', '故事接龙', '随机开头一起编。'],
@@ -32,7 +46,7 @@ const meta = {
   '袋鼠跳跳跳': ['🦘', '运动', 'play', '袋鼠跳', '秒表记录成绩。'],
   '爱心接力 / 齐心协力': ['💗', '合作', 'play', '爱心接力', '随机协作难度。'],
   '我是影帝': ['🎭', '表演', 'play', '我是影帝', '抽场景即兴表演。'],
-  '秘密身份推理（聚会版）': ['🎭', '同场同步', 'werewolf', '身份推理', '6 位口令进聚会组，本机看身份。']
+  '秘密身份推理（聚会版）': ['🎭', '同场同步', 'werewolf', '身份推理', '选 6/8/10/12 人局；本机看身份。']
 }
 
 /** 首页同场同步类互动优先排序；数字越小越靠前。 */
@@ -49,7 +63,11 @@ Page({
   data: {
     games: [],
     /** 全站各互动开始次数，用于热门排序 { [title: string]: number } */
-    clickRanks: {}
+    clickRanks: {},
+    agentBusy: false,
+    aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
+    showAiShareModal: false,
+    shareCopy: {}
   },
 
   buildGameList () {
@@ -93,8 +111,21 @@ Page({
     this.setData({ games })
   },
 
+  fetchClickRanksDebounced () {
+    const now = Date.now()
+    if (this._ranksFetchAt && now - this._ranksFetchAt < 2500) {
+      return
+    }
+    this._ranksFetchAt = now
+    this.fetchClickRanks()
+  },
+
   fetchClickRanks () {
     if (!wx.cloud) {
+      this.applyGameSort()
+      return
+    }
+    if (shouldSkipGameStatsInDevtools()) {
       this.applyGameSort()
       return
     }
@@ -118,21 +149,48 @@ Page({
     )
   },
 
-  onLoad () {
+  refreshAiUnlock () {
+    refreshAiUnlockPage(this)
+  },
+
+  onCloseAiShareModal () {
+    closeAiShareModal(this)
+  },
+
+  onAiShareTimeline () {
+    closeAiShareModal(this)
+    showShareGuide()
+  },
+
+  onAiRecommend () {
+    const { runPartyRecommend } = require('../../utils/agentHelper')
+    runPartyRecommend(this)
+  },
+
+  onLoad (q) {
+    enableShareMenus()
+    tryRedeemShareFromQuery(q || {})
     this.applyGameSort()
-    this.fetchClickRanks()
+    this.fetchClickRanksDebounced()
+    this.refreshAiUnlock()
   },
 
   onShow () {
-    this.fetchClickRanks()
+    enableShareMenus()
+    this.fetchClickRanksDebounced()
+    onPageShowUnlock(this)
+  },
+
+  onHide () {
+    onPageHideUnlock(this)
   },
 
   onShareAppMessage () {
-    return {
-      title: '家庭聚会助手 - 线下互动神器',
-      path: '/pages/index/index',
-      imageUrl: ''
-    }
+    return handleShareAppMessage(this, 'index', {})
+  },
+
+  onShareTimeline () {
+    return handleShareTimeline(this, 'index', {})
   },
 
   startGame(event) {
@@ -185,7 +243,7 @@ Page({
     wx.showModal({
       title: '输入口令',
       editable: true,
-      placeholderText: '4 位如 1333 或 6 位进身份推理',
+      placeholderText: '4 位或 6 位数字口令',
       success: (result) => {
         if (!result.confirm) return
         this.joinRoomByCode(result.content)
@@ -209,7 +267,7 @@ Page({
       this.joinCommonRoomByCode(digits)
       return
     }
-    wx.showToast({ title: '请输入 4 位或 6 位数字', icon: 'none' })
+    wx.showToast({ title: '请输入 4 位或 6 位数字口令', icon: 'none' })
   },
 
   joinSixDigitRoom(digits) {
@@ -412,7 +470,7 @@ Page({
           if (fromChain) {
             if (/组|房间|不存在|无效/.test(m2)) {
               wx.showToast({
-                title: '该 6 位非本程序已开同场聚会组',
+                title: '该数字口令非本程序已开的同场聚会组',
                 icon: 'none'
               })
             } else {

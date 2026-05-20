@@ -188,6 +188,8 @@ button.vote-btn.btn {
   line-height: 1.75;
 }
 
+@import '../../styles/room-game.wxss';
+
 /* v2 同场同步 */
 .page.ucv2 {
   padding: 20rpx 24rpx 100rpx;
@@ -228,25 +230,34 @@ button.vote-btn.btn {
   border-radius: 12rpx;
   font-size: 28rpx;
 }
-.uc-btn {
+.uc-btn,
+button.uc-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: 100% !important;
   margin: 0;
   box-sizing: border-box;
   margin-top: 16rpx;
-  line-height: 2.1;
+  min-height: 80rpx;
+  padding: 0 28rpx !important;
+  line-height: 1.35 !important;
   border-radius: 14rpx;
   font-size: 28rpx;
-  padding: 0;
 }
 .uc-btn.uc-primary {
   background: #ea580c;
   color: #fff;
   border: none;
+  min-height: 88rpx;
 }
 .uc-btn.uc-ghost {
   background: #fff4e5;
   color: #7c2d12;
   border: 1rpx solid #fed7aa;
+}
+.uc-btn::after {
+  border: none;
 }
 .uc-pill {
   display: inline-block;
@@ -321,4 +332,21 @@ button.vote-btn.btn {
 .uc-row {
   font-size: 28rpx;
   margin: 4rpx 0;
+}
+
+.uc-room-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.uc-btn-compact {
+  margin-top: 12rpx !important;
+}
+
+.uc-phase-line {
+  font-size: 24rpx;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 8rpx;
 }

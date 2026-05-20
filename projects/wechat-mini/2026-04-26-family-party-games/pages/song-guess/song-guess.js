@@ -3,9 +3,25 @@ const {
   memberCountLine,
   refreshCloudDoc,
   runStartAction,
-  explainMusicStartFail,
-  showRoomBlockModal
+  buildStartChecks
 } = require('../../utils/roomUi')
+const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const {
+  enableShareMenus,
+  handleShareAppMessage,
+  handleShareTimeline
+} = require('../../utils/shareHelper')
+const {
+  refreshAiUnlockPage,
+  tryRedeemShareFromQuery,
+  onPageShowUnlock,
+  onPageHideUnlock,
+  closeAiShareModal,
+  showShareGuide
+} = require('../../utils/aiUnlock')
+const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const { runAi, SYSTEM_MUSIC_HOST } = require('../../utils/aiHelper')
+const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
 
 const ROUNDS = [5, 10, 15]
 
@@ -28,10 +44,26 @@ Page({
     inputAnswer: '',
     roundLabels: ['5 题', '10 题', '15 题'],
     roundIndex: 0,
-    memberCountLine: ''
+    memberCountLine: '',
+    displayPlayers: [],
+    statusHint: '',
+    playerProgressPct: 0,
+    aiPanelOpen: false,
+    aiBusy: false,
+    aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
+    showAiShareModal: false,
+    shareCopy: {}
   },
 
+  _shareCtx () {
+    return {
+      roomId: this.data.roomId,
+      roomCode: this.data.roomCode || (this.data.state && this.data.state.roomCode)
+    }
+  },
   onLoad (q) {
+    enableShareMenus()
+    tryRedeemShareFromQuery(q || {})
     const roomId = (q && q.roomId) ? String(q.roomId) : ''
     const roomCode = q && q.roomCode
       ? decodeURIComponent(String(q.roomCode))
@@ -49,30 +81,34 @@ Page({
   },
 
   onUnload () {
+    onRoomLeft(this)
     this.stopTick()
     this.stopWatch()
   },
 
+  onHide () {
+    onPageHideUnlock(this)
+  },
+
   onShow () {
+    enableShareMenus()
+    onPageShowUnlock(this)
     if (this.data.roomId) {
       this._refreshRoomState()
     }
   },
   onShareAppMessage () {
-    const code = (this.data.roomCode || (this.data.state && this.data.state.roomCode) || '')
-      .toString()
-      .replace(/\D/g, '')
-    let path = '/pages/index/index'
-    let title = '家庭聚会助手 - 疯狂猜歌'
-    if (code.length === 6 && this.data.roomId) {
-      path =
-        '/pages/song-guess/song-guess?roomId=' +
-        encodeURIComponent(String(this.data.roomId)) +
-        '&roomCode=' +
-        encodeURIComponent(code)
-      title = '一起来玩疯狂猜歌！口令 ' + code
-    }
-    return { title, path, imageUrl: '' }
+    return handleShareAppMessage(this, 'music', this._shareCtx())
+  },
+  onShareTimeline () {
+    return handleShareTimeline(this, 'music', this._shareCtx())
+  },
+  onCloseAiShareModal () {
+    closeAiShareModal(this)
+  },
+  onAiShareTimeline () {
+    closeAiShareModal(this)
+    showShareGuide()
   },
   _refreshRoomState () {
     const id = this.data.roomId
@@ -106,7 +142,23 @@ Page({
 
   onRoundChange (e) {
     const i = Number((e.detail && e.detail.value) | 0)
-    this.setData({ roundIndex: i >= 0 && i < ROUNDS.length ? i : 0 })
+    this.setData({ roundIndex: i >= 0 && i < ROUNDS.length ? i : 0 }, () => {
+      this._saveRounds(false)
+    })
+  },
+  onRoundStep (e) {
+    const delta = Number((e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.delta) | 0)
+    const cur = this.data.roundIndex | 0
+    const next = Math.max(0, Math.min(ROUNDS.length - 1, cur + delta))
+    if (next === cur) {
+      return
+    }
+    this.setData({ roundIndex: next }, () => {
+      this._saveRounds(false)
+    })
+  },
+  toggleAiPanel () {
+    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
   },
 
   onInputAns (e) {
@@ -164,7 +216,7 @@ Page({
       .replace(/\D/g, '')
       .slice(0, 6)
     if (code.length !== 6) {
-      wx.showToast({ title: '请输入6位房号', icon: 'none' })
+      wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
     const nick = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
@@ -193,14 +245,36 @@ Page({
     )
   },
 
-  doSetRounds () {
+  _saveRounds (silent) {
+    if (!this.data.view || !this.data.view.isHost) {
+      return
+    }
+    const st = this.data.state || {}
+    if (st.status !== 'waiting') {
+      return
+    }
     const n = ROUNDS[this.data.roundIndex | 0] || 5
+    if (this._lastSavedRounds === n) {
+      return
+    }
+    this._lastSavedRounds = n
+    if (!silent) {
+      wx.showLoading({ title: '保存题数', mask: true })
+    }
     callMusic(
       { action: 'setRounds', roomId: this.data.roomId, totalRounds: n },
       {
         onOk: () => {
-          wx.showToast({ title: '已保存', icon: 'none' })
+          if (!silent) {
+            wx.hideLoading()
+          }
           this.loadView()
+        },
+        onError: () => {
+          if (!silent) {
+            wx.hideLoading()
+          }
+          this._lastSavedRounds = null
         }
       }
     )
@@ -211,21 +285,21 @@ Page({
     const n = (st.publicPlayers && st.publicPlayers.length) || 0
     const v = this.data.view || {}
     const ctx = { playerCount: n }
-    if (!v.isHost) {
-      showRoomBlockModal('无权限', '只有组长可以点击「开始互动」。')
-      return
-    }
-    if (n < 2) {
-      const box = explainMusicStartFail('至少2人', ctx)
-      showRoomBlockModal(box.title, box.content)
-      return
-    }
+    const checks = buildStartChecks({
+      isHost: v.isHost,
+      playerCount: n,
+      minPlayers: 2,
+      kind: 'music',
+      ctx,
+      startVerb: '开始互动'
+    })
     runStartAction({
       kind: 'music',
       ctx,
+      localChecks: checks,
       callService: callMusic,
       payload: { action: 'startGame', roomId: this.data.roomId },
-      loadingTitle: '开始',
+      loadingTitle: '开始互动',
       onSuccess: () => {
         this.loadView()
       }
@@ -279,6 +353,7 @@ Page({
 
   afterHasRoomId (roomId) {
     this.setData({ roomId: String(roomId) })
+    onRoomEntered(this, String(roomId), 'music')
     this.startWatch(String(roomId))
     if (wx.cloud && ensure()) {
       const db = wx.cloud.database()
@@ -334,7 +409,8 @@ Page({
     const roundNum = cix >= 0 ? cix + 1 : 0
     const rh = d.roundHits || []
     const pn = (d.publicPlayers && d.publicPlayers.length) || 0
-    this.setData({
+    const v = this.data.view || {}
+    const patch = {
       state: d,
       roomCode: d.roomCode || this.data.roomCode,
       roundIndex,
@@ -342,7 +418,15 @@ Page({
       hasRoundHits: rh.length > 0,
       showLog: !!(d.publicLog && d.publicLog.length),
       memberCountLine: memberCountLine(pn, 0, '建议至少 2 人')
+    }
+    patchMemberDisplay(patch, {
+      players: d.publicPlayers || [],
+      phase: d.status === 'waiting' ? 'waiting' : 'playing',
+      maxPlayers: 0,
+      isHost: v.isHost,
+      fallbackNeed: 2
     })
+    this.setData(patch)
     this.syncTimeLeft(d)
     this.maybeStartTick(d)
   },
@@ -380,6 +464,19 @@ Page({
     }
   },
 
+  doAiHostTip () {
+    const st = this.data.state || {}
+    const host = st.roundHostNickName || '本轮主持'
+    runAi(this, {
+      cacheTag: 'music-host',
+      roomId: this.data.roomId,
+      round: (this.data.state && this.data.state.currentIndex) | 0,
+      system: SYSTEM_MUSIC_HOST,
+      resultTitle: 'AI 主持词',
+      postProcess: { maxLen: 40 },
+      buildPrompt: () => '疯狂猜歌聚会，本轮主持：' + host + '，本机外放。'
+    })
+  },
   loadView () {
     const { roomId } = this.data
     if (!roomId) {
@@ -395,7 +492,17 @@ Page({
           const a = v.hostPlayAliases
           v.hostPlayAliasesString =
             a && a.length ? a.join('、') : ''
-          this.setData({ view: v })
+          const st = this.data.state || {}
+          const patch = { view: v }
+          const stStatus = st.status || v.roomStatus
+          patchMemberDisplay(patch, {
+            players: st.publicPlayers || v.publicPlayers || [],
+            phase: stStatus === 'waiting' ? 'waiting' : 'playing',
+            maxPlayers: 0,
+            isHost: v.isHost,
+            fallbackNeed: 2
+          })
+          this.setData(patch)
         },
         onError: () => {}
       }

@@ -11,8 +11,24 @@ const { callRoomService } = require('../../utils/roomCloud')
 const {
   memberCountLine,
   runStartAction,
-  explainTruthDareStartFail
+  buildStartChecks
 } = require('../../utils/roomUi')
+const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const {
+  enableShareMenus,
+  handleShareAppMessage,
+  handleShareTimeline
+} = require('../../utils/shareHelper')
+const {
+  refreshAiUnlockPage,
+  tryRedeemShareFromQuery,
+  onPageShowUnlock,
+  onPageHideUnlock,
+  closeAiShareModal,
+  showShareGuide
+} = require('../../utils/aiUnlock')
+const { runAi, SYSTEM_PARTY, SYSTEM_TRUTH_DARE, SYSTEM_STORY } = require('../../utils/aiHelper')
+const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
 
 Page({
   data: {
@@ -45,13 +61,20 @@ Page({
     tdRound: 0,
     tdRoomPlayers: [],
     tdMyOpenId: '',
-    memberCountLine: ''
+    displayPlayers: [],
+    statusHint: '',
+    memberCountLine: '',
+    aiBusy: false,
+    aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
+    showAiShareModal: false,
+    shareCopy: {}
   },
 
   timer: null,
   _tdPoll: null,
 
   onLoad(query) {
+    tryRedeemShareFromQuery(query || {})
     const title = decodeURIComponent(query.title || '')
     let config = {}
     try {
@@ -61,8 +84,10 @@ Page({
     }
     this.setData({ title })
     const rc = (config.roomCode && String(config.roomCode).replace(/\D/g, '')) || ''
+    enableShareMenus()
     if (title === '真心话大冒险' && rc.length === 4) {
       this.setData({ mode: 'truthDareRoom', roomCode: rc })
+      onRoomEntered(this, 'td_' + rc, 'truthDare')
       this._tdPoll = setInterval(() => {
         this.refreshTdState()
         this.refreshRoomPlayers()
@@ -74,31 +99,48 @@ Page({
     this.initGame(title)
   },
 
+  onHide() {
+    onPageHideUnlock(this)
+  },
+
   onShow() {
+    enableShareMenus()
+    onPageShowUnlock(this)
     if (this.data.mode === 'truthDareRoom' && this.data.roomCode) {
       this.refreshTdState()
       this.refreshRoomPlayers()
     }
   },
 
+  _shareCtx() {
+    return { roomCode: this.data.roomCode }
+  },
+
   onShareAppMessage() {
-    const code = (this.data.roomCode || '').toString().replace(/\D/g, '').slice(0, 4)
-    if (code.length !== 4) {
-      return { title: '家庭聚会助手', path: '/pages/index/index' }
+    if (this.data.mode === 'truthDareRoom') {
+      return handleShareAppMessage(this, 'truthDare', this._shareCtx())
     }
-    const cfg = JSON.stringify({ roomCode: code })
-    return {
-      title: '一起来玩真心话大冒险！口令 ' + code,
-      path:
-        '/pages/play/play?title=' +
-        encodeURIComponent('真心话大冒险') +
-        '&config=' +
-        encodeURIComponent(cfg),
-      imageUrl: ''
+    return handleShareAppMessage(this, 'index', {})
+  },
+
+  onShareTimeline() {
+    if (this.data.mode === 'truthDareRoom') {
+      return handleShareTimeline(this, 'truthDare', this._shareCtx())
     }
+    return handleShareTimeline(this, 'index', {})
+  },
+
+  onCloseAiShareModal() {
+    closeAiShareModal(this)
+  },
+
+  onAiShareTimeline() {
+    closeAiShareModal(this)
+    showShareGuide()
   },
 
   onUnload() {
+    onPageHideUnlock(this)
     this.stopTimer()
     if (this._tdPoll) {
       clearInterval(this._tdPoll)
@@ -141,6 +183,7 @@ Page({
     if (s.phase === 'resolved' && s.lastTally && s.lastTally.tie) {
       this.setData({ tdShowQuestion: false, prompt: null })
     }
+    this.refreshRoomPlayers()
   },
 
   refreshRoomPlayers() {
@@ -154,10 +197,25 @@ Page({
         onOk: (res) => {
           const r = res.result || {}
           const pl = r.players || []
-          this.setData({
+          const patch = {
             tdRoomPlayers: pl,
             memberCountLine: memberCountLine(pl.length, 0, '至少 2 人可开始')
+          }
+          const ph = this.data.tdPhase === 'none' ? 'waiting' : 'playing'
+          patchMemberDisplay(patch, {
+            players: pl.map((p) => ({
+              openId: p.openId,
+              nickName: p.nickName,
+              isHost: !!p.isHost
+            })),
+            phase: ph,
+            maxPlayers: 0,
+            isHost: this.data.tdIsHost,
+            fallbackNeed: 2,
+            hostWaiting: '⏳ 点击「开始本轮」',
+            guestWaiting: '👥 等待主持人开始'
           })
+          this.setData(patch)
         },
         onError: () => {}
       }
@@ -249,14 +307,15 @@ Page({
   tdStartRound() {
     const n = (this.data.tdRoomPlayers || []).length
     const ctx = { playerCount: n }
-    const checks = []
-    if (!this.data.tdIsHost) {
-      checks.push({ fail: true, title: '无权限', content: '只有主持人可以开始新轮。' })
-    }
-    if (n < 2) {
-      const box = explainTruthDareStartFail('请至少2位参与者进组再开始', ctx)
-      checks.push({ fail: true, title: box.title, content: box.content })
-    }
+    const checks = buildStartChecks({
+      isHost: this.data.tdIsHost,
+      playerCount: n,
+      minPlayers: 2,
+      kind: 'truthDare',
+      ctx,
+      hostLabel: '主持人',
+      startVerb: '开始新轮'
+    })
     const callTd = (payload, opts) => callRoomService(payload, opts)
     runStartAction({
       kind: 'truthDare',
@@ -350,7 +409,7 @@ Page({
       return
     }
 
-    const config = helperGames[title] || { mode: 'random', prompts: [{ title, detail: '面对面辅助玩法。' }] }
+    const config = helperGames[title] || { mode: 'random', prompts: [{ title, detail: '主持人持机，亲友口头互动。' }] }
     this.config = config
     this.setData({
       mode: config.mode,
@@ -462,6 +521,84 @@ Page({
     })
   },
 
+  onAiSpicePrompt() {
+    const p = this.data.prompt
+    if (!p || !p.detail) {
+      return
+    }
+    const kind = this.data.questionType === 'dare' ? '大冒险' : '真心话'
+    runAi(this, {
+      cacheTag: 'play-spice-' + this.data.questionType,
+      system: SYSTEM_TRUTH_DARE,
+      postProcess: { maxLen: 50 },
+      buildPrompt: () => '原' + kind + '题：「' + p.detail + '」。请改写成更幽默的版本。',
+      onOk: (text) => {
+        const patch = {
+          prompt: { title: p.title || kind, detail: text }
+        }
+        if (this.data.mode === 'truthDareRoom') {
+          patch.tdShowQuestion = true
+        }
+        this.setData(patch)
+      }
+    })
+  },
+  onAiGenTruthDare() {
+    const kind = this.data.questionType === 'dare' ? '大冒险' : '真心话'
+    runAi(this, {
+      cacheTag: 'play-gen-' + this.data.questionType,
+      system: SYSTEM_TRUTH_DARE,
+      postProcess: { maxLen: 50 },
+      buildPrompt: () => '生成1条' + kind + '。',
+      onOk: (text) => {
+        const patch = { prompt: { title: kind, detail: text } }
+        if (this.data.mode === 'truthDareRoom') {
+          patch.tdShowQuestion = true
+        }
+        this.setData(patch)
+      }
+    })
+  },
+  onAiStoryLine() {
+    const lines = this.data.storyLines || []
+    runAi(this, {
+      cacheTag: 'play-story',
+      round: lines.length,
+      system: SYSTEM_STORY,
+      postProcess: { maxLen: 80 },
+      buildPrompt: () => {
+        const prev = lines.length ? lines.join('') : this.data.prompt.title || ''
+        return '故事接龙，已有：「' + prev + '」。'
+      },
+      onOk: (text) => {
+        const lines2 = this.data.storyLines.concat([text])
+        this.setData({ storyLines: lines2 })
+      }
+    })
+  },
+  onAiTdComment() {
+    const lt = this.data.tdLastTally
+    if (!lt) {
+      return
+    }
+    runAi(this, {
+      cacheTag: 'play-td-comment',
+      round: this.data.tdRound | 0,
+      system: SYSTEM_PARTY,
+      resultTitle: 'AI 点评',
+      postProcess: { maxLen: 120 },
+      buildPrompt: () =>
+        '真心话大冒险投票：' +
+        this.data.tdTargetName +
+        ' 得真心话' +
+        (lt.truthCount | 0) +
+        '票、大冒险' +
+        (lt.dareCount | 0) +
+        '票。' +
+        (lt.tie ? '平票。' : '胜出：' + (lt.winner === 'truth' ? '真心话' : '大冒险')) +
+        '。'
+    })
+  },
   checkNumber(guess) {
     if (!guess || guess < this.data.numberLow || guess > this.data.numberHigh) {
       this.setData({ numberMessage: '请输入当前范围内的数字。' })

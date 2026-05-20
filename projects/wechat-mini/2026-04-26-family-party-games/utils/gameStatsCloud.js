@@ -48,36 +48,58 @@ function callGameStats (data, opts) {
     onError && onError()
     return
   }
+  const action = (data && data.action) || ''
+  const t0 = Date.now()
   if (debugLog) {
     /* eslint-disable no-console */
     console.log('[gameStatsService] call', data)
     /* eslint-enable no-console */
   }
-  wx.cloud.callFunction({
+  const req = {
     name: 'gameStatsService',
     data,
-    success: (res) => {
-      const r = (res && res.result) || {}
-      if (r && r.errMsg) {
-        if (!silent) {
-          /* eslint-disable no-console */
-          console.warn('[gameStatsService] err in result', r)
-          /* eslint-enable no-console */
-        }
-        onError && onError(new Error(String(r.errMsg)))
-        return
-      }
-      onOk && onOk(res)
-    },
-    fail: (err) => {
-      if (!silent) {
+    timeout: 15000
+  }
+  if (configEnv) {
+    req.config = { env: configEnv }
+  }
+  req.success = (res) => {
+    const ms = Date.now() - t0
+    const r = (res && res.result) || {}
+    if (r && r.errMsg) {
+      if (debugLog) {
         /* eslint-disable no-console */
-        console.warn('[gameStatsService] callFunction fail', err)
+        console.warn('[gameStatsService] biz fail', action, ms + 'ms', r)
+        /* eslint-enable no-console */
+      } else if (!silent) {
+        /* eslint-disable no-console */
+        console.warn('[gameStatsService] err in result', r)
         /* eslint-enable no-console */
       }
-      onError && onError(err)
+      onError && onError(new Error(String(r.errMsg)))
+      return
     }
-  })
+    if (debugLog) {
+      /* eslint-disable no-console */
+      console.log('[gameStatsService] ok', action, ms + 'ms')
+      /* eslint-enable no-console */
+    }
+    onOk && onOk(res)
+  }
+  req.fail = (err) => {
+    const ms = Date.now() - t0
+    if (debugLog) {
+      /* eslint-disable no-console */
+      console.warn('[gameStatsService] fail', action, ms + 'ms', err)
+      /* eslint-enable no-console */
+    } else if (!silent) {
+      /* eslint-disable no-console */
+      console.warn('[gameStatsService] callFunction fail', err)
+      /* eslint-enable no-console */
+    }
+    onError && onError(err)
+  }
+  wx.cloud.callFunction(req)
 }
 
 module.exports = { callGameStats, ensureGameStatsCloud: ensureCloud }

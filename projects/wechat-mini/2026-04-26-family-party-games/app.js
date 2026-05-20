@@ -1,11 +1,26 @@
+const { enableShareMenus } = require('./utils/shareHelper')
+const { ensureCloudInit, getCloudEnvId } = require('./utils/cloudInit')
+
 App({
   onLaunch() {
-    // 云能力见 utils/roomCloud：首次点「输入口令/生成口令」再 wx.cloud.init，减少冷启动时误报
+    // 必须在任意 Page / 云函数调用之前完成初始化
+    if (wx.cloud) {
+      const envId = getCloudEnvId()
+      if (envId) {
+        wx.cloud.init({
+          env: envId,
+          traceUser: true
+        })
+      } else {
+        ensureCloudInit()
+      }
+      this.globalData.cloudInited = true
+    }
+    enableShareMenus()
   },
 
   globalData: {
     appName: '家庭聚会助手',
-    // 由 utils/roomCloud 在首次需要「口令」云能力时置 true（避免未开通云时启动就 init 打日志 / timeout）
     cloudInited: false
   }
 })

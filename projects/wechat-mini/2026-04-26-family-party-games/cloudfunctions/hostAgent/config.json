@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "openapi": []
+  },
+  "timeout": 60,
+  "envVariables": {
+    "AGENT_BOT_ID": "party-host-agent"
+  },
+  "triggers": [
+    {
+      "name": "autoTick",
+      "type": "timer",
+      "config": "0 */1 * * * * *"
+    }
+  ]
+}

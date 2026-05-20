@@ -1,3 +1,5 @@
+@import '../../styles/room-game.wxss';
+
 .page {
   min-height: 100vh;
   box-sizing: border-box;
@@ -100,15 +102,23 @@
   margin-top: 0;
 }
 
-.btn {
+.btn,
+button.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 16rpx;
   min-height: 80rpx;
-  line-height: 80rpx;
+  padding: 0 24rpx;
+  line-height: 1.35;
   font-size: 30rpx;
   border-radius: 20rpx;
   background: #eee8e1;
   color: #1f1c24;
-  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+.btn::after {
+  border: none;
 }
 
 .btn.primary {

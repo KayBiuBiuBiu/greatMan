@@ -1,0 +1,11 @@
+<view class="ai-share-mask" wx:if="{{visible}}" catchtouchmove="noop">
+  <view class="ai-share-sheet" catchtap="noop">
+    <view class="ai-share-tip">
+      <text class="ai-share-tip-main">{{copyMain}}</text>
+      <text class="ai-share-tip-sub" wx:if="{{nextHint}}">{{nextHint}}</text>
+    </view>
+    <button class="ai-share-btn btn-wechat-invite" open-type="share">{{friendBtn}}</button>
+    <button class="ai-share-btn btn-wechat-invite" bindtap="onTimeline">{{timelineBtn}}</button>
+    <view class="ai-share-close" bindtap="onClose">关闭</view>
+  </view>
+</view>

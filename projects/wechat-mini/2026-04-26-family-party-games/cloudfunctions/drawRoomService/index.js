@@ -255,7 +255,7 @@ async function run (e) {
       .replace(/\D/g, '')
       .slice(0, 6)
     if (code.length !== 6) {
-      throw new Error('需6位房间码')
+      throw new Error('需 6 位数字口令')
     }
     const r0 = await gRoomByCode(code)
     if (!r0) {
@@ -320,6 +320,27 @@ async function run (e) {
     await setState(r2, g)
     return { totalRounds: n, wordCategory: cat }
   }
+  if (a === 'setPendingWord') {
+    const rid = e.roomId
+    const room0 = await gRoom(rid)
+    if (!room0 || room0.hostOpenId !== o) {
+      throw new Error('仅房主可设')
+    }
+    if (room0.status !== 'waiting') {
+      throw new Error('已开始过')
+    }
+    const word = String(e.word || '')
+      .trim()
+      .slice(0, 16)
+    if (!word) {
+      throw new Error('词语无效')
+    }
+    await db
+      .collection(R)
+      .doc(String(rid))
+      .update({ data: { pendingWord: word, updatedAt: t() } })
+    return { word: word }
+  }
   if (a === 'startGame') {
     const rid = e.roomId
     const room0 = await gRoom(rid)
@@ -333,11 +354,17 @@ async function run (e) {
     if (pls.length < 2) {
       throw new Error('至少2人才能开始')
     }
-    const w = pickNewWord(
-      Object.assign({ usedWordIds: room0.usedWordIds || [] }, room0, {
-        wordCategory: room0.wordCategory || 'all'
-      })
-    )
+    let w = null
+    const pending = String(room0.pendingWord || '').trim()
+    if (pending) {
+      w = { id: 'ai_' + t(), word: pending.slice(0, 16) }
+    } else {
+      w = pickNewWord(
+        Object.assign({ usedWordIds: room0.usedWordIds || [] }, room0, {
+          wordCategory: room0.wordCategory || 'all'
+        })
+      )
+    }
     if (!w) {
       throw new Error('词库不足，请改分类后重试')
     }
@@ -352,6 +379,7 @@ async function run (e) {
           status: 'playing',
           currentWordId: w.id,
           usedWordIds: used1,
+          pendingWord: '',
           updatedAt: t()
         }
       })

@@ -66,7 +66,7 @@ Page({
     if (this.data.screen === 'songGuess') {
       wx.showModal({
         title: '猜歌需多机同场',
-        content: '请创建 6 位聚会组并把口令发给朋友，或从首页输入口令加入。仅线下同场亲友使用。',
+        content: '请创建聚会组（会得到 6 位数字口令，不是人数），把口令发给亲友，或从首页输入加入。',
         showCancel: false
       })
       return
@@ -74,7 +74,7 @@ Page({
     if (this.data.screen === 'drinkParty') {
       wx.showModal({
         title: '趣味抽签需多机同场',
-        content: '请创建 6 位聚会组，每人在本机用口令进组；由组长发轮次、响铃与投票，同场同步。',
+        content: '请创建聚会组并把 6 位数字口令发给每人；至少 2 人可开始。组长负责响铃与投票。',
         showCancel: false
       })
       return
@@ -82,7 +82,7 @@ Page({
     if (this.data.screen === 'drawGuess') {
       wx.showModal({
         title: '你画我猜需多机同场',
-        content: '请创建 6 位聚会组，每人用各自手机进组。绘画与猜词在同场进行。',
+        content: '请创建聚会组并把数字口令发给每人；至少 2 人可开始。绘画与猜词在同场进行。',
         showCancel: false
       })
       return
@@ -90,7 +90,7 @@ Page({
     if (this.data.screen === 'werewolf') {
       wx.showModal({
         title: '身份推理需多机同场',
-        content: '每人用 6 位口令进聚会组。主持创建组并把口令发给大家。仅线下同场。',
+        content: '主持创建组后把 6 位数字口令发给大家进组。人齐后选板子人数（6/8/10/12）。',
         showCancel: false
       })
       return
@@ -211,7 +211,7 @@ Page({
           })
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位口令告诉身边亲友，他们输入后会进入同一聚会组。无广域联机。',
+            content: '把 6 位数字口令告诉身边亲友，他们输入后进同一聚会组。人齐后选 6/8/10/12 人局。',
             confirmText: '开始互动',
             showCancel: false,
             success: (res) => {
@@ -275,7 +275,7 @@ Page({
           })
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位口令告诉身边亲友，他们输入后会进入同一聚会组。无广域联机。',
+            content: '把 6 位数字口令告诉身边亲友，他们输入后进同一聚会组。至少 3 人且需凑满设定人数。',
             confirmText: '开始互动',
             showCancel: false,
             success: (res) => {
@@ -319,7 +319,7 @@ Page({
           const cfg = { roomId: String(r.roomId), roomCode: code }
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位口令告诉朋友。每人用手机进组后，由组长开歌、本机外放抢答。',
+            content: '把 6 位数字口令告诉朋友。建议至少 2 人；组长开题，主持本机外放抢答。',
             confirmText: '进入',
             showCancel: false,
             success: (res2) => {
@@ -382,7 +382,7 @@ Page({
           const cfg = { roomId: String(r.roomId), roomCode: code }
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位告诉朋友。组内设轮数/词类后由组长开始，绘画者用本机画布。',
+            content: '把 6 位数字口令告诉朋友。至少 2 人可开始；组长设轮数/词类后开画。',
             confirmText: '进入',
             showCancel: false,
             success: (m) => {
@@ -438,7 +438,7 @@ Page({
           const cfg = { roomId: String(r.roomId), roomCode: code }
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位给同桌；每人用各自手机进组。组长在组内开始本轮、投票与趣味小任务记数。',
+            content: '把 6 位数字口令给同桌；至少 2 人可开始。组长负责开始、投票与趣味小任务。',
             confirmText: '进入',
             showCancel: false,
             success: (m) => {

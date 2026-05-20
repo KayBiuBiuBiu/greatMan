@@ -1,12 +1,17 @@
 <view class="page index-page">
   <view class="hero">
     <view class="hero-title">家庭聚会助手</view>
-    <view class="hero-sub">线下互动工具</view>
+    <view class="hero-sub">亲友聚会互动</view>
     <view class="hero-subtitle">
-      <view class="hero-subtitle-line">进同一场地亲友面对面使用</view>
-      <view class="hero-subtitle-line">近距离口令，无陌生匹配</view>
+      <view class="hero-subtitle-line">把口令发给亲友，各自手机进同一组</view>
     </view>
     <button class="join-btn btn btn-secondary" bindtap="joinRoom">输入口令</button>
+    <button
+      class="join-btn btn btn-secondary {{aiUnlock.canRecap ? '' : 'ai-locked'}}"
+      style="margin-top: 28rpx"
+      bindtap="onAiRecommend"
+      disabled="{{agentBusy}}"
+    >AI 聚会建议{{aiUnlock.canRecap ? '' : ' 🔒'}}</button>
   </view>
 
   <scroll-view class="activity-panel" scroll-y enhanced show-scrollbar>
@@ -27,3 +32,11 @@
     </view>
   </scroll-view>
 </view>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

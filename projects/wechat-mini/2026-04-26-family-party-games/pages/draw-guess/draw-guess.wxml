@@ -5,34 +5,75 @@
     <view class="lab">昵称</view>
     <input class="inp" value="{{nick}}" bindinput="onNick" />
     <button class="btn primary" bindtap="doCreate">创建聚会组</button>
-    <view class="mt">或输入 6 位口令</view>
+    <view class="mt">或输入 6 位数字口令（至少 2 人可开始）</view>
     <input class="inp" type="number" value="{{joinCode}}" bindinput="onCode" />
     <button class="btn" bindtap="doJoin">加入互动组</button>
   </view>
   <block wx:else>
     <view class="card top">
       <text class="strong">聚会组口令 {{roomCode || (state && state.roomCode)}}</text>
-      <button class="btn" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
+      <button class="btn-wechat-invite" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
+      <view class="rg-status-banner" wx:if="{{statusHint}}">{{statusHint}}</view>
     </view>
-    <view class="card" wx:if="{{state && state.status === 'waiting'}}">
-      <view class="h2">成员<text class="muted" wx:if="{{memberCountLine}}"> {{memberCountLine}}</text></view>
-      <view class="muted" wx:if="{{!state.publicPlayers || !state.publicPlayers.length}}">暂无成员，请分享口令邀请加入</view>
-      <view class="mem" wx:for="{{state && state.publicPlayers}}" wx:key="openId">{{item.nickName}} · {{item.score}} 分</view>
+    <view class="card" wx:if="{{state}}">
+      <view class="rg-members-card" style="margin-top:0;background:transparent;border:none;padding:0">
+        <view class="rg-members-head">
+          <text class="rg-members-title">成员</text>
+          <text class="rg-members-count muted">{{memberCountLine}}</text>
+        </view>
+        <view class="rg-progress-wrap" wx:if="{{playerProgressPct > 0}}">
+          <view class="rg-progress-bar"><view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view></view>
+        </view>
+        <view class="muted" wx:if="{{!displayPlayers || !displayPlayers.length}}">暂无成员，请分享口令邀请加入</view>
+        <view class="rg-member-list">
+          <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
+            <view class="rg-avatar">{{p.avatarText}}</view>
+            <view class="rg-member-body">
+              <view class="rg-member-name-row">
+                <text class="rg-member-name">{{p.nickName}}</text>
+                <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+                <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
+              </view>
+              <text class="rg-ready-label">{{p.score != null ? p.score + ' 分 · ' : ''}}{{p.readyLabel}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
     <view class="card" wx:if="{{state && state.status === 'waiting' && view && view.isHost}}">
-      <view class="lab">总轮数</view>
-      <picker range="{{roundOptions}}" value="{{roundIdx}}" bindchange="onRoundPick">
-        <view class="pill">{{roundOptions[roundIdx] || '6 轮'}}</view>
-      </picker>
-      <view class="lab mt">词库</view>
-      <picker range="{{catNames}}" value="{{catIdx}}" bindchange="onCatPick">
-        <view class="pill">{{catNames[catIdx]}}</view>
-      </picker>
-      <button class="btn primary" bindtap="doSetConfig">保存设置</button>
-      <button class="btn primary" bindtap="doStart">开始</button>
-    </view>
-    <view class="card" wx:if="{{state && state.status === 'waiting' && view && !view.isHost}}">
-      <view class="wait">等待组长开始</view>
+      <view class="rg-section" style="margin-top:0">
+        <view class="rg-section-label">总轮数</view>
+        <picker range="{{roundOptions}}" value="{{roundIdx}}" bindchange="onRoundPick">
+          <view class="pill">{{roundOptions[roundIdx] || '6 轮'}}</view>
+        </picker>
+      </view>
+      <view class="rg-section">
+        <view class="rg-section-label">题目来源</view>
+        <view class="rg-seg-row">
+          <view class="rg-seg {{wordSource === 'system' ? 'active' : ''}}" data-src="system" bindtap="onWordSourceTap">系统词库</view>
+          <view class="rg-seg {{wordSource === 'ai' ? 'active' : ''}}" data-src="ai" bindtap="onWordSourceTap">AI 题目</view>
+        </view>
+        <view class="rg-preview-card" wx:if="{{wordSource === 'ai' && aiPendingWord}}">
+          <view class="rg-preview-title">已生成题目（预览）</view>
+          <view class="rg-preview-words">《{{aiPendingWord}}》</view>
+        </view>
+        <view class="lab mt">词库风格（系统随机时生效）</view>
+        <picker range="{{catNames}}" value="{{catIdx}}" bindchange="onCatPick">
+          <view class="pill">{{catNames[catIdx]}}</view>
+        </picker>
+        <view class="rg-tip">修改轮数/词库后自动保存</view>
+      </view>
+      <view class="rg-ai-panel">
+        <view class="rg-ai-panel-head" bindtap="toggleAiPanel">
+          <text>🤖 AI 辅助</text>
+          <text class="rg-ai-chevron">{{aiPanelOpen ? '▲' : '▼'}}</text>
+        </view>
+        <view class="rg-ai-panel-body" wx:if="{{aiPanelOpen}}">
+          <button class="btn btn-ai rg-btn-ghost {{aiUnlock.canGen ? '' : 'ai-locked'}}" bindtap="doAiWord" disabled="{{aiBusy}}">✨ AI 生成题目{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
+          <view class="rg-tip">仅生成预览，点「开始互动」后使用</view>
+        </view>
+      </view>
+      <button class="rg-btn-primary" bindtap="doStart">开始互动</button>
     </view>
     <view class="card" wx:if="{{(state && state.status) === 'playing' || (state && state.status) === 'finished'}}">
       <view class="row" wx:if="{{(state && state.currentRound) > 0 || (view && view.myScore != null)}}">
@@ -139,3 +180,11 @@
     </view>
   </block>
 </view>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

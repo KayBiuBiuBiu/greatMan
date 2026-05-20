@@ -7,7 +7,7 @@ const gameGroups = [
       {
         title: '谁是卧底',
         status: '已实现',
-        summary: '6 位进聚会组+同场同步；本机发词/投票。若需 4 位老房可继续用原聚会组链。'
+        summary: '至少 3 人且需凑满设定人数；本机看词与投票。'
       },
       {
         title: '真心话大冒险',
@@ -42,12 +42,12 @@ const gameGroups = [
       {
         title: '秘密身份推理（聚会版）',
         status: '已实现',
-        summary: '6 位进聚会组、同场同步阶段；本机私看身份，主持推流程。需部署 werewolfService。'
+        summary: '选 6/8/10/12 人局，人齐后开始；本机私看身份，主持推流程。'
       },
       {
         title: '趣味抽签',
         status: '同场同步+云',
-        summary: '6 位进组、同屏同步。倒计时、响铃提醒、投票与趣味小任务记数；需 drinkRoomService 与 4 个云集合。'
+        summary: '至少 2 人；倒计时、响铃、投票与趣味小任务，同屏同步。'
       }
     ]
   },
@@ -59,7 +59,7 @@ const gameGroups = [
       {
         title: '你画我猜轮流传词版',
         status: '同场同步+本地',
-        summary: '从首页进为 6 位+同场同步画布；本表为线下传词计分。'
+        summary: '首页为数字口令同场画布（至少 2 人）；本表为线下传词计分。'
       },
       {
         title: '疯狂猜歌',

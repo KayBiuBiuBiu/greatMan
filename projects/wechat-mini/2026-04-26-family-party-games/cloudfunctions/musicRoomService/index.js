@@ -225,7 +225,7 @@ async function run (e) {
       .replace(/\D/g, '')
       .slice(0, 6)
     if (code.length !== 6) {
-      throw new Error('需6位房间码')
+      throw new Error('需 6 位数字口令')
     }
     const r0 = await gRoomByCode(code)
     if (!r0) {

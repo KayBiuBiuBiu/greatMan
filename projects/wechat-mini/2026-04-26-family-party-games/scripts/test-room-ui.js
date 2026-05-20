@@ -8,8 +8,10 @@ const {
   explainWerewolfStartFail,
   explainDrawStartFail,
   explainMusicStartFail,
-  explainStartFail
+  explainStartFail,
+  buildStartChecks
 } = require('../utils/roomUi')
+const { buildRoomShare, toTimeline } = require('../utils/shareHelper')
 
 function assert(cond, msg) {
   if (!cond) {
@@ -66,6 +68,39 @@ t('truth dare min 2', () => {
   const b = explainStartFail('truthDare', '请至少2位参与者进组再开始', { playerCount: 1 })
   assert(b.title === '人数不足')
   assert(/4 位口令/.test(b.content))
+})
+
+t('buildStartChecks host + min', () => {
+  const checks = buildStartChecks({
+    isHost: false,
+    playerCount: 1,
+    minPlayers: 2,
+    kind: 'draw',
+    ctx: { playerCount: 1 }
+  })
+  assert(checks.length >= 2)
+  assert(checks.some((c) => c.title === '无权限'))
+  assert(checks.some((c) => c.title === '人数不足'))
+})
+
+t('buildStartChecks need full', () => {
+  const checks = buildStartChecks({
+    isHost: true,
+    playerCount: 4,
+    needPlayers: 6,
+    kind: 'undercover',
+    ctx: { playerCount: 4, needPlayers: 6 }
+  })
+  assert(checks.length === 1 && checks[0].title === '人未满')
+})
+
+t('timeline uses query not path', () => {
+  const msg = buildRoomShare('drink', { roomId: 'rid1', roomCode: '123456' })
+  assert(msg.path.indexOf('roomId=') >= 0)
+  const tl = toTimeline(msg)
+  assert(!tl.query || tl.query.indexOf('path=') < 0)
+  assert(tl.query.indexOf('roomId=') >= 0)
+  assert(tl.title.indexOf('123456') >= 0)
 })
 
 if (process.exitCode) {

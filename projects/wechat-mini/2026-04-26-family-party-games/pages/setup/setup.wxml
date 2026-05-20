@@ -1,19 +1,19 @@
 <view class="page">
   <view class="hero">
     <view class="hero-title">{{title}}</view>
-    <view class="hero-subtitle">{{screen==='undercover' ? '6 位进聚会组。人到齐后在同场用云功能发牌、看词、讨论与投票。仅线下亲友同场地，无陌生匹配。' : screen==='werewolf' ? '6 位进聚会组；人齐后主持在组内选人数与板子。把口令发给身边朋友，无广域联机。' : screen==='songGuess' ? '6 位进聚会组。因未购曲库未做小程序内统播，每题随机一名主持本机外放，他人抢答。' : screen==='drinkParty' ? '6 位进聚会组。倒计时、随机响铃、投票与趣味小任务记数，同场同步。' : screen==='drawGuess' ? '6 位进聚会组。一人用本机画画，大家同场同步看画布猜词。' : '先设置人数，再生成口令开始互动'}}</view>
+    <view class="hero-subtitle">{{screen==='undercover' ? '创建后得到 6 位数字口令（房号）。至少 3 人且需凑满设定人数；同场发牌、看词、投票。' : screen==='werewolf' ? '创建后得到 6 位数字口令。人齐后选板子人数（6/8/10/12 人局）；把口令发给身边朋友。' : screen==='songGuess' ? '创建后得到 6 位数字口令。建议至少 2 人；每题随机一人本机外放，他人抢答。' : screen==='drinkParty' ? '创建后得到 6 位数字口令。至少 2 人可开始；倒计时、响铃、投票与趣味小任务，同场同步。' : screen==='drawGuess' ? '创建后得到 6 位数字口令。至少 2 人可开始；一人画画，大家同屏猜词。' : '先设置人数，再生成口令开始互动'}}</view>
   </view>
 
   <view class="card setup-card" wx:if="{{screen === 'songGuess'}}">
-    <view class="hint" style="line-height:1.6">创建后得到 6 位口令。每题随机一名「主持」在 ta 手机上看歌名（开发未购曲库，故由本机外放），其他人只抢答、不看到答案。</view>
+    <view class="hint" style="line-height:1.6">创建后得到 6 位数字口令（不是人数）。每题随机一名「主持」在 ta 手机上看歌名（本机外放），其他人只抢答。</view>
   </view>
 
   <view class="card setup-card" wx:if="{{screen === 'drawGuess'}}">
-    <view class="hint" style="line-height:1.6">创建 6 位后把口令发给朋友；进组后组长可设总轮数与词库分类。绘画者仅自己可见题面。</view>
+    <view class="hint" style="line-height:1.6">创建后把 6 位数字口令发给朋友；至少 2 人可开始。组长可设轮数与词库，绘画者仅自己可见题面。</view>
   </view>
 
   <view class="card setup-card" wx:if="{{screen==='drinkParty'}}">
-    <view class="hint" style="line-height:1.6">创建 6 位后把口令发给同座；进组可改组名（组长）。线下聚会随机趣味小任务，活跃气氛。</view>
+    <view class="hint" style="line-height:1.6">创建后把 6 位数字口令发给同座；至少 2 人可开始。组长可改组名，同场倒计时、响铃与投票。</view>
   </view>
 
   <view

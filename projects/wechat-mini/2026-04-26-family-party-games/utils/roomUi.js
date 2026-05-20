@@ -250,6 +250,68 @@ function showStartFail(kind, err, extra, ctx) {
 /**
  * 本地校验 + 静默云调用；失败弹窗，成功走 onSuccess
  */
+/**
+ * 组装 runStartAction 的 localChecks（与文档 §3.4 一致）
+ * @param {object} o
+ * @param {boolean} o.isHost
+ * @param {number} o.playerCount
+ * @param {string} o.kind drink|undercover|werewolf|draw|music|truthDare
+ * @param {number} [o.minPlayers] 最少人数（如 2、3）
+ * @param {number} [o.needPlayers] 须满员人数（卧底/身份推理）
+ * @param {string} [o.hostLabel] 默认「组长」；真心话用「主持人」
+ * @param {string} [o.startVerb] 按钮语义，默认「开始」
+ * @param {Array} [o.extra] 额外 { fail, title, content }（如趣味抽签阶段）
+ */
+function buildStartChecks(o) {
+  const opts = o || {}
+  const checks = []
+  const n = opts.playerCount | 0
+  const need = opts.needPlayers | 0
+  const ctx = opts.ctx || { playerCount: n, needPlayers: need }
+  const kind = opts.kind || ''
+  const hostLabel = opts.hostLabel || '组长'
+  const startVerb = opts.startVerb || '开始'
+
+  if (opts.isHost === false) {
+    checks.push({
+      fail: true,
+      title: '无权限',
+      content: '只有' + hostLabel + '可以' + startVerb + '。'
+    })
+  }
+
+  const min = opts.minPlayers | 0
+  if (min > 0 && n < min) {
+    const explainers = {
+      drink: explainDrinkStartFail,
+      undercover: explainUndercoverStartFail,
+      werewolf: explainWerewolfStartFail,
+      draw: explainDrawStartFail,
+      music: explainMusicStartFail,
+      truthDare: explainTruthDareStartFail
+    }
+    const fn = explainers[kind] || explainGenericStartFail
+    const box = fn('至少 ' + min, ctx)
+    checks.push({ fail: true, title: box.title, content: box.content })
+  }
+
+  if (need > 0 && n < need) {
+    const fn =
+      kind === 'werewolf' ? explainWerewolfStartFail : explainUndercoverStartFail
+    const box = fn('人未满' + need, ctx)
+    checks.push({ fail: true, title: box.title, content: box.content })
+  }
+
+  const extra = opts.extra || []
+  for (let i = 0; i < extra.length; i++) {
+    const c = extra[i]
+    if (c && c.fail) {
+      checks.push(c)
+    }
+  }
+  return checks
+}
+
 function runStartAction(opts) {
   const {
     kind,
@@ -304,6 +366,7 @@ module.exports = {
   showStartFail,
   memberCountLine,
   refreshCloudDoc,
+  buildStartChecks,
   runStartAction,
   explainDrinkStartFail,
   explainUndercoverStartFail,

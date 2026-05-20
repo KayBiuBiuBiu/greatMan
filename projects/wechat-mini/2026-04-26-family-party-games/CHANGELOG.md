@@ -22,6 +22,21 @@
 - `drawRoomCloud` / `musicRoomCloud` / `werewolfCloud` / `drinkRoomCloud`：`onError` 附带 `{ result }` 便于弹窗解析。
 - `roomCloud`：`success` 时若 `result.errMsg` 走 `onError`（与云函数 throw 对齐）。
 
+### 2026-05-19 AI 聚会助手
+
+- `utils/aiHelper.js`：`wx.cloud.extend.AI` + `deepseek-v4-flash`，失败可兜底 `aiPartyService` 云函数。
+- `cloud-env.js` 默认环境 `cloud1-d9g01no7m292bc511`。
+- 趣味抽签：结果页 AI 解说 / 趣味任务建议。
+- 谁是卧底：AI 出题并发牌（`setCustomPair`）、结束战报文案。
+- 你画我猜：AI 出题（`setPendingWord`）。
+- 真心话大冒险 / 故事接龙：AI 出新题、加码、同场点评。
+- 身份推理 / 猜歌：结束战报、主持开场词。
+
+### 2026-05-19 朋友圈分享
+
+- 新增 `utils/shareHelper.js`：`onShareTimeline`（`query` 参数）、`wx.showShareMenu` 双通道。
+- 首页及同场玩法页、`play` 真心话大冒险均已实现；各页 `*.json` 增加 `enableShareTimeline: true`。
+
 ### 2026-05-19 补充
 
 - 各同场页 + 真心话大冒险：页内 `<button open-type="share">邀请朋友</button>`（沿用各页 `onShareAppMessage`）。

@@ -13,7 +13,13 @@ const V = 'drink_votes'
 
 const COUNTDOWN_MS = 3000
 const VOTE_MS = 30000
+const AGENT_AUTH = 'family-party-agent-v1'
+let _currentEvent = null
 const t = () => Date.now()
+
+function agentOk() {
+  return !!(_currentEvent && _currentEvent._agentAuth === AGENT_AUTH)
+}
 
 function c6() {
   return String(100000 + ((Math.random() * 900000) | 0))
@@ -190,6 +196,19 @@ function computeResultFromVotes(targetOpenId, pls, list) {
   }
 }
 async function assertInRoom(rid) {
+  if (agentOk()) {
+    const room = await gRoom(rid)
+    const pls = await gPlayers(rid)
+    if (!room) {
+      throw new Error('房间不存在')
+    }
+    return {
+      openId: room.hostOpenId || '',
+      players: pls,
+      self: null,
+      agent: true
+    }
+  }
   const o = await oid()
   const pls = await gPlayers(rid)
   const p = pls.find((q) => q.openId === o)
@@ -200,19 +219,28 @@ async function assertInRoom(rid) {
 }
 async function assertHostRid(rid) {
   const room = await gRoom(rid)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  if (agentOk()) {
+    return { room, openId: room.hostOpenId }
+  }
   const o = await oid()
-  if (!room || room.hostOpenId !== o) {
+  if (room.hostOpenId !== o) {
     throw new Error('仅房主可执行')
   }
   return { room, openId: o }
 }
 
 exports.main = async (event) => {
+  _currentEvent = event
   try {
     return await run(event)
   } catch (e) {
     console.error('[drinkRoomService]', e)
     return { errMsg: e && e.message ? e.message : String(e) }
+  } finally {
+    _currentEvent = null
   }
 }
 async function run(event) {
@@ -301,7 +329,7 @@ async function doJoin(event) {
     .replace(/\D/g, '')
     .slice(0, 6)
   if (code.length !== 6) {
-    return { errMsg: '6 位房号' }
+    return { errMsg: '请输入 6 位数字口令' }
   }
   const room = await gRoomByCode(code)
   if (!room || !room._id) {

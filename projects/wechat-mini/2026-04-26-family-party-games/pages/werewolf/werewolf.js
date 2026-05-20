@@ -6,9 +6,25 @@ const {
   memberCountLine,
   refreshCloudDoc,
   runStartAction,
-  explainWerewolfStartFail,
-  showRoomBlockModal
+  buildStartChecks
 } = require('../../utils/roomUi')
+const {
+  enableShareMenus,
+  handleShareAppMessage,
+  handleShareTimeline
+} = require('../../utils/shareHelper')
+const {
+  refreshAiUnlockPage,
+  tryRedeemShareFromQuery,
+  onPageShowUnlock,
+  onPageHideUnlock,
+  closeAiShareModal,
+  showShareGuide
+} = require('../../utils/aiUnlock')
+const { runAi, runAiPoster, SYSTEM_RECAP } = require('../../utils/aiHelper')
+const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
+const { markPartyFinishedOnce } = require('../../utils/partySession')
 const SIZES = [6, 8, 10, 12]
 const RZH = {
   werewolf: '暗位成员',
@@ -54,9 +70,24 @@ Page({
     lastNightText: '',
     allRolesList: [],
     playerList: [],
-    memberCountLine: ''
+    memberCountLine: '',
+    displayPlayers: [],
+    statusHint: '',
+    playerProgressPct: 0,
+    aiBusy: false,
+    aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
+    showAiShareModal: false,
+    shareCopy: {}
+  },
+  _shareCtx() {
+    return {
+      roomId: this.data.roomId,
+      roomCode: this.data.roomCode || (this.data.pub && this.data.pub.roomCode)
+    }
   },
   onLoad(q) {
+    enableShareMenus()
+    tryRedeemShareFromQuery(q || {})
     this._justOpened = true
     const title = decodeURIComponent(q.title || '秘密身份推理（聚会版）')
     const nick0 = (wx.getStorageSync('werewolf_nick') || '').toString()
@@ -89,9 +120,15 @@ Page({
     }
   },
   onUnload() {
+    onRoomLeft(this)
     this.stopWatch()
   },
+  onHide() {
+    onPageHideUnlock(this)
+  },
   onShow() {
+    enableShareMenus()
+    onPageShowUnlock(this)
     if (this._justOpened) {
       this._justOpened = false
       return
@@ -101,21 +138,17 @@ Page({
     }
   },
   onShareAppMessage() {
-    const code = (this.data.roomCode || (this.data.pub && this.data.pub.roomCode) || '')
-      .toString()
-      .replace(/\D/g, '')
-    let path = '/pages/index/index'
-    let title = '家庭聚会助手 - 秘密身份推理'
-    if (code.length === 6) {
-      const cfg = { roomCode: code }
-      if (this.data.roomId) {
-        cfg.roomId = String(this.data.roomId)
-      }
-      path =
-        '/pages/werewolf/werewolf?config=' + encodeURIComponent(JSON.stringify(cfg))
-      title = '一起来玩身份推理！口令 ' + code
-    }
-    return { title, path, imageUrl: '' }
+    return handleShareAppMessage(this, 'werewolf', this._shareCtx())
+  },
+  onShareTimeline() {
+    return handleShareTimeline(this, 'werewolf', this._shareCtx())
+  },
+  onCloseAiShareModal() {
+    closeAiShareModal(this)
+  },
+  onAiShareTimeline() {
+    closeAiShareModal(this)
+    showShareGuide()
   },
   _refreshRoomState() {
     const id = this.data.roomId
@@ -196,7 +229,7 @@ Page({
     if (c.length !== 6) {
       this._opBusy = false
       this.setData({ opBusy: false })
-      wx.showToast({ title: '请填 6 位聚会组口令', icon: 'none' })
+      wx.showToast({ title: '请输入 6 位数字口令', icon: 'none' })
       return
     }
     wx.showLoading({ title: '进房' })
@@ -225,19 +258,50 @@ Page({
   },
   onMaxChange(e) {
     const i = parseInt(e.detail.value, 10) || 0
-    this.setData({ maxIndex: i })
+    this.setData({ maxIndex: i }, () => {
+      this._saveMaxPlayers(false)
+    })
   },
-  doSetSize() {
+  onSizeStep(e) {
+    const delta = parseInt((e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.delta) || 0, 10)
+    const cur = this.data.maxIndex | 0
+    const next = Math.max(0, Math.min(SIZES.length - 1, cur + delta))
+    if (next === cur) {
+      return
+    }
+    this.setData({ maxIndex: next }, () => {
+      this._saveMaxPlayers(false)
+    })
+  },
+  _saveMaxPlayers(silent) {
+    if (!this.data.view || !this.data.view.isHost) {
+      return
+    }
+    const pub = this.data.pub || {}
+    if (pub.status !== 'waiting') {
+      return
+    }
     const n = SIZES[this.data.maxIndex] || 6
-    wx.showLoading({ title: '设人数' })
+    if (this._lastSavedMax === n) {
+      return
+    }
+    this._lastSavedMax = n
+    if (!silent) {
+      wx.showLoading({ title: '保存人数', mask: true })
+    }
     callWerewolfService(
       { action: 'setSize', roomId: this.data.roomId, maxPlayers: n },
       {
-        onOk: (res) => {
-          wx.hideLoading()
+        onOk: () => {
+          if (!silent) {
+            wx.hideLoading()
+          }
         },
         onError: () => {
-          wx.hideLoading()
+          if (!silent) {
+            wx.hideLoading()
+          }
+          this._lastSavedMax = null
         }
       }
     )
@@ -248,28 +312,33 @@ Page({
     const need = (pub.maxPlayers | 0) || SIZES[this.data.maxIndex | 0] || 6
     const v = this.data.view || {}
     const ctx = { playerCount: n, needPlayers: need }
-    if (!v.isHost) {
-      showRoomBlockModal('无权限', '只有组长可以发牌并开始。')
-      return
-    }
-    if (need > 0 && n < need) {
-      const box = explainWerewolfStartFail('人未满' + need + '人，暂不可开', ctx)
-      showRoomBlockModal(box.title, box.content)
-      return
-    }
+    const checks = buildStartChecks({
+      isHost: v.isHost,
+      playerCount: n,
+      needPlayers: need,
+      kind: 'werewolf',
+      ctx,
+      startVerb: '开始互动'
+    })
+    this.setData({ opBusy: true })
     runStartAction({
       kind: 'werewolf',
       ctx,
+      localChecks: checks,
       callService: callWerewolfService,
       payload: { action: 'start', roomId: this.data.roomId },
-      loadingTitle: '发牌',
+      loadingTitle: '开始互动',
       onSuccess: () => {
         this.loadView()
+      },
+      onFinally: () => {
+        this.setData({ opBusy: false })
       }
     })
   },
   afterHasRoomId(roomId) {
     this.setData({ roomId })
+    onRoomEntered(this, String(roomId), 'werewolf')
     this.startWatch(String(roomId))
     this.loadView()
   },
@@ -316,21 +385,36 @@ Page({
     }
   },
   syncDisplayText() {
-    const p = this.data.pub
+    const p = this.data.pub || {}
     const v = this.data.view || {}
-    this.setData({
+    const pl = (p.players || this.data.playerList || []).map((m) => ({
+      openId: m.openId,
+      nickName: m.nickName != null ? m.nickName : m.nick,
+      isAlive: m.isAlive !== false,
+      isHost: !!(p.hostOpenId && m.openId === p.hostOpenId)
+    }))
+    const phase = p.status === 'waiting' ? 'waiting' : p.currentPhase || 'lobby'
+    const patch = {
       wolfMatesLine:
         v.wolfMates && v.wolfMates.length ? v.wolfMates.join('、') : '',
       seerLine: v.seer && v.seer.label ? v.seer.label : '',
       publicLogText:
-        p && p.publicLog && p.publicLog.length ? p.publicLog.join('\n') : '',
+        p.publicLog && p.publicLog.length ? p.publicLog.join('\n') : '',
       lastNightText:
-        p && p.lastNightReport && p.lastNightReport.length
+        p.lastNightReport && p.lastNightReport.length
           ? p.lastNightReport.join(' ')
           : '',
       allRolesList: v && v.allRoles && v.allRoles.length ? v.allRoles : [],
-      playerList: p && p.players ? p.players : []
+      playerList: pl
+    }
+    patchMemberDisplay(patch, {
+      players: pl,
+      phase,
+      maxPlayers: p.maxPlayers | 0,
+      isHost: v.isHost,
+      hostOpenId: p.hostOpenId || ''
     })
+    this.setData(patch)
   },
   loadView() {
     const { roomId } = this.data
@@ -534,6 +618,26 @@ Page({
       { action: 'vote', roomId: this.data.roomId, targetOpenId: oid },
       { onOk: () => this.loadView() }
     )
+  },
+  doAiRecap() {
+    const pub = this.data.pub || {}
+    const end = pub.gameEnd || pub.winSide || '本局结束'
+    runAi(this, {
+      cacheTag: 'wolf-recap',
+      roomId: this.data.roomId,
+      round: (this.data.pub && this.data.pub.day) | 0,
+      system: SYSTEM_RECAP,
+      resultTitle: 'AI 战报',
+      postProcess: { maxLen: 200 },
+      buildPrompt: () => '秘密身份推理聚会局结束。结果：' + end + '。'
+    })
+  },
+  doAiPoster() {
+    const pub = this.data.pub || {}
+    const end = pub.gameEnd || pub.winSide || '对局结束'
+    runAiPoster(this, {
+      buildPrompt: () => '秘密身份推理聚会战报海报。' + end + '。'
+    })
   },
   async hunterTap() {
     const os = this.aliveOids()

@@ -33,7 +33,14 @@ const PAIRS = [
   ['飞机', '高铁'],
   ['医生', '护士']
 ]
+const AGENT_AUTH = 'family-party-agent-v1'
+let _currentEvent = null
 const t = () => Date.now()
+
+function agentOk() {
+  return !!(_currentEvent && _currentEvent._agentAuth === AGENT_AUTH)
+}
+
 async function oid() {
   return cloud.getWXContext().OPENID
 }
@@ -184,24 +191,34 @@ function stripRoomForDb(r) {
     speakOrder: r.speakOrder,
     tieBreakOids: r.tieBreakOids,
     pair: r.pair,
+    pendingPair: r.pendingPair,
     lastElim: r.lastElim,
     gameResult: r.gameResult,
     winSide: r.winSide
   }
 }
 async function assertHost(rid) {
-  const o = await oid()
   const room = await gRoom(rid)
-  if (!room || room.hostOpenId !== o) {
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  if (agentOk()) {
+    return room.hostOpenId
+  }
+  const o = await oid()
+  if (room.hostOpenId !== o) {
     throw new Error('仅房主可执行')
   }
   return o
 }
 exports.main = async (event) => {
+  _currentEvent = event
   try {
     return await run(event)
   } catch (e) {
     return { errMsg: (e && e.message) || String(e) }
+  } finally {
+    _currentEvent = null
   }
 }
 async function run(e) {
@@ -255,7 +272,7 @@ async function run(e) {
       .replace(/\D/g, '')
       .slice(0, 6)
     if (code.length !== 6) {
-      throw new Error('需6位房间码')
+      throw new Error('需 6 位数字口令')
     }
     const r0 = await gRoomByCode(code)
     if (!r0) {
@@ -329,6 +346,36 @@ async function run(e) {
     await setState(r2, pl2)
     return { maxPlayers: n }
   }
+  if (a === 'setCustomPair') {
+    const rid = e.roomId
+    await assertHost(rid)
+    const room = await gRoom(rid)
+    if (!room || room.status !== 'waiting') {
+      throw new Error('仅等待阶段可设词')
+    }
+    const civ = String(e.civilianWord || '')
+      .trim()
+      .slice(0, 12)
+    const uc = String(e.undercoverWord || '')
+      .trim()
+      .slice(0, 12)
+    if (!civ || !uc) {
+      throw new Error('词语无效')
+    }
+    if (civ === uc) {
+      throw new Error('两词不能相同')
+    }
+    await db
+      .collection(UC_R)
+      .doc(String(rid))
+      .update({
+        data: {
+          pendingPair: [civ, uc],
+          updatedAt: t()
+        }
+      })
+    return { civilianWord: civ, undercoverWord: uc }
+  }
   if (a === 'startGame') {
     const rid = e.roomId
     await assertHost(rid)
@@ -343,7 +390,12 @@ async function run(e) {
     if (pl.length !== (room.maxPlayers | 0) && (room.maxPlayers | 0) > 0) {
       throw new Error('人未满' + (room.maxPlayers | 0) + '，暂不可开')
     }
-    const p0 = PAIRS[((Math.random() * PAIRS.length) | 0) % PAIRS.length]
+    let p0 = null
+    if (room.pendingPair && room.pendingPair.length === 2) {
+      p0 = [String(room.pendingPair[0]), String(room.pendingPair[1])]
+    } else {
+      p0 = PAIRS[((Math.random() * PAIRS.length) | 0) % PAIRS.length]
+    }
     const wCiv = p0[0]
     const wUc = p0[1]
     const pSh = shuf(pl)
@@ -367,6 +419,7 @@ async function run(e) {
     }
     const rMerge = {
       status: 'playing',
+      pendingPair: null,
       currentRound: 1,
       currentPhase: 'word',
       pair: p0,

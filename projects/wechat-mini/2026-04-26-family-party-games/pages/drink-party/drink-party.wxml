@@ -1,7 +1,7 @@
 <view class="page" wx:if="{{!roomId}}">
   <view class="hero">
     <view class="hero-title">趣味抽签</view>
-    <view class="hero-subtitle">线下聚会随机抽签工具，生成唱歌、跳舞、讲笑话、真心话、小表演等趣味小任务，活跃气氛。仅同场亲友、6 位口令近距离加入，无陌生匹配。</view>
+    <view class="hero-subtitle">随机抽签：倒计时、响铃、投票与趣味小任务。凭 6 位数字口令进组（房号，不是人数）；至少 2 人可开始。</view>
   </view>
   <view class="card setup-card">
     <view class="label">昵称</view>
@@ -49,7 +49,7 @@
       <text>口令 <text class="dp-code-num">{{state.roomCode}}</text></text>
       <text class="dp-link" bindtap="onCopy">复制口令</text>
     </view>
-    <button class="btn btn-secondary main-btn" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
+    <button class="btn-wechat-invite main-btn" open-type="share" style="margin-top: 16rpx">邀请朋友</button>
     <view wx:if="{{isHost}}">
       <view class="label" style="margin-top: 16rpx">组名（仅组长）</view>
       <input
@@ -62,29 +62,31 @@
     </view>
   </view>
 
-  <view class="card setup-card" wx:if="{{state && state.publicPlayers}}">
-    <view class="section-title">成员
-      <text class="dp-muted" wx:if="{{memberCountLine}}"> {{memberCountLine}}</text>
-    </view>
-    <view class="player-row">
-      <view
-        class="pill"
-        wx:for="{{state.publicPlayers}}"
-        wx:key="openId"
-      >{{item.nickName}}<text class="dp-tag" wx:if="{{item.isHost}}">组长</text>
+  <view class="card setup-card" wx:if="{{state}}">
+    <view class="rg-status-banner" wx:if="{{statusHint}}">{{statusHint}}</view>
+    <view class="rg-members-card" style="margin-top:16rpx;background:transparent;border:none;padding:0">
+      <view class="rg-members-head">
+        <text class="rg-members-title">成员</text>
+        <text class="dp-muted rg-members-count">{{memberCountLine}}</text>
+      </view>
+      <view class="rg-member-list">
+        <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
+          <view class="rg-avatar">{{p.avatarText}}</view>
+          <view class="rg-member-body">
+            <view class="rg-member-name-row">
+              <text class="rg-member-name">{{p.nickName}}</text>
+              <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+              <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
+            </view>
+            <text class="rg-ready-label">{{p.readyLabel}}</text>
+          </view>
+        </view>
       </view>
     </view>
   </view>
 
-  <view
-    class="card setup-card"
-    wx:if="{{state && state.phase==='waiting' && !isHost}}"
-  >
-    <view class="sub-tip">等待组长点击「开始本轮」</view>
-  </view>
-
   <button
-    class="btn btn-primary main-btn"
+    class="btn btn-primary main-btn rg-btn-primary"
     wx:if="{{isHost && state && state.phase==='waiting'}}"
     bindtap="onStart"
     disabled="{{opBusy}}"
@@ -96,6 +98,20 @@
     bindtap="onForceEnd"
     disabled="{{opBusy}}"
   >强制出结果</button>
+
+  <view class="card setup-card" wx:if="{{state && roomId && (state.phase==='voting' || state.phase==='result')}}">
+    <view class="rg-ai-panel" style="margin-top:0">
+      <view class="rg-ai-panel-head" bindtap="toggleAiPanel">
+        <text>🤖 AI 辅助</text>
+        <text class="rg-ai-chevron">{{aiPanelOpen ? '▲' : '▼'}}</text>
+      </view>
+      <view class="rg-ai-panel-body" wx:if="{{aiPanelOpen}}">
+        <button class="btn btn-secondary main-btn btn-ai rg-btn-ghost {{aiUnlock.canAssist ? '' : 'ai-locked'}}" bindtap="onAgentAssist" disabled="{{agentBusy || aiBusy}}">策略建议{{aiUnlock.canAssist ? '' : ' 🔒'}}</button>
+        <button class="btn btn-secondary main-btn rg-btn-ghost" wx:if="{{isHost}}" bindtap="onToggleAgentHost">副主持：{{agentHostOn ? '开' : '关'}}</button>
+        <button class="btn btn-secondary main-btn btn-ai rg-btn-ghost {{aiUnlock.canRecap ? '' : 'ai-locked'}}" wx:if="{{state.phase==='result'}}" bindtap="onAgentRecap" disabled="{{agentBusy}}">智能战报{{aiUnlock.canRecap ? '' : ' 🔒'}}</button>
+      </view>
+    </view>
+  </view>
 
   <button
     class="btn btn-primary main-btn"
@@ -167,5 +183,23 @@
       class="result-wrong"
       wx:else
     >无投错，无人因「投错」多领 1 次小任务</view>
+    <button
+      class="btn btn-secondary main-btn btn-ai {{aiUnlock.canGen ? '' : 'ai-locked'}}"
+      bindtap="onAiCommentResult"
+      disabled="{{aiBusy}}"
+    >AI 解说本轮{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
+    <button
+      class="btn btn-secondary main-btn btn-ai {{aiUnlock.canGen ? '' : 'ai-locked'}}"
+      bindtap="onAiFunTask"
+      disabled="{{aiBusy}}"
+    >AI 趣味任务建议{{aiUnlock.canGen ? '' : ' 🔒'}}</button>
   </view>
 </view>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

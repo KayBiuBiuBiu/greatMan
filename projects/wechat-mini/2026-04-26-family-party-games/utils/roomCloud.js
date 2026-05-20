@@ -11,50 +11,24 @@
  * 之后控制台仍报 Error: timeout，且堆栈在 WAServiceMainContext 或 WAWorker、伴 reportRealtimeAction 等，
  * 多为基础库/模拟器内部任务，与本次云函数无关，可忽略。真正云失败不会先有 ok 日志。
  */
-let configEnv
-let debugCloudLog = true
-try {
-  const cfg = require('../cloud-env.js')
-  configEnv = (cfg && cfg.envId) || ''
-  if (cfg && typeof cfg.debugCloudLog === 'boolean') {
-    debugCloudLog = cfg.debugCloudLog
-  }
-} catch (e) {
-  configEnv = ''
-}
+const {
+  ensureCloudInit: ensureCloudInitShared,
+  getCallFunctionConfig,
+  debugCloudLog
+} = require('./cloudInit')
 
 let callSeq = 0
 
-/**
- * 首次调云前初始化（不在 app.onLaunch 里做，减少未开云/未选环境时一启动就 timeout 的误报）
- */
 function ensureCloudInit() {
   if (!wx.cloud) {
     return false
   }
-  const app = getApp && getApp()
-  if (app && app.globalData && app.globalData.cloudInited) {
-    return true
-  }
-  const opts = { traceUser: true }
-  if (configEnv) {
-    opts.env = configEnv
-  } else if (wx.cloud.DYNAMIC_CURRENT_ENV != null) {
-    opts.env = wx.cloud.DYNAMIC_CURRENT_ENV
-  }
   if (debugCloudLog) {
     /* eslint-disable no-console */
-    console.log('[roomService] wx.cloud.init 首次调用', {
-      hasConfigEnv: !!configEnv,
-      hasDynamic: wx.cloud.DYNAMIC_CURRENT_ENV != null
-    })
+    console.log('[roomService] ensureCloudInit')
     /* eslint-enable no-console */
   }
-  wx.cloud.init(opts)
-  if (app && app.globalData) {
-    app.globalData.cloudInited = true
-  }
-  return true
+  return ensureCloudInitShared()
 }
 
 function buildFailHint(err) {
@@ -108,6 +82,7 @@ function callRoomService(data, opts) {
 
   wx.cloud.callFunction({
     name: 'roomService',
+    config: getCallFunctionConfig(),
     data,
     success: (res) => {
       const ms = Date.now() - t0

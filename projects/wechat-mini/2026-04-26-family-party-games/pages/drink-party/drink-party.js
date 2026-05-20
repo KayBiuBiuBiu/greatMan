@@ -3,9 +3,27 @@ const {
   memberCountLine,
   refreshCloudDoc,
   runStartAction,
-  showRoomBlockModal,
+  buildStartChecks,
   explainDrinkStartFail
 } = require('../../utils/roomUi')
+const { patchMemberDisplay } = require('../../utils/roomMemberUi')
+const {
+  enableShareMenus,
+  handleShareAppMessage,
+  handleShareTimeline
+} = require('../../utils/shareHelper')
+const {
+  refreshAiUnlockPage,
+  tryRedeemShareFromQuery,
+  onPageShowUnlock,
+  onPageHideUnlock,
+  closeAiShareModal,
+  showShareGuide
+} = require('../../utils/aiUnlock')
+const { TOAST_ROOM_CODE_6 } = require('../../utils/roomCopy')
+const { runAi, SYSTEM_DRINK_COMMENT, SYSTEM_DRINK_TASK } = require('../../utils/aiHelper')
+const { runPlayerAssist, runHostTick, runGameRecap } = require('../../utils/agentHelper')
+const { onRoomEntered, onRoomLeft } = require('../../utils/partyAiRoomHooks')
 function defNick() {
   return (wx.getStorageSync('drink_nick') || '参与者').toString()
 }
@@ -30,7 +48,17 @@ Page({
     wrongNames: '',
     roomNameEdit: '',
     myOpenId: '',
-    memberCountLine: ''
+    memberCountLine: '',
+    displayPlayers: [],
+    statusHint: '',
+    playerProgressPct: 0,
+    aiPanelOpen: false,
+    aiBusy: false,
+    agentBusy: false,
+    agentHostOn: true,
+    aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
+    showAiShareModal: false,
+    shareCopy: {}
   },
   _w: null,
   _tcd: null,
@@ -41,7 +69,15 @@ Page({
   _revR: 0,
   _finR: 0,
   _revealBusy: false,
+  _shareCtx() {
+    return {
+      roomId: this.data.roomId,
+      roomCode: (this.data.state && this.data.state.roomCode) || this.data.roomCode
+    }
+  },
   onLoad(q) {
+    enableShareMenus()
+    tryRedeemShareFromQuery(q || {})
     const id = (q && q.roomId) ? String(q.roomId) : ''
     const code = (q && q.roomCode) ? String(q.roomCode) : ''
     this.setData({
@@ -58,36 +94,33 @@ Page({
     }
   },
   onUnload() {
+    onRoomLeft(this)
     this.clearT()
     this.unwatch()
   },
   onShow() {
+    enableShareMenus()
+    onPageShowUnlock(this)
     if (this.data.roomId) {
       this._refreshRoomState()
     }
   },
   onHide() {
+    onPageHideUnlock(this)
     this.clearT()
   },
   onShareAppMessage() {
-    const code = (
-      (this.data.state && this.data.state.roomCode) ||
-      this.data.roomCode ||
-      ''
-    )
-      .toString()
-      .replace(/\D/g, '')
-    let path = '/pages/index/index'
-    let title = '家庭聚会助手 - 趣味抽签'
-    if (code.length === 6) {
-      path =
-        '/pages/drink-party/drink-party?roomId=' +
-        encodeURIComponent(String(this.data.roomId)) +
-        '&roomCode=' +
-        encodeURIComponent(code)
-      title = '一起来玩趣味抽签！口令 ' + code
-    }
-    return { title, path, imageUrl: '' }
+    return handleShareAppMessage(this, 'drink', this._shareCtx())
+  },
+  onShareTimeline() {
+    return handleShareTimeline(this, 'drink', this._shareCtx())
+  },
+  onCloseAiShareModal() {
+    closeAiShareModal(this)
+  },
+  onAiShareTimeline() {
+    closeAiShareModal(this)
+    showShareGuide()
   },
   unwatch() {
     if (this._w) {
@@ -141,6 +174,9 @@ Page({
     })
   },
   _bootInRoom() {
+    if (this.data.roomId) {
+      onRoomEntered(this, String(this.data.roomId), 'drink')
+    }
     this.fetchMyOpenId()
     setTimeout(() => this.fetchMyOpenId(), 200)
     this._startW()
@@ -179,21 +215,33 @@ Page({
         }
       })
   },
+  toggleAiPanel() {
+    this.setData({ aiPanelOpen: !this.data.aiPanelOpen })
+  },
   _applyS(d) {
     const rDisp = (d && d.currentRound) | 0
     const pn = (d && d.publicPlayers && d.publicPlayers.length) || 0
-    this.setData(
-      {
-        state: d,
-        roomNameEdit: (d && d.roomName) || '聚会组',
-        roundDisp: rDisp,
-        memberCountLine: memberCountLine(pn, 0, '至少 2 人可开始')
-      },
-      () => {
-      const my = this._my || (this.data.myOpenId || '')
-      this._my = my
-      const isHost = d && d.hostOpenId && my && d.hostOpenId === my
-      const rPh = d && d.phase
+    const my = this._my || (this.data.myOpenId || '')
+    this._my = my
+    const isHost = !!(d && d.hostOpenId && my && d.hostOpenId === my)
+    const rPh = d && d.phase
+    const patch = {
+      state: d,
+      roomNameEdit: (d && d.roomName) || '聚会组',
+      roundDisp: rDisp,
+      memberCountLine: memberCountLine(pn, 0, '至少 2 人可开始'),
+      isHost
+    }
+    patchMemberDisplay(patch, {
+      players: (d && d.publicPlayers) || [],
+      phase: rPh === 'waiting' ? 'waiting' : rPh || 'playing',
+      maxPlayers: 0,
+      isHost,
+      fallbackNeed: 2,
+      hostWaiting: '⏳ 点击「开始本轮」',
+      guestWaiting: '👥 等待组长开始本轮'
+    })
+    this.setData(patch, () => {
       const iAmRinger =
         !!(my && d && d.targetOpenId && d.targetOpenId === my && rPh === 'voting')
       const m = (d && d.votesByVoter) || {}
@@ -208,9 +256,36 @@ Page({
       if (rPh === 'voting' && d && d.targetOpenId) {
         this._revR = d.currentRound | 0
       }
-      this.setData({ isHost, iAmRinger, voteDone, wrongNames })
+      this.setData({ iAmRinger, voteDone, wrongNames })
       this._maybeVibe(d)
       this._onPhaseTick(d, rPh)
+      this._maybeAgentHost(d, isHost, rPh)
+    })
+  },
+  _maybeAgentHost(d, isHost, ph) {
+    if (!isHost || !this.data.agentHostOn || !this.data.roomId) {
+      return
+    }
+    let cfg = {}
+    try {
+      cfg = require('../../cloud-env.js')
+    } catch (e) {}
+    if (cfg.agentEnabled === false || cfg.agentAutoHost === false) {
+      return
+    }
+    if (ph !== 'countdown' && ph !== 'voting') {
+      return
+    }
+    const now = Date.now()
+    if (this._agentHostAt && now - this._agentHostAt < 2500) {
+      return
+    }
+    this._agentHostAt = now
+    runHostTick(this, {
+      gameKind: 'drink',
+      roomId: this.data.roomId,
+      autoExecute: true,
+      speak: true
     })
   },
   _maybeVibe(d) {
@@ -368,7 +443,7 @@ Page({
       .replace(/\D/g, '')
       .slice(0, 6)
     if (c.length !== 6) {
-      wx.showToast({ title: '6 位', icon: 'none' })
+      wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
     const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
@@ -413,22 +488,24 @@ Page({
     const n = (st && st.publicPlayers && st.publicPlayers.length) || 0
     const ph = (st && st.phase) || 'waiting'
     const ctx = { playerCount: n }
-    const checks = []
+    const extra = []
     if (ph === 'result') {
       const box = explainDrinkStartFail('请先点「下一轮」再开始', ctx)
-      checks.push({ fail: true, title: box.title, content: box.content })
+      extra.push({ fail: true, title: box.title, content: box.content })
     }
     if (ph === 'countdown' || ph === 'voting') {
       const box = explainDrinkStartFail('请先结束或等待本回合', ctx)
-      checks.push({ fail: true, title: box.title, content: box.content })
+      extra.push({ fail: true, title: box.title, content: box.content })
     }
-    if (n < 2) {
-      const box = explainDrinkStartFail('至少 2 人才能开', ctx)
-      checks.push({ fail: true, title: box.title, content: box.content })
-    }
-    if (!this.data.isHost) {
-      checks.push({ fail: true, title: '无权限', content: '只有组长可以开始本轮。' })
-    }
+    const checks = buildStartChecks({
+      isHost: this.data.isHost,
+      playerCount: n,
+      minPlayers: 2,
+      kind: 'drink',
+      ctx,
+      startVerb: '开始本轮',
+      extra
+    })
     this.setData({ opBusy: true })
     runStartAction({
       kind: 'drink',
@@ -489,5 +566,64 @@ Page({
       return
     }
     callDrink({ action: 'submitAbstain', roomId: this.data.roomId })
+  },
+  _resultCtx() {
+    const st = this.data.state || {}
+    const r = st.result || {}
+    const wrong = (r.wrongVoters || [])
+      .map((w) => w.nickName + '(' + (w.sips | 0) + '次任务)')
+      .join('、')
+    return {
+      target: r.targetNick || st.targetNick || '响铃者',
+      targetSips: r.targetSips | 0,
+      wrong: wrong || '无'
+    }
+  },
+  onAiCommentResult() {
+    const c = this._resultCtx()
+    runAi(this, {
+      cacheTag: 'drink-comment',
+      roomId: this.data.roomId,
+      round: (this.data.state && this.data.state.currentRound) | 0,
+      system: SYSTEM_DRINK_COMMENT,
+      resultTitle: 'AI 解说',
+      postProcess: { maxLen: 120 },
+      buildPrompt: () =>
+        `趣味抽签本轮结束。响铃者「${c.target}」得${c.targetSips}票。投错的人：${c.wrong}。`
+    })
+  },
+  onAiFunTask() {
+    const c = this._resultCtx()
+    runAi(this, {
+      cacheTag: 'drink-task',
+      roomId: this.data.roomId,
+      round: (this.data.state && this.data.state.currentRound) | 0,
+      system: SYSTEM_DRINK_TASK,
+      resultTitle: 'AI 趣味任务',
+      postProcess: { maxLen: 40 },
+      buildPrompt: () => `适合「${c.target}」在本轮执行的轻松趣味小任务。`
+    })
+  },
+  onAgentAssist() {
+    runPlayerAssist(this, {
+      gameKind: 'drink',
+      roomId: this.data.roomId,
+      playerHint: this.data.isHost ? '我是组长' : '我是参与者'
+    })
+  },
+  onToggleAgentHost() {
+    this.setData({ agentHostOn: !this.data.agentHostOn })
+    wx.showToast({
+      title: this.data.agentHostOn ? '副主持已开' : '副主持已关',
+      icon: 'none'
+    })
+  },
+  onAgentRecap() {
+    const st = this.data.state || {}
+    runGameRecap(this, {
+      gameKind: 'drink',
+      gameName: '趣味抽签',
+      publicLog: st.publicLog || [st.result]
+    })
   }
 })

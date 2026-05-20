@@ -1,0 +1,367 @@
+/* 同场聚会组通用 UI（各游戏页 @import） */
+
+.rg-status-banner {
+  margin-top: 20rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  color: #9a3412;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.rg-members-card {
+  margin-top: 24rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #fafafa;
+  border: 1rpx solid #f3f4f6;
+}
+
+.rg-members-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.rg-members-title {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #111827;
+}
+
+.rg-members-count {
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.rg-progress-wrap {
+  margin-bottom: 16rpx;
+}
+
+.rg-progress-bar {
+  height: 12rpx;
+  border-radius: 999rpx;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.rg-progress-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #fb923c, #ea580c);
+  transition: width 0.25s ease;
+}
+
+.rg-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.rg-member-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 14rpx 16rpx;
+  background: #fff;
+  border-radius: 14rpx;
+  border: 1rpx solid #f3f4f6;
+}
+
+.rg-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #fdba74, #ea580c);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rg-member-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rg-member-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.rg-member-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #111827;
+  max-width: 360rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rg-host-badge {
+  font-size: 24rpx;
+}
+
+.rg-ready-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #d1d5db;
+  margin-left: 4rpx;
+}
+
+.rg-ready-dot.on {
+  background: #22c55e;
+  box-shadow: 0 0 0 4rpx rgba(34, 197, 94, 0.2);
+}
+
+.rg-ready-label {
+  font-size: 22rpx;
+  color: #9ca3af;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.rg-section {
+  margin-top: 28rpx;
+}
+
+.rg-section-label {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 12rpx;
+}
+
+.rg-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+}
+
+.rg-step-btn {
+  width: 72rpx !important;
+  min-width: 72rpx !important;
+  height: 72rpx !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  border-radius: 14rpx !important;
+  background: #fff4e5 !important;
+  color: #7c2d12 !important;
+  font-size: 36rpx !important;
+  font-weight: 700;
+}
+
+.rg-step-value {
+  min-width: 160rpx;
+  text-align: center;
+  padding: 16rpx 28rpx;
+  border-radius: 14rpx;
+  background: #fff;
+  border: 2rpx solid #fed7aa;
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #ea580c;
+}
+
+.rg-tip {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+
+.rg-seg-row {
+  display: flex;
+  gap: 16rpx;
+}
+
+.rg-seg {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 12rpx;
+  border-radius: 14rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  border: 2rpx solid transparent;
+}
+
+.rg-seg.active {
+  color: #c2410c;
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.rg-preview-card {
+  margin-top: 16rpx;
+  padding: 20rpx;
+  border-radius: 14rpx;
+  background: #fffbeb;
+  border: 1rpx dashed #fbbf24;
+}
+
+.rg-preview-title {
+  font-size: 24rpx;
+  color: #92400e;
+  font-weight: 700;
+}
+
+.rg-preview-words {
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #78350f;
+}
+
+.rg-ai-panel {
+  margin-top: 24rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid #e5e7eb;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.rg-ai-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 24rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #374151;
+}
+
+.rg-ai-chevron {
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+
+.rg-ai-panel-body {
+  padding: 0 24rpx 24rpx;
+  border-top: 1rpx solid #f3f4f6;
+}
+
+.rg-diff-row {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.rg-diff-btn {
+  flex: 1;
+  text-align: center;
+  padding: 14rpx 8rpx;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #6b7280;
+  background: #fff;
+  border: 1rpx solid #e5e7eb;
+}
+
+.rg-diff-btn.active {
+  color: #fff;
+  background: #ea580c;
+  border-color: #ea580c;
+}
+
+/* 主操作按钮：flex 垂直居中 */
+.rg-btn-primary,
+button.rg-btn-primary {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: 96rpx;
+  margin-top: 28rpx !important;
+  padding: 0 28rpx !important;
+  line-height: 1.35 !important;
+  border-radius: 16rpx !important;
+  font-size: 32rpx !important;
+  font-weight: 800 !important;
+  background: #ea580c !important;
+  color: #fff !important;
+  border: none;
+}
+
+.rg-btn-primary::after {
+  border: none;
+}
+
+/* 微信绿：邀请 / 分享按钮 */
+.btn-wechat-invite,
+button.btn-wechat-invite {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: 80rpx;
+  margin-top: 16rpx !important;
+  padding: 0 28rpx !important;
+  line-height: 1.35 !important;
+  border-radius: 12rpx !important;
+  font-size: 30rpx !important;
+  font-weight: 700 !important;
+  background: #07c160 !important;
+  color: #fff !important;
+  border: none;
+}
+
+.btn-wechat-invite::after {
+  border: none;
+}
+
+.ai-unlock-tip {
+  margin-top: 20rpx;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.55);
+  color: #166534;
+  font-size: 26rpx;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.ai-unlock-sub {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.ai-locked {
+  opacity: 0.72;
+}
+
+.rg-btn-ghost,
+button.rg-btn-ghost {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box;
+  min-height: 80rpx;
+  padding: 0 24rpx !important;
+  line-height: 1.35 !important;
+  border-radius: 14rpx !important;
+  font-size: 28rpx !important;
+  font-weight: 700;
+}

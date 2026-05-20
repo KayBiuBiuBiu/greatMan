@@ -97,9 +97,11 @@ async function setPub(room) {
     maxPlayers: room.maxPlayers,
     currentPhase: g.phase || 'lobby',
     day: g.day || 0,
+    hostOpenId: room.hostOpenId || '',
     players: (room.members || []).map((m, i) => ({
       openId: m.openId,
       nickName: m.nickName,
+      isHost: m.openId === room.hostOpenId,
       isAlive: al[m.openId] !== false,
       seat: i + 1
     })),
