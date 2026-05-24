@@ -10,7 +10,7 @@ const {
   explainMusicStartFail,
   explainStartFail,
   buildStartChecks
-} = require('../utils/roomUi')
+} = require('../packageGames/utils/roomUi')
 const { buildRoomShare, toTimeline } = require('../utils/shareHelper')
 
 function assert(cond, msg) {

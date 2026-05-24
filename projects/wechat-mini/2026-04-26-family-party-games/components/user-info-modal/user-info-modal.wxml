@@ -1,0 +1,65 @@
+<!-- 仅由父页面 visible 控制；不在首页 onLoad 自动打开 -->
+<view class="uim-mask" wx:if="{{visible}}" catchtouchmove="noop">
+  <view class="uim-card" catchtap="noop">
+    <view class="uim-title">设置聚会形象</view>
+    <view class="uim-desc">选择头像并填写昵称，同场好友才能认出你</view>
+
+    <view class="uim-error" wx:if="{{errorMsg}}">{{errorMsg}}</view>
+
+    <!-- 头像：透明 button + chooseAvatar -->
+    <view class="uim-avatar-block">
+      <button
+        class="uim-avatar-btn"
+        open-type="chooseAvatar"
+        bindchooseavatar="onChooseAvatar"
+        disabled="{{saving || uploading}}"
+      >
+        <view class="uim-avatar-ring">
+          <image
+            wx:if="{{avatarDisplay}}"
+            class="uim-avatar-img"
+            src="{{avatarDisplay}}"
+            mode="aspectFill"
+          />
+          <view wx:else class="uim-avatar-placeholder">
+            <text class="uim-avatar-plus">+</text>
+          </view>
+          <view class="uim-avatar-loading" wx:if="{{uploading}}">
+            <text class="uim-loading-text">上传中</text>
+          </view>
+        </view>
+      </button>
+      <text class="uim-avatar-hint">点击更换头像</text>
+    </view>
+
+    <!-- 昵称：仅本地暂存，确认时一并写入云库 -->
+    <view class="uim-nick-wrap">
+      <input
+        class="uim-nick-input"
+        type="nickname"
+        placeholder="请输入昵称"
+        placeholder-class="uim-nick-ph"
+        value="{{nickName}}"
+        maxlength="32"
+        bindinput="onNicknameInput"
+        bindblur="onNicknameBlur"
+        disabled="{{saving || uploading}}"
+      />
+    </view>
+
+    <!-- 按钮区 -->
+    <view class="uim-actions">
+      <button
+        class="uim-btn uim-btn-secondary"
+        bindtap="onCancel"
+        disabled="{{saving || uploading}}"
+      >稍后再说</button>
+      <button
+        class="uim-btn uim-btn-primary"
+        bindtap="onConfirm"
+        disabled="{{saving || uploading || !canConfirm}}"
+        loading="{{saving}}"
+      >确认并继续</button>
+    </view>
+  </view>
+</view>

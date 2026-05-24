@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const jp = require('./joinPlayerPatch')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -93,7 +94,8 @@ async function createRoom(event) {
   }
 
   const result = await db.collection(ROOMS).add({ data: room })
-  return publicRoom(Object.assign({}, room, { _id: result._id }), openId)
+  const row = Object.assign({}, room, { _id: result._id })
+  return Object.assign(publicRoom(row, openId), { myOpenId: openId })
 }
 
 async function joinRoom(event) {
@@ -120,18 +122,19 @@ async function joinRoom(event) {
   const nextPlayers = existed
     ? players.map(function (player) {
       if (player.openId === openId) {
-        return Object.assign({}, player, { nickName, avatarUrl })
+        return Object.assign({}, player, jp.mergeJoinFields(event, player))
       }
       return player
     })
     : players.concat([
-      {
-        openId,
-        nickName,
-        avatarUrl,
-        isHost: openId === room.hostOpenId,
-        joinedAt: now
-      }
+      Object.assign(
+        {
+          openId,
+          isHost: openId === room.hostOpenId,
+          joinedAt: now
+        },
+        jp.mergeJoinFields(event, {})
+      )
     ])
 
   await db.collection(ROOMS).doc(room._id).update({
@@ -141,10 +144,16 @@ async function joinRoom(event) {
     }
   })
 
-  return publicRoom(Object.assign({}, room, {
-    players: nextPlayers,
-    updatedAt: now
-  }), openId)
+  return Object.assign(
+    publicRoom(
+      Object.assign({}, room, {
+        players: nextPlayers,
+        updatedAt: now
+      }),
+      openId
+    ),
+    { myOpenId: openId }
+  )
 }
 
 async function getRoom(event) {
@@ -414,6 +423,59 @@ async function undercoverGetHostRoster(event) {
 const TRUTH_DARE_CURSE = '黄君的诅咒\n当场完成俯卧撑 20 个，并大声喊「鸡你太美」！\n由大家监督完成。主持点「进入下一轮」进入下一局。'
 
 /**
+ * 整对象写入 truthDare，避免 lastTally:null 时 SDK 点路径更新子字段报
+ * Cannot create field 'curseText' in element {lastTally: null}
+ */
+function normalizeTdQuestion(raw) {
+  const kind = String(raw.kind || raw.winner || '') === 'dare' ? 'dare' : 'truth'
+  const title = String(raw.title || '').trim().slice(0, 24) || (kind === 'dare' ? '大冒险' : '真心话')
+  const detail = String(raw.detail || '').trim().slice(0, 240)
+  if (!detail) {
+    throw new Error('题目不能为空')
+  }
+  return { kind: kind, title: title, detail: detail }
+}
+
+function packTruthDareForWrite(td, patch) {
+  const p = patch || {}
+  const base = td || {}
+  const out = {
+    targetOpenId: p.targetOpenId != null ? p.targetOpenId : base.targetOpenId,
+    targetNickName: p.targetNickName != null ? p.targetNickName : base.targetNickName,
+    tdVotes: p.tdVotes != null ? p.tdVotes : (base.tdVotes || []),
+    phase: p.phase != null ? p.phase : base.phase,
+    round: p.round != null ? p.round : base.round
+  }
+  if (p.clearLastTally) {
+    out.lastTally = _.remove()
+  } else if (p.lastTally !== undefined) {
+    out.lastTally = p.lastTally
+  } else if (base.lastTally) {
+    out.lastTally = base.lastTally
+  }
+  if (p.clearQuestion) {
+    out.currentQuestion = _.remove()
+  } else if (p.currentQuestion !== undefined) {
+    out.currentQuestion = p.currentQuestion
+  } else if (base.currentQuestion) {
+    out.currentQuestion = base.currentQuestion
+  }
+  return out
+}
+
+async function updateRoomTruthDare(roomId, td, patch) {
+  const truthDare = packTruthDareForWrite(td, patch)
+  const now = Date.now()
+  await db.collection(ROOMS).doc(roomId).update({
+    data: {
+      truthDare: truthDare,
+      updatedAt: now
+    }
+  })
+  return now
+}
+
+/**
  * 真心话大冒险·同场：随机被选中，他人投票；得票多定类型；平票时下发彩蛋文案（不对外宣导）
  */
 async function tdStart(event) {
@@ -432,22 +494,65 @@ async function tdStart(event) {
   }
   const t = players[Math.floor(Math.random() * players.length)]
   const round = (room.truthDare && room.truthDare.round) ? room.truthDare.round + 1 : 1
-  const now = Date.now()
-  const truthDare = {
+  await updateRoomTruthDare(room._id, room.truthDare, {
     targetOpenId: t.openId,
     targetNickName: t.nickName,
     tdVotes: [],
     phase: 'voting',
     round: round,
-    lastTally: null
-  }
-  await db.collection(ROOMS).doc(room._id).update({
-    data: {
-      truthDare: truthDare,
-      updatedAt: now
-    }
+    clearLastTally: true,
+    clearQuestion: true
   })
   return { targetOpenId: t.openId, targetNickName: t.nickName, round: round, playerCount: players.length }
+}
+
+function countTdVotes(list) {
+  let t = 0
+  let d = 0
+  for (let i = 0; i < list.length; i += 1) {
+    if (list[i].choice === 'truth') {
+      t += 1
+    } else {
+      d += 1
+    }
+  }
+  return { truthCount: t, dareCount: d }
+}
+
+function buildTdLastTally(list) {
+  const counts = countTdVotes(list)
+  const t = counts.truthCount
+  const d = counts.dareCount
+  if (t === d) {
+    return {
+      tie: true,
+      truthCount: t,
+      dareCount: d,
+      winner: null,
+      curseText: TRUTH_DARE_CURSE
+    }
+  }
+  return {
+    tie: false,
+    truthCount: t,
+    dareCount: d,
+    winner: t > d ? 'truth' : 'dare',
+    curseText: null
+  }
+}
+
+function tdVoteNeed(players, targetOpenId) {
+  const target = String(targetOpenId || '')
+  if (!target) {
+    return 0
+  }
+  let need = 0
+  for (let i = 0; i < (players || []).length; i += 1) {
+    if (players[i].openId && players[i].openId !== target) {
+      need += 1
+    }
+  }
+  return need
 }
 
 async function tdVote(event) {
@@ -458,24 +563,38 @@ async function tdVote(event) {
   if (!room) {
     throw new Error('聚会组不存在或已过期')
   }
+  const players = room.players || []
+  if (!players.some(function (p) {
+    return p.openId === openId
+  })) {
+    throw new Error('请先在首页输入口令加入聚会组')
+  }
   const td = room.truthDare
   if (!td || td.phase !== 'voting' || !td.targetOpenId) {
     throw new Error('当前没有进行中的投票')
   }
   if (td.targetOpenId === openId) {
-    throw new Error('本轮你被选中了，请让其他人点真心话/大冒险')
+    throw new Error('本轮你被选中了，请让其他人在各自手机上投票')
   }
   const list = (td.tdVotes || []).filter((v) => v.openId !== openId)
   list.push({ openId: openId, choice: choice })
+  const counts = countTdVotes(list)
   const now = Date.now()
-  let t = 0
-  let d = 0
-  for (let k = 0; k < list.length; k += 1) {
-    if (list[k].choice === 'truth') {
-      t += 1
-    } else {
-      d += 1
-    }
+  const need = tdVoteNeed(players, td.targetOpenId)
+  const allVoted = need > 0 && list.length >= need
+  if (allVoted) {
+    const lastTally = buildTdLastTally(list)
+    await updateRoomTruthDare(room._id, td, {
+      tdVotes: list,
+      phase: 'resolved',
+      lastTally: lastTally,
+      clearQuestion: true
+    })
+    return Object.assign(
+      { ok: true, choice: choice, autoTally: true, voteProgress: { cast: list.length, need: need } },
+      counts,
+      lastTally
+    )
   }
   await db.collection(ROOMS).doc(room._id).update({
     data: {
@@ -483,7 +602,10 @@ async function tdVote(event) {
       updatedAt: now
     }
   })
-  return { ok: true, choice: choice, truthCount: t, dareCount: d }
+  return Object.assign(
+    { ok: true, choice: choice, autoTally: false, voteProgress: { cast: list.length, need: need } },
+    counts
+  )
 }
 
 async function tdTally(event) {
@@ -494,49 +616,56 @@ async function tdTally(event) {
     throw new Error('聚会组不存在或已过期')
   }
   if (room.hostOpenId !== openId) {
-    throw new Error('仅主持人可结束投票并结算')
+    throw new Error('仅主持人可提前结束投票')
   }
   const td = room.truthDare
   if (!td || td.phase !== 'voting') {
     throw new Error('没有可结算的投票')
   }
   const list = td.tdVotes || []
-  let t = 0
-  let d = 0
-  for (let i = 0; i < list.length; i += 1) {
-    if (list[i].choice === 'truth') {
-      t += 1
-    } else {
-      d += 1
-    }
-  }
-  const tie = t === d
-  let lastTally
-  if (tie) {
-    lastTally = { tie: true, truthCount: t, dareCount: d, winner: null, curseText: TRUTH_DARE_CURSE }
-  } else {
-    const winner = t > d ? 'truth' : 'dare'
-    lastTally = { tie: false, truthCount: t, dareCount: d, winner: winner, curseText: null }
-  }
-  const now = Date.now()
-  const nextTd = Object.assign({}, td, { phase: 'resolved', lastTally: lastTally })
-  await db.collection(ROOMS).doc(room._id).update({
-    data: {
-      truthDare: nextTd,
-      updatedAt: now
-    }
+  const lastTally = buildTdLastTally(list)
+  await updateRoomTruthDare(room._id, td, {
+    tdVotes: list,
+    phase: 'resolved',
+    lastTally: lastTally,
+    clearQuestion: true
   })
   return lastTally
 }
 
-async function tdGetState(event) {
+async function tdSetQuestion(event) {
   const openId = await getOpenId()
   const roomCode = normalizeRoomCode(event.roomCode)
   const room = await findActiveRoom(roomCode)
   if (!room) {
     throw new Error('聚会组不存在或已过期')
   }
+  const td = room.truthDare
+  if (!td || td.phase !== 'resolved' || td.targetOpenId !== openId) {
+    throw new Error('仅本轮被选中者可抽题并同步给大家')
+  }
+  const lt = td.lastTally
+  if (!lt || lt.tie) {
+    throw new Error('当前无法设置题目')
+  }
+  const q = normalizeTdQuestion({
+    kind: event.kind || lt.winner,
+    title: event.title,
+    detail: event.detail
+  })
+  const now = Date.now()
+  await db.collection(ROOMS).doc(room._id).update({
+    data: {
+      'truthDare.currentQuestion': q,
+      updatedAt: now
+    }
+  })
+  return { ok: true, currentQuestion: q }
+}
+
+function buildTdState(room, openId) {
   const isHost = room.hostOpenId === openId
+  const players = room.players || []
   const td = room.truthDare
   if (!td || !td.targetOpenId) {
     return {
@@ -549,19 +678,15 @@ async function tdGetState(event) {
       truthCount: 0,
       dareCount: 0,
       myChoice: null,
-      lastTally: null
+      lastTally: null,
+      currentQuestion: null,
+      voteProgress: { cast: 0, need: 0 }
     }
   }
   const list = td.tdVotes || []
-  let t = 0
-  let d = 0
-  for (let i = 0; i < list.length; i += 1) {
-    if (list[i].choice === 'truth') {
-      t += 1
-    } else {
-      d += 1
-    }
-  }
+  const counts = countTdVotes(list)
+  const need = tdVoteNeed(players, td.targetOpenId)
+  const cast = list.length
   const mine = list.find((v) => v.openId === openId)
   return {
     isHost: isHost,
@@ -570,10 +695,45 @@ async function tdGetState(event) {
     targetOpenId: td.targetOpenId,
     targetNickName: td.targetNickName,
     round: td.round,
-    truthCount: t,
-    dareCount: d,
+    truthCount: counts.truthCount,
+    dareCount: counts.dareCount,
     myChoice: mine ? mine.choice : null,
-    lastTally: td.lastTally || null
+    lastTally: td.lastTally || null,
+    currentQuestion: td.currentQuestion || null,
+    voteProgress: { cast: cast, need: need }
+  }
+}
+
+async function tdGetState(event) {
+  const openId = await getOpenId()
+  const roomCode = normalizeRoomCode(event.roomCode)
+  const room = await findActiveRoom(roomCode)
+  if (!room) {
+    throw new Error('聚会组不存在或已过期')
+  }
+  return buildTdState(room, openId)
+}
+
+async function syncTruthDareState(event) {
+  const openId = await getOpenId()
+  const roomCode = normalizeRoomCode(event.roomCode)
+  if (roomCode.length !== 4) {
+    throw new Error('请输入4位口令')
+  }
+  const room = await findActiveRoom(roomCode)
+  if (!room) {
+    throw new Error('聚会组不存在或已过期')
+  }
+  const players = room.players || []
+  const inRoom = players.some(function (p) {
+    return p.openId === openId
+  })
+  return {
+    ok: 1,
+    myOpenId: openId,
+    inRoom: inRoom,
+    room: publicRoom(room, openId),
+    td: buildTdState(room, openId)
   }
 }
 
@@ -591,7 +751,9 @@ exports.main = async function (event) {
   if (action === 'tdStart') return tdStart(event)
   if (action === 'tdVote') return tdVote(event)
   if (action === 'tdTally') return tdTally(event)
+  if (action === 'tdSetQuestion') return tdSetQuestion(event)
   if (action === 'tdGetState') return tdGetState(event)
+  if (action === 'syncState') return syncTruthDareState(event)
   if (action === 'transferHost') return transferHost(event)
   if (action === 'abdicateHost') return abdicateHost(event)
 

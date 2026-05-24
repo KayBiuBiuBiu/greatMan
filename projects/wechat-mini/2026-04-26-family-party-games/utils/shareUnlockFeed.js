@@ -46,9 +46,7 @@ function shouldUseFeedWatch(sessionId) {
   if (!shouldUseDbWatch()) {
     return false
   }
-  const sid = String(sessionId || '')
-  // 首页 day_ 场次仅轮询即可
-  return sid && !sid.startsWith('day_')
+  return !!String(sessionId || '')
 }
 
 function startUnlockFeedWatch(page, callbacks) {

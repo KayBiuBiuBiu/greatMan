@@ -1,6 +1,6 @@
 # shareService 上线部署清单
 
-环境须为 `cloud1-d9g01no7m292bc511`（与 `cloud-env.js` 一致）。
+环境须为 `cloud1-d9g01no7m292bc511-d5e875d`（与 `cloud-env.js` 一致）。
 
 ## 一、云开发控制台
 

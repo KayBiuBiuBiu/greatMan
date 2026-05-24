@@ -1,6 +1,6 @@
 # AI 聚会助手
 
-云环境：`cloud1-d9g01no7m292bc511`（见 `cloud-env.js`）
+云环境：`cloud1-d9g01no7m292bc511-d5e875d`（见 `cloud-env.js`）
 
 混元 OpenAPI 基址（官方）：`https://api.hunyuan.cloud.tencent.com/v1/`（已写入 `cloud-env.js` 的 `hunyuanApiBase`）
 
@@ -54,7 +54,7 @@ print(response.choices[0].message.content)
 > tccli scf UpdateFunctionConfiguration \
 >   --region ap-shanghai \
 >   --FunctionName aiPartyService \
->   --Namespace cloud1-d9g01no7m292bc511 \
+>   --Namespace cloud1-d9g01no7m292bc511-d5e875d \
 >   --Environment '{"Variables":[{"Key":"HUNYUAN_API_KEY","Value":"sk-***"},{"Key":"HUNYUAN_API_BASE","Value":"https://api.hunyuan.cloud.tencent.com/v1/"}]}' \
 >   --Timeout 60
 > ```
@@ -63,8 +63,8 @@ print(response.choices[0].message.content)
 
 ## 部署
 
-1. 微信开发者工具 → **云开发** → 顶部环境必须选 **`cloud1-d9g01no7m292bc511`**（与 `cloud-env.js` 的 `envId` 一致）。
-2. 云开发控制台 → **AI** → 确认已开通 **hunyuan-lite**（主）及 **hy3-preview**（备）与混元生图。
+1. 微信开发者工具 → **云开发** → 顶部环境必须选 **`cloud1-d9g01no7m292bc511-d5e875d`**（与 `cloud-env.js` 的 `envId` 一致）。
+2. 云开发控制台 → **AI** → 确认 **hy3-preview**（提供方 **hunyuan-v3**）已开通；小程序须 `createModel("hunyuan-v3")` + `model: "hy3-preview"`（见混元升级指南）。
 3. 部署 `aiPartyService`、`imageService`（依赖 **wx-server-sdk ~3.0.4**，勿写不存在的 3.9.x 版本号）：
    - 在终端进入对应目录执行 `npm install`（生成 `node_modules`）；
    - 开发者工具右键该函数 → **上传并部署：所有文件**（若「云端安装依赖」报「更新云函数失败」，改用此项）。
@@ -106,12 +106,12 @@ CloudBase 控制台 → **AI 用量**：生文 Token / 生图张数从 **0 变�
 
 | 检查项 | 说明 |
 |--------|------|
-| 云环境 | 工具栏云开发环境 = `cloud1-d9g01no7m292bc511`；`cloud-env.js` 的 `envId` 一致 |
+| 云环境 | 工具栏云开发环境 = `cloud1-d9g01no7m292bc511-d5e875d`；`cloud-env.js` 的 `envId` 一致 |
 | 云函数 | `aiPartyService`、`imageService` 已部署且状态正常；依赖为 wx-server-sdk **3.x** |
 | 基础库 | ≥ 3.15.1；真机预览/体验版再测一次（模拟器偶发不走 extend.AI） |
 | 缓存 | `runAi` 有 **5 分钟内存缓存**，重复点同一解说**不会再次扣费**；自检会 `clearAiCache`，玩法内请点「换一个」或换 `cacheTag` |
 | 控制台日志 | 开启 `debugCloudLog: true` 时，Console 有 `[ai] { via, modelUsed, usage }` |
-| 模型 | 主：`hunyuan` / `hunyuan-lite`；备：`cloudbase` / `hy3-preview`（见 `cloud-env.js`） |
+| 模型 | `createModel("hunyuan-v3")` + `hy3-preview`（见 `cloud-env.js`；勿用 `hunyuan-exp` / `cloudbase`） |
 
 ### 真机冒烟
 

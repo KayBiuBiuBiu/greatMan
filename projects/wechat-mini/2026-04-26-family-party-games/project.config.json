@@ -7,7 +7,7 @@
     "minified": true,
     "compileWorklet": false,
     "uglifyFileName": false,
-    "uploadWithSourceMap": true,
+    "uploadWithSourceMap": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true,
@@ -19,7 +19,9 @@
     "swc": false,
     "disableSWC": true,
     "babelSetting": {
-      "ignore": ["scripts/**"],
+      "ignore": [
+        "scripts/**"
+      ],
       "disablePlugins": [],
       "outputPath": ""
     }
@@ -37,11 +39,32 @@
     "ignore": [
       {
         "type": "folder",
+        "value": "cloudfunctions"
+      },
+      {
+        "type": "folder",
+        "value": "docs"
+      },
+      {
+        "type": "folder",
         "value": "scripts"
+      },
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "suffix",
+        "value": ".md"
+      },
+      {
+        "type": "file",
+        "value": ".DS_Store"
       }
     ],
     "include": []
   },
   "editorSetting": {},
-  "isGameTourist": false
+  "isGameTourist": false,
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

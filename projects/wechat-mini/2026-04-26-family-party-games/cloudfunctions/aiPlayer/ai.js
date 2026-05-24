@@ -1,7 +1,6 @@
 const cloud = require('wx-server-sdk')
 const ATTEMPTS = [
-  { provider: 'hunyuan', models: ['hunyuan-lite'] },
-  { provider: 'cloudbase', models: ['hunyuan-lite', 'hy3-preview'] }
+  { provider: 'hunyuan-v3', models: ['hy3-preview'] }
 ]
 
 function pickText(data) {

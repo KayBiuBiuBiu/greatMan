@@ -4,7 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SECRETS="$ROOT/cloudfunctions/aiPartyService/secrets.local.json"
-ENV_ID="cloud1-d9g01no7m292bc511"
+ENV_ID="cloud1-d9g01no7m292bc511-d5e875d"
 FN="aiPartyService"
 REGION="${TCCLI_REGION:-ap-shanghai}"
 

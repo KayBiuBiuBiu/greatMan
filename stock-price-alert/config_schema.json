@@ -1070,6 +1070,12 @@
               "maximum": 500,
               "description": "全进程 pro_bar / daily / daily_basic(trade_date) 滑动窗口限流：每分钟最多次数（默认 500，与官方 daily 额度一致；0=不限制）"
             },
+            "adj_factor_max_per_minute": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 200,
+              "description": "pro_bar(adj=qfq) 触发的 adj_factor 独立限流（默认 180；官方 200/分钟；0=不限制）"
+            },
             "sh_index_free_fallback": {
               "type": "boolean",
               "description": "已废弃：上证仅走 Tushare"

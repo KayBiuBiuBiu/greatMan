@@ -1,0 +1,145 @@
+.up-root {
+  box-sizing: border-box;
+}
+
+.up-card {
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background: #fff;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.up-compact .up-body {
+  flex-direction: row;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.up-head {
+  margin-bottom: 20rpx;
+}
+
+.up-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #23212a;
+  line-height: 44rpx;
+}
+
+.up-hint {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #7b7280;
+  line-height: 34rpx;
+}
+
+.up-loading,
+.up-error {
+  text-align: center;
+  font-size: 28rpx;
+  color: #7b7280;
+  padding: 24rpx 0;
+}
+
+.up-retry {
+  margin-top: 16rpx;
+  color: #ff7a2f;
+  font-size: 28rpx;
+}
+
+.up-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.up-avatar-btn {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  line-height: 1;
+}
+
+.up-avatar-btn::after {
+  border: none;
+}
+
+.up-avatar-ring {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 9999rpx;
+  overflow: hidden;
+  border: 4rpx solid #fed7aa;
+  box-sizing: border-box;
+  background: #f5f5f5;
+}
+
+.up-avatar-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.up-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #fdba74, #ea580c);
+  color: #fff;
+}
+
+.up-avatar-plus {
+  font-size: 56rpx;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.up-avatar-tip {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+}
+
+.up-nick-wrap {
+  width: 100%;
+  margin-top: 24rpx;
+}
+
+.up-compact .up-nick-wrap {
+  margin-top: 0;
+  flex: 1;
+}
+
+.up-nick-label {
+  display: block;
+  font-size: 24rpx;
+  color: #7b7280;
+  margin-bottom: 8rpx;
+}
+
+.up-nick-input {
+  width: 100%;
+  min-height: 72rpx;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  border-radius: 16rpx;
+  background: #f5f5f5;
+  font-size: 28rpx;
+  color: #23212a;
+  text-align: center;
+}
+
+.up-compact .up-nick-input {
+  text-align: left;
+}
+
+.up-saving {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #ff7a2f;
+}

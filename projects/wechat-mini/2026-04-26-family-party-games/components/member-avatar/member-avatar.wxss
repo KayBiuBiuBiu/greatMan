@@ -1,0 +1,33 @@
+.ma-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 9999rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #fdba74, #ea580c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ma-wrap.ma-sm {
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.ma-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ma-letter {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.ma-sm .ma-letter {
+  font-size: 26rpx;
+}

@@ -11,7 +11,7 @@ const ROOT = path.join(__dirname, '..')
 const FN_DIR = path.join(ROOT, 'cloudfunctions/aiPartyService')
 const SECRETS = path.join(FN_DIR, 'secrets.local.json')
 const CONFIG = path.join(FN_DIR, 'config.json')
-const ENV_ID = 'cloud1-d9g01no7m292bc511'
+const ENV_ID = 'cloud1-d9g01no7m292bc511-d5e875d'
 const CLI =
   process.platform === 'darwin'
     ? '/Applications/wechatwebdevtools.app/Contents/MacOS/cli'

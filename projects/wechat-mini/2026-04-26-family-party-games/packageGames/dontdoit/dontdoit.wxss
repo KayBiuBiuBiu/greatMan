@@ -1,0 +1,113 @@
+@import '../../styles/room-game.wxss';
+
+.ddi-page-inroom {
+  padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
+}
+
+.ddi-hero-compact {
+  margin-bottom: var(--space-md);
+}
+
+.ddi-card {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.ddi-label {
+  font-size: var(--font-body-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-accent);
+  margin-bottom: var(--space-xs);
+}
+
+.ddi-inp {
+  width: 100%;
+  min-height: var(--btn-secondary-height);
+  padding: 0 var(--space-md);
+  margin: var(--space-sm) 0 0;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  box-sizing: border-box;
+  font-size: var(--font-body-size);
+}
+
+.ddi-members-inner {
+  margin-top: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.ddi-member-out {
+  opacity: 0.45;
+}
+
+.ddi-member-out .rg-member-name,
+.ddi-member-out .rg-ready-label {
+  text-decoration: line-through;
+  color: var(--color-text-secondary);
+}
+
+.ddi-elim-btn {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  padding: 8rpx 20rpx;
+  line-height: 1.2;
+  margin-left: 8rpx;
+}
+
+.ddi-picker-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--color-border-soft);
+  font-size: 28rpx;
+}
+
+.ddi-phase-card {
+  text-align: center;
+}
+
+.ddi-win-hero {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #15803d;
+}
+
+.ddi-win-sub {
+  margin-top: 8rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-caption-size);
+}
+
+.ddi-main-btn {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.ddi-action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16rpx 32rpx calc(16rpx + env(safe-area-inset-bottom));
+  background: var(--color-bg-card);
+  border-top: 1rpx solid var(--color-border-soft);
+  box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.06);
+  z-index: 20;
+}
+
+.ddi-action-tip {
+  margin-bottom: 12rpx;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-caption-size);
+}
+
+.ddi-trigger-btn {
+  width: 100%;
+}

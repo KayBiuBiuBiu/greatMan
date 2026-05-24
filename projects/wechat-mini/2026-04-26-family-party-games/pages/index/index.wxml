@@ -16,25 +16,38 @@
 
   <scroll-view class="activity-panel" scroll-y enhanced show-scrollbar>
     <view class="card-grid">
-      <view class="item-card card" wx:for="{{games}}" wx:key="title">
+      <view class="item-card card {{item.devLocked ? 'item-card--dev' : ''}}" wx:for="{{games}}" wx:key="title">
         <view class="icon-bubble">{{item.icon}}</view>
         <view class="item-name">{{item.displayTitle}}</view>
         <view class="item-desc">{{item.displaySummary}}</view>
         <view class="card-actions">
           <button
-            class="start-btn btn btn-primary"
+            class="start-btn btn {{item.devLocked ? 'btn-secondary' : 'btn-primary'}}"
             bindtap="startGame"
             data-title="{{item.title}}"
             data-screen="{{item.screen}}"
-          >开始互动</button>
+            disabled="{{item.devLocked}}"
+          >{{item.devLocked ? '敬请期待' : '开始互动'}}</button>
+        </view>
+        <view wx:if="{{item.devLocked}}" class="dev-mask" catchtap="onDevLockedTap">
+          <text class="dev-mask-text">正在开发中</text>
         </view>
       </view>
     </view>
   </scroll-view>
 </view>
 
+<!-- 仅点击游戏「开始互动」且未填资料时显示，首页 onLoad 不会打开 -->
+<user-info-modal
+  wx:if="{{showUserInfoModal}}"
+  visible="{{showUserInfoModal}}"
+  bind:success="onUserInfoModalSuccess"
+  bind:cancel="onUserInfoModalCancel"
+/>
+
 <ai-share-modal
   visible="{{showAiShareModal}}"
+  share-token-ready="{{shareTokenReady}}"
   next-hint="{{aiUnlock.nextHint || ''}}"
   share-copy="{{shareCopy}}"
   bind:close="onCloseAiShareModal"

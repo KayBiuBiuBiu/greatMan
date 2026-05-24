@@ -82,22 +82,3 @@ page {
   /* 大屏居中（约 540px 内容区） */
   --page-max-width: 540px;
 }
-
-/* 暗色模式：跟随系统（真机有效；开发者工具可切换外观） */
-@media (prefers-color-scheme: dark) {
-  page {
-    --color-bg-page: #1a1816;
-    --color-bg-card: #2a2622;
-    --color-bg-muted: #322e2a;
-    --color-border: #3d3834;
-    --color-border-soft: #3d3834;
-    --color-text: #f5f0e8;
-    --color-text-secondary: #a8a29e;
-    --color-text-accent: #fdba74;
-    --color-secondary-bg: #3d2f1f;
-    --color-hero-grad-start: #7c4a1a;
-    --color-hero-grad-end: #5c3d14;
-    --color-brand: #ff8f4d;
-    --color-brand-deep: #fb923c;
-  }
-}

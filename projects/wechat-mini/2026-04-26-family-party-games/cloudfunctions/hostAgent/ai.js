@@ -3,10 +3,7 @@
  */
 const cloud = require('wx-server-sdk')
 
-const ATTEMPTS = [
-  { provider: 'hunyuan', models: ['hunyuan-lite'] },
-  { provider: 'cloudbase', models: ['hunyuan-lite', 'hy3-preview'] }
-]
+const ATTEMPTS = [{ provider: 'hunyuan-v3', models: ['hy3-preview'] }]
 
 function pickText(data) {
   if (!data) return ''
@@ -38,7 +35,8 @@ async function collectStream(res) {
 
 async function generateTextFromModel(model, modelName, messages) {
   const res = await model.generateText({
-    data: { model: modelName, messages }
+    model: modelName,
+    messages: messages
   })
   const body = (res && res.data) || res
   const t =

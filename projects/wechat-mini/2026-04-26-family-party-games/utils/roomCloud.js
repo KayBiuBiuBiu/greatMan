@@ -19,6 +19,9 @@ const {
 
 let callSeq = 0
 
+/** 与 shareService 对齐，避免客户端 -404012 polling timeout */
+const CALL_TIMEOUT_MS = 15000
+
 function ensureCloudInit() {
   if (!wx.cloud) {
     return false
@@ -83,6 +86,7 @@ function callRoomService(data, opts) {
   wx.cloud.callFunction({
     name: 'roomService',
     config: getCallFunctionConfig(),
+    timeout: CALL_TIMEOUT_MS,
     data,
     success: (res) => {
       const ms = Date.now() - t0

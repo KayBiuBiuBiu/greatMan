@@ -71,6 +71,12 @@
   transform: scale(0.98);
 }
 
+.ai-share-btn--disabled,
+.ai-share-btn[disabled] {
+  opacity: 0.55 !important;
+  background: #9ca3af !important;
+}
+
 .ai-share-btn::after {
   border: none;
 }

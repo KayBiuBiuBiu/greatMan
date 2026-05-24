@@ -1,9 +1,13 @@
+const { isDrawGuessEnabled, isHomeGameEnabled, isWerewolfEnabled } = require('../../data/feature-flags')
 const { callRoomService } = require('../../utils/roomCloud')
+const { withJoinProfile } = require('../../utils/userProfile')
 const { callWerewolfService } = require('../../utils/werewolfCloud')
 const { callUndercoverService } = require('../../utils/undercoverRoomCloud')
 const { callMusic } = require('../../utils/musicRoomCloud')
 const { callDraw } = require('../../utils/drawRoomCloud')
 const { callDrink } = require('../../utils/drinkRoomCloud')
+const { callHeadband } = require('../../utils/headbandCloud')
+const { callDontdoit } = require('../../utils/dontdoitCloud')
 
 const {
   SIZES: WOLF_SIZES,
@@ -33,6 +37,27 @@ Page({
   onLoad(query) {
     const title = decodeURIComponent(query.title || '')
     const screen = query.screen || 'play'
+    if (title && !isHomeGameEnabled(title)) {
+      wx.showToast({ title: '正在开发中', icon: 'none' })
+      setTimeout(function () {
+        wx.navigateBack({ delta: 1 })
+      }, 400)
+      return
+    }
+    if (screen === 'drawGuess' && !isDrawGuessEnabled()) {
+      wx.showToast({ title: '你画我猜暂未开放', icon: 'none' })
+      setTimeout(function () {
+        wx.navigateBack({ delta: 1 })
+      }, 400)
+      return
+    }
+    if (screen === 'werewolf' && !isWerewolfEnabled()) {
+      wx.showToast({ title: '身份推理暂未开放', icon: 'none' })
+      setTimeout(function () {
+        wx.navigateBack({ delta: 1 })
+      }, 400)
+      return
+    }
     const wolfInit = screen === 'werewolf' ? loadStoredSize() : 6
     const ucInit = 6
     const ucIdx = UC_SIZES.indexOf(ucInit) >= 0 ? UC_SIZES.indexOf(ucInit) : 2
@@ -44,7 +69,11 @@ Page({
           ? wolfInit
           : screen === 'undercover'
             ? ucInit
-            : screen === 'songGuess' || screen === 'drawGuess' || screen === 'drinkParty'
+            : screen === 'songGuess' ||
+                screen === 'drawGuess' ||
+                screen === 'drinkParty' ||
+                screen === 'headband' ||
+                screen === 'dontdoit'
               ? 6
               : 4,
       undercoverCount: 1,
@@ -150,7 +179,23 @@ Page({
     if (this.data.screen === 'drinkParty') {
       wx.showModal({
         title: '趣味抽签需多机同场',
-        content: '请创建聚会组并把 6 位数字口令发给每人；至少 2 人可开始。组长负责响铃与投票。',
+        content: '请创建聚会组并把 6 位数字口令发给每人；至少 2 人可开始。组长负责开始与下一轮。',
+        showCancel: false
+      })
+      return
+    }
+    if (this.data.screen === 'headband') {
+      wx.showModal({
+        title: '贴头猜词需多机同场',
+        content: '请创建聚会组并把 6 位数字口令发给每人；至少 2 人可开始。每人看自己头上是？？？，猜对自己获胜。',
+        showCancel: false
+      })
+      return
+    }
+    if (this.data.screen === 'dontdoit') {
+      wx.showModal({
+        title: '不要做挑战需多机同场',
+        content: '请创建聚会组并把 6 位口令发给每人；至少 2 人可开始。自己禁止动作保密，别犯规坚持到最后。',
         showCancel: false
       })
       return
@@ -203,6 +248,14 @@ Page({
       this.createDrinkRoom()
       return
     }
+    if (this.data.screen === 'headband') {
+      this.createHeadbandRoom()
+      return
+    }
+    if (this.data.screen === 'dontdoit') {
+      this.createDontdoitRoom()
+      return
+    }
     if (!wx.cloud) {
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
@@ -211,12 +264,11 @@ Page({
     const game = this.buildGame()
     wx.showLoading({ title: '生成口令' })
     callRoomService(
-      {
+      withJoinProfile({
         action: 'create',
-        nickName: '参与者',
         selectedGame: game,
         status: 'started'
-      },
+      }),
       {
         onOk: (result) => {
           wx.hideLoading()
@@ -266,7 +318,7 @@ Page({
     const maxPlayers = this.data.playerCount | 0
     saveStoredSize(maxPlayers)
     callWerewolfService(
-      { action: 'create', maxPlayers },
+      withJoinProfile({ action: 'create', maxPlayers }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -308,7 +360,7 @@ Page({
 
   goWerewolf(cfg) {
     const config = Object.assign(this.getConfig(), cfg || {})
-    const u = `/pages/werewolf/werewolf?title=${encodeURIComponent(
+    const u = `/packageGames/werewolf/werewolf?title=${encodeURIComponent(
       this.data.title
     )}&config=${encodeURIComponent(JSON.stringify(config))}`
     if (u.length > 2000) {
@@ -330,7 +382,7 @@ Page({
     }
     wx.showLoading({ title: '建房' })
     callUndercoverService(
-      { action: 'create' },
+      withJoinProfile({ action: 'create' }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -375,13 +427,9 @@ Page({
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
     }
-    const nick = (wx.getStorageSync('music_nick') || '房主').toString()
-      .trim()
-      .slice(0, 12) || '房主'
-    wx.setStorageSync('music_nick', nick)
     wx.showLoading({ title: '建房' })
     callMusic(
-      { action: 'create', nickName: nick },
+      withJoinProfile({ action: 'create' }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -421,7 +469,7 @@ Page({
       return
     }
     const u =
-      '/pages/song-guess/song-guess?roomId=' +
+      '/packageGames/song-guess/song-guess?roomId=' +
       encodeURIComponent(String(c.roomId)) +
       '&roomCode=' +
       encodeURIComponent(String(c.roomCode || ''))
@@ -438,13 +486,9 @@ Page({
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
     }
-    const nick = (wx.getStorageSync('draw_nick') || '房主').toString()
-      .trim()
-      .slice(0, 12) || '房主'
-    wx.setStorageSync('draw_nick', nick)
     wx.showLoading({ title: '建房' })
     callDraw(
-      { action: 'create', nickName: nick },
+      withJoinProfile({ action: 'create' }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -482,7 +526,7 @@ Page({
       wx.showToast({ title: '组号无效', icon: 'none' })
       return
     }
-    const u = '/pages/draw-guess/draw-guess?roomId=' +
+    const u = '/packageGames/draw-guess/draw-guess?roomId=' +
       encodeURIComponent(String((cfg && cfg.roomId) || '')) +
       '&roomCode=' + encodeURIComponent(String((cfg && cfg.roomCode) || ''))
     wx.navigateTo({ url: u, fail: (e) => { wx.showToast({ title: (e && e.errMsg) || '进房失败', icon: 'none' }) } })
@@ -493,14 +537,9 @@ Page({
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
     }
-    const nick = (wx.getStorageSync('drink_nick') || '房主')
-      .toString()
-      .trim()
-      .slice(0, 12) || '房主'
-    wx.setStorageSync('drink_nick', nick)
     wx.showLoading({ title: '建房' })
     callDrink(
-      { action: 'create', nickName: nick },
+      withJoinProfile({ action: 'create' }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -516,7 +555,7 @@ Page({
           const cfg = { roomId: String(r.roomId), roomCode: code }
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位数字口令给同桌；至少 2 人可开始。组长负责开始、投票与趣味小任务。',
+            content: '把 6 位数字口令给同桌；至少 2 人可开始。倒计时后随机一人响铃，显示喝 1～10 口。',
             confirmText: '进入',
             showCancel: false,
             success: (m) => {
@@ -537,15 +576,120 @@ Page({
       wx.showToast({ title: '组号无效', icon: 'none' })
       return
     }
-    const u = '/pages/drink-party/drink-party?roomId=' +
+    const u = '/packageGames/drink-party/drink-party?roomId=' +
       encodeURIComponent(String((cfg && cfg.roomId) || '')) +
       '&roomCode=' + encodeURIComponent(String((cfg && cfg.roomCode) || ''))
     wx.navigateTo({ url: u, fail: (e) => { wx.showToast({ title: (e && e.errMsg) || '进房失败', icon: 'none' }) } })
   },
 
+  createHeadbandRoom () {
+    if (!wx.cloud) {
+      wx.showToast({ title: '请先开通云开发', icon: 'none' })
+      return
+    }
+    wx.showLoading({ title: '建房' })
+    callHeadband(
+      withJoinProfile({ action: 'create' }),
+      {
+        onOk: (res) => {
+          wx.hideLoading()
+          const r = (res && res.result) || {}
+          if (!r.roomId) {
+            wx.showToast({ title: '未返回组号，请检查 headbandRoomService 是否已部署', icon: 'none' })
+            return
+          }
+          const code = (r.roomCode || '').toString()
+          const cfg = { roomId: String(r.roomId), roomCode: code }
+          wx.showModal({
+            title: '聚会组口令：' + (code || '—'),
+            content: '把 6 位数字口令给同桌；至少 2 人可开始。组长开局后每人头上显示词语（自己为？？？）。',
+            confirmText: '进入',
+            showCancel: false,
+            success: (m) => {
+              if (m.confirm) {
+                this.goHeadband(cfg)
+              }
+            }
+          })
+        },
+        onError: () => {
+          wx.hideLoading()
+        }
+      }
+    )
+  },
+
+  goHeadband (cfg) {
+    if (!((cfg && cfg.roomId) || '')) {
+      wx.showToast({ title: '组号无效', icon: 'none' })
+      return
+    }
+    const c = Object.assign({}, cfg || {})
+    const u =
+      '/packageGames/headband/headband?config=' + encodeURIComponent(JSON.stringify(c))
+    wx.navigateTo({
+      url: u,
+      fail: (e) => {
+        wx.showToast({ title: (e && e.errMsg) || '进房失败', icon: 'none' })
+      }
+    })
+  },
+
+  createDontdoitRoom () {
+    if (!wx.cloud) {
+      wx.showToast({ title: '请先开通云开发', icon: 'none' })
+      return
+    }
+    wx.showLoading({ title: '建房' })
+    callDontdoit(
+      withJoinProfile({ action: 'create' }),
+      {
+        onOk: (res) => {
+          wx.hideLoading()
+          const r = (res && res.result) || {}
+          if (!r.roomId) {
+            wx.showToast({ title: '请部署 dontdoitRoomService', icon: 'none' })
+            return
+          }
+          const code = (r.roomCode || '').toString()
+          const cfg = { roomId: String(r.roomId), roomCode: code }
+          wx.showModal({
+            title: '聚会组口令：' + (code || '—'),
+            content: '把 6 位口令给同桌；至少 2 人。开局后每人一个禁止动作（自己保密）。',
+            confirmText: '进入',
+            showCancel: false,
+            success: (m) => {
+              if (m.confirm) {
+                this.goDontdoit(cfg)
+              }
+            }
+          })
+        },
+        onError: () => {
+          wx.hideLoading()
+        }
+      }
+    )
+  },
+
+  goDontdoit (cfg) {
+    if (!((cfg && cfg.roomId) || '')) {
+      wx.showToast({ title: '组号无效', icon: 'none' })
+      return
+    }
+    const u =
+      '/packageGames/dontdoit/dontdoit?config=' + encodeURIComponent(JSON.stringify(cfg || {}))
+    wx.navigateTo({
+      url: u,
+      fail: (e) => {
+        wx.showToast({ title: (e && e.errMsg) || '进房失败', icon: 'none' })
+      }
+    })
+  },
+
   goUcV2(cfg) {
     const c = Object.assign(this.getConfig(), { mode: 'v2' }, cfg || {})
-    const u = `/pages/undercover/undercover?title=${encodeURIComponent(
+    const u = `/packageGames/undercover/undercover?title=${encodeURIComponent(
       this.data.title
     )}&config=${encodeURIComponent(JSON.stringify(c))}`
     if (u.length > 2000) {
@@ -581,10 +725,18 @@ Page({
       this.goDrinkParty(extra || {})
       return
     }
+    if (this.data.screen === 'headband') {
+      this.goHeadband(extra || {})
+      return
+    }
+    if (this.data.screen === 'dontdoit') {
+      this.goDontdoit(extra || {})
+      return
+    }
     const page = 'play'
     const config = Object.assign({}, this.getConfig(), extra || {})
     wx.navigateTo({
-      url: `/pages/${page}/${page}?title=${encodeURIComponent(this.data.title)}&config=${encodeURIComponent(JSON.stringify(config))}`
+      url: `/packageGames/${page}/${page}?title=${encodeURIComponent(this.data.title)}&config=${encodeURIComponent(JSON.stringify(config))}`
     })
   }
 })

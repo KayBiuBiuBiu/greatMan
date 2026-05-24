@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.cloudbase.net/cli/cloudbaserc.schema.json",
+  "envId": "cloud1-d9g01no7m292bc511-d5e875d",
+  "functionRoot": "cloudfunctions",
+  "functions": [
+    { "name": "aiPartyService", "timeout": 60, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "aiPlayer", "timeout": 60, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "dontdoitRoomService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "drawRoomService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "drinkRoomService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "gameStatsService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "headbandRoomService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "hostAgent", "timeout": 60, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "hostAgentEnhanced", "timeout": 60, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "imageService", "timeout": 60, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "musicRoomService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "riddleShare", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "roomService", "timeout": 60, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "shareCardGenerator", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "shareService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "undercoverRoomService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "userService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true },
+    { "name": "werewolfService", "timeout": 30, "runtime": "Nodejs18.15", "handler": "index.main", "installDependency": true }
+  ]
+}

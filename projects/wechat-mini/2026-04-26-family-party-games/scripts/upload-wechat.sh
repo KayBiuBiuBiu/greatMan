@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CLI="/Applications/wechatwebdevtools.app/Contents/MacOS/cli"
 VERSION="${1:-1.0.$(date +%Y%m%d)}"
 DESC="${2:-聚会组：成员刷新、开始失败弹窗、邀请分享、猜歌至少2人}"
-ENV_ID="${WX_CLOUD_ENV:-}"
+ENV_ID="${WX_CLOUD_ENV:-cloud1-d9g01no7m292bc511-d5e875d}"
 
 if [[ ! -x "$CLI" ]]; then
   echo "未找到微信开发者工具 CLI: $CLI"

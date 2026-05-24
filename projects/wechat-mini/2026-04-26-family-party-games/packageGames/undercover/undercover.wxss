@@ -1,0 +1,349 @@
+@import '../../styles/room-game.wxss';
+
+.ucv2-inroom {
+  padding-bottom: calc(var(--page-pad-bottom) + constant(safe-area-inset-bottom));
+  padding-bottom: calc(var(--page-pad-bottom) + env(safe-area-inset-bottom));
+}
+
+.panel {
+  margin-top: 28rpx;
+  padding: 34rpx;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 900;
+  margin-bottom: 12rpx;
+}
+
+.muted {
+  line-height: 1.6;
+  font-size: 26rpx;
+}
+
+.muted .em {
+  color: #c2410c;
+  font-weight: 800;
+}
+
+.sub-tip {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #fff4e8;
+  font-size: 26rpx;
+}
+
+.tip-tiny {
+  color: #7b7280;
+  font-size: 24rpx;
+  line-height: 1.5;
+  margin: 12rpx 0 20rpx;
+}
+
+.main-btn {
+  margin-top: 24rpx;
+  min-height: 82rpx;
+}
+
+.word-panel,
+.word-panel.word-panel {
+  text-align: center;
+}
+
+.my-name {
+  margin-top: 20rpx;
+  font-size: 44rpx;
+  font-weight: 900;
+}
+
+.role-badge {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  color: #8a3a0a;
+  background: #ffedd5;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.player-name {
+  margin-top: 14rpx;
+  font-size: 48rpx;
+  font-weight: 900;
+}
+
+.secret-word,
+.hidden-word {
+  margin: 34rpx 0;
+  padding: 48rpx 20rpx;
+  border-radius: 32rpx;
+  background: #fff4e8;
+  color: #ff7a2f;
+  font-size: 60rpx;
+  font-weight: 900;
+}
+
+.room-word-wrap {
+  word-break: break-all;
+}
+
+.hidden-word {
+  color: #7b7280;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.num-step {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+}
+
+.vote-outer {
+  margin-top: 8rpx;
+}
+
+.section-title {
+  margin: 8rpx 0 0;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.vote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 18rpx;
+}
+
+.vote-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+}
+
+/* 基础库 button 固定 184px + 行高偏上：用 flex 居中并收紧宽度内排版 */
+.vote-outer .vote-card button.vote-btn.btn,
+button.vote-btn.btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 124rpx !important;
+  min-height: 64rpx;
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  line-height: 1.2;
+  font-size: 26rpx;
+}
+
+.vote-name {
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.status-line {
+  margin-top: 6rpx;
+}
+
+.result-card {
+  margin-top: 24rpx;
+  text-align: left;
+}
+
+.winner {
+  color: #ff7a2f;
+  font-size: 58rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 20rpx;
+  align-items: stretch;
+}
+
+.half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80rpx;
+  padding: 0;
+  line-height: normal;
+  margin: 0;
+}
+
+.row .half {
+  min-height: 88rpx;
+}
+
+.role {
+  margin-top: 16rpx;
+  color: #5f5966;
+  font-size: 28rpx;
+  line-height: 1.75;
+}
+
+/* v2 同场同步 · 阶段面板 */
+.uc-muted {
+  font-size: 24rpx;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 8rpx 0;
+}
+.uc-panel {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-top: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.uc-h2 {
+  font-size: 32rpx;
+  font-weight: 800;
+  margin-bottom: 8rpx;
+}
+.uc-inp {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20rpx;
+  margin-top: 12rpx;
+  background: #fafafa;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+}
+.uc-btn,
+button.uc-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 0;
+  box-sizing: border-box;
+  margin-top: 16rpx;
+  min-height: 80rpx;
+  padding: 0 28rpx !important;
+  line-height: 1.35 !important;
+  border-radius: 14rpx;
+  font-size: 28rpx;
+}
+.uc-btn.uc-primary {
+  background: #ea580c;
+  color: #fff;
+  border: none;
+  min-height: 88rpx;
+}
+.uc-btn.uc-ghost {
+  background: #fff4e5;
+  color: #7c2d12;
+  border: 1rpx solid #fed7aa;
+}
+.uc-btn::after {
+  border: none;
+}
+.uc-pill {
+  display: inline-block;
+  padding: 10rpx 20rpx;
+  border-radius: 999rpx;
+  background: #ffedd4;
+  font-size: 24rpx;
+  margin: 8rpx 0;
+}
+.uc-mopt {
+  display: block;
+  width: 100%;
+  margin: 8rpx 0;
+  padding: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.3;
+  background: #f9fafb;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+  color: #111827;
+}
+
+.uc-mopt-selected {
+  background: #fff7ed;
+  border-color: #f97316;
+  color: #c2410c;
+  font-weight: 700;
+}
+.uc-log {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #4b5563;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.uc-end {
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #b91c1c;
+}
+.uc-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+.uc-modal {
+  width: 100%;
+  max-width: 600rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 36rpx 28rpx 28rpx;
+  text-align: center;
+}
+.uc-secr {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #111;
+  margin-top: 12rpx;
+}
+.uc-members {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+.uc-mi {
+  padding: 4rpx 0;
+  border-bottom: 1rpx solid #f3f4f6;
+}
+.uc-row {
+  font-size: 28rpx;
+  margin: 4rpx 0;
+}
+
+.uc-room-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.uc-btn-compact {
+  margin-top: 12rpx !important;
+}
+
+.uc-phase-line {
+  font-size: 24rpx;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 8rpx;
+}

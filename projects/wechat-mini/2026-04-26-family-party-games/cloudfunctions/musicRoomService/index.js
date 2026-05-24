@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const jp = require('./joinPlayerPatch')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -23,21 +24,17 @@ function shuf (a) {
   }
   return x
 }
-/** 随机一名轮次主持；≥2 人时尽量避免与上一轮同一人 */
-function pickRoundHost (players, previousOpenId) {
-  const pls = (players || []).filter((p) => p && p.openId)
-  if (!pls.length) {
+/** 当轮主持固定为聚会组组长（房主） */
+function hostAsRoundHost (room, players) {
+  const oid = (room && room.hostOpenId) || ''
+  if (!oid) {
     return { openId: '', nickName: '' }
   }
-  if (pls.length === 1) {
-    return { openId: pls[0].openId, nickName: pls[0].nickName }
+  const p = (players || []).find((x) => x && x.openId === oid)
+  return {
+    openId: oid,
+    nickName: (p && p.nickName) || '组长'
   }
-  const candidates = previousOpenId
-    ? pls.filter((p) => p.openId !== previousOpenId)
-    : pls
-  const pool = candidates.length ? candidates : pls
-  const r = pool[(Math.random() * pool.length) | 0]
-  return { openId: r.openId, nickName: r.nickName }
 }
 function normAns (s) {
   return String(s || '')
@@ -161,14 +158,13 @@ function buildPub (room, players, st) {
     /** 公屏不暴露歌名；由轮次主持在本机用音乐 App 外放 */
     roundHostOpenId: g.roundHostOpenId || '',
     roundHostNickName: g.roundHostNickName || '',
-    publicPlayers: sorted.map((p) => ({
-      openId: p.openId,
-      nickName: p.nickName,
-      score: p.score | 0
-    })),
+    publicPlayers: sorted.map((p) =>
+      Object.assign(jp.withProfileReadyFlag(p), { score: p.score | 0 })
+    ),
     roundHits: g.roundHits || [],
     publicLog: g.publicLog || [],
-    finishedAt: g.finishedAt
+    finishedAt: g.finishedAt,
+    syncAt: t()
   }
 }
 
@@ -207,6 +203,7 @@ async function run (e) {
         roomId: _id,
         openId: o,
         nickName: e.nickName && String(e.nickName).trim().slice(0, 12) ? String(e.nickName).trim().slice(0, 12) : '房主',
+        avatarUrl: String((e && e.avatarUrl) || '').trim(),
         isHost: true,
         score: 0,
         joinedAt: t()
@@ -218,7 +215,7 @@ async function run (e) {
       Object.assign(row, { _id }),
       { currentIndex: -1, playToken: 0, roundStartTime: 0, phase: 'waiting', publicLog: [], roundHits: [] }
     )
-    return { roomId: _id, roomCode: code }
+    return { roomId: _id, roomCode: code, myOpenId: o }
   }
   if (a === 'join') {
     const code = String(e.roomCode || '')
@@ -236,29 +233,30 @@ async function run (e) {
     }
     const pl0 = await gPlayers(r0._id)
     const exist = pl0.find((p) => p.openId === o)
-    const nm = String(e.nickName || '')
-      .trim()
-      .slice(0, 12) || '参与者'
     if (exist) {
       if (exist._id) {
         await db
           .collection(P)
           .doc(String(exist._id))
-          .update({ data: { nickName: nm, updatedAt: t() } })
+          .update({
+            data: Object.assign(jp.mergeJoinFields(e, exist), { updatedAt: t() })
+          })
       }
     } else {
       if (pl0.length >= 20) {
         throw new Error('满员')
       }
       await db.collection(P).add({
-        data: {
-          roomId: r0._id,
-          openId: o,
-          nickName: nm,
-          isHost: r0.hostOpenId === o,
-          score: 0,
-          joinedAt: t()
-        }
+        data: Object.assign(
+          {
+            roomId: r0._id,
+            openId: o,
+            isHost: r0.hostOpenId === o,
+            score: 0,
+            joinedAt: t()
+          },
+          jp.mergeJoinFields(e, {})
+        )
       })
     }
     const r1 = await gRoom(r0._id)
@@ -270,7 +268,13 @@ async function run (e) {
         roundHits: []
       }
     await setStateFromRoom(r1, g0)
-    return { roomId: String(r0._id) }
+    const pl1 = await gPlayers(r0._id)
+    return {
+      roomId: String(r0._id),
+      roomCode: r0.roomCode,
+      playerCount: pl1.length,
+      myOpenId: o
+    }
   }
   if (a === 'setRounds') {
     const rid = e.roomId
@@ -316,7 +320,7 @@ async function run (e) {
     if (pls0.length < 2) {
       throw new Error('至少2人才能开始')
     }
-    const rh0 = pickRoundHost(pls0, null)
+    const rh0 = hostAsRoundHost(room0, pls0)
     const now = t()
     const st0 = {
       currentIndex: 0,
@@ -325,7 +329,7 @@ async function run (e) {
       phase: 'round_playing',
       roundHits: [],
       publicLog: [
-        '互动开始。第1轮。主持：' + (rh0.nickName || '—') + '（请用本机外放该歌）。'
+        '互动开始。第1轮。组长主持：' + (rh0.nickName || '—') + '（请用本机外放该歌）。'
       ],
       currentSongId: rounds[0] ? rounds[0].id : '',
       lastRoundIndex: -1,
@@ -364,9 +368,9 @@ async function run (e) {
       const ni = idx + 1
       const now = t()
       const pln = await gPlayers(rid)
-      const rh = pickRoundHost(pln, g.roundHostOpenId)
+      const rh = hostAsRoundHost(room0, pln)
       const log = (g.publicLog || []).concat([
-        '第' + (ni + 1) + '轮。主持：' + (rh.nickName || '—') + '。'
+        '第' + (ni + 1) + '轮。组长主持：' + (rh.nickName || '—') + '。'
       ])
       const g2 = {
         currentIndex: ni,
@@ -427,11 +431,6 @@ async function run (e) {
     if (!row) {
       throw new Error('歌曲异常')
     }
-    const dur = (room0.roundDuration | 0) || 30
-    const elapsed = t() - (g.roundStartTime | 0)
-    if (elapsed > dur * 1000) {
-      return { late: 1, ok: 0 }
-    }
     const pls = await gPlayers(rid)
     const me = pls.find((p) => p.openId === o)
     if (!me) {
@@ -484,7 +483,36 @@ async function run (e) {
   if (a === 'getView') {
     return await getView(e.roomId, o)
   }
+  if (a === 'syncState') {
+    return await doSyncState(e.roomId, o)
+  }
   throw new Error('未知' + a)
+}
+
+async function doSyncState (roomId, openId) {
+  const rid = String(roomId || '')
+  if (!rid) {
+    throw new Error('无房间')
+  }
+  const room = await gRoom(rid)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const pls = await gPlayers(rid)
+  const me = pls.find((p) => p.openId === openId)
+  if (!me) {
+    return { ok: 1, myOpenId: openId, inRoom: false }
+  }
+  const g = (await gState(rid)) || {}
+  const state = buildPub(room, pls, g)
+  const view = await getView(rid, openId)
+  return {
+    ok: 1,
+    myOpenId: openId,
+    inRoom: true,
+    state,
+    view
+  }
 }
 
 async function getView (roomId, openId) {
@@ -503,6 +531,7 @@ async function getView (roomId, openId) {
     ? (ID_TO_SONG[currentSong.id] || currentSong)
     : null
   return {
+    myOpenId: openId,
     isHost: room.hostOpenId === openId,
     isRoundHost,
     /** 仅轮次主持可见，用于本机去音乐 App 搜歌外放 */
@@ -523,7 +552,12 @@ async function getView (roomId, openId) {
     publicPlayers: pls
       .slice()
       .sort((a, b) => (b.score | 0) - (a.score | 0))
-      .map((p) => ({ openId: p.openId, nickName: p.nickName, score: p.score | 0 })),
+      .map((p) =>
+        Object.assign(jp.withProfileReadyFlag(p), {
+          isHost: room.hostOpenId === p.openId,
+          score: p.score | 0
+        })
+      ),
     currentRound: cix2 >= 0 ? cix2 + 1 : 0,
     totalRounds: (room.totalRounds | 0) || 0,
     publicLog: g.publicLog || [],

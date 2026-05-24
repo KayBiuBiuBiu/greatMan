@@ -1,0 +1,56 @@
+.share-card-page {
+  min-height: 100vh;
+  padding: 32rpx;
+  box-sizing: border-box;
+  background: var(--color-bg-page, #fef8f0);
+}
+
+.share-card-loading,
+.share-card-err {
+  text-align: center;
+  padding: 80rpx 24rpx;
+  color: var(--color-text-muted, #888);
+}
+
+.share-card-preview {
+  background: var(--color-bg-card, #fff);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+.share-card-img {
+  width: 100%;
+  border-radius: 16rpx;
+}
+
+.share-card-code-box {
+  margin-top: 24rpx;
+  text-align: center;
+}
+
+.share-card-code-label {
+  display: block;
+  font-size: 26rpx;
+  color: #6b5a4a;
+}
+
+.share-card-code-num {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 56rpx;
+  font-weight: bold;
+  letter-spacing: 8rpx;
+  color: #111;
+}
+
+.share-card-hint {
+  margin-top: 16rpx;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.main-btn {
+  margin-top: 20rpx;
+}

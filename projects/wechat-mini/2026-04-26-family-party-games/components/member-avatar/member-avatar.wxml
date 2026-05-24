@@ -1,0 +1,10 @@
+<view class="ma-wrap ma-{{size}}">
+  <image
+    wx:if="{{showImage}}"
+    class="ma-img"
+    src="{{imageSrc}}"
+    mode="aspectFill"
+    binderror="onImageError"
+  />
+  <view wx:else class="ma-letter">{{displayLetter}}</view>
+</view>

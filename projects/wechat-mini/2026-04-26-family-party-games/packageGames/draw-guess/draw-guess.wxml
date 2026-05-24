@@ -1,0 +1,285 @@
+<!-- 未进房：创建 / 加入 -->
+<view class="page draw-page" wx:if="{{!roomId}}">
+  <view class="hero draw-lobby-hero">
+    <view class="hero-title">🎨 你画我猜</view>
+    <view class="hero-subtitle">线下同场：一人画、全员看画布抢答。凭 6 位数字口令进组，至少 2 人可开始。</view>
+  </view>
+  <view class="card draw-room-card">
+    <view class="draw-label">昵称</view>
+    <input class="draw-inp" value="{{nick}}" bindinput="onNick" placeholder="输入昵称" />
+    <button class="btn btn-primary main-btn" bindtap="doCreate">创建聚会组</button>
+    <view class="draw-label" style="margin-top: var(--space-md)">已有口令</view>
+    <input class="draw-inp" type="number" maxlength="6" value="{{joinCode}}" bindinput="onCode" placeholder="6 位数字" />
+    <button class="btn btn-secondary main-btn" bindtap="doJoin">加入互动组</button>
+  </view>
+</view>
+
+<!-- 已进房 -->
+<block wx:else>
+<page-meta page-style="overflow: hidden; height: 100%;" wx:if="{{isMeDrawer && isDrawingMode}}" />
+<view class="page draw-page {{isMeDrawer && isDrawingMode ? 'draw-page-focus' : 'draw-page-inroom'}}">
+
+  <!-- 画家沉浸绘画：全屏盖住其余 UI -->
+  <view class="draw-focus" wx:if="{{isMeDrawer && isDrawingMode}}">
+    <view class="draw-focus-bar">
+      <view class="draw-focus-bar-left">
+        <text class="draw-focus-label">画</text>
+        <text class="draw-focus-word">{{painterWordSafe || '—'}}</text>
+      </view>
+      <text class="draw-focus-time" wx:if="{{timeLeft > 0}}">{{timeLeft}}s</text>
+      <button class="draw-focus-done" bindtap="onExitDrawingMode">完成</button>
+    </view>
+    <view class="draw-focus-center">
+      <view class="draw-canvas-box" id="drawFocusWrap">
+        <canvas
+          class="cvs cvs-drawer"
+          type="2d"
+          id="cvs2"
+          disable-scroll="{{true}}"
+          bindtouchstart="onTouchS"
+          bindtouchmove="handleTouchMove"
+          bindtouchend="onTouchE"
+        />
+      </view>
+    </view>
+    <view class="draw-focus-tools">
+      <button size="mini" class="tbtn" data-c="#111" bindtap="onPickColor">黑</button>
+      <button size="mini" class="tbtn" data-c="#d33" bindtap="onPickColor">红</button>
+      <button size="mini" class="tbtn" data-c="#16a" bindtap="onPickColor">蓝</button>
+      <button size="mini" class="tbtn" bindtap="onClear">清空</button>
+      <button size="mini" class="tbtn btn-sync" bindtap="onManualSync">同步画板</button>
+      <text class="tlab text-caption">线宽</text>
+      <slider class="sli" min="2" max="10" value="{{lineW}}" bindchange="onLineW" />
+    </view>
+  </view>
+
+  <block wx:if="{{!(isMeDrawer && isDrawingMode)}}">
+  <view class="hero draw-lobby-hero draw-lobby-hero-compact">
+    <view class="hero-title">🎨 你画我猜</view>
+    <view class="hero-subtitle text-caption" wx:if="{{state && state.status === 'playing'}}">
+      第 {{state.currentRound || 0}} / {{state.totalRounds}} 轮
+      <text wx:if="{{state.phase === 'drawing'}}"> · 绘画中 ⏱ {{timeLeft}}s</text>
+    </view>
+  </view>
+
+  <!-- 口令 + 邀请 -->
+    <view class="card draw-room-card">
+      <view class="rg-code-row">
+        <view class="rg-code-main">
+          <text class="rg-code-label">聚会组口令</text>
+          <view class="rg-code-num-row rg-code-tap" bindtap="onCopyRoomCode">
+            <text class="rg-code-num">{{roomCode || (state && state.roomCode)}}</text>
+          </view>
+        </view>
+        <button class="btn-wechat-invite rg-invite-btn" open-type="share">邀请朋友</button>
+      </view>
+      <view
+        class="rg-status-banner {{statusBannerWarn ? 'rg-banner-warn' : ''}}"
+        wx:if="{{statusHint}}"
+      >{{statusHint}}</view>
+  </view>
+
+  <!-- 成员 -->
+  <view class="card draw-room-card" wx:if="{{state}}">
+    <view class="rg-members-card draw-members-inner">
+      <view class="rg-members-head">
+        <text class="rg-members-title">成员</text>
+        <text class="rg-members-count muted">{{memberCountLine}}</text>
+      </view>
+      <view class="rg-progress-wrap" wx:if="{{inWaiting}}">
+        <view class="rg-progress-bar">
+          <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
+        </view>
+      </view>
+      <view class="draw-empty-members text-caption" wx:if="{{!displayPlayers || !displayPlayers.length}}">
+        暂无成员，请点「邀请朋友」或分享口令
+      </view>
+      <view class="rg-member-list">
+        <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
+          <member-avatar avatar-url="{{p.avatarUrl}}" nick-name="{{p.nickName}}" letter="{{p.avatarText}}" />
+          <view class="rg-member-body">
+            <view class="rg-member-name-row">
+              <text class="rg-member-name">{{p.nickName}}</text>
+              <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+              <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
+            </view>
+            <text class="rg-ready-label">{{p.score != null ? p.score + ' 分 · ' : ''}}{{p.readyLabel}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <room-ready-bar
+    wx:if="{{inWaiting && view && !view.isHost}}"
+    ready="{{lobbySelfReady}}"
+    bind:tapready="onLobbyReadyTap"
+  />
+
+  <!-- 组长 · 等待中：设置 + 开始 -->
+  <block wx:if="{{inWaiting && view && view.isHost}}">
+    <view class="rg-settings-card">
+      <view class="rg-setting-item">
+        <text class="rg-label">总轮数</text>
+        <view class="rg-stepper-board">
+          <view
+            class="stepper-btn {{roundIdx <= 0 ? 'stepper-btn-disabled' : ''}}"
+            bindtap="onRoundsMinus"
+          >-</view>
+          <text class="stepper-value">{{rounds}}</text>
+          <view
+            class="stepper-btn {{roundIdx >= roundOptions.length - 1 ? 'stepper-btn-disabled' : ''}}"
+            bindtap="onRoundsPlus"
+          >+</view>
+        </view>
+      </view>
+      <view class="rg-stepper-hint">{{roundStepHint}}</view>
+      <view class="rg-setting-item">
+        <text class="rg-label">题目来源</text>
+        <picker
+          mode="selector"
+          range="{{wordSourceOptions}}"
+          value="{{wordSourceIdx}}"
+          bindchange="onWordSourceChange"
+        >
+          <view class="rg-picker">{{wordSourceLabel}}</view>
+        </picker>
+      </view>
+      <view class="rg-setting-item">
+        <text class="rg-label">词库风格</text>
+        <picker mode="selector" range="{{catNames}}" value="{{catIdx}}" bindchange="onCategoryChange">
+          <view class="rg-picker">{{currentCategoryName}}</view>
+        </picker>
+      </view>
+
+      <view class="rg-preview-inline" wx:if="{{wordSource === 'ai' && aiPendingWord}}">
+        <text class="rg-preview-inline-title">已生成题目（预览）</text>
+        <text class="rg-preview-inline-word">《{{aiPendingWord}}》</text>
+      </view>
+
+      <view class="rg-ai-action" wx:if="{{aiButtonsEnabled && aiUnlock.canGen}}">
+        <button class="btn-ai" bindtap="onAiGenerateWord" disabled="{{aiBusy}}">✨ AI 出题</button>
+      </view>
+      <view class="rg-ai-locked" wx:elif="{{aiButtonsEnabled}}">
+        <button class="btn-ai ai-locked" bindtap="onAiUnlockTap">🔒 AI 出题</button>
+      </view>
+      <view class="rg-settings-tip">仅生成预览，点「开始互动」后使用</view>
+    </view>
+
+    <button
+      class="rg-btn-primary main-btn draw-start-btn {{canStart ? '' : 'rg-start-muted'}}"
+      bindtap="doStart"
+    >开始互动</button>
+  </block>
+
+  <view class="card draw-room-card draw-guest-wait" wx:if="{{inWaiting && view && !view.isHost}}">
+    <view class="text-body muted">👥 等待组长开始互动，可先邀请更多朋友进组</view>
+    <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)">邀请朋友</button>
+  </view>
+
+  <!-- 进行中 -->
+  <view class="card draw-room-card" wx:if="{{state && (state.status === 'playing' || state.status === 'finished')}}">
+    <view class="draw-play-meta" wx:if="{{state.currentDrawerNick}}">
+      <text class="text-body">{{drawRoleHint || ('绘画：' + state.currentDrawerNick)}}</text>
+      <text class="pill" wx:if="{{state.phase === 'drawing'}}">⏱ {{timeLeft}}s</text>
+    </view>
+    <view class="draw-play-meta" wx:if="{{view && view.myScore != null}}">
+      <text class="text-caption muted">我的得分 {{view.myScore}}</text>
+    </view>
+  </view>
+
+  <!-- 绘画阶段：观看端 + 画家未进沉浸时 -->
+  <view class="card draw-room-card draw-stage" wx:if="{{inDrawingPhase}}">
+    <view class="word-big" wx:if="{{isMeDrawer && painterWordSafe}}">你要画：{{painterWordSafe}}</view>
+    <view class="draw-guess-hint text-caption" wx:elif="{{!isMeDrawer}}">
+      {{state.currentDrawerNick || '画家'}}正在作画，请看画板猜词
+    </view>
+
+    <button
+      class="btn btn-primary main-btn draw-mode-enter"
+      wx:if="{{isMeDrawer && !isDrawingMode && manualExitDraw}}"
+      bindtap="onEnterDrawingMode"
+    >开始绘画</button>
+
+    <view class="draw-canvas-box" id="drawWrapBox" hidden="{{!showCanvasBoard}}">
+      <canvas
+        class="cvs cvs-viewer"
+        type="2d"
+        id="cvs2"
+        disable-scroll="{{false}}"
+        hidden="{{!showCanvasBoard}}"
+      />
+    </view>
+
+    <view class="draw-guess-form guess-area" wx:if="{{inDrawingPhase && !isMeDrawer}}">
+      <input
+        class="draw-inp"
+        placeholder="猜是什么词"
+        value="{{guessInput}}"
+        bindinput="onGuessI"
+        disabled="{{view && view.hasGuessedThisRound}}"
+      />
+      <button
+        class="btn btn-primary main-btn btn-md"
+        bindtap="doSubmitGuess"
+        disabled="{{view && view.hasGuessedThisRound}}"
+      >{{view && view.hasGuessedThisRound ? '本轮已答' : '猜一猜'}}</button>
+    </view>
+  </view>
+
+  <view class="card draw-room-card" wx:if="{{state && (state.phase === 'revealed' || state.status === 'finished')}}">
+    <view class="text-card-title" wx:if="{{state.revealedWord || (view && view.revealedWord)}}">答案</view>
+    <view class="ans" wx:if="{{state.revealedWord || (view && view.revealedWord)}}">
+      《{{state.revealedWord || (view && view.revealedWord)}}》
+    </view>
+    <view class="hits text-caption" wx:if="{{state.roundHits && state.roundHits.length > 0}}">
+      <view wx:for="{{state.roundHits}}" wx:key="openId">{{item.nickName}} +{{item.points}}</view>
+    </view>
+  </view>
+
+  <view class="card draw-room-card" wx:if="{{view && view.isHost && state && state.status === 'playing'}}">
+    <view class="draw-host-actions">
+      <button class="btn btn-secondary btn-sm" wx:if="{{state.phase === 'drawing'}}" bindtap="doReveal">揭晓答案</button>
+      <button class="btn btn-secondary btn-sm" wx:if="{{state.phase === 'drawing'}}" bindtap="doSkip">换词</button>
+      <button class="btn btn-secondary btn-sm" wx:if="{{state.phase === 'revealed'}}" bindtap="doNextR">下一轮</button>
+      <button class="btn btn-secondary btn-sm" bindtap="doEndG">结束本环节</button>
+    </view>
+  </view>
+
+  <view
+    class="card draw-room-card"
+    wx:if="{{state && state.status === 'finished' || (view && view.roomStatus === 'finished')}}"
+  >
+    <view class="text-card-title">本环节得分</view>
+    <view
+      class="rank"
+      wx:for="{{state.publicPlayers || (view && view.publicPlayers) || []}}"
+      wx:for-item="u"
+      wx:for-index="i"
+      wx:key="openId"
+    >{{i + 1}}. {{u.nickName}} — {{u.score}} 分</view>
+  </view>
+
+  <view class="card draw-room-card" wx:if="{{state && state.publicLog && state.publicLog.length > 0}}">
+    <view class="text-card-title">记录</view>
+    <view class="log text-caption" wx:for="{{state.publicLog}}" wx:key="*this">{{item}}</view>
+  </view>
+  </block>
+</view>
+</block>
+
+<user-info-modal
+  wx:if="{{showUserInfoModal}}"
+  visible="{{showUserInfoModal}}"
+  bind:success="onLobbyUserInfoSuccess"
+  bind:cancel="onLobbyUserInfoCancel"
+/>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  share-token-ready="{{shareTokenReady}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

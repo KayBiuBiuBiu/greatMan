@@ -2,9 +2,14 @@
   <view class="ai-share-sheet" catchtap="noop">
     <view class="ai-share-tip">
       <text class="ai-share-tip-main">{{copyMain}}</text>
+      <text class="ai-share-tip-sub">须点下方按钮「分享给好友」，好友点开聊天卡片链接；朋友圈不计入</text>
       <text class="ai-share-tip-sub" wx:if="{{nextHint}}">{{nextHint}}</text>
     </view>
-    <button class="ai-share-btn btn-wechat-invite" open-type="share">{{friendBtn}}</button>
+    <button
+      class="ai-share-btn btn-wechat-invite {{shareTokenReady ? '' : 'ai-share-btn--disabled'}}"
+      open-type="share"
+      disabled="{{!shareTokenReady}}"
+    >{{shareTokenReady ? friendBtn : '分享码生成中…'}}</button>
     <button class="ai-share-btn btn-wechat-invite" bindtap="onTimeline">{{timelineBtn}}</button>
     <view class="ai-share-close" bindtap="onClose">关闭</view>
   </view>

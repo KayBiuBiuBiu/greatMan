@@ -3,6 +3,7 @@
  * 与旧版 roomService.rooms(4 位) 数据隔离
  */
 const cloud = require('wx-server-sdk')
+const jp = require('./joinPlayerPatch')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -117,6 +118,81 @@ function nn(pl, o) {
   const f = (pl || []).find((p) => p.openId === o)
   return f ? f.nickName : '参与者'
 }
+
+async function resetRoomForRematch(rid) {
+  const pl = await gPlayers(rid)
+  for (const p of pl) {
+    await db
+      .collection(UC_P)
+      .doc(p._id)
+      .update({
+        data: {
+          isAlive: true,
+          wordAck: false,
+          currentVote: null,
+          role: '',
+          word: '',
+          updatedAt: t()
+        }
+      })
+  }
+}
+
+async function dealUndercoverRound(rid, room, pl, opts) {
+  const o = opts || {}
+  let p0 = null
+  if (room.pendingPair && room.pendingPair.length === 2) {
+    p0 = [String(room.pendingPair[0]), String(room.pendingPair[1])]
+  } else {
+    p0 = PAIRS[((Math.random() * PAIRS.length) | 0) % PAIRS.length]
+  }
+  const wCiv = p0[0]
+  const wUc = p0[1]
+  const pSh = shuf(pl)
+  for (let j = 0; j < pSh.length; j += 1) {
+    const p = pSh[j]
+    const isUc = j === 0
+    const word = isUc ? wUc : wCiv
+    const role = isUc ? 'undercover' : 'civilian'
+    await db
+      .collection(UC_P)
+      .doc(p._id)
+      .update({
+        data: {
+          role,
+          word,
+          isAlive: true,
+          wordAck: false,
+          currentVote: null
+        }
+      })
+  }
+  const prevLog = o.appendLog ? room.publicLog || [] : []
+  const logLine = o.logLine || '发词完成，大家查看词语。'
+  const rMerge = {
+    status: 'playing',
+    pendingPair: null,
+    currentRound: 1,
+    currentPhase: 'word',
+    pair: p0,
+    speakIndex: 0,
+    speakOrder: shuf(
+      pSh
+        .filter((x) => x.isAlive)
+        .map((x) => x.openId)
+    ),
+    tieBreakOids: [],
+    gameResult: null,
+    winSide: null,
+    lastElim: null,
+    publicLog: o.rematch ? [logLine] : prevLog.concat([logLine])
+  }
+  await saveR(Object.assign({}, await gRoom(rid), rMerge))
+  const rAfter = await gRoom(rid)
+  const plAfter = await gPlayers(rid)
+  await setState(rAfter, plAfter)
+  return { ok: 1, pair: p0 }
+}
 async function setState(room, players) {
   const g = gPub(room, players)
   if (!g) {
@@ -151,14 +227,14 @@ function gPub(room, players) {
     publicPlayers: pl
       .slice()
       .sort((a, b) => (a.seat | 0) - (b.seat | 0))
-      .map((p) => ({
-        openId: p.openId,
-        nickName: p.nickName,
-        isAlive: !!p.isAlive,
-        seat: p.seat,
-        isHost: !!p.isHost,
-        wordAck: !!p.wordAck
-      })),
+      .map((p) =>
+        Object.assign(jp.withProfileReadyFlag(p), {
+          isAlive: !!p.isAlive,
+          seat: p.seat,
+          isHost: !!p.isHost,
+          wordAck: !!p.wordAck
+        })
+      ),
     speakIndex: room.speakIndex | 0,
     speakOrder: room.speakOrder || [],
     tieOids: room.tieBreakOids || [],
@@ -248,11 +324,17 @@ async function run(e) {
     }
     const { _id } = await db.collection(UC_R).add({ data: room })
     const row = { ...room, _id }
+    const hostNick =
+      e.nickName && String(e.nickName).trim().slice(0, 12)
+        ? String(e.nickName).trim().slice(0, 12)
+        : '房主'
+    const hostAv = String((e && e.avatarUrl) || '').trim()
     await db.collection(UC_P).add({
       data: {
         roomId: _id,
         openId: o,
-        nickName: '房主',
+        nickName: hostNick,
+        avatarUrl: hostAv,
         isHost: true,
         seat: 0,
         role: '',
@@ -265,7 +347,7 @@ async function run(e) {
     })
     const pl = await gPlayers(_id)
     await setState(Object.assign(row, { _id }), pl)
-    return { roomId: _id, roomCode: code }
+    return { roomId: _id, roomCode: code, myOpenId: o }
   }
   if (a === 'join') {
     const code = String(e.roomCode || '')
@@ -286,10 +368,8 @@ async function run(e) {
     if (pl0.length >= max) {
       throw new Error('满员')
     }
-    const nm = String(e.nickName || '')
-      .trim()
-      .slice(0, 12) || '参与者'
-    if (pl0.some((p) => p.openId === o)) {
+    const existUc = pl0.find((p) => p.openId === o)
+    if (existUc) {
       await db
         .collection(UC_P)
         .where({ roomId: r0._id, openId: o })
@@ -299,31 +379,37 @@ async function run(e) {
             return db
               .collection(UC_P)
               .doc(res.data[0]._id)
-              .update({ data: { nickName: nm, updatedAt: t() } })
+              .update({
+                data: Object.assign(jp.mergeJoinFields(e, existUc), {
+                  updatedAt: t()
+                })
+              })
           }
         })
     } else {
       const seat = pl0.length
       await db.collection(UC_P).add({
-        data: {
-          roomId: r0._id,
-          openId: o,
-          nickName: nm,
-          isHost: false,
-          seat,
-          role: '',
-          word: '',
-          isAlive: true,
-          wordAck: false,
-          currentVote: null,
-          joinedAt: t()
-        }
+        data: Object.assign(
+          {
+            roomId: r0._id,
+            openId: o,
+            isHost: false,
+            seat,
+            role: '',
+            word: '',
+            isAlive: true,
+            wordAck: false,
+            currentVote: null,
+            joinedAt: t()
+          },
+          jp.mergeJoinFields(e, {})
+        )
       })
     }
     const r = await gRoom(r0._id)
     const pl2 = await gPlayers(r0._id)
     await setState(r, pl2)
-    return { roomId: String(r0._id) }
+    return { roomId: String(r0._id), roomCode: r.roomCode, myOpenId: o }
   }
   if (a === 'setConfig') {
     const rid = e.roomId
@@ -376,64 +462,36 @@ async function run(e) {
       })
     return { civilianWord: civ, undercoverWord: uc }
   }
-  if (a === 'startGame') {
+  if (a === 'startGame' || a === 'playAgain') {
     const rid = e.roomId
     await assertHost(rid)
-    const room = await gRoom(rid)
-    if (room.status !== 'waiting') {
+    let room = await gRoom(rid)
+    const isRematch = a === 'playAgain'
+    if (isRematch) {
+      if (room.currentPhase !== 'ended' && room.status !== 'finished') {
+        throw new Error('本局未结束')
+      }
+      await resetRoomForRematch(rid)
+      room = await gRoom(rid)
+    } else if (room.status !== 'waiting') {
       throw new Error('已开局')
     }
     const pl = await gPlayers(rid)
     if (pl.length < 3) {
       throw new Error('至少3人')
     }
-    if (pl.length !== (room.maxPlayers | 0) && (room.maxPlayers | 0) > 0) {
+    if (
+      !isRematch &&
+      pl.length !== (room.maxPlayers | 0) &&
+      (room.maxPlayers | 0) > 0
+    ) {
       throw new Error('人未满' + (room.maxPlayers | 0) + '，暂不可开')
     }
-    let p0 = null
-    if (room.pendingPair && room.pendingPair.length === 2) {
-      p0 = [String(room.pendingPair[0]), String(room.pendingPair[1])]
-    } else {
-      p0 = PAIRS[((Math.random() * PAIRS.length) | 0) % PAIRS.length]
-    }
-    const wCiv = p0[0]
-    const wUc = p0[1]
-    const pSh = shuf(pl)
-    for (let j = 0; j < pSh.length; j += 1) {
-      const p = pSh[j]
-      const isUc = j === 0
-      const word = isUc ? wUc : wCiv
-      const role = isUc ? 'undercover' : 'civilian'
-      await db
-        .collection(UC_P)
-        .doc(p._id)
-        .update({
-          data: {
-            role,
-            word,
-            isAlive: true,
-            wordAck: false,
-            currentVote: null
-          }
-        })
-    }
-    const rMerge = {
-      status: 'playing',
-      pendingPair: null,
-      currentRound: 1,
-      currentPhase: 'word',
-      pair: p0,
-      speakIndex: 0,
-      speakOrder: shuf(
-        pSh
-          .filter((x) => x.isAlive)
-          .map((x) => x.openId)
-      ),
-      tieBreakOids: [],
-      publicLog: ['发词完成，大家查看词语。']
-    }
-    await saveR(Object.assign({}, await gRoom(rid), rMerge))
-    return { ok: 1, pair: p0 }
+    return await dealUndercoverRound(rid, room, pl, {
+      rematch: isRematch,
+      appendLog: isRematch,
+      logLine: isRematch ? '新一轮开始，大家查看词语。' : '发词完成，大家查看词语。'
+    })
   }
   if (a === 'ackWord') {
     const rid = e.roomId
@@ -668,7 +726,7 @@ async function run(e) {
         .update({ data: { currentVote: null } })
     }
     const isUc = vOut.role === 'undercover'
-    const rnew = (room.publicLog || []).concat([nn(pls, out) + (isUc ? ' 是卧底' : ' 是平民') + '，被放逐。'])
+    const rnew = (room.publicLog || []).concat([nn(pls, out) + ' 被放逐。'])
     if (isUc) {
       const room2 = {
         currentPhase: 'ended',
@@ -676,7 +734,7 @@ async function run(e) {
         gameResult: 'civilian',
         winSide: 'good',
         lastElim: { o: out, u: 1, round: room.currentRound | 0 },
-        publicLog: rnew.concat(['本环节以普通词侧描述收束。'])
+        publicLog: rnew.concat(['本局结束。'])
       }
       await saveR(Object.assign({}, await gRoom(rid), room2))
       return { over: 1, out, wasUndercover: 1 }
@@ -692,7 +750,7 @@ async function run(e) {
           gameResult: 'undercover',
           winSide: 'bad',
           lastElim: { o: out, u: 0, round: room.currentRound | 0 },
-          publicLog: rnew.concat(['仅剩两人且持不同词仍在场，本环节以特殊词侧收束。'])
+          publicLog: rnew.concat(['本局结束。'])
         }
         await saveR(Object.assign({}, await gRoom(rid), room2))
         return { over: 1, out, wasUndercover: 0 }
@@ -719,7 +777,35 @@ async function run(e) {
   if (a === 'getView') {
     return await gView(e.roomId, o)
   }
+  if (a === 'syncState') {
+    return await doSyncState(e.roomId, o)
+  }
   throw new Error('未知' + a)
+}
+
+async function doSyncState(rid, o) {
+  const id = String(rid || '')
+  if (!id) {
+    throw new Error('无房间')
+  }
+  const room = await gRoom(id)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const pls = await gPlayers(id)
+  if (!pls.find((p) => p.openId === o)) {
+    return { ok: 1, myOpenId: o, inRoom: false }
+  }
+  const pub = gPub(room, pls)
+  const view = await gView(id, o)
+  return {
+    ok: 1,
+    myOpenId: o,
+    inRoom: true,
+    isHost: room.hostOpenId === o,
+    state: pub,
+    view
+  }
 }
 async function gView(rid, o) {
   const room = await gRoom(rid)
@@ -757,14 +843,14 @@ async function gView(rid, o) {
   const publicPlayers = pls
     .slice()
     .sort((a, b) => (a.seat | 0) - (b.seat | 0))
-    .map((p) => ({
-      openId: p.openId,
-      nickName: p.nickName,
-      isAlive: !!p.isAlive,
-      seat: p.seat,
-      isHost: !!p.isHost,
-      wordAck: !!p.wordAck
-    }))
+    .map((p) =>
+      Object.assign(jp.withProfileReadyFlag(p), {
+        isAlive: !!p.isAlive,
+        seat: p.seat,
+        isHost: !!p.isHost,
+        wordAck: !!p.wordAck
+      })
+    )
   return {
     roomCode: room.roomCode,
     maxPlayers: room.maxPlayers,
@@ -790,7 +876,7 @@ async function gView(rid, o) {
     allRoles: isHost
       ? pls.map((p) => ({
         n: p.nickName,
-        r: p.role,
+        w: p.word || '',
         o: p.openId,
         dead: !p.isAlive
       }))

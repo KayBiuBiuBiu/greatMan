@@ -7,8 +7,28 @@ const PRESETS = {
     page: '/pages/index/index',
     defaultTitle: '家庭聚会助手 - 亲友口令进组一起玩'
   },
+  dontdoit: {
+    page: '/packageGames/dontdoit/dontdoit',
+    defaultTitle: '家庭聚会助手 - 不要做挑战',
+    codeLen: 6,
+    roomTitle: (code) => '一起来玩不要做挑战！口令 ' + code,
+    buildQuery: (ctx) => {
+      const cfg = { roomId: ctx.roomId, roomCode: ctx.code }
+      return 'config=' + encodeURIComponent(JSON.stringify(cfg))
+    }
+  },
+  headband: {
+    page: '/packageGames/headband/headband',
+    defaultTitle: '家庭聚会助手 - 贴头猜词',
+    codeLen: 6,
+    roomTitle: (code) => '一起来玩贴头猜词！口令 ' + code,
+    buildQuery: (ctx) => {
+      const cfg = { roomId: ctx.roomId, roomCode: ctx.code }
+      return 'config=' + encodeURIComponent(JSON.stringify(cfg))
+    }
+  },
   drink: {
-    page: '/pages/drink-party/drink-party',
+    page: '/packageGames/drink-party/drink-party',
     defaultTitle: '家庭聚会助手 - 趣味抽签',
     codeLen: 6,
     roomTitle: (code) => '一起来玩趣味抽签！口令 ' + code,
@@ -19,7 +39,7 @@ const PRESETS = {
       encodeURIComponent(ctx.code)
   },
   undercover: {
-    page: '/pages/undercover/undercover',
+    page: '/packageGames/undercover/undercover',
     defaultTitle: '家庭聚会助手 - 谁是卧底',
     codeLen: 6,
     roomTitle: (code) => '快来一起玩谁是卧底！口令 ' + code,
@@ -32,7 +52,7 @@ const PRESETS = {
     }
   },
   werewolf: {
-    page: '/pages/werewolf/werewolf',
+    page: '/packageGames/werewolf/werewolf',
     defaultTitle: '家庭聚会助手 - 秘密身份推理',
     codeLen: 6,
     roomTitle: (code) => '一起来玩身份推理！口令 ' + code,
@@ -45,7 +65,7 @@ const PRESETS = {
     }
   },
   draw: {
-    page: '/pages/draw-guess/draw-guess',
+    page: '/packageGames/draw-guess/draw-guess',
     defaultTitle: '家庭聚会助手 - 你画我猜',
     codeLen: 6,
     needRoomId: true,
@@ -57,7 +77,7 @@ const PRESETS = {
       encodeURIComponent(ctx.code)
   },
   music: {
-    page: '/pages/song-guess/song-guess',
+    page: '/packageGames/song-guess/song-guess',
     defaultTitle: '家庭聚会助手 - 疯狂猜歌',
     codeLen: 6,
     needRoomId: true,
@@ -69,7 +89,7 @@ const PRESETS = {
       encodeURIComponent(ctx.code)
   },
   truthDare: {
-    page: '/pages/play/play',
+    page: '/packageGames/play/play',
     defaultTitle: '家庭聚会助手 - 真心话大冒险',
     codeLen: 4,
     roomTitle: (code) => '一起来玩真心话大冒险！口令 ' + code,
@@ -171,6 +191,13 @@ function handleShareAppMessage(page, kind, ctx) {
     }
   }
   const token = getShareTokenForShare(page)
+  if (!token) {
+    wx.showToast({
+      title: '分享码准备中，请稍候再点',
+      icon: 'none',
+      duration: 2500
+    })
+  }
   if (page) {
     refreshAiUnlockPage(page)
   }

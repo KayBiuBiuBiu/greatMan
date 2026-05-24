@@ -1,0 +1,123 @@
+@import '../../styles/room-game.wxss';
+
+.hb-page-inroom {
+  padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
+}
+
+.hb-hero-compact {
+  margin-bottom: var(--space-md);
+}
+
+.hb-hero-compact .hero-title {
+  font-size: var(--font-title-size);
+  line-height: var(--font-title-lh);
+}
+
+.hb-card {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.hb-label {
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-lh);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-accent);
+  margin-bottom: var(--space-xs);
+}
+
+.hb-inp {
+  width: 100%;
+  min-height: var(--btn-secondary-height);
+  padding: 0 var(--space-md);
+  margin: var(--space-sm) 0 0;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  box-sizing: border-box;
+  font-size: var(--font-body-size);
+  color: var(--color-text);
+}
+
+.hb-members-inner {
+  margin-top: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.hb-phase-card {
+  text-align: center;
+}
+
+.hb-win-hero {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #15803d;
+}
+
+.hb-win-sub {
+  margin-top: 8rpx;
+  color: var(--color-text-secondary);
+}
+
+.hb-picker-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--color-border-soft);
+  font-size: 28rpx;
+}
+
+.hb-main-btn {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.hb-rematch-tip {
+  text-align: center;
+  margin: 16rpx 0 8rpx;
+  color: var(--color-text-muted, #888);
+}
+
+.hb-guess-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16rpx 32rpx calc(16rpx + env(safe-area-inset-bottom));
+  background: var(--color-bg-card);
+  border-top: 1rpx solid var(--color-border-soft);
+  box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.06);
+  z-index: 20;
+}
+
+.hb-guess-tip {
+  margin-bottom: 12rpx;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.hb-guess-row {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.hb-guess-inp {
+  flex: 1;
+  min-height: var(--btn-secondary-height);
+  padding: 0 24rpx;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  font-size: var(--font-body-size);
+}
+
+.hb-guess-btn {
+  min-width: 140rpx;
+  flex-shrink: 0;
+}

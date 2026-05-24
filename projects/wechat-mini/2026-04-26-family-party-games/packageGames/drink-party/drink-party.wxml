@@ -1,0 +1,132 @@
+<!-- 未进房 -->
+<view class="page dp-page" wx:if="{{!roomId}}">
+  <view class="hero">
+    <view class="hero-title">趣味抽签</view>
+    <view class="hero-subtitle">点开始抽签，随机一人手机响铃，并显示喝 1～10 口。凭 6 位口令进组，至少 2 人。</view>
+  </view>
+  <view class="dp-card">
+    <view class="dp-label">昵称</view>
+    <input class="dp-inp" placeholder="输入昵称" value="{{nick}}" bindinput="onNick" />
+    <button class="btn btn-primary main-btn" bindtap="doCreate" disabled="{{opBusy}}">创建聚会组</button>
+  </view>
+  <view class="dp-card">
+    <view class="dp-label">已有口令</view>
+    <input class="dp-inp" type="number" maxlength="6" placeholder="6 位数字" value="{{joinCode}}" bindinput="onCode" />
+    <button class="btn btn-secondary main-btn" bindtap="doJoin" disabled="{{opBusy}}">加入互动组</button>
+  </view>
+</view>
+
+<!-- 已进房 -->
+<view class="page dp-page dp-page-inroom" wx:else>
+  <view class="ring-flash" wx:if="{{ringFlash}}"></view>
+  <view class="hero dp-hero-compact">
+    <view class="hero-title">趣味抽签</view>
+    <view class="hero-subtitle text-caption" wx:if="{{state}}">第 {{roundDisp}} 轮 · 玩法 v2</view>
+    <view class="hero-subtitle text-caption" wx:else>加载中…</view>
+  </view>
+
+  <!-- 口令 + 邀请 -->
+  <view class="dp-card" wx:if="{{state}}">
+    <view class="rg-code-row">
+      <view class="rg-code-main">
+        <text class="rg-code-label">聚会组口令</text>
+        <view class="rg-code-num-row rg-code-tap" bindtap="onCopyRoomCode">
+          <text class="rg-code-num">{{state.roomCode}}</text>
+        </view>
+      </view>
+      <button class="btn-wechat-invite rg-invite-btn" open-type="share">邀请朋友</button>
+    </view>
+  </view>
+
+  <!-- 10 秒抽签倒计时（揭晓后才响铃/震动） -->
+  <view
+    class="dp-card dp-phase-card dp-phase-prominent"
+    wx:if="{{countdownSec > 0 && (inCountdown || (state && state.phase === 'countdown'))}}"
+  >
+    <view class="dp-countdown-num">{{countdownSec}}</view>
+    <view class="dp-countdown-sub">秒后揭晓响铃者</view>
+    <view class="dp-countdown-tip text-caption">紧张感拉满，请盯住成员列表</view>
+  </view>
+
+  <!-- 结果（含旧云 voting 阶段兼容，统一显示喝几口） -->
+  <view class="dp-card dp-phase-card dp-phase-prominent" wx:if="{{showDrinkResult && drinkResultText}}">
+    <view class="dp-drink-hero">{{drinkResultText}}</view>
+    <view class="dp-ringer-hint" wx:if="{{iAmRinger}}">你的手机响了，请喝 {{drinkSips}} 口</view>
+    <view class="dp-result-sub text-caption" wx:else>被抽中者本机正在响铃</view>
+  </view>
+
+  <!-- 状态 + 成员 -->
+  <view class="dp-card" wx:if="{{state}}">
+    <view
+      class="rg-status-banner {{statusBannerWarn ? 'rg-banner-warn' : ''}}"
+      wx:if="{{phaseHint}}"
+    >{{phaseHint}}</view>
+
+    <view class="rg-members-card dp-members-inner">
+      <view class="rg-members-head">
+        <text class="rg-members-title">成员</text>
+        <text class="rg-members-count muted">{{memberCountLine}}</text>
+      </view>
+      <view class="rg-progress-wrap" wx:if="{{inWaiting}}">
+        <view class="rg-progress-bar">
+          <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
+        </view>
+      </view>
+      <view class="rg-member-list">
+        <view
+          class="rg-member-item {{(inCountdown || (state && state.phase === 'countdown')) ? 'dp-member-pulse' : ''}}"
+          style="{{(inCountdown || (state && state.phase === 'countdown')) ? 'animation-duration:' + memberPulseDuration + 'ms;' : ''}}"
+          wx:for="{{displayPlayers}}"
+          wx:for-item="p"
+          wx:key="openId"
+        >
+          <member-avatar avatar-url="{{p.avatarUrl}}" nick-name="{{p.nickName}}" letter="{{p.avatarText}}" />
+          <view class="rg-member-body">
+            <view class="rg-member-name-row">
+              <text class="rg-member-name">{{p.nickName}}</text>
+              <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+              <view class="rg-ready-dot {{p.ready ? 'on' : ''}}" wx:if="{{state.phase !== 'result'}}"></view>
+            </view>
+            <text class="rg-ready-label">{{p.readyLabel}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <room-ready-bar
+    wx:if="{{inWaiting && !isHost}}"
+    ready="{{lobbySelfReady}}"
+    bind:tapready="onLobbyReadyTap"
+  />
+
+  <button
+    class="rg-btn-primary main-btn dp-main-btn {{canStart ? '' : 'rg-start-muted'}}"
+    wx:if="{{isHost && state && state.phase === 'waiting'}}"
+    bindtap="onStart"
+    disabled="{{opBusy}}"
+  >开始本轮</button>
+
+  <button
+    class="rg-btn-primary main-btn dp-main-btn"
+    wx:if="{{isHost && state && state.phase === 'result'}}"
+    bindtap="onNextRound"
+    disabled="{{opBusy}}"
+  >下一轮</button>
+</view>
+
+<user-info-modal
+  wx:if="{{showUserInfoModal}}"
+  visible="{{showUserInfoModal}}"
+  bind:success="onLobbyUserInfoSuccess"
+  bind:cancel="onLobbyUserInfoCancel"
+/>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  share-token-ready="{{shareTokenReady}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

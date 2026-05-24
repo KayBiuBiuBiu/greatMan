@@ -25,7 +25,7 @@
 ### 2026-05-19 AI 聚会助手
 
 - `utils/aiHelper.js`：`wx.cloud.extend.AI` + `deepseek-v4-flash`，失败可兜底 `aiPartyService` 云函数。
-- `cloud-env.js` 默认环境 `cloud1-d9g01no7m292bc511`。
+- `cloud-env.js` 默认环境 `cloud1-d9g01no7m292bc511-d5e875d`。
 - 趣味抽签：结果页 AI 解说 / 趣味任务建议。
 - 谁是卧底：AI 出题并发牌（`setCustomPair`）、结束战报文案。
 - 你画我猜：AI 出题（`setPendingWord`）。

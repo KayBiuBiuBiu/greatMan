@@ -1,7 +1,7 @@
 /** 身份推理板子人数：6 / 8 / 10 / 12 */
 const SIZES = [6, 8, 10, 12]
 const STORAGE_KEY = 'werewolf_board_size'
-const HINT = '可选 6 / 8 / 10 / 12 人局'
+const HINT = '可选 6 / 8 / 10 / 12 人局（不含主持）'
 
 function indexOfSize(n) {
   const i = SIZES.indexOf(parseInt(n, 10) || 0)

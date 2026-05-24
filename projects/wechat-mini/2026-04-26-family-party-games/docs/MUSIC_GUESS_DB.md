@@ -8,7 +8,7 @@
 | `music_players` | 每局每人的 openId、昵称、是否房主、累计分 |
 | `music_gameState` | 公屏状态，供全端 `watch`：当前曲、轮次、倒计时起点、本轮答中、日志等 |
 
-所有写操作由云函数 `musicRoomService` 完成；客户端以 `roomId` 为文档 ID 监听 `music_gameState`，并轮询/触发 `getView` 取本人是否已答等隐私字段。
+所有写操作由云函数 `musicRoomService` 完成。客户端优先用 **`syncState`**（每秒轮询 + `watch` 兜底）拉公屏与本人视角；`music_gameState` 建议「登录用户可读、仅云函数可写」。
 
 ## `music_rooms` 文档字段
 
@@ -46,7 +46,7 @@
 | `currentIndex` | 当前第几首（0-based），未开局可为 -1 |
 | `playToken` | 每开始一首或切歌自增（保留字段，便于以后扩展） |
 | `roundStartTime` | 本轮开始时间（ms），用于端上倒计时与云端超时判题 |
-| `roundHostOpenId` / `roundHostNickName` | **本轮随机主持**（在在线玩家中抽选；≥2 人时尽量不与上一轮同一人），公屏只显示 Ta 的昵称，**不**公布歌名 |
+| `roundHostOpenId` / `roundHostNickName` | **组长（房主）**固定为当轮主持，公屏只显示 Ta 的昵称，**不**公布歌名 |
 | `phase` | `waiting` \| `round_playing` \| `finished` |
 | `publicPlayers` | 按分数排序的 `{ openId, nickName, score }[]` |
 | `roundHits` | 本轮已答中列表：`openId`, `nickName`, `order`, `points` |
@@ -67,8 +67,8 @@
 | `create` | 建 `music_rooms`、房主进 `music_players`、写初始 `music_gameState` |
 | `join` | 凭 `roomCode` 进房；满员/已结束/无效码时返回错误信息 |
 | `setRounds` | 仅房主、等待中：设置 `totalRounds` |
-| `startGame` | 仅房主：洗牌抽题、写 `rounds`、**随机首轮主持**、`status=playing`、首轮 `round_playing` |
-| `nextSong` | 仅房主：未结束则**再随机**一名主持、进下一题、重置 `roundHits` 等；最后一题后再点则全剧终 |
+| `startGame` | 仅房主：洗牌抽题、写 `rounds`、**组长为当轮主持**、`status=playing`、首轮 `round_playing` |
+| `nextSong` | 仅房主：未结束则进下一题、重置 `roundHits` 等（主持仍为组长）；最后一题后再点则全剧终 |
 | `submitAnswer` | 非**当轮主持**可抢答；主持提交返回 `hostNoGuess`；首中 +3 等计分规则不变 |
 | `getView` | `isHost` 房主；`isRoundHost` 当轮主持；**仅当轮主持**能拿到 `hostPlayTitle` / `hostPlayAliases` 与无 URL 的 `currentSong` 摘要 |
 

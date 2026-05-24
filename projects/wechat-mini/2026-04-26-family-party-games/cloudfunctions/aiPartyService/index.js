@@ -6,8 +6,8 @@ const { chatCompletions } = require('./hunyuanOpenApi')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
-let aiProvider = 'hunyuan'
-let aiModels = ['hunyuan-lite']
+let aiProvider = 'hunyuan-v3'
+let aiModels = ['hy3-preview']
 let hunyuanApiBase = 'https://api.hunyuan.cloud.tencent.com/v1/'
 try {
   const cfg = require('./cloud-env.js')
@@ -49,7 +49,7 @@ async function chatViaExtendAi(prompt, system) {
   }
 
   let messages
-  if (aiProvider === 'hunyuan') {
+  if (aiProvider === 'hunyuan' || aiProvider === 'hunyuan-v3' || aiProvider === 'hunyuan-exp') {
     messages = [{ role: 'user', content: system ? system + '\n\n' + prompt : prompt }]
   } else {
     messages = []
@@ -63,7 +63,8 @@ async function chatViaExtendAi(prompt, system) {
     const modelName = aiModels[i]
     try {
       const res = await model.generateText({
-        data: { model: modelName, messages }
+        model: modelName,
+        messages: messages
       })
       const r = extractText(res)
       return {

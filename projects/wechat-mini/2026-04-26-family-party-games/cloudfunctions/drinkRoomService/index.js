@@ -2,6 +2,7 @@
  * 趣味抽签 / 同场同步：6 位聚会组 + drink_rooms / drink_players / drink_gameState / drink_votes
  */
 const cloud = require('wx-server-sdk')
+const jp = require('./joinPlayerPatch')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -11,7 +12,7 @@ const P = 'drink_players'
 const S = 'drink_gameState'
 const V = 'drink_votes'
 
-const COUNTDOWN_MS = 3000
+const COUNTDOWN_MS = 10000
 const VOTE_MS = 30000
 const AGENT_AUTH = 'family-party-agent-v1'
 let _currentEvent = null
@@ -23,6 +24,9 @@ function agentOk() {
 
 function c6() {
   return String(100000 + ((Math.random() * 900000) | 0))
+}
+function randomDrinkSips() {
+  return 1 + ((Math.random() * 10) | 0)
 }
 function shuf(a) {
   const x = a.slice()
@@ -145,11 +149,9 @@ function buildPub(room, players, g) {
     votesByVoter: m,
     voteTally: st.voteTally && typeof st.voteTally === 'object' ? st.voteTally : recomputeTally(m),
     voteProgress: { cast, need },
-    publicPlayers: sorted.map((p) => ({
-      openId: p.openId,
-      nickName: p.nickName,
-      isHost: !!p.isHost
-    })),
+    publicPlayers: sorted.map((p) =>
+      Object.assign(jp.withProfileReadyFlag(p), { isHost: !!p.isHost })
+    ),
     result: st.result != null ? st.result : null,
     updatedAt: t()
   }
@@ -275,12 +277,142 @@ async function run(event) {
   if (action === 'nextRound') {
     return doNextRound(event)
   }
+  if (action === 'getView') {
+    return doGetView(event)
+  }
+  if (action === 'syncState') {
+    return doSyncState(event)
+  }
+  if (action === 'rerollRinger') {
+    return doRerollRinger(event)
+  }
   return { errMsg: '未知 action' }
+}
+
+async function doSyncState(event) {
+  const rid = String((event && event.roomId) || '')
+  if (!rid) {
+    return { errMsg: '无房间' }
+  }
+  const o = await oid()
+  const room = await gRoom(rid)
+  if (!room) {
+    return { errMsg: '房间不存在' }
+  }
+  const pls = byJoin(await gPlayers(rid))
+  if (!pls.find((p) => p.openId === o)) {
+    return { ok: 1, myOpenId: o, inRoom: false }
+  }
+  const st = (await gState(rid)) || {}
+  const pub = buildPub(room, pls, st)
+  if (!pub) {
+    return { errMsg: '状态异常' }
+  }
+  return {
+    ok: 1,
+    myOpenId: o,
+    inRoom: true,
+    isHost: room.hostOpenId === o,
+    state: pub
+  }
+}
+
+async function doGetView(event) {
+  const rid = String((event && event.roomId) || '')
+  if (!rid) {
+    return { errMsg: '无房间' }
+  }
+  const { openId } = await assertInRoom(rid)
+  const room = await gRoom(rid)
+  if (!room) {
+    return { errMsg: '房间不存在' }
+  }
+  const st = (await gState(rid)) || {}
+  const pls = byJoin(await gPlayers(rid))
+  const out = {
+    ok: 1,
+    phase: st.phase || 'waiting',
+    myOpenId: openId,
+    isHost: room.hostOpenId === openId,
+    currentRound: st.currentRound | 0,
+    targetOpenId: st.targetOpenId || '',
+    targetNick: st.targetNick || ''
+  }
+  if (room.hostOpenId !== openId || st.phase !== 'voting') {
+    return out
+  }
+  const tally =
+    (st.voteTally && typeof st.voteTally === 'object' && st.voteTally) ||
+    recomputeTally(st.votesByVoter || {})
+  const voteStats = pls
+    .map((p) => ({
+      openId: p.openId,
+      nickName: p.nickName,
+      count: tally[p.openId] | 0
+    }))
+    .sort((a, b) => (b.count | 0) - (a.count | 0))
+  out.voteStats = voteStats
+  return out
+}
+
+async function doRerollRinger(event) {
+  const rid = String((event && event.roomId) || '')
+  if (!rid) {
+    return { errMsg: '无房间' }
+  }
+  const { room } = await assertHostRid(rid)
+  const st = (await gState(rid)) || {}
+  if (st.phase !== 'voting') {
+    return { errMsg: '当前非投票阶段' }
+  }
+  const pls = byJoin(await gPlayers(rid))
+  if (pls.length < 1) {
+    return { errMsg: '无参与者' }
+  }
+  const rno = st.currentRound | 0
+  const old = st.targetOpenId || ''
+  let pool = pls
+  if (pls.length > 1 && old) {
+    const rest = pls.filter((p) => p.openId !== old)
+    if (rest.length) {
+      pool = rest
+    }
+  }
+  const one = shuf(pool)[0]
+  const deadline = t() + VOTE_MS
+  const votes = await db
+    .collection(V)
+    .where({ roomId: String(rid), round: rno })
+    .get()
+  for (const row of votes.data || []) {
+    if (row && row._id) {
+      try {
+        await db.collection(V).doc(row._id).remove()
+      } catch (e) {
+        /* ignore */
+      }
+    }
+  }
+  const room2 = await gRoom(rid)
+  await setFullState(room2, {
+    targetOpenId: one.openId,
+    targetNick: one.nickName,
+    votingDeadline: deadline,
+    votesByVoter: {},
+    voteTally: {}
+  })
+  return {
+    ok: 1,
+    targetOpenId: one.openId,
+    targetNick: one.nickName,
+    votingDeadline: deadline
+  }
 }
 
 async function doCreate(event) {
   const o = await oid()
   const nick0 = (event && event.nickName) || '房主'
+  const av0 = String((event && event.avatarUrl) || '').trim()
   for (let k = 0; k < 12; k += 1) {
     const code = c6()
     if (await gRoomByCode(code)) {
@@ -303,6 +435,7 @@ async function doCreate(event) {
         roomId: String(id),
         openId: o,
         nickName: String(nick0).trim().slice(0, 12) || '房主',
+        avatarUrl: av0,
         isHost: true,
         joinedAt: t()
       }
@@ -319,7 +452,7 @@ async function doCreate(event) {
       countdownEndsAt: 0,
       votingDeadline: 0
     })
-    return { roomId: String(id), roomCode: code }
+    return { roomId: String(id), roomCode: code, myOpenId: o }
   }
   return { errMsg: '重试' }
 }
@@ -336,23 +469,50 @@ async function doJoin(event) {
     return { errMsg: '房间不存在' }
   }
   const pls0 = await gPlayers(room._id)
-  if (pls0.find((p) => p.openId === o)) {
-    return { roomId: String(room._id), roomCode: room.roomCode, joined: true }
-  }
-  const nn0 = (event && event.nickName) || '参与者'
-  await db.collection(P).add({
-    data: {
-      roomId: String(room._id),
-      openId: o,
-      nickName: String(nn0).trim().slice(0, 12) || '参与者',
-      isHost: false,
-      joinedAt: t()
+  const exist = pls0.find((p) => p.openId === o)
+  if (exist) {
+    if (exist._id) {
+      const fields = jp.mergeJoinFields(event, exist)
+      await db
+        .collection(P)
+        .doc(String(exist._id))
+        .update({
+          data: Object.assign(fields, { updatedAt: t() })
+        })
     }
+    const room2 = await gRoom(room._id)
+    const st0 = (await gState(String(room._id))) || {}
+    await setFullState(room2, st0)
+    const pls1 = await gPlayers(room._id)
+    return {
+      roomId: String(room._id),
+      roomCode: room.roomCode,
+      joined: true,
+      myOpenId: o,
+      playerCount: pls1.length
+    }
+  }
+  await db.collection(P).add({
+    data: Object.assign(
+      {
+        roomId: String(room._id),
+        openId: o,
+        isHost: false,
+        joinedAt: t()
+      },
+      jp.mergeJoinFields(event, {})
+    )
   })
   const room2 = await gRoom(room._id)
   const st0 = (await gState(String(room._id))) || {}
   await setFullState(room2, st0)
-  return { roomId: String(room._id), roomCode: room.roomCode }
+  const pls1 = await gPlayers(room._id)
+  return {
+    roomId: String(room._id),
+    roomCode: room.roomCode,
+    myOpenId: o,
+    playerCount: pls1.length
+  }
 }
 async function doSetRoomName(event) {
   const rid = String((event && event.roomId) || '')
@@ -383,8 +543,8 @@ async function doStartRound(event) {
     return { errMsg: '至少 2 人才能开' }
   }
   const st0 = (await gState(rid)) || {}
-  if (st0.phase === 'countdown' || st0.phase === 'voting') {
-    return { errMsg: '请先结束或等待本回合' }
+  if (st0.phase === 'countdown') {
+    return { errMsg: '请先等待本回合倒计时结束' }
   }
   if (st0.phase === 'result') {
     return { errMsg: '请先点「下一轮」再开始' }
@@ -420,30 +580,33 @@ async function doRevealRinger(event) {
   if (st.phase !== 'countdown') {
     return { ok: true, phase: st.phase, idle: true }
   }
-  const now = t()
-  if (now < (st.countdownEndsAt | 0) - 100) {
-    return { errMsg: '尚未到开响' }
-  }
   const pls = byJoin(await gPlayers(rid))
   if (pls.length < 1) {
     return { errMsg: '无参与者' }
   }
   const one = shuf(pls)[0]
-  const deadline = t() + VOTE_MS
-  const room2 = await gRoom(rid)
-  await setFullState(room2, {
-    phase: 'voting',
+  const drinkSips = randomDrinkSips()
+  const result = {
     targetOpenId: one.openId,
     targetNick: one.nickName,
-    votingDeadline: deadline,
+    drinkSips
+  }
+  const room2 = await gRoom(rid)
+  await setFullState(room2, {
+    phase: 'result',
+    targetOpenId: one.openId,
+    targetNick: one.nickName,
+    votingDeadline: 0,
     votesByVoter: {},
-    voteTally: {}
+    voteTally: {},
+    result
   })
   return {
     ok: true,
     targetOpenId: one.openId,
     targetNick: one.nickName,
-    votingDeadline: deadline
+    drinkSips,
+    result
   }
 }
 async function doSubmitVote(event) {
@@ -574,8 +737,8 @@ async function doNextRound(event) {
   }
   const { room } = await assertHostRid(rid)
   const g = (await gState(rid)) || {}
-  if (g.phase === 'voting' || g.phase === 'countdown') {
-    return { errMsg: '请先结束本回合' }
+  if (g.phase === 'countdown') {
+    return { errMsg: '请先等待本回合结束' }
   }
   if (g.phase === 'waiting') {
     return { ok: true, idle: true }

@@ -1,0 +1,7 @@
+<view class="room-ready-bar">
+  <button
+    class="room-ready-btn {{ready ? 'room-ready-btn-done' : ''}}"
+    disabled="{{ready}}"
+    bindtap="onTap"
+  >{{ready ? '已准备' : '准备'}}</button>
+</view>

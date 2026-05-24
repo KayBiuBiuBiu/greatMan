@@ -1,0 +1,22 @@
+<view class="share-card-page">
+  <view class="share-card-loading" wx:if="{{loading}}">正在生成卡片…</view>
+  <view class="share-card-err" wx:elif="{{error}}">{{error}}</view>
+  <block wx:else>
+    <view class="share-card-preview">
+      <image
+        wx:if="{{previewImage}}"
+        class="share-card-img"
+        src="{{previewImage}}"
+        mode="widthFix"
+        show-menu-by-longpress="{{true}}"
+      />
+      <view class="share-card-code-box" wx:if="{{roomCode}}">
+        <text class="share-card-code-label">聚会口令</text>
+        <text class="share-card-code-num">{{roomCode}}</text>
+      </view>
+      <view class="share-card-hint text-caption" wx:if="{{shareUrl}}">好友打开小程序即可进组</view>
+    </view>
+    <button class="btn btn-primary main-btn" bindtap="onSaveImage" disabled="{{!previewImage}}">预览 / 保存</button>
+    <button class="btn btn-secondary main-btn" open-type="share" wx:if="{{canShare}}">发给好友</button>
+  </block>
+</view>

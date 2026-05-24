@@ -3,13 +3,30 @@
   "pages": [
     "pages/index/index",
     "pages/setup/setup",
-    "pages/werewolf/werewolf",
-    "pages/play/play",
-    "pages/undercover/undercover",
-    "pages/song-guess/song-guess",
-    "pages/draw-guess/draw-guess",
-    "pages/drink-party/drink-party"
+    "pages/share/card/card"
   ],
+  "subpackages": [
+    {
+      "root": "packageGames",
+      "name": "games",
+      "pages": [
+        "werewolf/werewolf",
+        "play/play",
+        "undercover/undercover",
+        "song-guess/song-guess",
+        "draw-guess/draw-guess",
+        "drink-party/drink-party",
+        "headband/headband",
+        "dontdoit/dontdoit"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["games"]
+    }
+  },
   "window": {
     "navigationBarTitleText": "家庭聚会助手",
     "navigationBarBackgroundColor": "#FEF8F0",

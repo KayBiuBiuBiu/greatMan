@@ -32,12 +32,17 @@ _CFG: dict[str, Any] = {
     "stock_to_sw_path": "data/stock_to_sw.json",
     # Tushare 文档：daily 类接口 500 次/分钟；pro_bar 等计入同类额度
     "daily_max_per_minute": 500,
+    # pro_bar(adj=qfq) 内部会调 adj_factor，独立限额 200 次/分钟（与 daily 额度无关）
+    "adj_factor_max_per_minute": 180,
 }
 _PRO: Any = None
 
 _DEFAULT_DAILY_MAX_PER_MIN = 500
+_DEFAULT_ADJ_FACTOR_MAX_PER_MIN = 180
 _daily_rate_lock = threading.Lock()
 _daily_rate_mono: deque[float] = deque()
+_adj_factor_rate_lock = threading.Lock()
+_adj_factor_rate_mono: deque[float] = deque()
 # configure_tushare_from_sources 会被 load_df 等高频路径反复调用；仅在配置实质变化时重置 pro / 限流窗口
 _LAST_TUSHARE_CONFIGURE_FG: tuple[Any, ...] | None = None
 
@@ -50,6 +55,41 @@ _TUSHARE_QUERY_PATCH_INSTALLED = False
 def _reset_daily_rate_window() -> None:
     with _daily_rate_lock:
         _daily_rate_mono.clear()
+
+
+def _reset_adj_factor_rate_window() -> None:
+    with _adj_factor_rate_lock:
+        _adj_factor_rate_mono.clear()
+
+
+def _acquire_tushare_adj_factor_slot() -> None:
+    """
+    pro_bar(adj=qfq) 会触发 adj_factor 接口；Tushare 对该接口单独限 200 次/分钟。
+    全市场选股多线程时若只限 daily 500/分钟仍会撞 adj_factor 上限。
+    adj_factor_max_per_minute=0 表示不限制。
+    """
+    if not (_CFG.get("enabled") and _resolved_token()):
+        return
+    try:
+        lim = int(
+            _CFG.get("adj_factor_max_per_minute", _DEFAULT_ADJ_FACTOR_MAX_PER_MIN) or 0
+        )
+    except (TypeError, ValueError):
+        lim = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
+    if lim <= 0:
+        return
+    lim = max(30, min(200, lim))
+    window = 60.0
+    while True:
+        with _adj_factor_rate_lock:
+            now = time.monotonic()
+            while _adj_factor_rate_mono and now - _adj_factor_rate_mono[0] >= window:
+                _adj_factor_rate_mono.popleft()
+            if len(_adj_factor_rate_mono) < lim:
+                _adj_factor_rate_mono.append(now)
+                return
+            wait_s = window - (now - _adj_factor_rate_mono[0]) + 0.02
+        time.sleep(max(wait_s, 0.05))
 
 
 def _acquire_tushare_daily_slot() -> None:
@@ -393,6 +433,7 @@ def configure_tushare_from_sources(sources: dict[str, Any] | None) -> None:
         _CFG["stock_basic_cache_path"] = "data/stock_basic_cache.json"
         _CFG["stock_to_sw_path"] = "data/stock_to_sw.json"
         _CFG["daily_max_per_minute"] = _DEFAULT_DAILY_MAX_PER_MIN
+        _CFG["adj_factor_max_per_minute"] = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
     else:
         t = sources.get("tushare")
         if not isinstance(t, dict):
@@ -405,6 +446,7 @@ def configure_tushare_from_sources(sources: dict[str, Any] | None) -> None:
             _CFG["stock_basic_cache_path"] = "data/stock_basic_cache.json"
             _CFG["stock_to_sw_path"] = "data/stock_to_sw.json"
             _CFG["daily_max_per_minute"] = _DEFAULT_DAILY_MAX_PER_MIN
+            _CFG["adj_factor_max_per_minute"] = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
         else:
             _CFG["enabled"] = bool(t.get("enabled", False))
             _CFG["token"] = str(t.get("token") or "").strip()
@@ -433,12 +475,28 @@ def configure_tushare_from_sources(sources: dict[str, Any] | None) -> None:
                         _CFG["daily_max_per_minute"] = max(30, min(500, v))
             except (TypeError, ValueError):
                 _CFG["daily_max_per_minute"] = _DEFAULT_DAILY_MAX_PER_MIN
+            try:
+                alim = t.get("adj_factor_max_per_minute")
+                if alim is None:
+                    _CFG["adj_factor_max_per_minute"] = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
+                else:
+                    v = int(alim)
+                    if v == 0:
+                        _CFG["adj_factor_max_per_minute"] = 0
+                    else:
+                        _CFG["adj_factor_max_per_minute"] = max(30, min(200, v))
+            except (TypeError, ValueError):
+                _CFG["adj_factor_max_per_minute"] = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
 
     tok_eff = _resolved_token()
     try:
         dm = int(_CFG.get("daily_max_per_minute") or 0)
     except (TypeError, ValueError):
         dm = _DEFAULT_DAILY_MAX_PER_MIN
+    try:
+        am = int(_CFG.get("adj_factor_max_per_minute") or 0)
+    except (TypeError, ValueError):
+        am = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
     dataapi_base = _resolve_tushare_dataapi_base(sources if isinstance(sources, dict) else None)
     with _dataapi_bases_lock:
         _DATAAPI_BASE_CHAIN = _build_dataapi_base_chain(
@@ -446,11 +504,12 @@ def configure_tushare_from_sources(sources: dict[str, Any] | None) -> None:
         )
         chain_fg = tuple(_DATAAPI_BASE_CHAIN)
     _apply_tushare_dataapi_base(_DATAAPI_BASE_CHAIN[0] if _DATAAPI_BASE_CHAIN else dataapi_base)
-    fg: tuple[Any, ...] = (bool(_CFG.get("enabled")), tok_eff, dm, chain_fg)
+    fg: tuple[Any, ...] = (bool(_CFG.get("enabled")), tok_eff, dm, am, chain_fg)
 
     if fg != prev_fg:
         _PRO = None
         _reset_daily_rate_window()
+        _reset_adj_factor_rate_window()
         _LAST_TUSHARE_CONFIGURE_FG = fg
 
 
@@ -850,6 +909,7 @@ def fetch_stock_kline_rows_pro_bar(
     try:
         import tushare as ts
 
+        _acquire_tushare_adj_factor_slot()
         _acquire_tushare_daily_slot()
         ts.set_token(_resolved_token())
         df = ts.pro_bar(ts_code=ts_code, adj="qfq", start_date=start_s, end_date=end_s)

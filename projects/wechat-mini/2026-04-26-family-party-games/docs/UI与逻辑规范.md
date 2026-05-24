@@ -163,7 +163,9 @@
 | `.rg-status-banner` | 顶部状态提示（等待、进行中、错误说明） |
 | `.rg-members-card` / `.rg-member-list` | 成员列表容器 |
 | `.rg-progress-bar` / `.rg-progress-fill` | 人数进度（当前/目标） |
-| `.rg-avatar` / `.rg-member-name` | 头像字、昵称省略 |
+| `.rg-avatar` / `.rg-member-name` | 旧版首字头像（逐步改用 `member-avatar`） |
+| `member-avatar` | 成员列表：云存储头像或首字 fallback；无昵称显示「匿名」 |
+| `user-info-modal` | 600rpx 卡片弹窗；**仅**首页点击游戏「开始互动」且资料未齐时弹出；`稍后再说` 关闭且不跳转 |
 | `.rg-ready-dot.on` | 就绪绿点 |
 | `.rg-settings-card` / `.rg-room-card` | 组长设置卡、大厅白卡片 |
 | `.rg-setting-item` + `.rg-stepper-board` | 加减设置行：左标签、右 `-` 数字 `+`（64rpx 圆钮） |

@@ -1,0 +1,158 @@
+<!-- 未进房 -->
+<view class="page hb-page" wx:if="{{!roomId}}">
+  <view class="hero">
+    <view class="hero-title">贴头猜词</view>
+    <view class="hero-subtitle">每人看自己词卡为「保密」，看别人头上的真实名字；猜对自己即获胜。6 位口令进组，至少 2 人。</view>
+  </view>
+  <view class="hb-card">
+    <view class="hb-label">昵称</view>
+    <input class="hb-inp" placeholder="输入昵称" value="{{nick}}" bindinput="onNick" />
+    <button class="btn btn-primary main-btn" bindtap="doCreate" disabled="{{opBusy}}">创建聚会组</button>
+  </view>
+  <view class="hb-card">
+    <view class="hb-label">已有口令</view>
+    <input class="hb-inp" type="number" maxlength="6" placeholder="6 位数字" value="{{joinCode}}" bindinput="onCode" />
+    <button class="btn btn-secondary main-btn" bindtap="doJoin" disabled="{{opBusy}}">加入聚会组</button>
+  </view>
+</view>
+
+<!-- 已进房 -->
+<view class="page hb-page hb-page-inroom" wx:else>
+  <view class="hero hb-hero-compact">
+    <view class="hero-title">贴头猜词</view>
+    <view class="hero-subtitle text-caption" wx:if="{{view.roomCode}}">口令 {{view.roomCode}}</view>
+    <view class="hero-subtitle text-caption" wx:else>加载中…</view>
+  </view>
+
+  <view class="hb-card" wx:if="{{view.roomCode}}">
+    <view class="rg-code-row">
+      <view class="rg-code-main">
+        <text class="rg-code-label">聚会组口令</text>
+        <view class="rg-code-num-row rg-code-tap" bindtap="onCopyRoomCode">
+          <text class="rg-code-num">{{view.roomCode}}</text>
+        </view>
+      </view>
+      <button class="btn-wechat-invite rg-invite-btn" open-type="share">邀请朋友</button>
+    </view>
+  </view>
+
+  <view class="hb-card hb-phase-card" wx:if="{{inFinished && view.winnerNickName}}">
+    <view class="hb-win-hero">🎉 {{view.winnerNickName}} 猜对了！</view>
+    <view class="text-caption hb-win-sub">本局结束，可看大家词卡；组长可点「再来一局」</view>
+  </view>
+  <view class="hb-card hb-phase-card" wx:elif="{{inFinished}}">
+    <view class="hb-win-hero">本局已结束</view>
+  </view>
+
+  <view class="hb-card" wx:if="{{view}}">
+    <view
+      class="rg-status-banner {{statusBannerWarn ? 'rg-banner-warn' : ''}}"
+      wx:if="{{statusHint}}"
+    >{{statusHint}}</view>
+
+    <view class="rg-members-card hb-members-inner">
+      <view class="rg-members-head">
+        <text class="rg-members-title">成员</text>
+        <text class="rg-members-count muted">{{memberCountLine}}</text>
+      </view>
+      <view class="rg-progress-wrap" wx:if="{{inWaiting}}">
+        <view class="rg-progress-bar">
+          <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
+        </view>
+      </view>
+      <view class="rg-member-list">
+        <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:for-item="p" wx:key="openId">
+          <member-avatar avatar-url="{{p.avatarUrl}}" nick-name="{{p.nickName}}" letter="{{p.avatarText}}" />
+          <view class="rg-member-body">
+            <view class="rg-member-name-row">
+              <text class="rg-member-name">{{p.nickName}}</text>
+              <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+            </view>
+            <text class="rg-ready-label" wx:if="{{p.subLabel}}">{{p.subLabel}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <room-ready-bar
+    wx:if="{{inWaiting && !isHost}}"
+    ready="{{lobbySelfReady}}"
+    bind:tapready="onLobbyReadyTap"
+  />
+
+  <view class="hb-card" wx:if="{{isHost && inWaiting}}">
+    <view class="section-title compact">游戏设置</view>
+    <picker mode="selector" range="{{categoryLabels}}" value="{{categoryIdx}}" bindchange="onCategoryPick">
+      <view class="hb-picker-line">
+        <text>分类</text>
+        <text class="muted">{{categoryLabels[categoryIdx]}}</text>
+      </view>
+    </picker>
+    <picker mode="selector" range="{{difficultyLabels}}" value="{{difficultyIdx}}" bindchange="onDifficultyPick">
+      <view class="hb-picker-line">
+        <text>难度</text>
+        <text class="muted">{{difficultyLabels[difficultyIdx]}}</text>
+      </view>
+    </picker>
+    <picker mode="selector" range="{{wordCountLabels}}" value="{{wordCountIdx}}" bindchange="onWordCountPick">
+      <view class="hb-picker-line">
+        <text>词条数量</text>
+        <text class="muted">{{wordCountLabels[wordCountIdx]}}</text>
+      </view>
+    </picker>
+  </view>
+
+  <button
+    class="rg-btn-primary main-btn hb-main-btn {{canStart ? '' : 'rg-start-muted'}}"
+    wx:if="{{isHost && inWaiting}}"
+    bindtap="onStartGame"
+    disabled="{{opBusy || !canStart}}"
+  >开始游戏</button>
+
+  <button
+    wx:if="{{isHost && inPlaying}}"
+    class="btn btn-secondary main-btn hb-main-btn"
+    bindtap="onEndGame"
+    disabled="{{opBusy}}"
+  >结束游戏</button>
+
+  <button
+    class="rg-btn-primary main-btn hb-main-btn {{canRestart ? '' : 'rg-start-muted'}}"
+    wx:if="{{isHost && inFinished}}"
+    bindtap="onPlayAgain"
+    disabled="{{opBusy || !canRestart}}"
+  >再来一局</button>
+  <view class="hb-rematch-tip text-caption" wx:if="{{inFinished && !isHost}}">等待组长再来一局</view>
+
+  <view class="hb-guess-bar" wx:if="{{inPlaying}}">
+    <view class="hb-guess-tip text-caption">输入你头上人物的名字（自己的词卡是「保密」）</view>
+    <view class="hb-guess-row">
+      <input
+        class="hb-guess-inp"
+        placeholder="猜自己头上的名字"
+        value="{{guessInput}}"
+        bindinput="onGuessInput"
+        confirm-type="done"
+        bindconfirm="onSubmitGuess"
+      />
+      <button class="btn btn-primary hb-guess-btn" bindtap="onSubmitGuess" disabled="{{opBusy}}">提交</button>
+    </view>
+  </view>
+</view>
+
+<user-info-modal
+  wx:if="{{showUserInfoModal}}"
+  visible="{{showUserInfoModal}}"
+  bind:success="onLobbyUserInfoSuccess"
+  bind:cancel="onLobbyUserInfoCancel"
+/>
+
+<ai-share-modal
+  visible="{{showAiShareModal}}"
+  share-token-ready="{{shareTokenReady}}"
+  next-hint="{{aiUnlock.nextHint || ''}}"
+  share-copy="{{shareCopy}}"
+  bind:close="onCloseAiShareModal"
+  bind:timeline="onAiShareTimeline"
+/>

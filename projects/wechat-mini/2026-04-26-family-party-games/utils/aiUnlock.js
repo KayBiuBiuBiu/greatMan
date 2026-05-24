@@ -3,6 +3,7 @@
  */
 const shareService = require('./shareService')
 const { debugCloudLog } = require('./cloudInit')
+const { shouldSkipShareCloudInDevtools } = require('./cloudRealtime')
 const { getCurrentSessionId } = require('./partyAiSession')
 const { getShareCopyVariant } = require('./shareUnlockCopy')
 const {
@@ -10,10 +11,19 @@ const {
   stopUnlockFeedWatch
 } = require('./shareUnlockFeed')
 
+let aiButtonsEnabled = true
+try {
+  aiButtonsEnabled = require('../data/feature-flags').isAiButtonsEnabled()
+} catch (e) {
+  aiButtonsEnabled = true
+}
+
 const STORAGE_KEY = 'ai_share_unlock_v2'
 const REDEEM_PREFIX = 'ai_redeemed_'
 /** watch 不可用时的兜底轮询间隔 */
 const POLL_FALLBACK_MS = 60000
+/** 分享弹窗打开时加快同步好友助力结果 */
+const POLL_FAST_MS = 5000
 const PREPARE_TOKEN_GAP_MS = 25000
 let _lastPrepareAt = 0
 let _prepareInflight = null
@@ -113,37 +123,46 @@ function getUnlockSnapshot() {
   }
 }
 
-/** 客户端兜底 token（云端 createToken 未就绪时） */
-function genShareToken() {
-  const t =
-    Date.now().toString(36) + Math.random().toString(36).slice(2, 12)
-  return t.slice(0, 24)
-}
-
 /**
  * 预创建云端分享码（打开分享弹窗 / 进房时调用）
  * @param {object} [page]
  * @param {{ roomId?: string, kind?: string }} [extra]
+ * @param {{ force?: boolean }} [opts] force 时忽略节流（打开分享弹窗）
+ * @returns {Promise<object|null>}
  */
-function prepareShareToken(page, extra) {
-  if (!wx.cloud) {
-    return
+function prepareShareToken(page, extra, opts) {
+  if (!wx.cloud || shouldSkipShareCloudInDevtools()) {
+    return Promise.resolve(null)
   }
-  const now = Date.now()
-  if (_prepareInflight || now - _lastPrepareAt < PREPARE_TOKEN_GAP_MS) {
+  if (_prepareInflight) {
     return _prepareInflight
+  }
+  const force = !!(opts && opts.force)
+  const now = Date.now()
+  if (
+    !force &&
+    now - _lastPrepareAt < PREPARE_TOKEN_GAP_MS &&
+    page &&
+    page._shareTokenCache
+  ) {
+    return Promise.resolve({ token: page._shareTokenCache })
+  }
+  if (!force && now - _lastPrepareAt < PREPARE_TOKEN_GAP_MS) {
+    return Promise.resolve(null)
   }
   const e = extra || {}
   if (page) {
     page._shareExtra = e
   }
-  _lastPrepareAt = now
   const sessionId = getCurrentSessionId()
   _prepareInflight = shareService
     .createShareToken(sessionId, e)
     .then((r) => {
-      if (r && r.token && page) {
-        page._shareTokenCache = r.token
+      if (r && r.token) {
+        _lastPrepareAt = Date.now()
+        if (page) {
+          page._shareTokenCache = r.token
+        }
       }
       return r
     })
@@ -157,6 +176,7 @@ function prepareShareToken(page, extra) {
         console.warn('[shareService] 请创建 share_tokens / share_unlock_users 集合')
         /* eslint-enable no-console */
       }
+      return null
     })
     .finally(() => {
       _prepareInflight = null
@@ -165,7 +185,7 @@ function prepareShareToken(page, extra) {
 }
 
 /**
- * onShareAppMessage 同步取 token（优先用预创建的 8 位码）
+ * onShareAppMessage 同步取 token（仅使用云端已登记的码）
  */
 function getShareTokenForShare(page) {
   const extra = (page && page._shareExtra) || {}
@@ -175,8 +195,8 @@ function getShareTokenForShare(page) {
     prepareShareToken(page, extra)
     return t
   }
-  prepareShareToken(page, extra)
-  return genShareToken()
+  prepareShareToken(page, extra, { force: true })
+  return ''
 }
 
 function mergeCloudCount(cloudCount, opts) {
@@ -219,7 +239,7 @@ function mergeCloudCount(cloudCount, opts) {
 
 function syncUnlockFromCloud(opts) {
   const { page, silent } = opts || {}
-  if (!wx.cloud) {
+  if (!wx.cloud || shouldSkipShareCloudInDevtools()) {
     refreshAiUnlockPage(page)
     return
   }
@@ -284,11 +304,14 @@ function tryRedeemShareFromQuery(query) {
         })
       }
     })
-    .catch(() => {})
+    .catch((err) => {
+      const msg = (err && err.message) || '助力失败，请确认分享链接有效'
+      wx.showToast({ title: msg.slice(0, 28), icon: 'none' })
+    })
 }
 
 function scheduleFallbackPoll(page) {
-  if (!page || !wx.cloud) {
+  if (!page || !wx.cloud || shouldSkipShareCloudInDevtools()) {
     return
   }
   const snap = getUnlockSnapshot()
@@ -296,14 +319,33 @@ function scheduleFallbackPoll(page) {
     stopShareUnlockPoll(page)
     return
   }
+  const ms = (page && page._sharePollMs) || POLL_FALLBACK_MS
   page._shareUnlockPollTimer = setTimeout(() => {
     syncUnlockFromCloud({ page, silent: true })
     scheduleFallbackPoll(page)
-  }, POLL_FALLBACK_MS)
+  }, ms)
 }
 
 function startShareUnlockPoll(page) {
   scheduleFallbackPoll(page)
+}
+
+function startShareUnlockFastPoll(page) {
+  if (!page) {
+    return
+  }
+  page._sharePollMs = POLL_FAST_MS
+  stopShareUnlockPoll(page)
+  syncUnlockFromCloud({ page, silent: true })
+  scheduleFallbackPoll(page)
+}
+
+function stopShareUnlockFastPoll(page) {
+  if (!page) {
+    return
+  }
+  page._sharePollMs = null
+  stopShareUnlockPoll(page)
 }
 
 function stopShareUnlockPoll(page) {
@@ -327,8 +369,11 @@ function onPageShowUnlock(page) {
   if (page) {
     page._shareUseFeed = false
   }
-  syncUnlockFromCloud({ page, silent: true })
   refreshAiUnlockPage(page)
+  if (shouldSkipShareCloudInDevtools()) {
+    return
+  }
+  syncUnlockFromCloud({ page, silent: true })
   prepareShareToken(page, (page && page._shareExtra) || {})
 
   const watchOk = startUnlockFeedWatch(page, {
@@ -364,10 +409,27 @@ function showShareGuide() {
   wx.showModal({
     title: '分享到朋友圈',
     content:
-      '点击右上角「···」，选择「分享到朋友圈」，请好友点开你发出的链接。\n\n好友确认后为本场聚会累计解锁进度。',
+      '朋友圈分享不计入 AI 解锁进度。\n\n请使用弹窗中的「分享给好友」，让好友点开聊天卡片里的链接完成助力。',
     showCancel: false,
     confirmText: '知道了'
   })
+}
+
+function applyShareTokenReady(page, r) {
+  if (!page || !page.setData) {
+    return
+  }
+  const open = !!(page.data && page.data.showAiShareModal)
+  if (!open) {
+    return
+  }
+  if (r && r.token) {
+    page._shareTokenCache = r.token
+    page.setData({ shareTokenReady: true })
+    return
+  }
+  page.setData({ shareTokenReady: false })
+  wx.showToast({ title: '分享码生成失败，请稍后重试', icon: 'none' })
 }
 
 function openAiShareModal(page) {
@@ -376,20 +438,33 @@ function openAiShareModal(page) {
     return
   }
   refreshAiUnlockPage(page)
-  prepareShareToken(page, (page && page._shareExtra) || {})
+  const extra = (page && page._shareExtra) || {}
   page.setData({
     showAiShareModal: true,
+    shareTokenReady: false,
     shareCopy: getShareCopyVariant() || {}
   })
+  startShareUnlockFastPoll(page)
+  const p = prepareShareToken(page, extra, { force: true })
+  if (p && typeof p.then === 'function') {
+    p.then((r) => applyShareTokenReady(page, r)).catch(() => applyShareTokenReady(page, null))
+  }
 }
 
 function closeAiShareModal(page) {
+  stopShareUnlockFastPoll(page)
   if (page && page.setData) {
-    page.setData({ showAiShareModal: false })
+    page.setData({ showAiShareModal: false, shareTokenReady: false })
+    if (!shouldSkipShareCloudInDevtools()) {
+      startShareUnlockPoll(page)
+    }
   }
 }
 
 function ensureAiUnlock(minLevel, featureName, page) {
+  if (!aiButtonsEnabled) {
+    return false
+  }
   if (hasUnlock(minLevel)) {
     return true
   }
@@ -405,10 +480,19 @@ function refreshAiUnlockPage(page) {
   if (!page || !page.setData) {
     return getUnlockSnapshot()
   }
-  const snap = getUnlockSnapshot()
+  const snap = aiButtonsEnabled
+    ? getUnlockSnapshot()
+    : {
+        level: 0,
+        canGen: false,
+        canAssist: false,
+        canRecap: false,
+        nextHint: ''
+      }
   page.setData({
     aiUnlock: Object.assign({}, snap, { nextHint: snap.nextHint || '' }),
-    canShowPartyRecommend: snap.canRecap
+    canShowPartyRecommend: aiButtonsEnabled && snap.canRecap,
+    aiButtonsEnabled: aiButtonsEnabled
   })
   return snap
 }
@@ -417,7 +501,6 @@ module.exports = {
   LEVEL,
   FEATURE_LABEL,
   getUnlockSnapshot,
-  genShareToken,
   prepareShareToken,
   getShareTokenForShare,
   tryRedeemShareFromQuery,

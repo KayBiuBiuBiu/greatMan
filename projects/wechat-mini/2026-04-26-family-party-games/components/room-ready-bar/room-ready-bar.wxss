@@ -1,0 +1,53 @@
+.room-ready-bar {
+  margin: var(--space-md, 24rpx) 0;
+}
+
+.room-ready-btn,
+button.room-ready-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: var(--btn-primary-height, 96rpx) !important;
+  margin: 0 !important;
+  padding: 0 var(--space-lg, 32rpx) !important;
+  line-height: var(--font-card-title-lh, 44rpx) !important;
+  border-radius: var(--radius-lg, 24rpx) !important;
+  font-size: var(--btn-primary-font, 32rpx) !important;
+  font-weight: var(--font-weight-medium, 500) !important;
+  background: var(--color-brand-deep, #ea580c) !important;
+  color: var(--color-text-on-brand, #fff) !important;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.12);
+  border: none;
+}
+
+.room-ready-btn:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.room-ready-btn-done,
+button.room-ready-btn-done {
+  background: #16a34a !important;
+  color: #fff !important;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.12);
+  border: none !important;
+  opacity: 1 !important;
+}
+
+.room-ready-btn-done:active {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.room-ready-btn-cancel {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  text-shadow: none;
+  border: 2rpx solid #d1d5db !important;
+}
+
+.room-ready-btn::after {
+  border: none;
+}

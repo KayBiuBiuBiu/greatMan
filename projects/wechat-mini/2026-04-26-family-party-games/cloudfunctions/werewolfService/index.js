@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const jp = require('./joinPlayerPatch')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -34,6 +35,7 @@ function omitIdDeep (x) {
 const R = 'werewolf_rooms'
 const S = 'werewolf_state'
 const MAXN = [6, 8, 10, 12]
+const MOCK_PREFIX = 'mock:ww:'
 const DECK = {
   6: ['werewolf', 'werewolf', 'seer', 'witch', 'villager', 'villager'],
   8: ['werewolf', 'werewolf', 'seer', 'witch', 'hunter', 'villager', 'villager', 'villager'],
@@ -57,6 +59,27 @@ function shuf(a) {
 function mk6() {
   return String(100000 + ((Math.random() * 900000) | 0))
 }
+
+function isMockOpenId(id) {
+  return String(id || '').startsWith(MOCK_PREFIX)
+}
+
+function addOneMockMember(members, rid) {
+  const ms = members || []
+  const mockCount = ms.filter((m) => isMockOpenId(m.openId)).length
+  const mockOid = MOCK_PREFIX + String(rid) + ':' + (mockCount + 1)
+  return ms.concat([
+    {
+      openId: mockOid,
+      nickName: '模拟玩家' + (mockCount + 1),
+      avatarUrl: '',
+      profileReady: true,
+      isMock: true,
+      joinedAt: now()
+    }
+  ])
+}
+
 async function getRoomById(id) {
   if (!id) {
     return null
@@ -83,28 +106,39 @@ function nn(room, oid) {
   return m ? m.nickName : '参与者'
 }
 function getRole(room, oid) {
+  if (room && room.hostOpenId === oid) {
+    return ''
+  }
   return (room.playerRoles || {})[oid]
 }
-async function setPub(room) {
+function participantsOf(room) {
+  const host = String((room && room.hostOpenId) || '')
+  return (room.members || []).filter((m) => m && m.openId && m.openId !== host)
+}
+function roomSeatCap(room) {
+  return (room.maxPlayers | 0 || 6) + 1
+}
+function buildPubFromRoom(room) {
   if (!room || !room._id) {
-    return
+    return null
   }
   const g = room.game || {}
   const al = g.alive || {}
-  const doc = {
+  return {
     roomCode: room.roomCode,
     status: room.status,
     maxPlayers: room.maxPlayers,
     currentPhase: g.phase || 'lobby',
     day: g.day || 0,
     hostOpenId: room.hostOpenId || '',
-    players: (room.members || []).map((m, i) => ({
-      openId: m.openId,
-      nickName: m.nickName,
-      isHost: m.openId === room.hostOpenId,
-      isAlive: al[m.openId] !== false,
-      seat: i + 1
-    })),
+    players: (room.members || []).map((m, i) =>
+      Object.assign(jp.withProfileReadyFlag(m), {
+        isHost: m.openId === room.hostOpenId,
+        isAlive:
+          m.openId === room.hostOpenId ? true : al[m.openId] !== false,
+        seat: i + 1
+      })
+    ),
     publicLog: g.publicLog || [],
     lastNightReport: g.lastNightReport,
     speakIndex: g.speakIndex | 0,
@@ -116,11 +150,91 @@ async function setPub(room) {
     pendingHunter: g.pendingHunter,
     updatedAt: now()
   }
+}
+async function setPub(room) {
+  const doc = buildPubFromRoom(room)
+  if (!doc) {
+    return
+  }
   const safe = omitIdDeep(doc)
   await db
     .collection(S)
     .doc(String(room._id))
     .set({ data: safe })
+}
+function buildPlayerView(ro, o) {
+  if (!ro) {
+    return {}
+  }
+  const pr = ro.playerRoles || {}
+  const myR = pr[o]
+  const g = ro.game || {}
+  const al = g.alive || {}
+  const wm = (ro.members || [])
+    .filter((m) => pr[m.openId] === 'werewolf' && m.openId !== o)
+    .map((m) => m.nickName)
+  return {
+    isHost: ro.hostOpenId === o,
+    myOpenId: o,
+    iAmAlive: ro.hostOpenId === o ? true : al[o] !== false,
+    myRole: ro.hostOpenId === o ? '' : myR,
+    roomCode: ro.roomCode,
+    maxPlayers: ro.maxPlayers,
+    roomStatus: ro.status,
+    phase: g.phase,
+    day: g.day,
+    night: g.night,
+    alive: g.alive,
+    publicLog: g.publicLog,
+    lastNightReport: g.lastNightReport,
+    gameEnd: g.endReason,
+    winSide: g.winSide,
+    players: (ro.members || []).map((m, i) =>
+      Object.assign(jp.withProfileReadyFlag(m), {
+        isAlive:
+          m.openId === ro.hostOpenId ? true : al[m.openId] !== false,
+        seat: i + 1
+      })
+    ),
+    wolfMates: myR === 'werewolf' ? wm : [],
+    seer: myR === 'seer' && g.night && g.night.seer ? g.night.seer : null,
+    allRoles:
+      ro.hostOpenId === o
+        ? participantsOf(ro).map((m) => ({
+          o: m.openId,
+          n: m.nickName,
+          r: pr[m.openId]
+        }))
+        : null,
+    speakIndex: g.speakIndex | 0,
+    speakOrder: g.speakOrder || [],
+    voteOpen: !!g.voteOpen,
+    currentVotes: g.currentVotes || {},
+    pendingHunter: g.pendingHunter
+  }
+}
+async function doSyncState(event, o) {
+  const rid = String((event && event.roomId) || '')
+  if (!rid) {
+    throw new Error('无房间')
+  }
+  const ro = await getRoomById(rid)
+  if (!ro) {
+    throw new Error('聚会组无效或已结束')
+  }
+  if (!(ro.members || []).some((m) => m.openId === o)) {
+    return { ok: 1, myOpenId: o, inRoom: false }
+  }
+  const pub = buildPubFromRoom(ro)
+  const view = buildPlayerView(ro, o)
+  return {
+    ok: 1,
+    myOpenId: o,
+    inRoom: true,
+    isHost: ro.hostOpenId === o,
+    state: pub,
+    view
+  }
 }
 function aggWolfVote(wvote) {
   const c = {}
@@ -143,12 +257,15 @@ function checkWin(room) {
   let w = 0
   let good = 0
   ;(room.members || []).forEach((m) => {
+    if (m.openId === room.hostOpenId) {
+      return
+    }
     if (al[m.openId] === false) {
       return
     }
     if (pr[m.openId] === 'werewolf') {
       w += 1
-    } else {
+    } else if (pr[m.openId]) {
       good += 1
     }
   })
@@ -213,7 +330,17 @@ async function run(event) {
       hostOpenId: o,
       maxPlayers,
       status: 'waiting',
-      members: [{ openId: o, nickName: '房主', joinedAt: now() }],
+      members: [
+        {
+          openId: o,
+          nickName:
+            event.nickName && String(event.nickName).trim().slice(0, 12)
+              ? String(event.nickName).trim().slice(0, 12)
+              : '房主',
+          avatarUrl: String((event && event.avatarUrl) || '').trim(),
+          joinedAt: now()
+        }
+      ],
       game: { phase: 'lobby', day: 0, publicLog: [] },
       createdAt: now(),
       updatedAt: now()
@@ -222,12 +349,9 @@ async function run(event) {
     const room = await getRoomById(_id)
     room._id = _id
     await setPub(room)
-    return { roomId: _id, roomCode: code }
+    return { roomId: _id, roomCode: code, myOpenId: o }
   }
   if (action === 'join') {
-    const nick = String(event.nickName || '')
-      .trim()
-      .slice(0, 12) || '参与者'
     const ro = event.roomId ? await getRoomById(event.roomId) : await getRoomByCode(event.roomCode)
     if (!ro) {
       throw new Error('聚会组无效或已结束')
@@ -235,22 +359,26 @@ async function run(event) {
     if (ro.status !== 'waiting') {
       throw new Error('已开始，无法加入')
     }
-    if ((ro.members || []).length >= (ro.maxPlayers || 6)) {
+    if ((ro.members || []).length >= roomSeatCap(ro)) {
       throw new Error('聚会组人数已满')
     }
     const ms = ro.members || []
     let next
     if (ms.some((u) => u.openId === o)) {
-      next = ms.map((m) => (m.openId === o ? { ...m, nickName: nick } : m))
+      next = ms.map((m) =>
+        m.openId === o ? Object.assign({}, m, jp.mergeJoinFields(event, m)) : m
+      )
     } else {
-      next = ms.concat([{ openId: o, nickName: nick, joinedAt: now() }])
+      next = ms.concat([
+        Object.assign({ openId: o, joinedAt: now() }, jp.mergeJoinFields(event, {}))
+      ])
     }
     await db
       .collection(R)
       .doc(String(ro._id))
       .update({ data: { members: next, updatedAt: now() } })
     await setPub(await getRoomById(ro._id))
-    return { roomId: String(ro._id) }
+    return { roomId: String(ro._id), roomCode: ro.roomCode, myOpenId: o }
   }
   if (action === 'setSize') {
     const ro = await getRoomById(event.roomId)
@@ -264,8 +392,8 @@ async function run(event) {
     if (MAXN.indexOf(n) < 0) {
       throw new Error('只支持 6/8/10/12 人')
     }
-    if ((ro.members || []).length > n) {
-      throw new Error('已超人数，请调整或另建聚会组')
+    if (participantsOf(ro).length > n) {
+      throw new Error('参与者已超人数，请调整或另建聚会组')
     }
     await db
       .collection(R)
@@ -274,6 +402,58 @@ async function run(event) {
     await setPub(await getRoomById(event.roomId))
     return { maxPlayers: n }
   }
+  if (action === 'addMockPlayer') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.hostOpenId !== o) {
+      throw new Error('仅组长可添加')
+    }
+    if (ro.status !== 'waiting') {
+      throw new Error('仅等待阶段可添加')
+    }
+    const max = ro.maxPlayers | 0 || 6
+    const ms = ro.members || []
+    if (participantsOf(ro).length >= max) {
+      throw new Error('参与者已满')
+    }
+    if (ms.length >= roomSeatCap(ro)) {
+      throw new Error('已满员')
+    }
+    const next = addOneMockMember(ms, ro._id)
+    await db
+      .collection(R)
+      .doc(String(ro._id))
+      .update({ data: { members: next, updatedAt: now() } })
+    await setPub(await getRoomById(ro._id))
+    return { ok: 1, added: next[next.length - 1].openId }
+  }
+  if (action === 'fillMockPlayers') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.hostOpenId !== o) {
+      throw new Error('仅组长可添加')
+    }
+    if (ro.status !== 'waiting') {
+      throw new Error('仅等待阶段可添加')
+    }
+    const max = ro.maxPlayers | 0 || 6
+    let next = ro.members || []
+    let added = 0
+    for (let i = 0; i < 12; i += 1) {
+      if (participantsOf({ members: next, hostOpenId: ro.hostOpenId }).length >= max) {
+        break
+      }
+      if (next.length >= roomSeatCap(ro)) {
+        break
+      }
+      next = addOneMockMember(next, ro._id)
+      added += 1
+    }
+    await db
+      .collection(R)
+      .doc(String(ro._id))
+      .update({ data: { members: next, updatedAt: now() } })
+    await setPub(await getRoomById(ro._id))
+    return { ok: 1, added }
+  }
   if (action === 'start') {
     const ro = await getRoomById(event.roomId)
     if (!ro || ro.hostOpenId !== o) {
@@ -281,8 +461,9 @@ async function run(event) {
     }
     const m = ro.members || []
     const n = ro.maxPlayers || 6
-    if (m.length !== n) {
-      throw new Error('人未满' + n + '人，暂不可开')
+    const players = participantsOf(ro)
+    if (players.length !== n) {
+      throw new Error('参与者未满' + n + '人，暂不可开')
     }
     if (!DECK[n]) {
       throw new Error('人数与板子未配')
@@ -290,7 +471,11 @@ async function run(event) {
     const deck = shuf(DECK[n].slice(0, n))
     const pr = {}
     const al = {}
-    m.forEach((mem, i) => {
+    if (ro.hostOpenId) {
+      pr[ro.hostOpenId] = ''
+      al[ro.hostOpenId] = false
+    }
+    players.forEach((mem, i) => {
       pr[mem.openId] = deck[i]
       al[mem.openId] = true
     })
@@ -306,7 +491,7 @@ async function run(event) {
         wwitch: { saveLeft: 1, poisonLeft: 1, saveOn: null, poisonOn: null }
       },
       lastNightReport: null,
-      speakOrder: shuf(m.map((u) => u.openId)),
+      speakOrder: shuf(players.map((u) => u.openId)),
       speakIndex: 0,
       currentVotes: {},
       voteOpen: 0,
@@ -574,44 +759,10 @@ async function run(event) {
     if (!ro) {
       return {}
     }
-    const pr = ro.playerRoles || {}
-    const myR = pr[o]
-    const g = ro.game || {}
-    const al = g.alive || {}
-    const wm = (ro.members || [])
-      .filter((m) => pr[m.openId] === 'werewolf' && m.openId !== o)
-      .map((m) => m.nickName)
-    return {
-      isHost: ro.hostOpenId === o,
-      myOpenId: o,
-      iAmAlive: al[o] !== false,
-      myRole: myR,
-      roomCode: ro.roomCode,
-      maxPlayers: ro.maxPlayers,
-      roomStatus: ro.status,
-      phase: g.phase,
-      day: g.day,
-      night: g.night,
-      alive: g.alive,
-      publicLog: g.publicLog,
-      lastNightReport: g.lastNightReport,
-      gameEnd: g.endReason,
-      winSide: g.winSide,
-      players: (ro.members || []).map((m, i) => ({
-        openId: m.openId,
-        nick: m.nickName,
-        isAlive: al[m.openId] !== false,
-        seat: i + 1
-      })),
-      wolfMates: myR === 'werewolf' ? wm : [],
-      seer: myR === 'seer' && g.night && g.night.seer ? g.night.seer : null,
-      allRoles: ro.hostOpenId === o ? (ro.members || []).map((m) => ({ o: m.openId, n: m.nickName, r: pr[m.openId] })) : null,
-      speakIndex: g.speakIndex | 0,
-      speakOrder: g.speakOrder || [],
-      voteOpen: !!g.voteOpen,
-      currentVotes: g.currentVotes || {},
-      pendingHunter: g.pendingHunter
-    }
+    return buildPlayerView(ro, o)
+  }
+  if (action === 'syncState') {
+    return await doSyncState(event, o)
   }
   throw new Error('未知action ' + action)
 }

@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const jp = require('./joinPlayerPatch')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -10,6 +11,10 @@ const S = 'draw_gameState'
 const C = 'draw_canvas'
 
 const t = () => Date.now()
+
+function logDraw (tag, extra) {
+  console.log('[drawRoom]', tag, extra || '')
+}
 
 function c6 () {
   return String(100000 + ((Math.random() * 900000) | 0))
@@ -30,12 +35,41 @@ function normGuess (s) {
     .toLowerCase()
     .replace(/\s/g, '')
 }
-function normW (o) {
-  if (!o || o.w == null) {
+function wordText (o) {
+  if (!o) {
     return ''
   }
-  return String(o.w)
-    .trim()
+  if (o.w != null && String(o.w).trim()) {
+    return String(o.w).trim()
+  }
+  if (o.word != null && String(o.word).trim()) {
+    return String(o.word).trim()
+  }
+  return ''
+}
+
+/** 系统词库 + AI/自定义题（currentWordText） */
+function resolveWord (room0) {
+  if (!room0 || !room0.currentWordId) {
+    return null
+  }
+  const hit = BY_ID[room0.currentWordId]
+  if (hit) {
+    return hit
+  }
+  const text = String(room0.currentWordText || '').trim()
+  if (text) {
+    return { id: room0.currentWordId, w: text.slice(0, 16) }
+  }
+  return null
+}
+
+function normW (o) {
+  const s = wordText(o)
+  if (!s) {
+    return ''
+  }
+  return s
     .toLowerCase()
     .replace(/\s/g, '')
 }
@@ -155,17 +189,127 @@ function buildPub (room, players, st) {
     roundStartTime: g.roundStartTime | 0,
     currentDrawerOpenId: g.currentDrawerOpenId || '',
     currentDrawerNick: drow ? drow.nickName : (g.currentDrawerNick || ''),
-    publicPlayers: sorted.map((p) => ({
-      openId: p.openId,
-      nickName: p.nickName,
-      score: p.score | 0
-    })),
+    publicPlayers: sorted.map((p) =>
+      Object.assign(jp.withProfileReadyFlag(p), { score: p.score | 0 })
+    ),
     roundHits: g.roundHits || [],
     revealedWord: g.revealedWord || '',
     publicLog: g.publicLog || [],
     wordCategory: room.wordCategory || 'all',
-    canvasSeq: g.canvasSeq | 0
+    canvasSeq: g.canvasSeq | 0,
+    canvasData: canvasDataForPub(g.canvasData),
+    canvasDataVer: g.canvasDataVer | 0,
+    syncAt: t()
   }
+}
+
+function canvasDataFromDb (raw) {
+  if (Array.isArray(raw)) {
+    return raw
+  }
+  if (typeof raw === 'string') {
+    const s = raw.trim()
+    if (!s) {
+      return []
+    }
+    try {
+      const p = JSON.parse(s)
+      return Array.isArray(p) ? p : []
+    } catch (e) {
+      return []
+    }
+  }
+  return []
+}
+
+function canvasDataForPub (raw) {
+  if (typeof raw === 'string') {
+    return raw
+  }
+  return JSON.stringify(Array.isArray(raw) ? raw : [])
+}
+
+/** 规范化画家上传的完整笔画（全量重绘，非增量） */
+function normCanvasData (raw) {
+  if (typeof raw === 'string') {
+    raw = canvasDataFromDb(raw)
+  }
+  if (!Array.isArray(raw)) {
+    return []
+  }
+  const out = []
+  for (let i = 0; i < raw.length && out.length < 200; i += 1) {
+    const item = raw[i]
+    if (!item) {
+      continue
+    }
+    const pts = []
+    const src = item.pts || item.points || item.path || []
+    for (let j = 0; j < src.length && pts.length < 800; j += 1) {
+      const p = src[j]
+      if (Array.isArray(p) && p.length >= 2) {
+        pts.push([Math.round(p[0] | 0), Math.round(p[1] | 0)])
+      } else if (p && p.x != null && p.y != null) {
+        pts.push([Math.round(p.x | 0), Math.round(p.y | 0)])
+      }
+    }
+    if (pts.length < 2) {
+      continue
+    }
+    out.push({
+      c: String(item.c || item.color || '#111111').slice(0, 16),
+      w: Math.min(20, Math.max(1, (item.w | 0) || (item.width | 0) || 4)),
+      pts: pts
+    })
+  }
+  return out
+}
+
+/** 单段笔画（增量 appendStroke） */
+function normStrokeSegment (raw) {
+  if (!raw) {
+    return null
+  }
+  const pts = []
+  const src = raw.pts || raw.points || raw.path || []
+  for (let j = 0; j < src.length && pts.length < 8; j += 1) {
+    const p = src[j]
+    if (Array.isArray(p) && p.length >= 2) {
+      pts.push([Math.round(p[0] | 0), Math.round(p[1] | 0)])
+    } else if (p && p.x != null && p.y != null) {
+      pts.push([Math.round(p.x | 0), Math.round(p.y | 0)])
+    }
+  }
+  if (pts.length < 2) {
+    return null
+  }
+  return {
+    c: String(raw.c || raw.color || '#111111').slice(0, 16),
+    w: Math.min(20, Math.max(1, (raw.w | 0) || (raw.width | 0) || 4)),
+    pts: pts
+  }
+}
+
+function mergeStrokeIntoCanvas (canvasData, entry) {
+  const list = canvasDataFromDb(canvasData).slice()
+  const last = list[list.length - 1]
+  if (last && last.c === entry.c && (last.w | 0) === (entry.w | 0)) {
+    const merged = last.pts.slice()
+    for (let i = 0; i < entry.pts.length; i += 1) {
+      const p = entry.pts[i]
+      const tail = merged[merged.length - 1]
+      if (!tail || tail[0] !== p[0] || tail[1] !== p[1]) {
+        merged.push(p)
+      }
+    }
+    if (merged.length < 2) {
+      return list
+    }
+    last.pts = merged.slice(-800)
+    return list.slice(-200)
+  }
+  list.push(entry)
+  return list.slice(-200)
 }
 
 function pickNewWord (room) {
@@ -180,18 +324,20 @@ function pickNewWord (room) {
   return w
 }
 
-async function clearCanvasDoc (roomId) {
+async function clearCanvasDoc (roomId, canvasSeq) {
   const id = String(roomId)
-  await db
-    .collection(C)
-    .doc(id)
-    .set({
-      data: {
-        roomId: id,
-        image: '',
-        v: (t() % 100000000) | 0
-      }
-    })
+  const seq = canvasSeq | 0
+  await db.collection(C).doc(id).set({
+    data: {
+      roomId: id,
+      image: '',
+      strokes: [],
+      canvasSeq: seq,
+      v: t(),
+      updatedAt: t()
+    }
+  })
+  logDraw('clearCanvasDoc', { roomId: id, canvasSeq: seq })
 }
 
 exports.main = async (event) => {
@@ -205,6 +351,9 @@ exports.main = async (event) => {
 async function run (e) {
   const a = e.action
   const o = await oid()
+  if (a === 'getOpenId') {
+    return { openId: o }
+  }
   if (a === 'create') {
     let code = c6()
     for (let i = 0; i < 16; i += 1) {
@@ -230,6 +379,7 @@ async function run (e) {
         roomId: _id,
         openId: o,
         nickName: e.nickName && String(e.nickName).trim().slice(0, 12) ? String(e.nickName).trim().slice(0, 12) : '房主',
+        avatarUrl: String((e && e.avatarUrl) || '').trim(),
         isHost: true,
         score: 0,
         joinedAt: t()
@@ -248,7 +398,7 @@ async function run (e) {
       }
     )
     await clearCanvasDoc(_id)
-    return { roomId: _id, roomCode: code }
+    return { roomId: _id, roomCode: code, myOpenId: o }
   }
   if (a === 'join') {
     const code = String(e.roomCode || '')
@@ -266,35 +416,42 @@ async function run (e) {
     }
     const pl0 = await gPlayers(r0._id)
     const exist = pl0.find((p) => p.openId === o)
-    const nm = String(e.nickName || '')
-      .trim()
-      .slice(0, 12) || '参与者'
     if (exist) {
       if (exist._id) {
         await db
           .collection(P)
           .doc(String(exist._id))
-          .update({ data: { nickName: nm, updatedAt: t() } })
+          .update({
+            data: Object.assign(jp.mergeJoinFields(e, exist), { updatedAt: t() })
+          })
       }
     } else {
       if (pl0.length >= 20) {
         throw new Error('满员')
       }
       await db.collection(P).add({
-        data: {
-          roomId: r0._id,
-          openId: o,
-          nickName: nm,
-          isHost: r0.hostOpenId === o,
-          score: 0,
-          joinedAt: t()
-        }
+        data: Object.assign(
+          {
+            roomId: r0._id,
+            openId: o,
+            isHost: r0.hostOpenId === o,
+            score: 0,
+            joinedAt: t()
+          },
+          jp.mergeJoinFields(e, {})
+        )
       })
     }
     const r1 = await gRoom(r0._id)
     const g0 = (await gState(r0._id)) || { roundHits: [], publicLog: [] }
     await setState(r1, g0)
-    return { roomId: String(r0._id) }
+    const pl1 = await gPlayers(r0._id)
+    return {
+      roomId: String(r0._id),
+      roomCode: r1.roomCode,
+      playerCount: pl1.length,
+      myOpenId: o
+    }
   }
   if (a === 'setConfig') {
     const rid = e.roomId
@@ -357,7 +514,7 @@ async function run (e) {
     let w = null
     const pending = String(room0.pendingWord || '').trim()
     if (pending) {
-      w = { id: 'ai_' + t(), word: pending.slice(0, 16) }
+      w = { id: 'ai_' + t(), w: pending.slice(0, 16) }
     } else {
       w = pickNewWord(
         Object.assign({ usedWordIds: room0.usedWordIds || [] }, room0, {
@@ -378,6 +535,7 @@ async function run (e) {
         data: {
           status: 'playing',
           currentWordId: w.id,
+          currentWordText: wordText(w).slice(0, 16),
           usedWordIds: used1,
           pendingWord: '',
           updatedAt: t()
@@ -392,12 +550,20 @@ async function run (e) {
       currentDrawerOpenId: d.openId,
       currentDrawerNick: d.nick,
       revealedWord: '',
-      canvasSeq: 1
+      canvasSeq: 1,
+      canvasData: [],
+      canvasDataVer: t()
     }
     const r3 = await gRoom(rid)
     await setState(r3, g)
-    await clearCanvasDoc(rid)
-    return { ok: 1 }
+    await clearCanvasDoc(rid, g.canvasSeq)
+    logDraw('startGame', {
+      roomId: rid,
+      drawerOpenId: d.openId,
+      round: 1,
+      wordId: w.id
+    })
+    return { ok: 1, drawerOpenId: d.openId }
   }
   if (a === 'reveal') {
     const rid = e.roomId
@@ -415,8 +581,8 @@ async function run (e) {
     if (!isHost && t() < rs + dur) {
       throw new Error('倒计时未结束')
     }
-    const w = (room0.currentWordId && BY_ID[room0.currentWordId]) || null
-    const wordStr = w ? w.w : ''
+    const w = resolveWord(room0)
+    const wordStr = wordText(w)
     const r2 = await gRoom(rid)
     await setState(r2, {
       phase: 'revealed',
@@ -425,6 +591,7 @@ async function run (e) {
         '揭晓：' + wordStr + '。' + guessSummary(g.roundHits || [])
       )
     })
+    logDraw('reveal', { roomId: rid, word: wordStr })
     return { ok: 1 }
   }
   if (a === 'nextRound') {
@@ -492,7 +659,12 @@ async function run (e) {
       .collection(R)
       .doc(String(rid))
       .update({
-        data: { currentWordId: w.id, usedWordIds: usedList, updatedAt: t() }
+        data: {
+          currentWordId: w.id,
+          currentWordText: wordText(w).slice(0, 16),
+          usedWordIds: usedList,
+          updatedAt: t()
+        }
       })
     const r6 = await gRoom(rid)
     const g3 = {
@@ -508,14 +680,18 @@ async function run (e) {
           '第' + nextR + '轮。绘画：' + d.nick + '。'
         ]
       ),
-      canvasSeq: (g.canvasSeq | 0) + 1
+      canvasSeq: (g.canvasSeq | 0) + 1,
+      canvasData: [],
+      canvasDataVer: t()
     }
-    await setState(
-      r6,
-      g3
-    )
-    await clearCanvasDoc(rid)
-    return { currentRound: nextR }
+    await setState(r6, g3)
+    await clearCanvasDoc(rid, g3.canvasSeq)
+    logDraw('nextRound', {
+      roomId: rid,
+      round: nextR,
+      drawerOpenId: d.openId
+    })
+    return { currentRound: nextR, drawerOpenId: d.openId }
   }
   if (a === 'skipWord') {
     const rid = e.roomId
@@ -540,7 +716,14 @@ async function run (e) {
     await db
       .collection(R)
       .doc(String(rid))
-      .update({ data: { currentWordId: w.id, usedWordIds: usedList, updatedAt: t() } })
+      .update({
+        data: {
+          currentWordId: w.id,
+          currentWordText: wordText(w).slice(0, 16),
+          usedWordIds: usedList,
+          updatedAt: t()
+        }
+      })
     const r6 = await gRoom(rid)
     const g3 = {
       roundStartTime: now,
@@ -548,13 +731,12 @@ async function run (e) {
       publicLog: (g.publicLog || []).concat(
         [ '房主已换题。' ]
       ),
-      canvasSeq: (g.canvasSeq | 0) + 1
+      canvasSeq: (g.canvasSeq | 0) + 1,
+      canvasData: [],
+      canvasDataVer: t()
     }
-    await setState(
-      r6,
-      g3
-    )
-    await clearCanvasDoc(rid)
+    await setState(r6, g3)
+    await clearCanvasDoc(rid, g3.canvasSeq)
     return { ok: 1 }
   }
   if (a === 'submitGuess') {
@@ -571,9 +753,10 @@ async function run (e) {
     if (g.phase !== 'drawing') {
       return { done: 1, ok: 0 }
     }
-    const w = (room0.currentWordId && BY_ID[room0.currentWordId]) || null
+    const w = resolveWord(room0)
     if (!w) {
-      return { err: 1, ok: 0 }
+      logDraw('submitGuess noWord', { roomId: rid, wordId: room0.currentWordId })
+      return { err: 1, ok: 0, errHint: '题目无效' }
     }
     const dur = (room0.roundDuration | 0) * 1000
     if (t() > (g.roundStartTime | 0) + dur) {
@@ -631,9 +814,8 @@ async function run (e) {
     )
     return { ok: 1, points, order: h.order, score: newG }
   }
-  if (a === 'updateCanvas') {
+  if (a === 'appendStroke') {
     const rid = e.roomId
-    const im = (e.image && String(e.image)) || ''
     const room0 = await gRoom(rid)
     if (!room0 || room0.status !== 'playing') {
       return { no: 1 }
@@ -642,21 +824,109 @@ async function run (e) {
     if (g.phase !== 'drawing' || o !== g.currentDrawerOpenId) {
       return { no: 1 }
     }
+    const entry = normStrokeSegment(e.stroke)
+    if (!entry) {
+      return { no: 1 }
+    }
+    const rNow = await gRoom(rid)
+    const canvasData = mergeStrokeIntoCanvas(g.canvasData, entry)
+    await setState(rNow, { canvasData: canvasData, canvasDataVer: t() })
+    logDraw('appendStroke', { roomId: String(rid), pathCount: canvasData.length })
+    return { ok: 1, pathCount: canvasData.length }
+  }
+  if (a === 'updateCanvas') {
+    const rid = e.roomId
+    const room0 = await gRoom(rid)
+    if (!room0 || room0.status !== 'playing') {
+      return { no: 1 }
+    }
+    const g = (await gState(rid)) || {}
+    if (g.phase !== 'drawing' || o !== g.currentDrawerOpenId) {
+      return { no: 1 }
+    }
+    const id = String(rid)
+    const canvasSeq = (g.canvasSeq | 0) || 0
+    const rNow = await gRoom(rid)
+
+    if (e.clear) {
+      await setState(rNow, { canvasData: [], canvasDataVer: t() })
+      await clearCanvasDoc(rid, canvasSeq)
+      logDraw('updateCanvas clear', { roomId: id })
+      return { ok: 1, clear: 1 }
+    }
+
+    if (e.canvasData !== undefined) {
+      const canvasData = normCanvasData(e.canvasData)
+      await setState(rNow, { canvasData: canvasData, canvasDataVer: t() })
+      logDraw('updateCanvas canvasData', {
+        roomId: id,
+        pathCount: canvasData.length
+      })
+      return { ok: 1, pathCount: canvasData.length }
+    }
+
+    let doc = null
+    try {
+      doc = (await db.collection(C).doc(id).get()).data
+    } catch (err) {
+      doc = null
+    }
+
+    const stroke = e.stroke
+    if (stroke && stroke.pts && stroke.pts.length >= 2) {
+      const pts = []
+      for (let i = 0; i < stroke.pts.length && pts.length < 64; i += 1) {
+        const p = stroke.pts[i]
+        if (!p || p.length < 2) {
+          continue
+        }
+        pts.push([Math.round(p[0] | 0), Math.round(p[1] | 0)])
+      }
+      if (pts.length < 2) {
+        return { no: 1 }
+      }
+      const entry = {
+        c: String(stroke.c || '#111111').slice(0, 16),
+        w: Math.min(20, Math.max(1, (stroke.w | 0) || 4)),
+        pts: pts
+      }
+      const prev = (doc && doc.strokes) || []
+      if ((doc && doc.canvasSeq | 0) !== canvasSeq) {
+        await clearCanvasDoc(rid, canvasSeq)
+        doc = { strokes: [], canvasSeq: canvasSeq }
+      }
+      const strokes = ((doc && doc.strokes) || []).concat([entry]).slice(-500)
+      await db.collection(C).doc(id).set({
+        data: {
+          roomId: id,
+          strokes: strokes,
+          canvasSeq: canvasSeq,
+          image: (doc && doc.image) || '',
+          v: t(),
+          updatedAt: t()
+        }
+      })
+      return { ok: 1, strokeCount: strokes.length }
+    }
+
+    const im = (e.image && String(e.image)) || ''
     if (im.length < 20) {
       return { no: 1 }
     }
     if (im.length > 800000) {
       throw new Error('画布过大，请清屏或重绘')
     }
-    const id = String(rid)
-    const ver = t()
-    await db
-      .collection(C)
-      .doc(id)
-      .set({
-        data: { roomId: id, image: im, v: ver, updatedAt: t() }
-      })
-    return { ok: 1 }
+    await db.collection(C).doc(id).set({
+      data: {
+        roomId: id,
+        image: im,
+        strokes: (doc && doc.strokes) || [],
+        canvasSeq: canvasSeq,
+        v: t(),
+        updatedAt: t()
+      }
+    })
+    return { ok: 1, image: 1 }
   }
   if (a === 'endGame') {
     const rid = e.roomId
@@ -682,7 +952,36 @@ async function run (e) {
   if (a === 'getView') {
     return await getView(e.roomId, o)
   }
+  if (a === 'syncState') {
+    return await doSyncState(e.roomId, o)
+  }
   throw new Error('未知' + a)
+}
+
+async function doSyncState (roomId, openId) {
+  const rid = String(roomId || '')
+  if (!rid) {
+    throw new Error('无房间')
+  }
+  const room = await gRoom(rid)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const pls = await gPlayers(rid)
+  const me = pls.find((p) => p.openId === openId)
+  if (!me) {
+    return { ok: 1, myOpenId: openId, inRoom: false }
+  }
+  const g = (await gState(rid)) || {}
+  const state = buildPub(room, pls, g)
+  const view = await getView(rid, openId)
+  return {
+    ok: 1,
+    myOpenId: openId,
+    inRoom: true,
+    state,
+    view
+  }
 }
 
 function pickWithUsed (room0) {
@@ -720,24 +1019,33 @@ async function getView (roomId, openId) {
   }
   const g = (await gState(roomId)) || {}
   const pls = await gPlayers(roomId)
-  const w = (room.currentWordId && BY_ID[room.currentWordId]) || null
+  const w = resolveWord(room)
   const isDrawer = !!(g.currentDrawerOpenId && g.currentDrawerOpenId === openId)
-  return {
+  const wt = wordText(w)
+  const view = {
+    myOpenId: openId,
     isHost: room.hostOpenId === openId,
     isDrawer: !!isDrawer,
-    painterWord: isDrawer && g.phase === 'drawing' && w ? w.w : '',
     myScore: (pls.find((p) => p.openId === openId) || { score: 0 }).score | 0,
     hasGuessedThisRound: !!(g.roundHits || []).find((h) => h.openId === openId),
     publicPlayers: (pls || [])
       .slice()
       .sort((a, b) => (b.score | 0) - (a.score | 0))
-      .map((p) => ({ openId: p.openId, nickName: p.nickName, score: p.score | 0 })),
+      .map((p) => ({
+        openId: p.openId,
+        nickName: p.nickName,
+        avatarUrl: p.avatarUrl || '',
+        isHost: room.hostOpenId === p.openId,
+        score: p.score | 0
+      })),
     phase: g.phase,
     currentRound: g.currentRound,
     currentDrawerNick: g.currentDrawerNick,
-    revealedWord: g.revealedWord
-      || (g.phase === 'revealed' && w ? w.w : '')
-      || '',
+    revealedWord: g.revealedWord || (g.phase === 'revealed' && wt ? wt : '') || '',
     roomStatus: room.status
   }
+  if (isDrawer && g.phase === 'drawing' && wt) {
+    view.painterWord = wt
+  }
+  return view
 }

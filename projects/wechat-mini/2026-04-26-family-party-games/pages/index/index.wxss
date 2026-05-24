@@ -40,6 +40,7 @@
 }
 
 .item-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,6 +53,40 @@
   background: var(--color-bg-card);
   box-shadow: 0 14rpx 36rpx rgba(138, 58, 10, 0.10);
   text-align: center;
+}
+
+.item-card--dev {
+  opacity: 0.72;
+}
+
+.item-card--dev .item-name,
+.item-card--dev .item-desc,
+.item-card--dev .icon-bubble {
+  filter: grayscale(0.35);
+}
+
+.dev-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: rgba(255, 252, 248, 0.78);
+  z-index: 2;
+}
+
+.dev-mask-text {
+  padding: 12rpx 28rpx;
+  border-radius: 999rpx;
+  background: rgba(107, 90, 74, 0.12);
+  color: #6b5a4a;
+  font-size: 26rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
 }
 
 .icon-bubble {

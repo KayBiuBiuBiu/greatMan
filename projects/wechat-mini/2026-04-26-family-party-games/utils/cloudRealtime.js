@@ -30,6 +30,22 @@ function shouldUseDbWatch() {
   return false
 }
 
+/** 开发者工具里是否跳过 shareService / agent_room_feed（首页 onShow 易触发 timeout） */
+function shouldSkipShareCloudInDevtools() {
+  if (!isDevtools()) {
+    return false
+  }
+  try {
+    const cfg = require('../cloud-env.js')
+    if (cfg && cfg.allowShareCloudInDevtools === true) {
+      return false
+    }
+  } catch (e) {
+    /* ignore */
+  }
+  return true
+}
+
 /** 开发者工具里是否跳过 gameStatsService（避免 callFunction 超时刷红） */
 function shouldSkipGameStatsInDevtools() {
   if (!isDevtools()) {
@@ -46,12 +62,20 @@ function shouldSkipGameStatsInDevtools() {
   return true
 }
 
+/** 真机 db.watch 已建立时标记，供 syncState 轮询降频 */
+function markRoomDbWatch(page, active) {
+  if (page) {
+    page._roomDbWatchActive = !!active
+  }
+}
+
 function startDevtoolsPoll(page, timerKey, fn, intervalMs) {
   stopDevtoolsPoll(page, timerKey)
   if (!page || typeof fn !== 'function') {
     return
   }
-  page[timerKey] = setInterval(fn, intervalMs || 2000)
+  markRoomDbWatch(page, false)
+  page[timerKey] = setInterval(fn, intervalMs || 2500)
 }
 
 function stopDevtoolsPoll(page, timerKey) {
@@ -73,7 +97,9 @@ function watchDocument(page, opts) {
     onError,
     pollTimerKey,
     pollFn,
-    intervalMs
+    intervalMs,
+    /** 为 false 时不标记 _roomDbWatchActive（如画布子文档 watch） */
+    markActive
   } = opts || {}
   if (!db || !collection || docId == null) {
     return null
@@ -83,12 +109,15 @@ function watchDocument(page, opts) {
     console.log('[cloud watch] devtools 轮询替代', collection, docId)
     /* eslint-enable no-console */
     if (pollTimerKey && pollFn) {
-      startDevtoolsPoll(page, pollTimerKey, pollFn, intervalMs)
+      startDevtoolsPoll(page, pollTimerKey, pollFn, intervalMs || 2500)
     }
     return null
   }
   if (pollTimerKey) {
     stopDevtoolsPoll(page, pollTimerKey)
+  }
+  if (markActive !== false) {
+    markRoomDbWatch(page, true)
   }
   return db
     .collection(collection)
@@ -96,8 +125,9 @@ function watchDocument(page, opts) {
     .watch({
       onChange,
       onError: (err) => {
+        markRoomDbWatch(page, false)
         if (pollTimerKey && pollFn) {
-          startDevtoolsPoll(page, pollTimerKey, pollFn, intervalMs)
+          startDevtoolsPoll(page, pollTimerKey, pollFn, intervalMs || 2500)
         }
         if (onError) {
           onError(err)
@@ -109,7 +139,9 @@ function watchDocument(page, opts) {
 module.exports = {
   isDevtools,
   shouldUseDbWatch,
+  shouldSkipShareCloudInDevtools,
   shouldSkipGameStatsInDevtools,
+  markRoomDbWatch,
   startDevtoolsPoll,
   stopDevtoolsPoll,
   watchDocument

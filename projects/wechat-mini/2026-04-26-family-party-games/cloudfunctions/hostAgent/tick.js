@@ -34,20 +34,7 @@ function planDrink(state, now, roomId) {
   const ph = state.phase
   if (ph === 'countdown' && now >= (state.countdownEndsAt | 0) - 100) {
     actions.push({ service: 'drink', action: 'revealRinger', roomId: rid })
-    speak = '倒计时结束，自动揭晓响铃者'
-  } else if (ph === 'voting') {
-    const need = (state.voteProgress && state.voteProgress.need) || 0
-    const cast = (state.voteProgress && state.voteProgress.cast) || 0
-    const deadline = state.votingDeadline | 0
-    if ((need > 0 && cast >= need) || now >= deadline - 300) {
-      actions.push({
-        service: 'drink',
-        action: 'finalizeVoting',
-        roomId: rid,
-        force: false
-      })
-      speak = '投票时间到，自动结算'
-    }
+    speak = '倒计时结束，揭晓谁喝几口'
   }
   return { actions, speak }
 }

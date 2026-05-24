@@ -12,7 +12,7 @@ const gameGroups = [
       {
         title: '真心话大冒险',
         status: '已实现',
-        summary: '同场同步时众人投票定真心话或趣味任务，本机可随机换题。'
+        summary: '4 位口令同房，每人用自己手机投票定真心话或趣味任务。'
       },
       {
         title: '海龟汤',
@@ -47,7 +47,7 @@ const gameGroups = [
       {
         title: '趣味抽签',
         status: '同场同步+云',
-        summary: '至少 2 人；倒计时、响铃、投票与趣味小任务，同屏同步。'
+        summary: '至少 2 人；随机一人响铃、喝 1～10 口，同屏同步。'
       }
     ]
   },
@@ -64,7 +64,17 @@ const gameGroups = [
       {
         title: '疯狂猜歌',
         status: '规则辅助',
-        summary: '同场版为随机主持本机外放+抢答；本页为家庭线下提示互动。'
+        summary: '同场版为组长主持本机外放+抢答；本页为家庭线下提示互动。'
+      },
+      {
+        title: '贴头猜词',
+        status: '同场同步+云',
+        summary: '6 位口令同房；每人看自己头上？？？，猜对自己获胜。'
+      },
+      {
+        title: '不要做挑战',
+        status: '同场同步+云',
+        summary: '6 位口令；自己禁止动作保密，诱导他人犯规，坚持到最后。'
       },
       {
         title: '倒着说',
@@ -470,6 +480,20 @@ const helperGames = {
   }
 }
 
+function getTurtleSoupRiddles() {
+  const g = helperGames['海龟汤']
+  return (g && g.prompts) || []
+}
+
+function getTurtleSoupRiddleByIndex(index) {
+  const list = getTurtleSoupRiddles()
+  if (!list.length) {
+    return { title: '海龟汤', detail: '暂无题目', answer: '', hint: '' }
+  }
+  const i = ((index | 0) % list.length + list.length) % list.length
+  return list[i]
+}
+
 module.exports = {
   gameGroups,
   undercoverPairs,
@@ -478,5 +502,7 @@ module.exports = {
   drawWords,
   storyStarts,
   gardens,
-  helperGames
+  helperGames,
+  getTurtleSoupRiddles,
+  getTurtleSoupRiddleByIndex
 }

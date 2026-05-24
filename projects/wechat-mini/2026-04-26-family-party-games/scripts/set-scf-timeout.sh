@@ -2,10 +2,10 @@
 # 将云函数超时设为 60 秒（AI / 生图 / 副主持 hostAgent 等）
 # 前置：pip install tccli && tccli configure
 set -euo pipefail
-ENV_ID="${TCCLI_NAMESPACE:-cloud1-d9g01no7m292bc511}"
+ENV_ID="${TCCLI_NAMESPACE:-cloud1-d9g01no7m292bc511-d5e875d}"
 REGION="${TCCLI_REGION:-ap-shanghai}"
 TIMEOUT="${SCF_TIMEOUT:-60}"
-NAMES="${*:-aiPartyService imageService hostAgent aiPlayer}"
+NAMES="${*:-aiPartyService imageService hostAgent aiPlayer roomService}"
 
 if ! command -v tccli >/dev/null 2>&1; then
   echo "未安装 tccli。请执行: pip install tccli && tccli configure"

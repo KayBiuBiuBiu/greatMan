@@ -13,6 +13,10 @@ Component({
     shareCopy: {
       type: Object,
       value: {}
+    },
+    shareTokenReady: {
+      type: Boolean,
+      value: false
     }
   },
   data: {

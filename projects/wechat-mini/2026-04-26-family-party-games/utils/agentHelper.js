@@ -7,6 +7,7 @@ const { agentSpeak, playHostVoice } = require('./agentTts')
 
 let agentBotId = ''
 let agentEnabled = true
+let featureAiButtonsOn = true
 try {
   const cfg = require('../cloud-env.js')
   agentBotId = (cfg && cfg.agentBotId) || ''
@@ -15,6 +16,11 @@ try {
   }
 } catch (e) {
   agentBotId = ''
+}
+try {
+  featureAiButtonsOn = require('../data/feature-flags').isAiButtonsEnabled()
+} catch (e) {
+  featureAiButtonsOn = true
 }
 
 const _threads = Object.create(null)
@@ -153,6 +159,9 @@ function runAgentText(opts) {
  * 玩家辅助：弹窗展示建议
  */
 function runPlayerAssist(page, opts) {
+  if (!featureAiButtonsOn) {
+    return
+  }
   const o = opts || {}
   if (!page) {
     return
@@ -253,6 +262,9 @@ function runHostTick(page, opts) {
  * 战报
  */
 function runGameRecap(page, opts) {
+  if (!featureAiButtonsOn) {
+    return
+  }
   const o = opts || {}
   const { ensureAiUnlock, LEVEL } = require('./aiUnlock')
   if (!ensureAiUnlock(LEVEL.RECAP, '智能战报', page)) {
@@ -328,13 +340,19 @@ function runPartyRecommend(page) {
  */
 function runHostNarrate(page, opts) {
   const o = opts || {}
+  if (!featureAiButtonsOn) {
+    return
+  }
   if (!o.roomId || !o.gameKind) {
     return
   }
-  if (page) {
+  const silent = !!o.silent
+  if (page && !silent) {
     page.setData({ agentBusy: true })
   }
-  wx.showLoading({ title: '副主持播报…', mask: true })
+  if (!silent) {
+    wx.showLoading({ title: '副主持播报…', mask: true })
+  }
   callHostAgentPromise({
     action: 'hostNarrate',
     gameKind: o.gameKind,
@@ -344,21 +362,29 @@ function runHostNarrate(page, opts) {
     voiceSpeed: o.voiceSpeed
   })
     .then((r) => {
-      wx.hideLoading()
+      if (!silent) {
+        wx.hideLoading()
+      }
       if (page) {
         page.setData({ agentBusy: false })
       }
-      playHostVoice(r)
+      if (o.speak !== false) {
+        playHostVoice(r)
+      }
       if (o.onOk) {
         o.onOk(r)
       }
     })
     .catch((err) => {
-      wx.hideLoading()
+      if (!silent) {
+        wx.hideLoading()
+      }
       if (page) {
         page.setData({ agentBusy: false })
       }
-      wx.showToast({ title: (err && err.message) || '播报失败', icon: 'none' })
+      if (!silent) {
+        wx.showToast({ title: (err && err.message) || '播报失败', icon: 'none' })
+      }
     })
 }
 

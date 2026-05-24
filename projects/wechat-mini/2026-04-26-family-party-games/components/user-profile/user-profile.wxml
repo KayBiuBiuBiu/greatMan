@@ -1,0 +1,53 @@
+<view class="up-root up-{{mode}}">
+  <view class="up-head" wx:if="{{mode === 'card'}}">
+    <text class="up-title">{{title}}</text>
+    <text class="up-hint">{{hint}}</text>
+  </view>
+
+  <view class="up-loading" wx:if="{{loading}}">
+    <text>加载中…</text>
+  </view>
+
+  <view class="up-error" wx:elif="{{errorMsg}}">
+    <text>{{errorMsg}}</text>
+    <view class="up-retry" bindtap="onRetry">重试</view>
+  </view>
+
+  <view class="up-body" wx:else>
+    <button
+      class="up-avatar-btn"
+      open-type="chooseAvatar"
+      bindchooseavatar="onChooseAvatar"
+      disabled="{{saving}}"
+    >
+      <view class="up-avatar-ring">
+        <image
+          wx:if="{{hasAvatar}}"
+          class="up-avatar-img"
+          src="{{avatarDisplay}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="up-avatar-placeholder">
+          <text class="up-avatar-plus">+</text>
+          <text class="up-avatar-tip">选头像</text>
+        </view>
+      </view>
+    </button>
+
+    <view class="up-nick-wrap">
+      <text class="up-nick-label">昵称</text>
+      <input
+        class="up-nick-input"
+        type="nickname"
+        placeholder="点击填写昵称"
+        value="{{nickName}}"
+        maxlength="32"
+        bindblur="onNicknameBlur"
+        bindconfirm="onNicknameConfirm"
+        disabled="{{saving}}"
+      />
+    </view>
+
+    <view class="up-saving" wx:if="{{saving}}">保存中…</view>
+  </view>
+</view>

@@ -9,7 +9,7 @@ const {
   validateUndercoverPair,
   validateDrawWord,
   sanitizeDisplayText
-} = require('../utils/aiHelper')
+} = require('../packageGames/utils/aiHelper')
 
 function assert(cond, msg) {
   if (!cond) {
