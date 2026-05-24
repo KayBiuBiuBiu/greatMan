@@ -59,7 +59,7 @@ def refresh_stock_to_sw_cache(path: Path, *, pro: Any, sleep_sec: float = 0.12) 
         if len(sw) >= 9 and sw.endswith(".SI") and sw[:-3].isdigit():
             by_code[sym] = sw
 
-    # 1) index_member_all
+    # 1) index_member_all（全量可能仅 ~3000 条，后续 L1 成分表补全）
     try:
         df = pro.index_member_all(is_new="Y")
         if df is not None and not getattr(df, "empty", True):
@@ -75,39 +75,38 @@ def refresh_stock_to_sw_cache(path: Path, *, pro: Any, sleep_sec: float = 0.12) 
     except Exception:
         pass
 
-    # 2) 分类 + sw_index_member
-    if len(by_code) < 100:
-        classify = None
-        for kwargs in (
-            {"level": "L1", "src": "SW2021"},
-            {"level": "L1", "src": "SW"},
-            {"level": "L1"},
-        ):
-            try:
-                classify = pro.index_classify(**kwargs)
-                if classify is not None and not getattr(classify, "empty", True):
-                    break
-            except Exception:
-                classify = None
-        if classify is not None and not getattr(classify, "empty", True):
-            code_col = "index_code" if "index_code" in classify.columns else None
-            if code_col:
-                for _, crow in classify.iterrows():
-                    ic = str(crow.get(code_col) or "").strip().upper()
-                    if not ic.endswith(".SI"):
-                        continue
-                    try:
-                        mdf = pro.sw_index_member(index_code=ic)
-                    except Exception:
-                        continue
-                    if mdf is None or getattr(mdf, "empty", True):
-                        continue
-                    scol = "con_code" if "con_code" in mdf.columns else None
-                    if not scol:
-                        continue
-                    for _, mrow in mdf.iterrows():
-                        add_pair(str(mrow.get(scol) or ""), ic)
-                    time.sleep(max(0.0, float(sleep_sec)))
+    # 2) 申万一级 index_classify + sw_index_member（补全/覆盖，避免 1) 截断）
+    classify = None
+    for kwargs in (
+        {"level": "L1", "src": "SW2021"},
+        {"level": "L1", "src": "SW"},
+        {"level": "L1"},
+    ):
+        try:
+            classify = pro.index_classify(**kwargs)
+            if classify is not None and not getattr(classify, "empty", True):
+                break
+        except Exception:
+            classify = None
+    if classify is not None and not getattr(classify, "empty", True):
+        code_col = "index_code" if "index_code" in classify.columns else None
+        if code_col:
+            for _, crow in classify.iterrows():
+                ic = str(crow.get(code_col) or "").strip().upper()
+                if not ic.endswith(".SI"):
+                    continue
+                try:
+                    mdf = pro.sw_index_member(index_code=ic)
+                except Exception:
+                    continue
+                if mdf is None or getattr(mdf, "empty", True):
+                    continue
+                scol = "con_code" if "con_code" in mdf.columns else None
+                if not scol:
+                    continue
+                for _, mrow in mdf.iterrows():
+                    add_pair(str(mrow.get(scol) or ""), ic)
+                time.sleep(max(0.0, float(sleep_sec)))
 
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {

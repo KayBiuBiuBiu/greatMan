@@ -220,7 +220,11 @@ from quote_eastmoney import (
     resolve_ut,
     secid_for,
 )
-from sector_em import clear_round_cache as sector_clear_round_cache, resolve_sector_bk
+from sector_em import (
+    clear_round_cache as sector_clear_round_cache,
+    format_sector_console_line,
+    resolve_sector_bk,
+)
 from risk_control import RiskManager
 from strategy_engine import ma_box_strategy, ma_box_strategy_best_signal
 from t1_guard import (
@@ -816,6 +820,14 @@ DEFAULT_DIP_DISPLAY_FILTER: dict[str, Any] = {
     "enabled": True,
     "max_change_pct": 5.0,
     "max_intraday_position": 0.85,
+}
+DEFAULT_DISPLAY: dict[str, Any] = {
+    # 控制台「热门板块优质股」分区：申万一级 5 日超额前 30% 行业内的盘前优质股
+    "hot_sector_quality_enabled": True,
+    "hot_sector_lookback_days": 5,
+    "hot_sector_top_fraction": 0.3,
+    "hot_sector_max_stocks": 10,
+    "hot_sector_index_benchmark_ts_code": "000001.SH",
 }
 DEFAULT_MIDDAY_OPS: dict[str, Any] = {
     # 午休 11:30–13:00 增量：控制台「今日优质股」过滤、持仓策略临近价提示等（不写 daily_picks.json）
@@ -1813,6 +1825,12 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     ddf_m = dict(DEFAULT_DIP_DISPLAY_FILTER)
     ddf_m.update(cfg["dip_display_filter"])
     cfg["dip_display_filter"] = ddf_m
+    cfg.setdefault("display", {})
+    if not isinstance(cfg["display"], dict):
+        cfg["display"] = {}
+    disp_m = dict(DEFAULT_DISPLAY)
+    disp_m.update(cfg["display"])
+    cfg["display"] = disp_m
     cfg.setdefault("midday_ops", {})
     if not isinstance(cfg["midday_ops"], dict):
         cfg["midday_ops"] = {}
@@ -2097,6 +2115,309 @@ def _console_quality_codes_from_picks(picks_path: Path) -> set[str]:
             if nc:
                 out.add(nc)
     return out
+
+
+def _kline_store_db_path(cfg: dict[str, Any], *, root: Path = ROOT) -> Path | None:
+    ks = cfg.get("kline_store") if isinstance(cfg.get("kline_store"), dict) else {}
+    rel = str(ks.get("db_path") or "data/daily_klines.db").strip()
+    p = Path(rel)
+    if not p.is_absolute():
+        p = root / p
+    return p if p.is_file() else None
+
+
+def _distinct_sw_l1_secids_from_kline_db(db_path: Path) -> set[str]:
+    import sqlite3
+
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=5.0)
+    except sqlite3.Error:
+        return set()
+    try:
+        rows = conn.execute(
+            """
+            SELECT DISTINCT secid FROM daily_klines
+            WHERE secid GLOB '801*.SI'
+            """
+        ).fetchall()
+    except sqlite3.Error:
+        return set()
+    finally:
+        conn.close()
+    out: set[str] = set()
+    for row in rows:
+        sw = str(row[0] or "").strip().upper()
+        if sw.endswith(".SI") and sw[:-3].isdigit():
+            out.add(sw)
+    return out
+
+
+def _hot_sw_l1_top_fraction(
+    excess_by_sw: dict[str, float],
+    *,
+    top_fraction: float,
+) -> frozenset[str]:
+    if not excess_by_sw:
+        return frozenset()
+    try:
+        frac = float(top_fraction)
+    except (TypeError, ValueError):
+        frac = 0.3
+    frac = max(0.05, min(1.0, frac))
+    ranked = sorted(excess_by_sw.items(), key=lambda kv: kv[1], reverse=True)
+    n = len(ranked)
+    k = max(1, int(math.ceil(n * frac)))
+    return frozenset(sw for sw, _ in ranked[:k])
+
+
+def _sector_abs_returns_from_kline_db(
+    db_path: Path,
+    sw_universe: set[str],
+    *,
+    lookback: int,
+) -> dict[str, float]:
+    from ml_forward4_sector_strength import local_n_day_return_fraction
+
+    out: dict[str, float] = {}
+    n = max(1, int(lookback))
+    for raw in sw_universe:
+        sw = str(raw).strip().upper()
+        if not sw.endswith(".SI"):
+            continue
+        r = local_n_day_return_fraction(db_path, sw, n)
+        if r is not None:
+            out[sw] = float(r)
+    return out
+
+
+def _benchmark_return_fraction_fallback(
+    cfg: dict[str, Any],
+    *,
+    lookback: int,
+    index_ts_code: str,
+) -> float | None:
+    """基准指数 N 日收益（比例）；本地库缺失时尝试 Tushare。"""
+    try:
+        from quote_tushare import sh_index_n_day_return_pct
+
+        pct = sh_index_n_day_return_pct(n=int(lookback), ts_code=index_ts_code)
+        if pct is not None:
+            return float(pct) / 100.0
+    except Exception:
+        logging.getLogger(__name__).debug("hot sector benchmark tushare", exc_info=True)
+    _ = cfg
+    return None
+
+
+def _resolve_hot_sw_l1_set(
+    cfg: dict[str, Any],
+    *,
+    root: Path,
+    state: dict[str, Any],
+    picks_path: Path,
+) -> frozenset[str]:
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    if not bool(disp.get("hot_sector_quality_enabled", True)):
+        return frozenset()
+    today = date.today().isoformat()
+    cache = state.get("__hot_sw_l1_daily__")
+    if isinstance(cache, dict) and cache.get("date") == today:
+        raw = cache.get("codes") or []
+        rank_mode_cached = cache.get("rank_mode")
+        # 旧版失败路径会整日缓存 codes=[] 且无 rank_mode，需重算
+        if raw or rank_mode_cached:
+            return frozenset(str(x).strip().upper() for x in raw if str(x).strip())
+
+    try:
+        lookback = max(1, int(disp.get("hot_sector_lookback_days", 5) or 5))
+    except (TypeError, ValueError):
+        lookback = 5
+    try:
+        top_frac = float(disp.get("hot_sector_top_fraction", 0.3) or 0.3)
+    except (TypeError, ValueError):
+        top_frac = 0.3
+    bench = str(disp.get("hot_sector_index_benchmark_ts_code") or "000001.SH").strip()
+
+    db_path = _kline_store_db_path(cfg, root=root)
+    if db_path is None:
+        return frozenset()
+
+    sw_universe = _distinct_sw_l1_secids_from_kline_db(db_path)
+    if not sw_universe:
+        for row in _daily_picks_quality_rows_in_order(picks_path):
+            sw = str(row.get("sw_l1") or "").strip().upper()
+            if sw.endswith(".SI"):
+                sw_universe.add(sw)
+    if not sw_universe:
+        return frozenset()
+
+    try:
+        from ml_forward4_sector_strength import precompute_sector_excess_vs_sh
+
+        excess_by_sw, bench_ret = precompute_sector_excess_vs_sh(
+            cfg,
+            db_path,
+            sw_universe,
+            lookback_days=lookback,
+            index_ts_code=bench,
+        )
+    except Exception:
+        logging.getLogger(__name__).debug("hot_sw_l1 excess compute", exc_info=True)
+        excess_by_sw, bench_ret = {}, None
+
+    rank_map: dict[str, float] = {}
+    rank_mode = "excess"
+    if excess_by_sw:
+        rank_map = dict(excess_by_sw)
+    else:
+        if bench_ret is None:
+            bench_fb = _benchmark_return_fraction_fallback(
+                cfg, lookback=lookback, index_ts_code=bench
+            )
+            if bench_fb is not None:
+                abs_map = _sector_abs_returns_from_kline_db(
+                    db_path, sw_universe, lookback=lookback
+                )
+                if abs_map:
+                    rank_map = {
+                        sw: float(sr) - float(bench_fb) for sw, sr in abs_map.items()
+                    }
+                    rank_mode = "excess_tushare"
+        if not rank_map:
+            rank_map = _sector_abs_returns_from_kline_db(
+                db_path, sw_universe, lookback=lookback
+            )
+            rank_mode = "absolute"
+            if rank_map and state.get("__hot_sw_l1_abs_warn_date__") != today:
+                logging.getLogger(__name__).warning(
+                    "[热门板块] 基准 %s 本地无 K 线，改用申万一级 %s 日绝对涨幅排序（非超额）",
+                    bench,
+                    lookback,
+                )
+                state["__hot_sw_l1_abs_warn_date__"] = today
+
+    if not rank_map:
+        return frozenset()
+
+    hot = _hot_sw_l1_top_fraction(rank_map, top_fraction=top_frac)
+    state["__hot_sw_l1_daily__"] = {
+        "date": today,
+        "codes": sorted(hot),
+        "lookback_days": lookback,
+        "top_fraction": top_frac,
+        "rank_mode": rank_mode,
+    }
+    return hot
+
+
+def _daily_picks_quality_rows_in_order(picks_path: Path) -> list[dict[str, Any]]:
+    """daily_picks.json 优质股/优质标的，保持文件内顺序（去重）。"""
+    if not picks_path.is_file():
+        return []
+    try:
+        j = json.loads(picks_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for key in ("优质股", "优质标的"):
+        rows = j.get(key)
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            nc = normalize_stock_code(str(row.get("code") or "").strip())
+            if not nc or nc in seen:
+                continue
+            seen.add(nc)
+            out.append(row)
+    return out
+
+
+def _load_stock_to_sw_l1_map(root: Path) -> dict[str, str]:
+    """6 位代码 → 申万一级 801xxx.SI（本地 stock_to_sw.json）。"""
+    try:
+        from sw_member_cache import load_stock_to_sw_map
+
+        return load_stock_to_sw_map(root / "data" / "stock_to_sw.json")
+    except Exception:
+        logging.getLogger(__name__).debug("load stock_to_sw for hot sector", exc_info=True)
+        return {}
+
+
+def _resolve_pick_sw_l1(
+    row: dict[str, Any],
+    *,
+    pack_by_code: dict[str, dict[str, Any]],
+    code_to_sw: dict[str, str],
+) -> str:
+    sw = str(row.get("sw_l1") or "").strip().upper()
+    if sw.endswith(".SI"):
+        return sw
+    nc = normalize_stock_code(str(row.get("code") or "").strip())
+    if not nc:
+        return ""
+    pack = pack_by_code.get(nc)
+    if isinstance(pack, dict):
+        bk = str(pack.get("sector_bk") or "").strip().upper()
+        if bk.endswith(".SI"):
+            return bk
+    return str(code_to_sw.get(nc) or "").strip().upper()
+
+
+def _build_hot_sector_quality_items(
+    items: list[dict[str, Any]],
+    *,
+    picks_path: Path,
+    cfg: dict[str, Any],
+    root: Path,
+    state: dict[str, Any],
+    console_qcodes: set[str],
+    af_new_for_sec: set[str],
+) -> list[dict[str, Any]]:
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    if not bool(disp.get("hot_sector_quality_enabled", True)):
+        return []
+    try:
+        max_n = max(1, int(disp.get("hot_sector_max_stocks", 10) or 10))
+    except (TypeError, ValueError):
+        max_n = 10
+
+    hot_sw = _resolve_hot_sw_l1_set(cfg, root=root, state=state, picks_path=picks_path)
+    if not hot_sw:
+        return []
+
+    pack_by_code: dict[str, dict[str, Any]] = {}
+    for x in items:
+        if x.get("tagged"):
+            continue
+        c = _pack_stock_code(x)
+        if c:
+            pack_by_code[c] = x
+
+    code_to_sw = _load_stock_to_sw_l1_map(root)
+
+    selected_codes: list[str] = []
+    for row in _daily_picks_quality_rows_in_order(picks_path):
+        sw = _resolve_pick_sw_l1(row, pack_by_code=pack_by_code, code_to_sw=code_to_sw)
+        if not sw or sw not in hot_sw:
+            continue
+        nc = normalize_stock_code(str(row.get("code") or "").strip())
+        if not nc or nc not in console_qcodes:
+            continue
+        if af_new_for_sec and nc in af_new_for_sec:
+            continue
+        if nc not in pack_by_code or nc in selected_codes:
+            continue
+        selected_codes.append(nc)
+        if len(selected_codes) >= max_n:
+            break
+
+    hot_items = [pack_by_code[c] for c in selected_codes]
+    return _filter_watch_packs_by_strategy_sell_score(
+        hot_items, cfg, log_label="热门板块优质"
+    )
 
 
 def _daily_picks_quality_rows_by_code(picks_path: Path) -> dict[str, dict[str, Any]]:
@@ -5790,6 +6111,23 @@ def process_watch_pack(
         _emit_watch_line(
             format_tags_line(rule), event="watch_tags", code=code, rk=rk
         )
+        _emit_watch_line(
+            format_sector_console_line(
+                code,
+                cfg,
+                root=ROOT,
+                pack=pack,
+                market=str(rule.get("market") or ""),
+                sw_hint=(
+                    str(quality_pick_row.get("sw_l1") or "").strip()
+                    if isinstance(quality_pick_row, dict)
+                    else None
+                ),
+            ),
+            event="watch_sector_label",
+            code=code,
+            rk=rk,
+        )
         if quality_pick_row:
             _emit_quality_pick_reason_lines(
                 quality_pick_row, code=code, rk=rk
@@ -5813,6 +6151,23 @@ def process_watch_pack(
         color_line(chg_color, base_txt), event="watch_quote", code=code, rk=rk
     )
     _emit_watch_line(format_tags_line(rule), event="watch_tags", code=code, rk=rk)
+    _emit_watch_line(
+        format_sector_console_line(
+            code,
+            cfg,
+            root=ROOT,
+            pack=pack,
+            market=str(rule.get("market") or ""),
+            sw_hint=(
+                str(quality_pick_row.get("sw_l1") or "").strip()
+                if isinstance(quality_pick_row, dict)
+                else None
+            ),
+        ),
+        event="watch_sector_label",
+        code=code,
+        rk=rk,
+    )
     if quality_pick_row:
         _emit_quality_pick_reason_lines(quality_pick_row, code=code, rk=rk)
     if afternoon_metrics_row:
@@ -5864,14 +6219,6 @@ def process_watch_pack(
                     rk=rk,
                     level=logging.WARNING,
                 )
-    bk_trend = str(pack.get("sector_bk") or "").strip()
-    if bk_trend:
-        _emit_watch_line(
-            f"      └ 趋势板块柱 BK：{bk_trend}",
-            event="watch_sector_bk",
-            code=code,
-            rk=rk,
-        )
 
     if show_pick_card and score_row:
         _emit_watch_line(
@@ -7612,6 +7959,24 @@ def main() -> int:
 
             quality_items.sort(key=_quality_items_display_sort_key, reverse=True)
 
+            hot_sector_quality_items = _build_hot_sector_quality_items(
+                items,
+                picks_path=_picks_path,
+                cfg=cfg,
+                root=ROOT,
+                state=state,
+                console_qcodes=_console_qcodes,
+                af_new_for_sec=_af_new_for_sec,
+            )
+            if bool((cfg.get("display") or {}).get("hot_sector_quality_enabled", True)):
+                _hs_cache = state.get("__hot_sw_l1_daily__") or {}
+                _emit_main_line(
+                    f"[热门板块] 热门行业 {len(_hs_cache.get('codes') or [])} 个"
+                    f"（{(_hs_cache.get('rank_mode') or '?')}）"
+                    f"｜展示 {len(hot_sector_quality_items)} 只",
+                    event="poll_hot_sector_summary",
+                )
+
             afternoon_opp_items = [
                 x
                 for x in items
@@ -7672,6 +8037,10 @@ def main() -> int:
                 sections.append(("【我的持仓】", tagged_items, False))
             if quality_items:
                 sections.append(("【今日优质股】", quality_items, False))
+            if hot_sector_quality_items:
+                sections.append(
+                    ("【热门板块优质股】", hot_sector_quality_items, False)
+                )
             if afternoon_opp_items:
                 sections.append(("【下午机会·新增】", afternoon_opp_items, True))
             if top_picks:
@@ -7720,6 +8089,8 @@ def main() -> int:
                     return "持仓"
                 if "今日优质股" in sec:
                     return "优质"
+                if "热门板块优质股" in sec:
+                    return "热门"
                 if "下午机会" in sec:
                     return "下午"
                 if "低吸优选" in sec:
