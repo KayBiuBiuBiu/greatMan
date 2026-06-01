@@ -26,12 +26,12 @@
         "test_17_mystery_reason_insufficient_players"
       ]
     },
-    {
-      "pkg": "testcases.test_dontdoit_party",
-      "case_list": [
-        "test_09_dontdoit_core_flow",
-        "test_18_dontdoit_insufficient_players"
-      ]
-    }
-  ]
-}
+  {
+    "pkg": "testcases.test_member_display_format",
+    "case_list": [
+      "test_01_dontdoit_member_display",
+      "test_02_mystery_reason_member_display",
+      "test_03_draw_guess_member_display",
+      "test_04_dontdoit_status_hint_format"
+    ]
+  }
