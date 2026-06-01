@@ -1,0 +1,135 @@
+[E 2026-05-29 13:29:01,352 minium assertbase#308 _get_error_info] self._outcome is None, maybe a class error
+[E 2026-05-29 13:29:01,358 minium assertbase#390 _get_stack_info] <bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 823, in launch_dev_tool
+    self.connect_dev_tool(False)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+[W 2026-05-29 13:29:01,360 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529132834', 'case_output': './outputs/20260529132834/test_review_unlock_single_open_all_view/20260529132901342253'}
+[W 2026-05-29 13:29:01,360 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[E 2026-05-29 13:29:01,360 minium utils#166 wrapper] catch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'

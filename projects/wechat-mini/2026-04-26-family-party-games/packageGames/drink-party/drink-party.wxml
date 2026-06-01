@@ -38,21 +38,20 @@
     </view>
   </view>
 
-  <!-- 10 秒抽签倒计时（揭晓后才响铃/震动） -->
+  <!-- 6 秒抽签倒计时（揭晓后才响铃/震动） -->
   <view
     class="dp-card dp-phase-card dp-phase-prominent"
-    wx:if="{{countdownSec > 0 && (inCountdown || (state && state.phase === 'countdown'))}}"
+    wx:if="{{state && state.phase === 'countdown'}}"
   >
-    <view class="dp-countdown-num">{{countdownSec}}</view>
+    <view class="dp-countdown-num">{{countdownSec > 0 ? countdownSec : 1}}</view>
     <view class="dp-countdown-sub">秒后揭晓响铃者</view>
     <view class="dp-countdown-tip text-caption">紧张感拉满，请盯住成员列表</view>
   </view>
 
-  <!-- 结果（含旧云 voting 阶段兼容，统一显示喝几口） -->
-  <view class="dp-card dp-phase-card dp-phase-prominent" wx:if="{{showDrinkResult && drinkResultText}}">
+  <!-- 结果大卡只给被抽中的本机展示；其他人通过状态提示等待响铃者处理 -->
+  <view class="dp-card dp-phase-card dp-phase-prominent" wx:if="{{iAmRinger && showDrinkResult && drinkResultText}}">
     <view class="dp-drink-hero">{{drinkResultText}}</view>
-    <view class="dp-ringer-hint" wx:if="{{iAmRinger}}">你的手机响了，请喝 {{drinkSips}} 口</view>
-    <view class="dp-result-sub text-caption" wx:else>被抽中者本机正在响铃</view>
+    <view class="dp-ringer-hint">你的手机响了，请喝 {{drinkSips}} 口，点「下一轮」直接开始抽签</view>
   </view>
 
   <!-- 状态 + 成员 -->
@@ -95,21 +94,21 @@
   </view>
 
   <room-ready-bar
-    wx:if="{{inWaiting && !isHost}}"
+    wx:if="{{inWaiting && !isRoundStarter}}"
     ready="{{lobbySelfReady}}"
     bind:tapready="onLobbyReadyTap"
   />
 
   <button
     class="rg-btn-primary main-btn dp-main-btn {{canStart ? '' : 'rg-start-muted'}}"
-    wx:if="{{isHost && state && state.phase === 'waiting'}}"
+    wx:if="{{isRoundStarter && state && state.phase === 'waiting'}}"
     bindtap="onStart"
     disabled="{{opBusy}}"
   >开始本轮</button>
 
   <button
     class="rg-btn-primary main-btn dp-main-btn"
-    wx:if="{{isHost && state && state.phase === 'result'}}"
+    wx:if="{{iAmRinger && state && state.phase === 'result'}}"
     bindtap="onNextRound"
     disabled="{{opBusy}}"
   >下一轮</button>

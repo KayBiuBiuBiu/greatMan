@@ -1,7 +1,7 @@
 <view class="page">
   <view class="hero">
     <view class="hero-title">{{title}}</view>
-    <view class="hero-subtitle">{{screen==='undercover' ? '创建后得到 6 位数字口令（房号）。至少 3 人且需凑满设定人数；同场发牌、看词、投票。' : screen==='werewolf' ? '创建后得到 6 位数字口令。人齐后选板子人数（6/8/10/12 人局）；把口令发给身边朋友。' : screen==='songGuess' ? '创建后得到 6 位数字口令。建议至少 2 人；组长本机外放，他人抢答。' : screen==='drinkParty' ? '创建后得到 6 位数字口令。至少 2 人可开始；随机一人响铃，显示喝 1～10 口。' : screen==='headband' ? '创建后得到 6 位数字口令。至少 2 人可开始；每人看自己头上？？？，猜对自己获胜。' : screen==='dontdoit' ? '创建后得到 6 位数字口令。至少 2 人；自己禁止动作保密，坚持到最后。' : screen==='drawGuess' ? '创建后得到 6 位数字口令。至少 2 人可开始；一人画画，大家同屏猜词。' : '先设置人数，再生成口令开始互动'}}</view>
+    <view class="hero-subtitle">{{screen==='undercover' ? '创建后得到 6 位数字口令（房号）。至少 3 人即可开局，进多少人就多少人；同场发牌、看词、投票。' : screen==='werewolf' ? '创建后得到 6 位数字口令。至少 6 人可开局，进多少人就多少人；把口令发给身边朋友。' : screen==='songGuess' ? '创建后得到 6 位数字口令。建议至少 2 人；组长本机外放，他人抢答。' : screen==='drinkParty' ? '创建后得到 6 位数字口令。至少 2 人可开始；随机一人响铃，显示喝 1～10 口。' : screen==='headband' ? '创建后得到 6 位数字口令。至少 2 人可开始；每人看自己头上？？？，猜对自己获胜。' : screen==='dontdoit' ? '创建后得到 6 位数字口令。至少 2 人；自己禁止动作保密，坚持到最后。' : screen==='drawGuess' ? '创建后得到 6 位数字口令。至少 2 人可开始；一人画画，大家同屏猜词。' : '先设置人数，再生成口令开始互动'}}</view>
   </view>
 
   <view class="card setup-card" wx:if="{{screen === 'songGuess'}}">
@@ -24,62 +24,37 @@
     <view class="hint" style="line-height:1.6">创建后把 6 位口令发给同座；至少 2 人。组长选难度后开局，每人一个禁止动作（自己保密）。</view>
   </view>
 
+  <view class="card setup-card" wx:if="{{screen==='mysteryReason'}}">
+    <view class="hint" style="line-height:1.6">创建后得到 6 位数字口令。至少 3 人可开局；AI 生成剧本，全程面对面口头推理，无打字聊天。组长开局前可选难度。</view>
+  </view>
+
   <view class="card setup-card" wx:if="{{title === '真心话大冒险'}}">
     <view class="hint" style="line-height:1.6">创建后得到 4 位数字口令。请把口令发给每位参与者，各自在首页「输入口令」进组；被选中者除外，每人用自己手机投真心话或大冒险，全员投完自动计票。</view>
   </view>
 
-  <view
-    class="card setup-card"
-    wx:if="{{screen !== 'songGuess' && screen !== 'drawGuess' && screen!=='drinkParty' && screen!=='headband' && screen!=='dontdoit'}}"
-  >
-    <block wx:if="{{screen === 'werewolf'}}">
-      <view class="rg-setting-item">
-        <text class="rg-label">本环节人数</text>
-        <view class="rg-stepper-board">
-          <view
-            class="stepper-btn {{wolfSizeIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
-            bindtap="onWolfDecrease"
-          >-</view>
-          <text class="stepper-value">{{playerCount}}</text>
-          <view
-            class="stepper-btn {{wolfSizeIndex >= 3 ? 'stepper-btn-disabled' : ''}}"
-            bindtap="onWolfIncrease"
-          >+</view>
-        </view>
-      </view>
-      <view class="rg-stepper-hint">{{wolfSizeHint}}</view>
-    </block>
-    <block wx:elif="{{screen === 'undercover'}}">
-      <view class="rg-setting-item">
-        <text class="rg-label">本环节人数</text>
-        <view class="rg-stepper-board">
-          <view
-            class="stepper-btn {{ucSizeIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
-            bindtap="onUcDecrease"
-          >-</view>
-          <text class="stepper-value">{{playerCount}}</text>
-          <view
-            class="stepper-btn {{ucSizeIndex >= 11 ? 'stepper-btn-disabled' : ''}}"
-            bindtap="onUcIncrease"
-          >+</view>
-        </view>
-      </view>
-      <view class="rg-stepper-hint">{{ucSizeHint}}</view>
-      <view class="hint" style="margin-top: var(--space-sm)">同场 v2：每环节 1 个不同词，进组后组长可再调人数。</view>
-    </block>
-    <block wx:else>
-      <view class="rg-setting-item">
-        <text class="rg-label">本环节人数</text>
-        <view class="rg-stepper-board">
-          <view class="stepper-btn {{playerCount <= 1 ? 'stepper-btn-disabled' : ''}}" bindtap="onGenericDecrease">-</view>
-          <text class="stepper-value">{{playerCount}}</text>
-          <view class="stepper-btn {{playerCount >= 20 ? 'stepper-btn-disabled' : ''}}" bindtap="onGenericIncrease">+</view>
-        </view>
-      </view>
-      <view class="rg-stepper-hint">可选 1～20 人</view>
-    </block>
+  <view class="card setup-card" wx:if="{{screen === 'werewolf'}}">
+    <view class="hint" style="line-height:1.6">无需预设人数：亲友凭口令进组，当前进组人数即本局人数（至少 6 人可开局）。</view>
   </view>
 
-  <button class="btn btn-primary main-btn" bindtap="createRoom">{{screen==='werewolf' || screen==='undercover' || screen==='songGuess' || screen==='drawGuess' || screen==='drinkParty' || screen==='headband' || screen==='dontdoit' ? '创建聚会组并进入' : '生成口令并进入'}}</button>
-  <button wx:if="{{screen !== 'undercover' && screen !== 'werewolf' && screen !== 'songGuess' && screen !== 'drawGuess' && screen!=='drinkParty' && screen!=='headband' && screen!=='dontdoit' && title !== '真心话大冒险'}}" class="btn btn-secondary main-btn" bindtap="startLocal">本机直接开始互动</button>
+  <view class="card setup-card" wx:if="{{screen === 'undercover'}}">
+    <view class="hint" style="line-height:1.6">无需预设人数：亲友凭口令进组，当前进组人数即本局人数（至少 3 人可开局）。</view>
+  </view>
+
+  <view
+    class="card setup-card"
+    wx:if="{{screen !== 'songGuess' && screen !== 'drawGuess' && screen!=='drinkParty' && screen!=='headband' && screen!=='dontdoit' && screen!=='mysteryReason' && screen !== 'werewolf' && screen !== 'undercover' && title !== '真心话大冒险'}}"
+  >
+    <view class="rg-setting-item">
+      <text class="rg-label">本环节人数</text>
+      <view class="rg-stepper-board">
+        <view class="stepper-btn {{playerCount <= 1 ? 'stepper-btn-disabled' : ''}}" bindtap="onGenericDecrease">-</view>
+        <text class="stepper-value">{{playerCount}}</text>
+        <view class="stepper-btn {{playerCount >= 20 ? 'stepper-btn-disabled' : ''}}" bindtap="onGenericIncrease">+</view>
+      </view>
+    </view>
+    <view class="rg-stepper-hint">可选 1～20 人</view>
+  </view>
+
+  <button class="btn btn-primary main-btn" bindtap="createRoom">{{screen==='werewolf' || screen==='undercover' || screen==='songGuess' || screen==='drawGuess' || screen==='drinkParty' || screen==='headband' || screen==='dontdoit' || screen==='mysteryReason' ? '创建聚会组并进入' : '生成口令并进入'}}</button>
+  <button wx:if="{{screen !== 'undercover' && screen !== 'werewolf' && screen !== 'songGuess' && screen !== 'drawGuess' && screen!=='drinkParty' && screen!=='headband' && screen!=='dontdoit' && screen!=='mysteryReason' && title !== '真心话大冒险'}}" class="btn btn-secondary main-btn" bindtap="startLocal">本机直接开始互动</button>
 </view>

@@ -1,0 +1,37 @@
+[I 2026-05-28 23:46:18,073 minium minitest#432 _miniSetUp] =========Current case: test_p0_2_no_input_ui_clean=========
+[I 2026-05-28 23:46:18,081 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_p0_2_no_input_ui_clean
+[I 2026-05-28 23:46:18,089 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-28 23:46:18,097 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-28 23:46:18,105 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-28 23:46:18,113 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-28 23:46:18,150 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-28 23:46:18,158 minium minitest#897 capture] capture setup.png
+[I 2026-05-28 23:46:18,233 minium minitest#487 _miniSetUp] =========case: test_p0_2_no_input_ui_clean start=========
+[I 2026-05-28 23:46:18,249 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-28 23:46:18,257 minium.Conn1296 connection#668 __on_message] [4dd46460-b765-4ce3-bbbd-71e141b8013d]: wx.cloud.callFunction not exists
+[I 2026-05-28 23:46:21,575 minium minitest#897 capture] capture assertFalse-success.png
+[I 2026-05-28 23:46:21,665 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-28 23:46:21,742 minium.Conn1296 connection#668 __on_message] [8d8fecdb-bdd0-4f40-8c1e-37cff9441f37]: wx.cloud.callFunction not exists
+[I 2026-05-28 23:46:25,558 minium minitest#897 capture] capture assertFalse-success_234625558075.png
+[E 2026-05-28 23:46:25,650 minium.Conn1296 connection#668 __on_message] [11a60719-ab20-4fc2-a432-28ec1ba75374]: wx.cloud.callFunction not exists
+[I 2026-05-28 23:46:28,799 minium.App3504 app#891 navigate_to] NavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22f9d11e1d6a18634d0116ba7724f77bd4%22%2C%20%22roomCode%22%3A%20%22190345%22%7D
+[I 2026-05-28 23:46:29,733 minium.App3504 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522f9d11e1d6a18634d0116ba7724f77bd4%2522%252C%2520%2522roomCode%2522%253A%2520%2522190345%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779983189728, 'webviewId': 7, 'routeEventId': '7_1779983189099', 'renderer': 'webview'}, 1779983189729]}
+[I 2026-05-28 23:46:29,736 minium.Conn1296 connection#704 _handle_async_msg] received async msg: d78df83b-d9ec-4cbe-9f4d-2e85bbbe5eb4
+[I 2026-05-28 23:46:33,896 minium page#716 _get_elements_by_css] try to get elements: input
+[W 2026-05-28 23:46:33,905 minium page#747 _get_elements_by_css] Could not found any element 'input' you need
+[I 2026-05-28 23:46:33,916 minium page#716 _get_elements_by_css] try to get elements: textarea
+[W 2026-05-28 23:46:33,929 minium page#747 _get_elements_by_css] Could not found any element 'textarea' you need
+[I 2026-05-28 23:46:33,942 minium minitest#897 capture] capture assertFalse-success_234633941881.png
+[I 2026-05-28 23:46:34,020 minium page#716 _get_elements_by_css] try to get elements: textarea
+[W 2026-05-28 23:46:34,056 minium page#747 _get_elements_by_css] Could not found any element 'textarea' you need
+[I 2026-05-28 23:46:34,065 minium page#716 _get_elements_by_css] try to get elements: .chat-input
+[W 2026-05-28 23:46:34,089 minium page#747 _get_elements_by_css] Could not found any element '.chat-input' you need
+[I 2026-05-28 23:46:34,098 minium page#716 _get_elements_by_css] try to get elements: .mr-chat
+[W 2026-05-28 23:46:34,112 minium page#747 _get_elements_by_css] Could not found any element '.mr-chat' you need
+[I 2026-05-28 23:46:34,121 minium page#716 _get_elements_by_css] try to get elements: input
+[W 2026-05-28 23:46:34,133 minium page#747 _get_elements_by_css] Could not found any element 'input' you need
+[I 2026-05-28 23:46:34,190 minium minitest#897 capture] capture assertFalse-success_234634190484.png
+[I 2026-05-28 23:46:34,268 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-28 23:46:34,276 minium minitest#897 capture] capture teardown.png
+[I 2026-05-28 23:46:34,365 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-28 23:46:34,374 minium basenative#63 wrapper] call BaseNative.get_start_up end 

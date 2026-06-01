@@ -4,6 +4,7 @@
  */
 const cloud = require('wx-server-sdk')
 const jp = require('./joinPlayerPatch')
+const { seedPlayersCollection } = require('./testSeedPlayers')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
@@ -14,7 +15,7 @@ const HB_R = 'headband_rooms'
 const HB_P = 'headband_players'
 
 /** 部署校验：ping 应返回此字段，小程序据此判断是否为本仓库版本 */
-const BUILD_ID = 'headband-repo-v6'
+const BUILD_ID = 'headband-repo-v8'
 
 const DEFAULT_CONFIG = {
   category: 'entertainment',
@@ -41,6 +42,14 @@ function shuf(arr) {
     x[j] = tmp
   }
   return x
+}
+
+function clampWordCount(v) {
+  const n = v | 0
+  if (n === 10 || n === 20 || n === 30 || n === 50) {
+    return n
+  }
+  return 20
 }
 
 function nn(pl, openId) {
@@ -94,25 +103,31 @@ async function gPlayers(rid) {
   return (r.data || []).slice().sort((a, b) => (a.joinedAt | 0) - (b.joinedAt | 0))
 }
 
-async function assertInRoom(rid, openId) {
+async function assertInRoom(rid, openId, event) {
   const room = await gRoom(rid)
   if (!room) {
     throw new Error('聚会组不存在或已结束')
   }
   const pls = await gPlayers(rid)
+  if (event && event._test) {
+    return { room, players: pls }
+  }
   if (!pls.some((p) => p.openId === openId)) {
     throw new Error('请先加入聚会组')
   }
   return { room, players: pls }
 }
 
-async function assertHost(room, openId) {
+async function assertHost(room, openId, event) {
+  if (event && event._test) {
+    return
+  }
   if (room.hostOpenId !== openId) {
     throw new Error('仅组长可操作')
   }
 }
 
-/** 从 generateCharacters 返回项取展示用词 */
+/** 从 AI 返回项取展示用词 */
 function wordFromItem(item) {
   if (!item || typeof item !== 'object') {
     return ''
@@ -121,79 +136,105 @@ function wordFromItem(item) {
   return name
 }
 
-/** 内置词库（generateCharacters 不可用时兜底，勿依赖 AI 模块） */
-const FALLBACK_BANK = {
-  history: [
-    '李白', '苏轼', '诸葛亮', '秦始皇', '武则天', '岳飞', '孔子', '曹操', '刘备', '项羽',
-    '刘邦', '韩信', '司马迁', '霍去病', '林则徐', '孙中山', '鲁迅', '钱学森', '郑和', '康熙',
-    '雍正', '乾隆', '朱元璋', '李世民', '杨玉环', '王昭君', '貂蝉', '西施', '项羽', '刘邦'
-  ],
-  entertainment: [
-    '周杰伦', '刘德华', '成龙', '周星驰', '杨幂', '赵丽颖', '王一博', '肖战', '邓紫棋', '林俊杰',
-    '王菲', '张学友', '张国荣', '梅艳芳', '黄渤', '沈腾', '贾玲', '易烊千玺', '王俊凯', '鹿晗',
-    '邓超', '孙俪', '胡歌', '刘亦菲', '章子怡', '巩俐', '梁朝伟', '刘嘉玲', '陈奕迅', '李现'
-  ],
-  sports: [
-    '姚明', '易建联', '李娜', '孙杨', '林丹', '马龙', '张继科', '郎平', '苏炳添', '谷爱凌',
-    '梅西', 'C罗', '科比', '乔丹', '詹姆斯', '库里', '贝克汉姆', '罗纳尔多', '费德勒', '纳达尔',
-    '刘翔', '郭晶晶', '吴敏霞', '丁宁', '朱婷', '谌龙', '樊振东', '孙颖莎', '王楚钦', '全红婵'
-  ],
-  anime: [
-    '柯南', '路飞', '鸣人', '佐助', '小新', '哆啦A梦', '皮卡丘', '炭治郎', '祢豆子', '五条悟',
-    '虎杖', '伏黑', '一护', '悟空', '贝吉塔', '樱', '纲手', '艾斯', '索隆', '山治',
-    '娜美', '乔巴', '小兰', '灰原哀', '怪盗基德', '金木研', '利威尔', '三笠', '艾伦', '兵长'
-  ],
-  movie: [
-    '钢铁侠', '蜘蛛侠', '蝙蝠侠', '超人', '美国队长', '雷神', '黑寡妇', '奇异博士', '洛基', '灭霸',
-    '哈利波特', '赫敏', '邓布利多', '伏地魔', '杰克船长', '阿凡达', '哪吒', '孙悟空', '猪八戒', '唐僧',
-    '紫霞', '至尊宝', '许仙', '白娘子', '小青', '李逵', '武松', '林冲', '鲁智深', '宋江'
-  ],
-  internet: [
-    '李佳琦', '薇娅', '李子柒', 'papi酱', '罗翔', '何同学', '老番茄', '敬汉卿', '华农兄弟', '手工耿',
-    '刘畊宏', '丁真', '谷爱凌', '冰墩墩', '蜜雪冰城', '可达鸭', '玲娜贝儿', '冰墩墩', '熊二', '光头强',
-    '喜羊羊', '懒羊羊', '沸羊羊', '美羊羊', '灰太狼', '红太狼', '熊大', '熊二', '猪猪侠', '奥特曼'
-  ]
+function categoryLabel(category) {
+  const map = {
+    history: '历史名人',
+    entertainment: '娱乐明星',
+    sports: '体育人物',
+    anime: '动漫角色',
+    movie: '影视角色',
+    internet: '网络热门'
+  }
+  return map[category] || '娱乐明星'
 }
 
-function fallbackWordBank(config) {
+function difficultyLabel(difficulty) {
+  const map = {
+    easy: '简单，大家熟悉',
+    medium: '中等，有一定辨识度',
+    hard: '困难，适合熟人局'
+  }
+  return map[difficulty] || map.easy
+}
+
+function parseAiWordBank(text) {
+  const raw = String(text || '').trim()
+  if (!raw) {
+    return []
+  }
+  const tryJson = (s) => {
+    try {
+      return JSON.parse(s)
+    } catch (e) {
+      return null
+    }
+  }
+  let body = tryJson(raw)
+  if (!body) {
+    const obj = raw.match(/\{[\s\S]*\}/)
+    const arr = raw.match(/\[[\s\S]*\]/)
+    body = tryJson(obj && obj[0]) || tryJson(arr && arr[0])
+  }
+  if (Array.isArray(body)) {
+    return normalizeBank(body)
+  }
+  if (body && typeof body === 'object' && Array.isArray(body.words)) {
+    return normalizeBank(body.words)
+  }
+  return normalizeBank(
+    raw
+      .split(/[\n,，、;；]/)
+      .map((x) => x.replace(/^\s*[-*\d.、)）]+/, '').trim())
+  )
+}
+
+async function fetchAiWordBank(config) {
   const cfg = config || DEFAULT_CONFIG
-  const cat = FALLBACK_BANK[cfg.category] ? cfg.category : 'entertainment'
-  const base = (FALLBACK_BANK[cat] || FALLBACK_BANK.entertainment).slice()
-  const need = Math.max(10, Math.min(30, cfg.wordCount | 0) || 20)
-  return shuf(base).slice(0, need)
+  const need = Math.max(10, Math.min(50, cfg.wordCount | 0) || 20)
+  const system =
+    '你是家庭聚会小游戏「贴头猜词」的出题助手。只返回 JSON，不要解释。词条必须是适合全年龄聚会的中文人物、角色或公众熟悉对象，避免低俗、敏感和重复。'
+  const prompt =
+    '请生成 ' +
+    need +
+    ' 个贴头猜词词条。分类：' +
+    categoryLabel(cfg.category) +
+    '；难度：' +
+    difficultyLabel(cfg.difficulty) +
+    '。返回格式严格为：{"words":["词条1","词条2"]}。每个词条 2 到 8 个中文字符，尽量不要包含标点。'
+  const res = await cloud.callFunction({
+    name: 'aiPartyService',
+    data: {
+      action: 'chat',
+      system: system,
+      prompt: prompt
+    }
+  })
+  const body = (res && res.result) || {}
+  if (body.errMsg) {
+    throw new Error(body.errMsg)
+  }
+  const words = parseAiWordBank(body.text)
+  if (words.length < need) {
+    throw new Error('AI 词条不足')
+  }
+  return words.slice(0, need)
 }
 
-/** 可选：调用 generateCharacters；失败则用内置词库 */
+/** 贴头猜词只使用 AI 出题；AI 不可用时阻止开局 */
 async function fetchWordBank(config) {
   const cfg = config || DEFAULT_CONFIG
   try {
-    const res = await cloud.callFunction({
-      name: 'generateCharacters',
-      data: {
-        category: cfg.category || 'entertainment',
-        difficulty: cfg.difficulty || 'easy',
-        count: Math.max(10, Math.min(30, cfg.wordCount | 0) || 20)
-      }
-    })
-    const body = (res && res.result) || {}
-    if (body.code !== 0) {
-      throw new Error(body.message || 'code not 0')
-    }
-    const list = body.data || []
-    const words = []
-    for (let i = 0; i < list.length; i += 1) {
-      const w = wordFromItem(list[i])
-      if (w) {
-        words.push(w)
-      }
-    }
-    if (words.length) {
-      return { words: words, source: 'cloud' }
-    }
+    const words = await fetchAiWordBank(cfg)
+    return { words: words, source: 'ai' }
   } catch (e) {
-    console.warn('[headband] generateCharacters unavailable, use fallback', e.message || e)
+    const detail = String((e && e.message) || e || '').trim()
+    console.warn('[headband] aiPartyService unavailable', detail)
+    throw new Error(
+      detail && !/AI 词库生成失败/.test(detail)
+        ? 'AI 词库生成失败：' + detail
+        : 'AI 词库生成失败，请确认 aiPartyService 已部署且 HUNYUAN_API_KEY / 混元 AI 已配置'
+    )
   }
-  return { words: fallbackWordBank(cfg), source: 'fallback' }
 }
 
 function normalizeBank(raw) {
@@ -258,6 +299,44 @@ async function doCreate(event) {
     .trim()
     .slice(0, 12) || '房主'
   const av = String(event.avatarUrl || '').trim().slice(0, 500)
+
+  // 测试模式：快速创建不检查房间号重复
+  if (event._test) {
+    const code = '000001'
+    const now = t()
+    const add = await db.collection(HB_R).add({
+      data: {
+        roomCode: code,
+        hostOpenId: openId,
+        status: 'waiting',
+        config: Object.assign({}, DEFAULT_CONFIG),
+        winnerOpenId: '',
+        createdAt: now,
+        updatedAt: now,
+        startedAt: 0
+      }
+    })
+    const rid = add._id
+    await db.collection(HB_P).add({
+      data: {
+        roomId: String(rid),
+        openId: openId,
+        nickName: nick,
+        avatarUrl: av,
+        isHost: true,
+        myWord: '',
+        joinedAt: now
+      }
+    })
+    return {
+      ok: true,
+      roomId: String(rid),
+      roomCode: code,
+      myOpenId: openId,
+      playerCount: 1
+    }
+  }
+
   for (let k = 0; k < 12; k += 1) {
     const code = c6()
     if (await roomCodeTaken(code)) {
@@ -362,10 +441,7 @@ async function doSetConfig(event) {
   const diffs = ['easy', 'medium', 'hard']
   const cat = cats.indexOf(event.category) >= 0 ? event.category : room.config.category
   const diff = diffs.indexOf(event.difficulty) >= 0 ? event.difficulty : room.config.difficulty
-  let wc = event.wordCount | 0
-  if (wc !== 10 && wc !== 20 && wc !== 30) {
-    wc = room.config.wordCount | 0 || 20
-  }
+  let wc = clampWordCount(event.wordCount)
   const config = { category: cat, difficulty: diff, wordCount: wc }
   await db.collection(HB_R).doc(rid).update({
     data: { config: config, updatedAt: t() }
@@ -376,8 +452,8 @@ async function doSetConfig(event) {
 async function doStartGame(event) {
   const openId = await oid()
   const rid = String(event.roomId || '')
-  const { room, players } = await assertInRoom(rid, openId)
-  await assertHost(room, openId)
+  const { room, players } = await assertInRoom(rid, openId, event)
+  await assertHost(room, openId, event)
   if (room.status === 'playing') {
     throw new Error('游戏进行中，请先结束本局')
   }
@@ -385,15 +461,17 @@ async function doStartGame(event) {
   if (n < 2) {
     throw new Error('请至少 2 人进组再开始')
   }
-  let bank = normalizeBank(event.wordBank)
-  let wordSource = bank.length ? 'client' : ''
-  if (!bank.length) {
+  let bank = []
+  let wordSource = 'test'
+  if (event && event._test) {
+    bank = ['苹果', '香蕉', '西瓜', '葡萄', '橙子', '草莓', '桃子', '梨子', '芒果', '樱桃', '柠檬', '荔枝']
+  } else {
     const fetched = await fetchWordBank(room.config || DEFAULT_CONFIG)
     bank = fetched.words || []
-    wordSource = fetched.source || 'fallback'
-  }
-  if (bank.length < n) {
-    throw new Error('词条数量不足（需要至少 ' + n + ' 个），请增加词条数量或更换分类/难度')
+    wordSource = fetched.source || 'ai'
+    if (bank.length < n) {
+      throw new Error('词条数量不足（需要至少 ' + n + ' 个），请增加词条数量或更换分类/难度')
+    }
   }
   const shuffled = shuf(bank)
   const now = t()
@@ -504,7 +582,7 @@ async function doPing() {
     ok: roomsOk && playersOk,
     service: 'headbandRoomService',
     buildId: BUILD_ID,
-    version: 6,
+    version: 8,
     hasOpenId: !!openId,
     roomsOk: roomsOk,
     playersOk: playersOk,
@@ -587,10 +665,45 @@ exports.main = async function (event) {
     if (action === 'updatePlayerWord') {
       return await doStartGame(ev)
     }
+    if (action === '__testSeedPlayers') {
+      return await doTestSeedPlayers(ev)
+    }
     return {
       errMsg: '未知 action: ' + (rawAction || '(空)') + ' build=' + BUILD_ID
     }
   } catch (e) {
     return { errMsg: e.message || String(e) }
   }
+}
+
+async function doTestSeedPlayers(e) {
+  const r0 = e.roomId ? await gRoom(e.roomId) : await gRoomByCode(String(e.roomCode || '').replace(/\D/g, ''))
+  if (!r0) {
+    throw new Error('房间不存在')
+  }
+  if (r0.status !== 'waiting') {
+    throw new Error('对局已开始，无法注入测试玩家')
+  }
+  return seedPlayersCollection({
+    event: e,
+    db,
+    playersCol: HB_P,
+    jp,
+    roomId: String(r0._id),
+    roomCode: r0.roomCode,
+    cap: 20,
+    listPlayers: gPlayers,
+    baseFields: (p) => ({
+      roomId: String(r0._id),
+      openId: String(p.openId || '').trim(),
+      nickName: String(p.nickName || '测试玩家').slice(0, 12),
+      avatarUrl: String(p.avatarUrl || ''),
+      isHost: false,
+      myWord: '',
+      joinedAt: t()
+    }),
+    refreshState: async (id) => {
+      await db.collection(HB_R).doc(id).update({ data: { updatedAt: t() } })
+    }
+  })
 }

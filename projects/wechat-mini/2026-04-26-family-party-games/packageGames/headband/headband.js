@@ -1,6 +1,6 @@
 const { callHeadband } = require('../../utils/headbandCloud')
 const { enterCloudRoomOnLoad } = require('../utils/roomJoin')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const { memberCountLine, buildStartChecks } = require('../utils/roomUi')
 const { mergeLocalProfileIntoPlayers, patchLobbyUi } = require('../utils/roomMemberUi')
 const {
@@ -28,14 +28,14 @@ const {
 const lobbyReady = require('../utils/roomLobbyReady')
 const { overlayLobbyProfileReady } = lobbyReady
 const HB_OPENID_KEY = 'hb_my_open_id'
-const HB_BUILD_ID = 'headband-repo-v6'
+const HB_BUILD_ID = 'headband-repo-v8'
 
 const CATEGORY_VALUES = ['history', 'entertainment', 'sports', 'anime', 'movie', 'internet']
 const CATEGORY_LABELS = ['历史名人', '娱乐明星', '体育人物', '动漫角色', '影视角色', '网络热门']
 const DIFFICULTY_VALUES = ['easy', 'medium', 'hard']
 const DIFFICULTY_LABELS = ['简单', '中等', '困难']
-const WORD_COUNT_VALUES = [10, 20, 30]
-const WORD_COUNT_LABELS = ['10 个', '20 个', '30 个']
+const WORD_COUNT_VALUES = [10, 20, 30, 50]
+const WORD_COUNT_LABELS = ['10 个', '20 个', '30 个', '50 个']
 
 function idxOf(arr, val, fallback) {
   const i = arr.indexOf(val)
@@ -113,7 +113,7 @@ Page({
     enableShareMenus()
     tryRedeemShareFromQuery(query || {})
     this.setData({
-      nick: (wx.getStorageSync('hb_nick') || '').toString() || '参与者'
+      nick: (wx.getStorageSync('hb_nick') || '').toString() || getFallbackNickName()
     })
     const cfg = this._parseCfg(query)
     if (cfg.roomId) {
@@ -281,7 +281,7 @@ Page({
       inFinished: finished,
       categoryIdx: idxOf(CATEGORY_VALUES, cfg.category, 1),
       difficultyIdx: idxOf(DIFFICULTY_VALUES, cfg.difficulty, 0),
-      wordCountIdx: idxOf(WORD_COUNT_VALUES, cfg.wordCount | 0, 20)
+      wordCountIdx: idxOf(WORD_COUNT_VALUES, cfg.wordCount | 0, 1)
     }
 
     if (waiting) {
@@ -321,6 +321,12 @@ Page({
     }
 
     this.setData(patch)
+  },
+
+  applyTestSyncSnapshot(v) {
+    const view = v || {}
+    const oid = String(view.myOpenId || '').trim()
+    this._applyView(view, oid)
   },
 
   _syncConfigToCloud(done) {
@@ -382,7 +388,7 @@ Page({
       wx.showToast({ title: '需开通云开发', icon: 'none' })
       return
     }
-    const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const n = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('hb_nick', n)
     this.setData({ opBusy: true })
     callHeadband(withJoinProfile({ action: 'create', nickName: n }), {
@@ -415,7 +421,7 @@ Page({
       wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
-    const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const n = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('hb_nick', n)
     this.setData({ opBusy: true })
     joinRoomWithUi(
@@ -500,7 +506,7 @@ Page({
     this._ensureCloudBuild(() => {
       this.setData({ opBusy: true })
       const afterConfig = () => {
-        wx.showLoading({ title: rematch ? '正在开局…' : '正在发牌…', mask: true })
+          wx.showLoading({ title: rematch ? 'AI 正在开局…' : 'AI 正在出题…', mask: true })
         callHeadband(
           { action: 'startGame', roomId: this.data.roomId },
           {
@@ -524,12 +530,7 @@ Page({
               this.setData({ guessInput: '' })
               this._refreshView()
               wx.showToast({
-                title:
-                  r.wordSource === 'fallback'
-                    ? '已用内置词库开局'
-                    : rematch
-                      ? '新一局开始'
-                      : '游戏开始',
+                title: rematch ? 'AI 新一局开始' : 'AI 词库开局',
                 icon: 'success'
               })
             },

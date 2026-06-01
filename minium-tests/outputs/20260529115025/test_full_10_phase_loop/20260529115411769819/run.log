@@ -1,0 +1,109 @@
+[I 2026-05-29 11:54:11,773 minium minitest#432 _miniSetUp] =========Current case: test_full_10_phase_loop=========
+[I 2026-05-29 11:54:11,773 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_full_10_phase_loop
+[I 2026-05-29 11:54:11,773 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 11:54:11,773 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 11:54:11,773 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 11:54:11,773 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 11:54:11,773 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 11:54:11,785 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 11:54:11,839 minium minitest#487 _miniSetUp] =========case: test_full_10_phase_loop start=========
+[I 2026-05-29 11:54:11,839 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 11:54:11,841 minium.Conn2464 connection#668 __on_message] [0939c5f7-7f8c-47c3-8eec-937ab53314e9]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:54:14,995 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 11:54:15,067 minium minitest#897 capture] capture assertTrue-success_115415066767.png
+[E 2026-05-29 11:54:15,135 minium.Conn2464 connection#668 __on_message] [bffe3a16-3b47-4792-8021-990cbd74c234]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:54:18,508 minium minitest#897 capture] capture assertTrue-success_115418507984.png
+[E 2026-05-29 11:54:18,584 minium.Conn2464 connection#668 __on_message] [c5c2f72e-c487-46dd-bf4d-401f2aa70734]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:54:21,872 minium.App5360 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22038a06c16a190de60002d4364fcba594%22%2C%20%22roomCode%22%3A%20%22298607%22%7D
+[I 2026-05-29 11:54:22,904 minium.App5360 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522038a06c16a190de60002d4364fcba594%2522%252C%2520%2522roomCode%2522%253A%2520%2522298607%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780026862898, 'webviewId': 11, 'routeEventId': '', 'renderer': 'webview'}, 1780026862899]}
+[I 2026-05-29 11:54:22,904 minium.Conn2464 connection#704 _handle_async_msg] received async msg: 158e872c-3c6c-4b41-bff7-8a001021614a
+[E 2026-05-29 11:54:27,025 minium.Conn2464 connection#668 __on_message] [e26a1501-facb-44d4-ae7e-1f5203439064]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:54:30,860 minium minitest#897 capture] capture assertTrue-success_115430860579.png
+[E 2026-05-29 11:54:30,978 minium.Conn2464 connection#668 __on_message] [2ee85eef-4a38-4538-8e84-613ebc879fb9]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:54:35,897 minium minitest#897 capture] capture assertEqual-success.png
+[E 2026-05-29 11:54:35,979 minium.Conn2464 connection#668 __on_message] [61a59864-cfbe-4db2-9f83-1480045e5f10]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:54:39,163 minium.Conn2464 connection#668 __on_message] [fb276342-db0d-495d-b364-040311677b3b]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:54:43,924 minium.Conn2464 connection#668 __on_message] [40b6b5e8-ddb2-4dac-9c6d-6f2637d7e6ce]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:54:47,182 minium.Conn2464 connection#668 __on_message] [3228c37b-cb68-4f5c-bc2d-ed0ddef17826]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:54:52,145 minium.Conn2464 connection#668 __on_message] [dde2d27b-7f5c-45a2-9371-85bdc253b92b]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:54:57,214 minium.Conn2464 connection#668 __on_message] [7fadc22e-dd36-4c9c-bf68-2d359e592085]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:02,370 minium.Conn2464 connection#668 __on_message] [9e0b7271-4c0a-42e8-a5c4-3f1a947fc4b1]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:08,063 minium.Conn2464 connection#668 __on_message] [c64db8d5-57dc-4756-9fd8-864585c88714]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:13,770 minium.Conn2464 connection#668 __on_message] [ea34c17a-2d4d-4428-adbb-d04627d23ba0]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:18,846 minium.Conn2464 connection#668 __on_message] [d85da5b3-3756-4a02-ba14-72aff629a1d1]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:24,107 minium.Conn2464 connection#668 __on_message] [72d69f7c-0790-48e4-9b2f-a3c059d60a28]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:29,259 minium.Conn2464 connection#668 __on_message] [8bf9cfe4-e440-4eb6-a525-24dc5f6ce8a1]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:34,626 minium.Conn2464 connection#668 __on_message] [fef8ce18-25e9-4fe7-a3e7-aa3270cd5fcd]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:39,638 minium.Conn2464 connection#668 __on_message] [fc6fa7bf-6ea0-437d-8eff-cee6ae80473a]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:44,663 minium.Conn2464 connection#668 __on_message] [e4329adc-579a-4c7b-9e55-0751383fa60e]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:49,622 minium.Conn2464 connection#668 __on_message] [d7bc013f-563c-4370-aa45-f3567008d776]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:55:55,188 minium.Conn2464 connection#668 __on_message] [9e907e30-c765-4f0d-8917-248c8abd41f9]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:56:00,319 minium.Conn2464 connection#668 __on_message] [815d7fa8-8b63-470d-a9c1-01e52672e917]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:56:05,391 minium.Conn2464 connection#668 __on_message] [72020e3c-12e8-42cc-894c-d72b9f6fbf20]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:56:10,665 minium.Conn2464 connection#668 __on_message] [10469277-d580-4d54-9a66-9c9c51bfc93e]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:56:15,849 minium.Conn2464 connection#668 __on_message] [a1607922-e0ef-44ef-80cd-275fd53c3675]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:56:21,156 minium.Conn2464 connection#668 __on_message] [d0d5d1ce-7dba-463d-902f-0e7271bd3355]: wx.cloud.callFunction not exists
+[E 2026-05-29 11:56:27,188 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 243, in test_full_10_phase_loop
+    self._wait_phase(page, room_id, phase, timeout=90)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 123, in _wait_phase
+    page.wait_phase(
+    ~~~~~~~~~~~~~~~^
+        phase,
+        ^^^^^^
+    ...<2 lines>...
+        room_id=room_id,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 191, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text '证据派发' not reached
+[I 2026-05-29 11:56:27,191 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 11:56:27,193 minium.App5360 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 11:56:29,353 minium.App5360 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780026989344, 'webviewId': 12, 'routeEventId': '', 'renderer': 'webview'}, 1780026989345]}
+[I 2026-05-29 11:56:29,353 minium.Conn2464 connection#704 _handle_async_msg] received async msg: 0b19c3b0-e9fa-4b97-942c-69775b311ccd
+[I 2026-05-29 11:56:30,864 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 11:56:30,958 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 11:56:30,958 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-29 11:56:30,960 minium assertbase#390 _get_stack_info] <bound method TestMysteryReasonFullClosedLoop.test_full_10_phase_loop of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_full_10_phase_loop>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 243, in test_full_10_phase_loop
+    self._wait_phase(page, room_id, phase, timeout=90)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 123, in _wait_phase
+    page.wait_phase(
+    ~~~~~~~~~~~~~~~^
+        phase,
+        ^^^^^^
+    ...<2 lines>...
+        room_id=room_id,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 191, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text '证据派发' not reached
+[W 2026-05-29 11:56:30,961 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529115025', 'case_output': './outputs/20260529115025/test_full_10_phase_loop/20260529115411769819'}
+[W 2026-05-29 11:56:30,961 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-29 11:56:30,961 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-29 11:56:30,961 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1067caba0>

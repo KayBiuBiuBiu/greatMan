@@ -1,0 +1,107 @@
+{
+    "case_name": "test_13_draw_guess_insufficient_players",
+    "run_time": "20260526 01:07:14",
+    "test_type": "TestAllGames",
+    "case_doc": "\u4f60\u753b\u6211\u731c\uff1a\u6309\u7edf\u4e006\u4eba\u76ee\u6807\u6d4b\u8bd55\u4eba\u4e0d\u8db3\u3002",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 1165, in _change_route_async\n    cmd.get_open_result(wait_timeout)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 132, in get_open_result\n    return self._open_callback.get_result()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/callback.py\", line 158, in get_result\n    return self._waiter.result()\n           ~~~~~~~~~~~~~~~~~~~^^\nminium.framework.exception.MiniCommandError: timeout\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py\", line 475, in get_result\n    return fut.result(timeout)\n           ~~~~~~~~~~^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/concurrent/futures/_base.py\", line 458, in result\n    raise TimeoutError()\nTimeoutError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 187, in test_13_draw_guess_insufficient_players\n    self._run_insufficient_then_sufficient(DrawPage, \"start_round\", \"\u4f60\u753b\u6211\u731c\")\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 120, in _run_insufficient_then_sufficient\n    info = host.create_room()\n  File \"/Users/haha/greatMan/minium-tests/pages/draw_page.py\", line 12, in create_room\n    self.open()\n    ~~~~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/pages/draw_page.py\", line 9, in open\n    return self.navigate(self.path)\n           ~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/base/base_page.py\", line 56, in navigate\n    self.app.navigate_to(target)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 892, in navigate_to\n    page = self._change_route_async(\"navigateTo\", url, is_wait_url_change)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 1173, in _change_route_async\n    if cmd.get_route_result(wait_route_done_time):\n       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 163, in get_route_result\n    raise wt\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 148, in get_route_result\n    if get_result(self._route_changed, timeout):\n       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py\", line 479, in get_result\n    raise WaitTimeoutError() from ext\nminium.utils.utils.WaitTimeoutError\n",
+    "start_timestamp": 1779728835.626113,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 187,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "WaitTimeoutError",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1779728835,
+            "datetime": "2026-05-26 01:07:15",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/pages/index/index",
+            "path": "images/teardown.png",
+            "ts": 1779728860,
+            "datetime": "2026-05-26 01:07:40",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779728860.717219,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_13_draw_guess_insufficient_players(self):\n",
+            "        \"\"\"\u4f60\u753b\u6211\u731c\uff1a\u6309\u7edf\u4e006\u4eba\u76ee\u6807\u6d4b\u8bd55\u4eba\u4e0d\u8db3\u3002\"\"\"\n",
+            "        self._run_insufficient_then_sufficient(DrawPage, \"start_round\", \"\u4f60\u753b\u6211\u731c\")\n"
+        ],
+        "start": 185
+    },
+    "filename": "result.json"
+}

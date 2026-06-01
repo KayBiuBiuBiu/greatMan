@@ -1,0 +1,53 @@
+[I 2026-05-29 00:01:34,225 minium minitest#432 _miniSetUp] =========Current case: test_vote_tie_auto_analysis=========
+[I 2026-05-29 00:01:34,237 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis
+[I 2026-05-29 00:01:34,248 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 00:01:34,261 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 00:01:34,269 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 00:01:34,277 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 00:01:34,285 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 00:01:34,294 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 00:01:34,374 minium minitest#487 _miniSetUp] =========case: test_vote_tie_auto_analysis start=========
+[I 2026-05-29 00:01:34,375 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 00:01:34,385 minium.Conn9104 connection#668 __on_message] [7ae135f1-fbbf-43f9-b154-442434cf121f]: wx.cloud.callFunction not exists
+[I 2026-05-29 00:01:37,626 minium minitest#897 capture] capture assertFalse-success.png
+[I 2026-05-29 00:01:37,693 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-29 00:01:37,764 minium.Conn9104 connection#668 __on_message] [9a343ed7-6168-4652-b5d5-f7929bbc4c54]: wx.cloud.callFunction not exists
+[I 2026-05-29 00:01:41,810 minium minitest#897 capture] capture assertFalse-success_000141810388.png
+[E 2026-05-29 00:01:41,893 minium.Conn9104 connection#668 __on_message] [a333e507-25e3-4013-8f94-d01150218a26]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:01:45,182 minium.Conn9104 connection#668 __on_message] [f5d3b5ce-d051-4904-852f-88f4fbc2756c]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:01:49,363 minium.Conn9104 connection#668 __on_message] [df163856-e298-4549-b06a-3af96aa62e32]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:01:53,653 minium.Conn9104 connection#668 __on_message] [862ac12e-90eb-4c22-8bdc-f8fc56167c6d]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:01:57,078 minium.Conn9104 connection#668 __on_message] [7ef0bfec-d18b-4d44-b882-50455035a0c8]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:02:00,586 minium.Conn9104 connection#668 __on_message] [63b0363a-59c4-4be5-9053-f5727bb326ce]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:02:07,828 minium.Conn9104 connection#668 __on_message] [69cd7b2e-9358-47f1-bae7-96e1b6e5aa48]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:02:11,867 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 295, in test_vote_tie_auto_analysis
+    self.assertIn("平票", state["state"]["reviewContent"])
+                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'reviewContent'
+[I 2026-05-29 00:02:11,872 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 00:02:11,902 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 00:02:12,036 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 00:02:12,044 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-29 00:02:12,059 minium assertbase#390 _get_stack_info] <bound method TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_vote_tie_auto_analysis>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 295, in test_vote_tie_auto_analysis
+    self.assertIn("平票", state["state"]["reviewContent"])
+                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'reviewContent'
+[W 2026-05-29 00:02:12,076 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_vote_tie_auto_analysis/20260529000134224282'}
+[W 2026-05-29 00:02:12,087 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-29 00:02:12,097 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-29 00:02:12,106 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>

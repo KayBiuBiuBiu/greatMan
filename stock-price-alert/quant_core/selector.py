@@ -728,7 +728,12 @@ def load_df(code: str, *, lookback: int = 60, cfg: dict[str, Any] | None = None)
 
 
 def get_real_score(
-    code: str, df: pd.DataFrame | None = None, cfg: dict[str, Any] | None = None
+    code: str,
+    df: pd.DataFrame | None = None,
+    cfg: dict[str, Any] | None = None,
+    financial_factors: dict[str, Any] | None = None,
+    margin_factors: dict[str, Any] | None = None,
+    top_inst_factors: dict[str, Any] | None = None,
 ) -> float:
     k = df if df is not None else load_df(code, lookback=120, cfg=cfg)
     if k is None or len(k) < 30:
@@ -751,10 +756,201 @@ def get_real_score(
         vol20 = float(k["volume"].rolling(20).mean().iloc[-1])
         volume = 7 if vol5 > vol20 * 1.2 else 4
 
-        total = (trend * 3 + box * 2 + vol * 2 + volume * 2) / 9
+        qs = _selector_quant_cfg(cfg)
+        fw = qs.get("factor_weights") if isinstance(qs, dict) else None
+        weights = fw if isinstance(fw, dict) else {}
+        w_trend = _float_cfg(weights, "trend", 3.0)
+        w_box = _float_cfg(weights, "box_position", 2.0)
+        w_vol = _float_cfg(weights, "volatility", 2.0)
+        w_volume = _float_cfg(weights, "volume_ratio", 2.0)
+        denom = max(1e-9, w_trend + w_box + w_vol + w_volume)
+        total = (
+            trend * w_trend
+            + box * w_box
+            + vol * w_vol
+            + volume * w_volume
+        ) / denom
+        total += _factor_bonus(
+            code,
+            qs,
+            weights,
+            cfg=cfg,
+            financial_factors=financial_factors,
+            margin_factors=margin_factors,
+            top_inst_factors=top_inst_factors,
+        )
         return round(min(total, 10.0), 1)
     except Exception:
         return 3.0
+
+
+def _float_cfg(box: dict[str, Any], key: str, default: float) -> float:
+    try:
+        return float(box.get(key, default))
+    except (TypeError, ValueError):
+        return float(default)
+
+
+def _as_float_or_none(v: Any) -> float | None:
+    if v is None or str(v).strip() in ("", "nan", "None"):
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def _cached_factor(
+    code: str,
+    enabled: bool,
+    provided: dict[str, Any] | None,
+    loader_name: str,
+) -> dict[str, Any]:
+    if not enabled:
+        return {}
+    if isinstance(provided, dict):
+        return provided
+    try:
+        from quote_tushare import (
+            fetch_financial_factors,
+            fetch_margin_factor,
+            fetch_moneyflow_individual,
+            fetch_moneyflow_industry,
+            fetch_top_inst_factor,
+        )
+
+        loaders = {
+            "financial": fetch_financial_factors,
+            "margin": fetch_margin_factor,
+            "top_inst": fetch_top_inst_factor,
+            "moneyflow": fetch_moneyflow_individual,
+            "industry_moneyflow": fetch_moneyflow_industry,
+        }
+        if loader_name == "industry_moneyflow":
+            from quote_tushare import load_stock_to_sw_map_for_factors
+
+            sw_map = load_stock_to_sw_map_for_factors(_project_root())
+            sw = str(sw_map.get(str(code).strip().zfill(6)[-6:] or "") or "").strip().upper()
+            if not sw:
+                return {}
+            return fetch_moneyflow_industry(sw, cache_only=True) or {}
+        return loaders[loader_name](code, cache_only=True) or {}
+    except Exception:
+        return {}
+
+
+def _factor_bonus(
+    code: str,
+    qs: dict[str, Any],
+    weights: dict[str, Any],
+    *,
+    cfg: dict[str, Any] | None = None,
+    financial_factors: dict[str, Any] | None,
+    margin_factors: dict[str, Any] | None,
+    top_inst_factors: dict[str, Any] | None,
+) -> float:
+    max_bonus = max(0.0, _float_cfg(weights, "max_bonus", 3.0))
+    if max_bonus <= 0:
+        return 0.0
+
+    bonus = 0.0
+    fin = _cached_factor(
+        code,
+        bool(qs.get("enable_financial_factors", False)),
+        financial_factors,
+        "financial",
+    )
+    if fin:
+        roe = _as_float_or_none(fin.get("roe_ttm"))
+        rev = _as_float_or_none(fin.get("revenue_yoy"))
+        if roe is not None and roe >= _float_cfg(weights, "roe_min", 0.08):
+            bonus += 1.0
+        if rev is not None and rev >= _float_cfg(weights, "revenue_yoy_min", 0.10):
+            bonus += 1.0
+
+    margin = _cached_factor(
+        code,
+        bool(qs.get("enable_margin_factors", False)),
+        margin_factors,
+        "margin",
+    )
+    mchg = _as_float_or_none(margin.get("margin_change_pct_5d")) if margin else None
+    if mchg is not None and mchg >= _float_cfg(weights, "margin_change_pct_threshold", 0.03):
+        bonus += 1.0
+
+    top = _cached_factor(
+        code,
+        bool(qs.get("enable_top_inst_factors", False)),
+        top_inst_factors,
+        "top_inst",
+    )
+    inst = _as_float_or_none(top.get("inst_buy_net")) if top else None
+    if inst is not None and inst >= _float_cfg(weights, "inst_buy_net_threshold", 1_000_000.0):
+        bonus += 1.0
+
+    if bool(qs.get("enable_moneyflow_factors", True)):
+        mf = _cached_factor(code, True, None, "moneyflow")
+        net5 = _as_float_or_none(mf.get("net_main_5d")) if mf else None
+        if net5 is not None:
+            t1 = _float_cfg(weights, "moneyflow_individual_threshold1", 5e7)
+            t2 = _float_cfg(weights, "moneyflow_individual_threshold2", 2e8)
+            if net5 > t2:
+                bonus += _float_cfg(weights, "moneyflow_individual_bonus2", 2.0)
+            elif net5 > t1:
+                bonus += _float_cfg(weights, "moneyflow_individual_bonus1", 1.0)
+
+    if bool(qs.get("enable_industry_moneyflow_factors", True)):
+        imf = _cached_factor(code, True, None, "industry_moneyflow")
+        in5 = _as_float_or_none(imf.get("net_main_5d")) if imf else None
+        if in5 is not None:
+            t1 = _float_cfg(weights, "moneyflow_industry_threshold1", 5e8)
+            t2 = _float_cfg(weights, "moneyflow_industry_threshold2", 2e9)
+            if in5 > t2:
+                bonus += _float_cfg(weights, "moneyflow_industry_bonus2", 2.0)
+            elif in5 > t1:
+                bonus += _float_cfg(weights, "moneyflow_industry_bonus1", 1.0)
+
+    if bool(qs.get("enable_hot_stock_factors", True)):
+        try:
+            from quote_tushare import is_hot_stock
+
+            if is_hot_stock(code, cache_only=True):
+                bonus += _float_cfg(weights, "hot_stock_bonus", 1.0)
+                try:
+                    from run_alert import stock_is_dual_hot_resonance
+
+                    _cfg = cfg if isinstance(cfg, dict) else {}
+                    if stock_is_dual_hot_resonance(code, _cfg):
+                        bonus += _float_cfg(weights, "hot_stock_extra_bonus", 1.0)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
+    if bool(qs.get("enable_hot_concept_factors", True)):
+        try:
+            from quote_tushare import is_hot_concept_stock
+
+            if is_hot_concept_stock(code, cache_only=True):
+                bonus += _float_cfg(weights, "hot_concept_bonus", 1.0)
+        except Exception:
+            pass
+
+    if bool(qs.get("enable_broker_recommend_factors", True)):
+        try:
+            from quote_tushare import get_broker_recommend_count
+
+            cnt = get_broker_recommend_count(code, cache_only=True)
+            c2 = int(_float_cfg(weights, "broker_recommend_count2", 5))
+            c1 = int(_float_cfg(weights, "broker_recommend_count1", 2))
+            if cnt >= c2:
+                bonus += _float_cfg(weights, "broker_recommend_bonus2", 2.0)
+            elif cnt >= c1:
+                bonus += _float_cfg(weights, "broker_recommend_bonus1", 1.0)
+        except Exception:
+            pass
+
+    return min(max_bonus, bonus)
 
 
 _SELL_STRATEGY_ACTIONS = frozenset({"risk_reduce", "stop_loss_alert", "sell_range_high"})

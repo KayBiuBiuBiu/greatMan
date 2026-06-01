@@ -1,0 +1,156 @@
+[I 2026-06-01 21:52:38,619 minium minitest#432 _miniSetUp] =========Current case: test_02_undercover_core_flow=========
+[I 2026-06-01 21:52:38,664 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_02_undercover_core_flow
+[I 2026-06-01 21:52:38,708 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:52:38,754 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 21:52:38,799 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 21:52:38,843 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 21:52:38,888 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 21:52:38,932 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 21:52:39,235 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 84d5b630-70ed-4ca5-9bd3-20e058af182e, maybe command ignore response
+[I 2026-06-01 21:52:39,247 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 8f81e33a-dcfa-49a5-be69-5b634dcc66f1, maybe command ignore response
+[I 2026-06-01 21:52:39,658 minium.Conn0464 connection#704 _handle_async_msg] received async msg: addf45b6-2161-43a7-9854-2347d39a0042, maybe command ignore response
+[I 2026-06-01 21:52:39,716 minium minitest#487 _miniSetUp] =========case: test_02_undercover_core_flow start=========
+[I 2026-06-01 21:52:39,761 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 21:52:39,934 minium.App8224 app#950 relaunch] ReLaunch: /packageGames/undercover/undercover
+[I 2026-06-01 21:52:40,980 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 8e4408b3-ffec-4a43-bf28-66b4d466df16, maybe command ignore response
+[I 2026-06-01 21:52:41,159 minium.Conn0464 connection#704 _handle_async_msg] received async msg: c59cb099-fe4f-4015-a9d3-f44c5abe8691, maybe command ignore response
+[I 2026-06-01 21:52:41,252 minium.Conn0464 connection#704 _handle_async_msg] received async msg: ec9c6034-9d68-4dd8-99ec-e0537c9501e3, maybe command ignore response
+[I 2026-06-01 21:52:41,399 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 8f49031a-db4d-40f4-8ede-ddb227c611e4
+[I 2026-06-01 21:52:41,400 minium.App8224 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780321961343, 'webviewId': 4, 'routeEventId': '4_1780321960601', 'renderer': 'webview'}, 1780321961344]}
+[I 2026-06-01 21:52:41,464 minium.Conn0464 connection#704 _handle_async_msg] received async msg: abebbe07-bbb4-4500-a9e6-5c5ec7996162, maybe command ignore response
+[I 2026-06-01 21:52:41,778 minium.Conn0464 connection#704 _handle_async_msg] received async msg: e585a105-9448-4178-b637-292050fa6339, maybe command ignore response
+[I 2026-06-01 21:52:42,251 minium.Conn0464 connection#704 _handle_async_msg] received async msg: aa633ec0-3acc-4a73-b1f4-bcc869c3be76, maybe command ignore response
+[I 2026-06-01 21:52:42,260 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 85dda07b-a2e3-4e2f-b39f-3c1a5107faca, maybe command ignore response
+[I 2026-06-01 21:52:42,316 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 312be163-6e84-48db-8e0c-8bcd54692b34, maybe command ignore response
+[I 2026-06-01 21:52:42,356 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 87dfbf92-8be0-4856-8c44-cd920afe97c9, maybe command ignore response
+[I 2026-06-01 21:52:42,402 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 8d29776b-ddf5-4310-b3ca-89fbd927b59b, maybe command ignore response
+[I 2026-06-01 21:52:42,896 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 6a746d06-31be-4337-b3c4-f58fd8bd219d, maybe command ignore response
+[I 2026-06-01 21:52:42,966 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-01 21:52:42,996 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 220244ca-d045-47a5-85d7-dd7aa2ef7bc0, maybe command ignore response
+[I 2026-06-01 21:52:43,068 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x120e2f620>]
+[I 2026-06-01 21:52:43,521 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 2dd2f9ca-31f8-4dba-926a-4371ff2378c6, maybe command ignore response
+[I 2026-06-01 21:52:43,581 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 001ad4a7-0051-4189-af86-87d09f1db212, maybe command ignore response
+[I 2026-06-01 21:52:43,875 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:52:43,925 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1212f58b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1212f62b0>]
+[I 2026-06-01 21:52:44,147 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 8ac77a8d-cf42-45f3-aaa7-ad9fa98d589a, maybe command ignore response
+[I 2026-06-01 21:52:44,872 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 07c3cd0b-052c-46d6-adb8-b3e47d31c096, maybe command ignore response
+[I 2026-06-01 21:52:44,937 minium.Conn0464 connection#704 _handle_async_msg] received async msg: e7129ab5-9b8f-4c9c-bfb4-dd693e354576, maybe command ignore response
+[E 2026-06-01 21:52:45,069 minium.Conn0464 connection#668 __on_message] [a9dd7f65-25b5-481a-8e2e-bec5e84f0501]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:52:45,113 minium.Conn0464 connection#704 _handle_async_msg] received async msg: a9dd7f65-25b5-481a-8e2e-bec5e84f0501, maybe command ignore response
+[I 2026-06-01 21:52:45,882 minium.Conn0464 connection#704 _handle_async_msg] received async msg: a6aef304-63b9-4ad0-8aa7-a4176e6da1ee, maybe command ignore response
+[I 2026-06-01 21:52:45,939 minium.Conn0464 connection#704 _handle_async_msg] received async msg: ebb0f21d-fcbd-44fd-977b-326230c1aa8d, maybe command ignore response
+[I 2026-06-01 21:52:46,001 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 634ef7e6-3439-4a32-8f64-f2bee13bf306, maybe command ignore response
+[I 2026-06-01 21:52:46,725 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 21:52:47,085 minium.Conn0464 connection#668 __on_message] [c33a67cf-f0c5-4f44-bcce-f67a463eee8f]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:52:47,287 minium.Conn0464 connection#704 _handle_async_msg] received async msg: c382bef1-2001-4c88-bde5-809b629a68ed, maybe command ignore response
+[I 2026-06-01 21:52:47,334 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 41469b17-30ce-4bad-a18d-5b35e6e5bf62, maybe command ignore response
+[I 2026-06-01 21:52:47,382 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 5a77a722-8942-4048-b4fe-481a68b47338, maybe command ignore response
+[E 2026-06-01 21:52:48,144 minium.Conn0464 connection#668 __on_message] [8932c372-6632-4935-99c5-85119822e8fe]: page.applyTestRoomBootstrap not exists
+[I 2026-06-01 21:52:48,161 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 8932c372-6632-4935-99c5-85119822e8fe, maybe command ignore response
+[I 2026-06-01 21:52:48,295 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 149cfa71-3e81-41c2-9116-19cf56073678, maybe command ignore response
+[E 2026-06-01 21:52:48,657 minium.Conn0464 connection#668 __on_message] [2d579c4a-3e6d-4a95-84a3-97f8d4e2d5cd]: page.stopInRoomPollForTest not exists
+[I 2026-06-01 21:52:49,153 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 2d579c4a-3e6d-4a95-84a3-97f8d4e2d5cd, maybe command ignore response
+[I 2026-06-01 21:52:49,303 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 87aa7c72-0edd-41c0-8d27-a26f5bce3177, maybe command ignore response
+[I 2026-06-01 21:52:49,990 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 7b44714d-bb8d-416c-a3cc-26eb464150e3, maybe command ignore response
+[E 2026-06-01 21:52:51,004 minium.Conn0464 connection#668 __on_message] [27e6d162-9fa2-477a-ac4a-b3ee172e0b53]: page destroyed
+[I 2026-06-01 21:52:51,005 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 27e6d162-9fa2-477a-ac4a-b3ee172e0b53, maybe command ignore response
+[I 2026-06-01 21:52:51,127 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 1277cb91-635f-448a-906f-4bd9d22f31f1, maybe command ignore response
+[I 2026-06-01 21:52:51,399 minium.Conn0464 connection#704 _handle_async_msg] received async msg: b789e0b4-91d1-4e25-98fd-ce6ce57386ac, maybe command ignore response
+[I 2026-06-01 21:52:51,446 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 334bbe89-a544-4538-8bdc-44b0536d1ec9, maybe command ignore response
+[I 2026-06-01 21:52:51,491 minium.Conn0464 connection#704 _handle_async_msg] received async msg: f2c65d69-f4c7-4b9a-8d13-35130d074f1e, maybe command ignore response
+[I 2026-06-01 21:52:51,931 minium.App8224 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780321971904, 'webviewId': 5, 'routeEventId': '', 'renderer': 'webview'}, 1780321971905]}
+[I 2026-06-01 21:52:51,932 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 7d01572d-1707-4c19-8fe4-47350cedf479, maybe command ignore response
+[I 2026-06-01 21:52:52,164 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 54390d68-166e-4032-b366-f94df05a539f, maybe command ignore response
+[E 2026-06-01 21:52:52,651 minium.Conn0464 connection#668 __on_message] [9490dd74-d6dc-4b64-87a0-de25795aefec]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:52:53,459 minium.Conn0464 connection#704 _handle_async_msg] received async msg: f9c1df66-8ee2-4970-a9ca-d2b928af2879, maybe command ignore response
+[I 2026-06-01 21:52:53,561 minium.Conn0464 connection#704 _handle_async_msg] received async msg: d95c20f6-3151-464d-9efc-598120be4a7c, maybe command ignore response
+[I 2026-06-01 21:52:55,220 minium.App8224 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780321975219, 'webviewId': 6, 'routeEventId': '6_1780321974717', 'renderer': 'webview'}, 1780321975219]}
+[I 2026-06-01 21:52:55,224 minium.Conn0464 connection#704 _handle_async_msg] received async msg: c315b113-6647-4d66-a6c1-eeb0dacc4994, maybe command ignore response
+[I 2026-06-01 21:52:55,329 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 6bbb033f-08ed-498b-aaa8-a26eb0880e38, maybe command ignore response
+[I 2026-06-01 21:52:55,676 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 94702ff3-0489-4e36-965a-a7edab5124d8, maybe command ignore response
+[I 2026-06-01 21:52:55,768 minium.Conn0464 connection#704 _handle_async_msg] received async msg: 485e7b23-6585-47ae-8d63-63d0d618f2a0, maybe command ignore response
+[E 2026-06-01 21:52:56,232 minium.Conn0464 connection#668 __on_message] [fdfdcd09-e011-457c-b1dd-2378bcb57157]: page.applyTestSyncSnapshot not exists
+[E 2026-06-01 21:52:56,233 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 375, in test_02_undercover_core_flow
+    self._run_dynamic_core_flow(UndercoverPage, "start_game", player_count=4)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 293, in _run_dynamic_core_flow
+    self._refresh_host(host, info.get("roomId"))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 197, in _refresh_host
+    host.refresh_lobby(cloud=self.cloud, room_id=rid)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/undercover_page.py", line 84, in refresh_lobby
+    self.try_call_page_method("applyTestSyncSnapshot", snap)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 383, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 383, in call_method
+    return self._send("Page.callMethod", {"method": method, "args": args})
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.MiniCommandError: page.applyTestSyncSnapshot not exists
+[I 2026-06-01 21:52:56,342 minium.Conn0464 connection#704 _handle_async_msg] received async msg: e3f35394-cd09-45d6-87ff-6e6ba62011eb, maybe command ignore response
+[I 2026-06-01 21:52:56,374 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:52:56,469 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 21:52:56,821 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:52:56,868 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 21:52:56,917 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_02_undercover_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_02_undercover_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 375, in test_02_undercover_core_flow
+    self._run_dynamic_core_flow(UndercoverPage, "start_game", player_count=4)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 293, in _run_dynamic_core_flow
+    self._refresh_host(host, info.get("roomId"))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 197, in _refresh_host
+    host.refresh_lobby(cloud=self.cloud, room_id=rid)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/undercover_page.py", line 84, in refresh_lobby
+    self.try_call_page_method("applyTestSyncSnapshot", snap)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 383, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 383, in call_method
+    return self._send("Page.callMethod", {"method": method, "args": args})
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.MiniCommandError: page.applyTestSyncSnapshot not exists
+[W 2026-06-01 21:52:56,964 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601215006', 'case_output': './outputs/20260601215006/test_02_undercover_core_flow/20260601215238618142'}
+[W 2026-06-01 21:52:57,009 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 21:52:57,053 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 21:52:57,098 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x120e2eba0>

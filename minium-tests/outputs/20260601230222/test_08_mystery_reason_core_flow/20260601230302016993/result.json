@@ -1,0 +1,1891 @@
+{
+    "case_name": "test_08_mystery_reason_core_flow",
+    "run_time": "20260601 23:03:02",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u522b\u540d\uff1atest_core_script_generate_and_display\uff08\u5b8c\u6574\u6d41\u7a0b\uff09",
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780326197.112757,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780326197,
+            "datetime": "2026-06-01 23:03:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780326212,
+            "datetime": "2026-06-01 23:03:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_230345270801.png",
+            "ts": 1780326225,
+            "datetime": "2026-06-01 23:03:45",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_230345375679.png",
+            "ts": 1780326225,
+            "datetime": "2026-06-01 23:03:45",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_230348310217.png",
+            "ts": 1780326228,
+            "datetime": "2026-06-01 23:03:48",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230359335883.png",
+            "ts": 1780326239,
+            "datetime": "2026-06-01 23:03:59",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertEqual-success.png",
+            "ts": 1780326246,
+            "datetime": "2026-06-01 23:04:06",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230406688079.png",
+            "ts": 1780326246,
+            "datetime": "2026-06-01 23:04:06",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230406883623.png",
+            "ts": 1780326246,
+            "datetime": "2026-06-01 23:04:06",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230406940275.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407163446.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407222271.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407447136.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407506288.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407654277.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407877678.png",
+            "ts": 1780326247,
+            "datetime": "2026-06-01 23:04:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230407979705.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230408141827.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230408250013.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230408454958.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230408571753.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230408794267.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230408847860.png",
+            "ts": 1780326248,
+            "datetime": "2026-06-01 23:04:08",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230408956471.png",
+            "ts": 1780326249,
+            "datetime": "2026-06-01 23:04:09",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230409193663.png",
+            "ts": 1780326249,
+            "datetime": "2026-06-01 23:04:09",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230409250230.png",
+            "ts": 1780326249,
+            "datetime": "2026-06-01 23:04:09",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success.png",
+            "ts": 1780326249,
+            "datetime": "2026-06-01 23:04:09",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230409741535.png",
+            "ts": 1780326249,
+            "datetime": "2026-06-01 23:04:09",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230409928689.png",
+            "ts": 1780326249,
+            "datetime": "2026-06-01 23:04:09",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230409986029.png",
+            "ts": 1780326250,
+            "datetime": "2026-06-01 23:04:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230410113876.png",
+            "ts": 1780326250,
+            "datetime": "2026-06-01 23:04:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230410311363.png",
+            "ts": 1780326250,
+            "datetime": "2026-06-01 23:04:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230410376164.png",
+            "ts": 1780326250,
+            "datetime": "2026-06-01 23:04:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230410717665.png",
+            "ts": 1780326250,
+            "datetime": "2026-06-01 23:04:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230410836901.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230411022807.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230411081961.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230411311977.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230411371448.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230411647492.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230411705192.png",
+            "ts": 1780326251,
+            "datetime": "2026-06-01 23:04:11",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230411808282.png",
+            "ts": 1780326252,
+            "datetime": "2026-06-01 23:04:12",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230412125789.png",
+            "ts": 1780326252,
+            "datetime": "2026-06-01 23:04:12",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230412231861.png",
+            "ts": 1780326252,
+            "datetime": "2026-06-01 23:04:12",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230412470313.png",
+            "ts": 1780326252,
+            "datetime": "2026-06-01 23:04:12",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230412577996.png",
+            "ts": 1780326252,
+            "datetime": "2026-06-01 23:04:12",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230412867295.png",
+            "ts": 1780326252,
+            "datetime": "2026-06-01 23:04:12",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230412932094.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230413048026.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230413234654.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230413293444.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230413517000.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230413618661.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230413806567.png",
+            "ts": 1780326253,
+            "datetime": "2026-06-01 23:04:13",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230413877668.png",
+            "ts": 1780326254,
+            "datetime": "2026-06-01 23:04:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230414118516.png",
+            "ts": 1780326254,
+            "datetime": "2026-06-01 23:04:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230414225751.png",
+            "ts": 1780326254,
+            "datetime": "2026-06-01 23:04:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230414542854.png",
+            "ts": 1780326254,
+            "datetime": "2026-06-01 23:04:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230414609531.png",
+            "ts": 1780326254,
+            "datetime": "2026-06-01 23:04:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230414836727.png",
+            "ts": 1780326254,
+            "datetime": "2026-06-01 23:04:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230414942977.png",
+            "ts": 1780326255,
+            "datetime": "2026-06-01 23:04:15",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230415126629.png",
+            "ts": 1780326255,
+            "datetime": "2026-06-01 23:04:15",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230415312218.png",
+            "ts": 1780326255,
+            "datetime": "2026-06-01 23:04:15",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230415384452.png",
+            "ts": 1780326255,
+            "datetime": "2026-06-01 23:04:15",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230415687758.png",
+            "ts": 1780326255,
+            "datetime": "2026-06-01 23:04:15",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230415746504.png",
+            "ts": 1780326255,
+            "datetime": "2026-06-01 23:04:15",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230415918394.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230416132875.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230416190908.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230416293634.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230416532315.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230416659019.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230416895399.png",
+            "ts": 1780326256,
+            "datetime": "2026-06-01 23:04:16",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230416949812.png",
+            "ts": 1780326257,
+            "datetime": "2026-06-01 23:04:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230417212559.png",
+            "ts": 1780326257,
+            "datetime": "2026-06-01 23:04:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230417320062.png",
+            "ts": 1780326257,
+            "datetime": "2026-06-01 23:04:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230417484228.png",
+            "ts": 1780326257,
+            "datetime": "2026-06-01 23:04:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230417692990.png",
+            "ts": 1780326257,
+            "datetime": "2026-06-01 23:04:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230417800661.png",
+            "ts": 1780326257,
+            "datetime": "2026-06-01 23:04:17",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230417985656.png",
+            "ts": 1780326258,
+            "datetime": "2026-06-01 23:04:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230418042394.png",
+            "ts": 1780326258,
+            "datetime": "2026-06-01 23:04:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230418318471.png",
+            "ts": 1780326258,
+            "datetime": "2026-06-01 23:04:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230418373361.png",
+            "ts": 1780326258,
+            "datetime": "2026-06-01 23:04:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230418478587.png",
+            "ts": 1780326258,
+            "datetime": "2026-06-01 23:04:18",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230418730858.png",
+            "ts": 1780326258,
+            "datetime": "2026-06-01 23:04:18",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230418838006.png",
+            "ts": 1780326259,
+            "datetime": "2026-06-01 23:04:19",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230419083991.png",
+            "ts": 1780326259,
+            "datetime": "2026-06-01 23:04:19",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230419142806.png",
+            "ts": 1780326259,
+            "datetime": "2026-06-01 23:04:19",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230419398844.png",
+            "ts": 1780326259,
+            "datetime": "2026-06-01 23:04:19",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230419465918.png",
+            "ts": 1780326259,
+            "datetime": "2026-06-01 23:04:19",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230419677930.png",
+            "ts": 1780326259,
+            "datetime": "2026-06-01 23:04:19",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success_230419831744.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230420056713.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230420115385.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230420339834.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertEqual-success_230420441646.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230420808231.png",
+            "ts": 1780326260,
+            "datetime": "2026-06-01 23:04:20",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230420869477.png",
+            "ts": 1780326261,
+            "datetime": "2026-06-01 23:04:21",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230421210638.png",
+            "ts": 1780326261,
+            "datetime": "2026-06-01 23:04:21",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230421268921.png",
+            "ts": 1780326261,
+            "datetime": "2026-06-01 23:04:21",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230421539783.png",
+            "ts": 1780326261,
+            "datetime": "2026-06-01 23:04:21",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230421596835.png",
+            "ts": 1780326261,
+            "datetime": "2026-06-01 23:04:21",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230421808029.png",
+            "ts": 1780326261,
+            "datetime": "2026-06-01 23:04:21",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230421865609.png",
+            "ts": 1780326262,
+            "datetime": "2026-06-01 23:04:22",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230422089842.png",
+            "ts": 1780326262,
+            "datetime": "2026-06-01 23:04:22",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230422151462.png",
+            "ts": 1780326262,
+            "datetime": "2026-06-01 23:04:22",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotEqual-success_230422405799.png",
+            "ts": 1780326262,
+            "datetime": "2026-06-01 23:04:22",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230427026113.png",
+            "ts": 1780326267,
+            "datetime": "2026-06-01 23:04:27",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230427090469.png",
+            "ts": 1780326267,
+            "datetime": "2026-06-01 23:04:27",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230427416116.png",
+            "ts": 1780326267,
+            "datetime": "2026-06-01 23:04:27",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertIn-success_230427477689.png",
+            "ts": 1780326267,
+            "datetime": "2026-06-01 23:04:27",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230428641113.png",
+            "ts": 1780326268,
+            "datetime": "2026-06-01 23:04:28",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230428840700.png",
+            "ts": 1780326268,
+            "datetime": "2026-06-01 23:04:28",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230428904626.png",
+            "ts": 1780326269,
+            "datetime": "2026-06-01 23:04:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230429160583.png",
+            "ts": 1780326269,
+            "datetime": "2026-06-01 23:04:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230429238100.png",
+            "ts": 1780326269,
+            "datetime": "2026-06-01 23:04:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230429413022.png",
+            "ts": 1780326269,
+            "datetime": "2026-06-01 23:04:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_230429576818.png",
+            "ts": 1780326269,
+            "datetime": "2026-06-01 23:04:29",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1780326272,
+            "datetime": "2026-06-01 23:04:32",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780326272.660989,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_08_mystery_reason_core_flow(self):\n",
+            "        \"\"\"\u522b\u540d\uff1atest_core_script_generate_and_display\uff08\u5b8c\u6574\u6d41\u7a0b\uff09\"\"\"\n",
+            "        return self.test_core_script_generate_and_display()\n"
+        ],
+        "start": 490
+    },
+    "filename": "result.json"
+}

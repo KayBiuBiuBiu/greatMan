@@ -2,12 +2,16 @@
  * 用户头像昵称：点击游戏入口时检查/补全资料（非启动自动拉取）
  * 官方能力：chooseAvatar + input type="nickname"
  */
-const { ensureCloudInit } = require('./cloudInit')
+const { ensureCloudInit, getCallFunctionConfig } = require('./cloudInit')
+const { toCloudError, isCloudInfrastructureError } = require('./cloudCallFail')
 
 /** 与需求一致的本地缓存键 */
 const STORAGE_KEY = 'userInfo'
 /** 兼容旧版缓存键 */
 const LEGACY_STORAGE_KEY = 'user_profile_cache'
+const FALLBACK_NICK_KEY = 'fallback_nick_name'
+const FALLBACK_ADJECTIVES = ['欢乐', '机智', '幸运', '活力', '可爱', '开心', '神秘', '闪亮']
+const FALLBACK_ANIMALS = ['熊猫', '海豚', '小鹿', '狐狸', '考拉', '企鹅', '兔子', '小虎']
 
 function ensureCloud() {
   return ensureCloudInit() && !!wx.cloud
@@ -50,14 +54,36 @@ function writeLocalUserInfo(profile) {
   return row
 }
 
+function randomFallbackNick() {
+  const adj = FALLBACK_ADJECTIVES[(Math.random() * FALLBACK_ADJECTIVES.length) | 0]
+  const animal = FALLBACK_ANIMALS[(Math.random() * FALLBACK_ANIMALS.length) | 0]
+  const suffix = 100 + ((Math.random() * 900) | 0)
+  return adj + animal + suffix
+}
+
+function getFallbackNickName() {
+  try {
+    const stored = String(wx.getStorageSync(FALLBACK_NICK_KEY) || '').trim()
+    if (stored) {
+      return stored.slice(0, 12)
+    }
+    const nick = randomFallbackNick()
+    wx.setStorageSync(FALLBACK_NICK_KEY, nick)
+    return nick.slice(0, 12)
+  } catch (e) {
+    return randomFallbackNick().slice(0, 12)
+  }
+}
+
 function callUserService(payload) {
   if (!ensureCloud()) {
     return Promise.reject(new Error('请先开通云开发'))
   }
   return new Promise((resolve, reject) => {
-    wx.cloud.callFunction({
+    const req = {
       name: 'userService',
       data: payload || {},
+      timeout: 15000,
       success(res) {
         const r = (res && res.result) || {}
         if (r.errMsg) {
@@ -67,17 +93,14 @@ function callUserService(payload) {
         resolve(r)
       },
       fail(err) {
-        let msg =
-          (err && err.errMsg) ||
-          (err && err.message) ||
-          '网络异常，请检查网络后重试'
-        if (msg.indexOf('users') >= 0 && msg.indexOf('集合') >= 0) {
-          msg =
-            '请先在云开发控制台创建集合 users，并重新部署 userService（见 docs/USERS_DB.md）'
-        }
-        reject(new Error(msg))
+        reject(toCloudError(err))
       }
-    })
+    }
+    const cfg = getCallFunctionConfig()
+    if (cfg && cfg.env) {
+      req.config = cfg
+    }
+    wx.cloud.callFunction(req)
   })
 }
 
@@ -102,6 +125,13 @@ function getUserInfo(options) {
       const cached = readLocalUserInfo()
       if (cached && isProfileComplete(cached)) {
         return { profile: cached, isComplete: true }
+      }
+      if (silent && isCloudInfrastructureError(err)) {
+        return {
+          profile: { openId: '', nickName: '', avatarUrl: '', updatedAt: 0 },
+          isComplete: false,
+          cloudUnavailable: true
+        }
       }
       throw err
     })
@@ -194,7 +224,7 @@ function getJoinPayload() {
   const c = readLocalUserInfo() || {}
   const nick = String(c.nickName || '').trim()
   return {
-    nickName: nick ? nick.slice(0, 12) : '匿名',
+    nickName: nick ? nick.slice(0, 12) : getFallbackNickName(),
     avatarUrl: c.avatarUrl || ''
   }
 }
@@ -234,16 +264,36 @@ function ensureUserInfo(context, callback) {
         }
         return
       }
+      if (res.cloudUnavailable) {
+        wx.showToast({
+          title: '云服务暂不可用，将用随机昵称参与',
+          icon: 'none',
+          duration: 2800
+        })
+        if (typeof callback === 'function') {
+          callback()
+        }
+        return
+      }
       // 仅游戏点击等入口调用 ensureUserInfo 时才会打开弹窗
       context._pendingUserInfoCallback = callback
       context.setData({ showUserInfoModal: true })
     })
     .catch((err) => {
       context.setData({ userInfoChecking: false })
-      wx.showToast({
-        title: (err && err.message) || '网络异常，请稍后重试',
-        icon: 'none'
-      })
+      const msg = (err && err.message) || '网络异常，请稍后重试'
+      if (isCloudInfrastructureError(err)) {
+        wx.showToast({
+          title: '云服务暂不可用，将用随机昵称参与',
+          icon: 'none',
+          duration: 2800
+        })
+        if (typeof callback === 'function') {
+          callback()
+        }
+        return
+      }
+      wx.showToast({ title: msg, icon: 'none', duration: 2800 })
     })
 }
 
@@ -279,6 +329,7 @@ module.exports = {
   uploadChosenAvatar,
   saveUserInfo,
   getJoinPayload,
+  getFallbackNickName,
   ensureUserInfo,
   completePendingAction,
   cancelPendingAction

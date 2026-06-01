@@ -1,0 +1,107 @@
+{
+    "case_name": "test_08_mystery_reason_core_flow",
+    "run_time": "20260528 15:30:53",
+    "test_type": "TestMysteryReason",
+    "case_doc": "3 \u4eba\uff08\u7ec4\u957f + 2 \u865a\u62df\u73a9\u5bb6\uff09\u5b8c\u6574\u8dd1\u901a\u5f00\u5c40\u4e0e\u5173\u952e\u9636\u6bb5\u3002",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 98, in test_08_mystery_reason_core_flow\n    self._run_core_flow(self.min_players)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 75, in _run_core_flow\n    host, info = self._host_enter_room()\n                 ~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 63, in _host_enter_room\n    raw = self._unwrap_cloud(self.cloud.create_room(MysteryReasonPage.game_key))\n                             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/utils/cloud_helper.py\", line 81, in create_room\n    raw = self.call_function(\n        service,\n    ...<6 lines>...\n        },\n    )\n  File \"/Users/haha/greatMan/minium-tests/utils/cloud_helper.py\", line 59, in call_function\n    raise RuntimeError(\n    ...<2 lines>...\n    )\nRuntimeError: Current Minium app object cannot call wx.cloud.callFunction. Please implement cloud test hooks or use UI-only mode. last_error=wx.cloud.callFunction\u672a\u5b9e\u73b0, \u8bf7\u66f4\u6362\u66f4\u65b0\u7684\u57fa\u7840\u5e93\u7248\u672c\n",
+    "start_timestamp": 1779953454.9845629,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 98,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "RuntimeError",
+    "error_value": "Current Minium app object cannot call wx.cloud.callFunction. Please implement cloud test hooks or use UI-only mode. last_error=wx.cloud.callFunction\u672a\u5b9e\u73b0, \u8bf7\u66f4\u6362\u66f4\u65b0\u7684\u57fa\u7840\u5e93\u7248\u672c",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1779953454,
+            "datetime": "2026-05-28 15:30:54",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/pages/index/index",
+            "path": "images/teardown.png",
+            "ts": 1779953455,
+            "datetime": "2026-05-28 15:30:55",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779953455.1011992,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_08_mystery_reason_core_flow(self):\n",
+            "        \"\"\"3 \u4eba\uff08\u7ec4\u957f + 2 \u865a\u62df\u73a9\u5bb6\uff09\u5b8c\u6574\u8dd1\u901a\u5f00\u5c40\u4e0e\u5173\u952e\u9636\u6bb5\u3002\"\"\"\n",
+            "        self._run_core_flow(self.min_players)\n"
+        ],
+        "start": 96
+    },
+    "filename": "result.json"
+}

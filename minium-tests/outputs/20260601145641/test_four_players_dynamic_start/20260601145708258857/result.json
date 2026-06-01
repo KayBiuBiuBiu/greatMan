@@ -1,0 +1,142 @@
+{
+    "case_name": "test_four_players_dynamic_start",
+    "run_time": "20260601 14:57:08",
+    "test_type": "TestUndercoverDynamicPlayers",
+    "case_doc": "4 \u4eba\u8fdb\u7ec4\u5373\u53ef 4 \u4eba\u5c40\uff0c\u65e0\u9700\u51d1\u6ee1 6 \u4eba\u3002",
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780297029.1867142,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_undercover",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780297029,
+            "datetime": "2026-06-01 14:57:09",
+            "use_region": false
+        },
+        {
+            "name": "assertGreaterEqual-success",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/assertGreaterEqual-success.png",
+            "ts": 1780297048,
+            "datetime": "2026-06-01 14:57:28",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780297049,
+            "datetime": "2026-06-01 14:57:29",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/teardown.png",
+            "ts": 1780297055,
+            "datetime": "2026-06-01 14:57:35",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertGreaterEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertGreaterEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780297055.82691,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_four_players_dynamic_start(self):\n",
+            "        \"\"\"4 \u4eba\u8fdb\u7ec4\u5373\u53ef 4 \u4eba\u5c40\uff0c\u65e0\u9700\u51d1\u6ee1 6 \u4eba\u3002\"\"\"\n",
+            "        page = UndercoverPage(self)\n",
+            "        info = page.create_room()\n",
+            "        self._seed(info[\"roomId\"], info[\"roomCode\"], 3)\n",
+            "        self._refresh(page, info[\"roomId\"])\n",
+            "        self._assert_can_start(page, 4, info[\"roomId\"])\n",
+            "        page.start_game()\n",
+            "        page.wait_in_word_phase(timeout=30)\n"
+        ],
+        "start": 91
+    },
+    "filename": "result.json"
+}

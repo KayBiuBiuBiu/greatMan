@@ -1,0 +1,687 @@
+[D 2026-05-29 13:16:27 minium loader#620 main] [35mcase directory path not specified, use current path[0m
+[I 2026-05-29 13:16:27 minium miniconfig#153 from_file] [32mload config from config.json[0m
+[I 2026-05-29 13:16:28 minium loader#300 run_session] [32mstart session with fork mode 
+{'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627'}
+[0m
+after load None
+g_case_list size: 1
+
+test_core_player_threshold (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_core_player_threshold)
+test_core_script_generate_and_display (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display)
+test_evidence_private_public_isolate (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_evidence_private_public_isolate)
+test_evidence_round_timing_and_idempotent (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_evidence_round_timing_and_idempotent)
+test_full_10_phase_loop (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_full_10_phase_loop)
+test_p0_1_vote_idempotent_rule (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_p0_1_vote_idempotent_rule)
+test_p0_2_no_input_ui_clean (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_p0_2_no_input_ui_clean)
+test_reconnect_state_recovery (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery)
+test_review_unlock_single_open_all_view (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_review_unlock_single_open_all_view)
+test_vote_tie_auto_analysis (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis)
+
+
+{'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[I 2026-05-29 13:16:36 minium minitest#202 init_miniprogram] [32mstart init miniprogram[0m
+[I 2026-05-29 13:16:36 minium basenative#59 wrapper] [32mcall IdeNative.start_wechat[0m
+[I 2026-05-29 13:16:36 minium basenative#63 wrapper] [32mcall IdeNative.start_wechat end None[0m
+[I 2026-05-29 13:16:36 minium wx_minium#738 launch_dev_tool] [32mStarting dev tool and launch MiniProgram project ...[0m
+[I 2026-05-29 13:16:36 minium minium_object#83 _do_shell] [32mde shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 29483[0m
+[I 2026-05-29 13:16:37 minium minium_object#101 _do_shell] [32merr:
+- initialize
+
+✖ #initialize-error: Error: EPERM: operation not permitted, open '/Users/haha/Library/Application Support/微信开发者工具/50a7d9210159a32f006158795f893857/Default/.cli'
+[0m
+[I 2026-05-29 13:16:37 minium minium_object#102 _do_shell] [32mout:
+[error] Please ensure that the IDE has been properly installed
+[0m
+[E 2026-05-29 13:16:37 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:37 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:37 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_core_player_threshold/20260529131637722835'}[0m
+[W 2026-05-29 13:16:37 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:37 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:38 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:38 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:38 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_core_script_generate_and_display/20260529131637994340'}[0m
+[W 2026-05-29 13:16:38 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:38 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:38 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:38 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:38 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_evidence_private_public_isolate/20260529131638134630'}[0m
+[W 2026-05-29 13:16:38 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:38 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:38 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:38 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:38 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_evidence_round_timing_and_idempotent/20260529131638285473'}[0m
+[W 2026-05-29 13:16:38 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:38 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:38 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:38 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:38 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_full_10_phase_loop/20260529131638449565'}[0m
+[W 2026-05-29 13:16:38 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:38 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:38 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:38 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:38 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_p0_1_vote_idempotent_rule/20260529131638575179'}[0m
+[W 2026-05-29 13:16:38 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:38 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:38 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:38 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:38 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_p0_2_no_input_ui_clean/20260529131638743930'}[0m
+[W 2026-05-29 13:16:38 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:38 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:39 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:39 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:39 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_reconnect_state_recovery/20260529131639167446'}[0m
+[W 2026-05-29 13:16:39 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:39 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:39 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:39 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:39 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_review_unlock_single_open_all_view/20260529131639308487'}[0m
+[W 2026-05-29 13:16:39 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:39 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[E 2026-05-29 13:16:39 minium assertbase#308 _get_error_info] [31mself._outcome is None, maybe a class error[0m
+[E 2026-05-29 13:16:39 minium assertbase#390 _get_stack_info] [31m<bound method MiniTest._miniClassSetUp of <class 'testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop'>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+[W 2026-05-29 13:16:39 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529131627', 'case_output': './outputs/20260529131627/test_vote_tie_auto_analysis/20260529131639545331'}[0m
+[W 2026-05-29 13:16:39 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[E 2026-05-29 13:16:39 minium utils#166 wrapper] [31mcatch error: 'TestMysteryReasonFullClosedLoop' object has no attribute 'autofix_info'[0m
+[I 2026-05-29 13:16:39 minium miniresult#143 print_shot_msg] [32m
+====================case num:10, failed num:0, error num:10====================TestMysteryReasonFullClosedLoop:test_core_player_threshold has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_core_script_generate_and_display has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_evidence_private_public_isolate has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_evidence_round_timing_and_idempotent has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_full_10_phase_loop has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_p0_1_vote_idempotent_rule has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_p0_2_no_input_ui_clean has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_reconnect_state_recovery has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_review_unlock_single_open_all_view has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_vote_tie_auto_analysis has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py", line 64, in _handleClassSetUp
+    _miniClassSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 334, in _miniClassSetUp
+    native, mini, miniprogram = init_miniprogram(cls.CONFIG)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 773, in launch_dev_tool
+    raise MiniLaunchError(err_msg)
+minium.framework.exception.MiniLaunchError: [error] Please ensure that the IDE has been properly installed
+
+
+-------------------------------------------------------------------------------
+[0m
+[I 2026-05-29 13:16:49 minium.SESSION session#67 run] [32mcase queue is empty, test complete, release None[0m
+[I 2026-05-29 13:16:50 minium minitest#89 reset_native] [32mreset_native[0m
+[I 2026-05-29 13:16:50 minium basenative#59 wrapper] [32mcall IdeNative.stop_wechat[0m
+[I 2026-05-29 13:16:50 minium basenative#63 wrapper] [32mcall IdeNative.stop_wechat end None[0m
+[I 2026-05-29 13:16:50 minium basenative#59 wrapper] [32mcall IdeNative.release[0m
+[I 2026-05-29 13:16:50 minium basenative#59 wrapper] [32mcall BaseNative.release[0m
+[I 2026-05-29 13:16:51 minium basenative#250 release] [32mNative release[0m
+[I 2026-05-29 13:16:51 minium basenative#59 wrapper] [32mcall BaseNative.release_auto_authorize[0m
+[I 2026-05-29 13:16:51 minium basenative#63 wrapper] [32mcall BaseNative.release_auto_authorize end None[0m
+[I 2026-05-29 13:16:51 minium basenative#63 wrapper] [32mcall BaseNative.release end None[0m
+[I 2026-05-29 13:16:51 minium basenative#63 wrapper] [32mcall IdeNative.release end None[0m

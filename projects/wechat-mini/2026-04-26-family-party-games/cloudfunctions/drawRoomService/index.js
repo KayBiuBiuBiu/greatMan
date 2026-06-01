@@ -1,9 +1,10 @@
 const cloud = require('wx-server-sdk')
 const jp = require('./joinPlayerPatch')
+const { seedPlayersCollection } = require('./testSeedPlayers')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
-const { pickPool, BY_ID, WORDS } = require('./words')
+const { BY_ID } = require('./words')
 
 const R = 'draw_rooms'
 const P = 'draw_players'
@@ -48,7 +49,7 @@ function wordText (o) {
   return ''
 }
 
-/** 系统词库 + AI/自定义题（currentWordText） */
+/** 当前题面：新局由 AI 生成，兼容历史房间的旧题目 ID */
 function resolveWord (room0) {
   if (!room0 || !room0.currentWordId) {
     return null
@@ -73,6 +74,81 @@ function normW (o) {
     .toLowerCase()
     .replace(/\s/g, '')
 }
+
+function parseJsonObject (text) {
+  const raw = String(text || '').trim()
+  if (!raw) {
+    return null
+  }
+  try {
+    return JSON.parse(raw)
+  } catch (e) {
+    const m = raw.match(/\{[\s\S]*\}/)
+    if (m) {
+      try {
+        return JSON.parse(m[0])
+      } catch (e2) {}
+    }
+  }
+  return null
+}
+
+function drawCategoryLabel (cat) {
+  const map = {
+    all: '随机混合',
+    daily: '日常物品',
+    food: '食物饮品',
+    animal: '动物',
+    place: '地点',
+    action: '动作'
+  }
+  return map[cat] || String(cat || '随机混合')
+}
+
+function wordFromAiText (text) {
+  const obj = parseJsonObject(text)
+  let w = ''
+  if (obj && typeof obj === 'object') {
+    w = String(obj.word || obj.title || '').trim()
+  }
+  if (!w) {
+    w = String(text || '')
+      .replace(/[《》"“”]/g, '')
+      .split(/[\n,，、;；]/)[0]
+      .trim()
+  }
+  w = w.replace(/\s+/g, '').slice(0, 8)
+  if (!w) {
+    throw new Error('AI 题目无效')
+  }
+  return { id: 'ai_' + t(), w: w }
+}
+
+async function fetchAiDrawWord (room0) {
+  const cat = drawCategoryLabel(room0 && room0.wordCategory)
+  const usedTexts = ((room0 && room0.usedWordTexts) || []).slice(-12)
+  const system =
+    '你是聚会小游戏「你画我猜」的出题助手。只返回 JSON，不要解释。题目必须适合全年龄、容易画出来、不能敏感低俗。'
+  const prompt =
+    '请生成 1 个你画我猜题目。风格：' +
+    cat +
+    '。返回格式严格为：{"word":"题目"}。题目 2 到 6 个中文字符。不要重复这些近期题目：' +
+    (usedTexts.length ? usedTexts.join('、') : '无')
+  const res = await cloud.callFunction({
+    name: 'aiPartyService',
+    data: {
+      action: 'chat',
+      system: system,
+      prompt: prompt
+    }
+  })
+  const body = (res && res.result) || {}
+  if (body.errMsg) {
+    throw new Error(body.errMsg)
+  }
+  return wordFromAiText(body.text)
+}
+
 function omitIdDeep (x) {
   if (x == null) {
     return x
@@ -312,18 +388,6 @@ function mergeStrokeIntoCanvas (canvasData, entry) {
   return list.slice(-200)
 }
 
-function pickNewWord (room) {
-  const used = new Set((room.usedWordIds || []) || [])
-  const pool = shuf(
-    pickPool(room.wordCategory || 'all').filter((w) => !used.has(w.id))
-  )
-  if (!pool.length) {
-    return null
-  }
-  const w = pool[0]
-  return w
-}
-
 async function clearCanvasDoc (roomId, canvasSeq) {
   const id = String(roomId)
   const seq = canvasSeq | 0
@@ -501,7 +565,10 @@ async function run (e) {
   if (a === 'startGame') {
     const rid = e.roomId
     const room0 = await gRoom(rid)
-    if (!room0 || room0.hostOpenId !== o) {
+    if (!room0) {
+      throw new Error('房间不存在')
+    }
+    if (!e._test && room0.hostOpenId !== o) {
       throw new Error('仅房主可开始')
     }
     if (room0.status !== 'waiting') {
@@ -512,22 +579,18 @@ async function run (e) {
       throw new Error('至少2人才能开始')
     }
     let w = null
-    const pending = String(room0.pendingWord || '').trim()
-    if (pending) {
-      w = { id: 'ai_' + t(), w: pending.slice(0, 16) }
+    if (e._test) {
+      w = { id: 'minium_test_word', word: '苹果' }
     } else {
-      w = pickNewWord(
-        Object.assign({ usedWordIds: room0.usedWordIds || [] }, room0, {
-          wordCategory: room0.wordCategory || 'all'
-        })
-      )
+      w = await fetchAiDrawWord(room0)
     }
     if (!w) {
-      throw new Error('词库不足，请改分类后重试')
+      throw new Error('AI 题目生成失败，请确认 aiPartyService 可用')
     }
     const d = drawerForRound(pls, 1, room0.totalRounds | 0)
     const now = t()
     const used1 = w && w.id ? [w.id] : []
+    const usedText1 = [wordText(w)]
     await db
       .collection(R)
       .doc(String(rid))
@@ -537,6 +600,7 @@ async function run (e) {
           currentWordId: w.id,
           currentWordText: wordText(w).slice(0, 16),
           usedWordIds: used1,
+          usedWordTexts: usedText1,
           pendingWord: '',
           updatedAt: t()
         }
@@ -630,30 +694,14 @@ async function run (e) {
       return { over: 1 }
     }
     const pls = await gPlayers(rid)
-    const w = pickWithUsed(room0)
+    const w = await fetchAiDrawWord(room0)
     if (!w) {
-      const used = (room0.usedWordIds || []).length
-      if (used >= WORDS.length) {
-        await db
-          .collection(R)
-          .doc(String(rid))
-          .update({ data: { status: 'finished', updatedAt: t() } })
-        const r5 = await gRoom(rid)
-        await setState(
-          r5,
-          {
-            currentRound: cr,
-            phase: 'finished',
-            publicLog: (g.publicLog || []).concat(['词已用尽，结束。'])
-          }
-        )
-        return { over: 1, wordsOut: 1 }
-      }
-      throw new Error('无可用新词，请重开')
+      throw new Error('AI 题目生成失败，请确认 aiPartyService 可用')
     }
     const nextR = cr + 1
     const d = drawerForRound(pls, nextR, tr)
     const usedList = (room0.usedWordIds || []).concat([w.id])
+    const usedTextList = (room0.usedWordTexts || []).concat([wordText(w)])
     const now = t()
     await db
       .collection(R)
@@ -663,6 +711,7 @@ async function run (e) {
           currentWordId: w.id,
           currentWordText: wordText(w).slice(0, 16),
           usedWordIds: usedList,
+          usedWordTexts: usedTextList,
           updatedAt: t()
         }
       })
@@ -706,12 +755,13 @@ async function run (e) {
     if (g.phase !== 'drawing') {
       throw new Error('非绘画中')
     }
-    const w = pickWithUsed(room0)
+    const w = await fetchAiDrawWord(room0)
     if (!w) {
-      throw new Error('无词可换')
+      throw new Error('AI 题目生成失败，请确认 aiPartyService 可用')
     }
     const u0 = room0.usedWordIds || []
     const usedList = Array.from(new Set(u0.concat([w.id])))
+    const usedTextList = (room0.usedWordTexts || []).concat([wordText(w)])
     const now = t()
     await db
       .collection(R)
@@ -721,6 +771,7 @@ async function run (e) {
           currentWordId: w.id,
           currentWordText: wordText(w).slice(0, 16),
           usedWordIds: usedList,
+          usedWordTexts: usedTextList,
           updatedAt: t()
         }
       })
@@ -955,7 +1006,42 @@ async function run (e) {
   if (a === 'syncState') {
     return await doSyncState(e.roomId, o)
   }
+  if (a === '__testSeedPlayers') {
+    return await doTestSeedPlayers(e)
+  }
   throw new Error('未知' + a)
+}
+
+async function doTestSeedPlayers(e) {
+  const r0 = e.roomId ? await gRoom(e.roomId) : await gRoomByCode(String(e.roomCode || '').replace(/\D/g, ''))
+  if (!r0) {
+    throw new Error('房间不存在')
+  }
+  if (r0.status !== 'waiting') {
+    throw new Error('对局已开始，无法注入测试玩家')
+  }
+  return seedPlayersCollection({
+    event: e,
+    db,
+    playersCol: P,
+    jp,
+    roomId: String(r0._id),
+    roomCode: r0.roomCode,
+    cap: 20,
+    listPlayers: gPlayers,
+    baseFields: (p) => ({
+      roomId: r0._id,
+      openId: String(p.openId || '').trim(),
+      isHost: false,
+      score: 0,
+      joinedAt: t()
+    }),
+    refreshState: async (id) => {
+      const r1 = await gRoom(id)
+      const g0 = (await gState(id)) || { roundHits: [], publicLog: [] }
+      await setState(r1, g0)
+    }
+  })
 }
 
 async function doSyncState (roomId, openId) {
@@ -982,21 +1068,6 @@ async function doSyncState (roomId, openId) {
     state,
     view
   }
-}
-
-function pickWithUsed (room0) {
-  const used = new Set((room0.usedWordIds || []) || [])
-  const cur = room0.currentWordId || ''
-  const pool0 = shuf(
-    pickPool(room0.wordCategory || 'all').filter(
-      (w) => !used.has(w.id) && w.id !== cur
-    )
-  )
-  if (pool0.length) {
-    return pool0[0]
-  }
-  const pool1 = shuf(WORDS.filter((w) => w.id !== cur && !used.has(w.id)))
-  return pool1[0] || null
 }
 
 function guessSummary (hits) {

@@ -1,0 +1,91 @@
+[I 2026-06-01 16:30:25,043 minium minitest#432 _miniSetUp] =========Current case: test_03_draw_guess_core_flow=========
+[I 2026-06-01 16:30:25,043 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_03_draw_guess_core_flow
+[I 2026-06-01 16:30:25,043 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 16:30:25,043 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 16:30:25,043 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 16:30:25,044 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 16:30:25,044 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 16:30:25,048 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 16:30:25,105 minium minitest#487 _miniSetUp] =========case: test_03_draw_guess_core_flow start=========
+[I 2026-06-01 16:30:25,105 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 16:30:25,108 minium.Conn0128 connection#668 __on_message] [04107395-0368-4df8-bba5-641ceb51be47]: wx.cloud.callFunction not exists
+[I 2026-06-01 16:30:29,891 minium.App1632 app#891 navigate_to] NavigateTo: /packageGames/draw-guess/draw-guess?roomId=93eed62b6a1d43250046c73648a53f1d&roomCode=802109
+[E 2026-06-01 16:30:39,908 minium.Conn0128 connection#668 __on_message] [9cf6a4a7-6a5e-4978-82ba-17b3f6c44f0c]: timeout
+[I 2026-06-01 16:30:39,908 minium.Conn0128 connection#704 _handle_async_msg] received async msg: 9cf6a4a7-6a5e-4978-82ba-17b3f6c44f0c
+[W 2026-06-01 16:30:39,909 minium.App1632 app#1172 _change_route_async] 可能因频繁调用navigateTo导致timeout
+[W 2026-06-01 16:30:54,894 minium.App1632 app#1180 _change_route_async] recall navigateTo
+[E 2026-06-01 16:31:04,911 minium.Conn0128 connection#668 __on_message] [fbbe2f16-a771-4863-a256-14283b253a19]: timeout
+[I 2026-06-01 16:31:04,911 minium.Conn0128 connection#704 _handle_async_msg] received async msg: fbbe2f16-a771-4863-a256-14283b253a19
+[E 2026-06-01 16:31:22,420 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 178, in test_03_draw_guess_core_flow
+    host, _ = self._run_dynamic_core_flow(DrawPage, "start_round", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 117, in _run_dynamic_core_flow
+    info = self._create_host_room(page_cls, host)
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 108, in _create_host_room
+    return host.create_room(cloud=self.cloud)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/draw_page.py", line 55, in create_room
+    return self.enter_room(info["roomId"], info["roomCode"])
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/draw_page.py", line 35, in enter_room
+    self.wait_until(
+    ~~~~~~~~~~~~~~~^
+        lambda: self.data_value("roomId"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        timeout=25,
+        ^^^^^^^^^^^
+        message="draw enter_room failed",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 314, in wait_until
+    raise AssertionError(f"{message}; last={last}")
+AssertionError: draw enter_room failed; last=None
+[I 2026-06-01 16:31:22,424 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 16:31:22,426 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 16:31:22,475 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 16:31:22,476 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 16:31:22,478 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_03_draw_guess_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_03_draw_guess_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 178, in test_03_draw_guess_core_flow
+    host, _ = self._run_dynamic_core_flow(DrawPage, "start_round", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 117, in _run_dynamic_core_flow
+    info = self._create_host_room(page_cls, host)
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 108, in _create_host_room
+    return host.create_room(cloud=self.cloud)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/draw_page.py", line 55, in create_room
+    return self.enter_room(info["roomId"], info["roomCode"])
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/draw_page.py", line 35, in enter_room
+    self.wait_until(
+    ~~~~~~~~~~~~~~~^
+        lambda: self.data_value("roomId"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        timeout=25,
+        ^^^^^^^^^^^
+        message="draw enter_room failed",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 314, in wait_until
+    raise AssertionError(f"{message}; last={last}")
+AssertionError: draw enter_room failed; last=None
+[W 2026-06-01 16:31:22,479 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601162837', 'case_output': './outputs/20260601162837/test_03_draw_guess_core_flow/20260601163025036929'}
+[W 2026-06-01 16:31:22,479 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 16:31:22,479 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 16:31:22,479 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x105cb2f90>

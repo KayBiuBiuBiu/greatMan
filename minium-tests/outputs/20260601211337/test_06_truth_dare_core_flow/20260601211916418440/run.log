@@ -1,0 +1,95 @@
+[I 2026-06-01 21:19:16,369 minium.Conn7200 connection#704 _handle_async_msg] received async msg: b5bd8d1f-8485-4e2f-9035-a7573d77b126, maybe command ignore response
+[I 2026-06-01 21:19:16,421 minium minitest#432 _miniSetUp] =========Current case: test_06_truth_dare_core_flow=========
+[I 2026-06-01 21:19:16,508 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_06_truth_dare_core_flow
+[I 2026-06-01 21:19:16,554 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:19:16,601 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 21:19:16,649 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 21:19:16,696 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 21:19:16,742 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 21:19:16,790 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 21:19:17,199 minium.Conn7200 connection#704 _handle_async_msg] received async msg: a5727892-53ac-4e04-98bb-e1095a0951ee, maybe command ignore response
+[I 2026-06-01 21:19:17,271 minium minitest#487 _miniSetUp] =========case: test_06_truth_dare_core_flow start=========
+[I 2026-06-01 21:19:17,400 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 21:19:17,663 minium.Conn7200 connection#668 __on_message] [9b18ec72-fab6-4571-9985-1249341a3c9c]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:19:17,840 minium.Conn7200 connection#704 _handle_async_msg] received async msg: e335fe50-b6fe-48c6-908b-2dc2e6aa9fa8, maybe command ignore response
+[E 2026-06-01 21:19:18,074 minium.Conn7200 connection#668 __on_message] [5abcdc8b-d0ac-4020-9736-b4f78d39f7ab]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:19:18,444 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 5abcdc8b-d0ac-4020-9736-b4f78d39f7ab, maybe command ignore response
+[I 2026-06-01 21:19:18,800 minium.Conn7200 connection#704 _handle_async_msg] received async msg: f681244c-c65c-4a72-a581-2c8a21cd4feb, maybe command ignore response
+[I 2026-06-01 21:19:19,371 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 5eeb6e72-43e5-490f-aaea-4293f8a50a16, maybe command ignore response
+[E 2026-06-01 21:19:19,457 minium.Conn7200 connection#668 __on_message] [318fdd1c-b95f-4fe5-a150-7308395262f2]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:19:19,515 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 318fdd1c-b95f-4fe5-a150-7308395262f2, maybe command ignore response
+[E 2026-06-01 21:19:20,574 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 20, in enter_room
+    self.app.reLaunch(
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'App' object has no attribute 'reLaunch'. Did you mean: 'relaunch'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 391, in test_06_truth_dare_core_flow
+    info = page.create_room(cloud=self.cloud)
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 55, in create_room
+    entered = self.enter_room(room_code)
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 25, in enter_room
+    self.open_room_mode(room_code=room_code)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 16, in open_room_mode
+    return self.navigate(url)
+           ~~~~~~~~~~~~~^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 55, in navigate
+    self.log(f"navigate: {target}")
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 45, in log
+    print(f"[{self.__class__.__name__}] {message}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+[I 2026-06-01 21:19:20,579 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:19:20,798 minium minitest#897 capture] capture teardown.png
+[E 2026-06-01 21:19:21,454 minium.Conn7200 connection#668 __on_message] [e57f4010-52e5-4a5b-b751-c38c225c8a84]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:19:21,454 minium.Conn7200 connection#704 _handle_async_msg] received async msg: e57f4010-52e5-4a5b-b751-c38c225c8a84, maybe command ignore response
+[I 2026-06-01 21:19:21,707 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:19:21,927 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 21:19:22,136 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_06_truth_dare_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_06_truth_dare_core_flow>>
+Traceback (most recent call last):
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 20, in enter_room
+    self.app.reLaunch(
+    ^^^^^^^^^^^^^^^^^
+AttributeError: 'App' object has no attribute 'reLaunch'. Did you mean: 'relaunch'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 391, in test_06_truth_dare_core_flow
+    info = page.create_room(cloud=self.cloud)
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 55, in create_room
+    entered = self.enter_room(room_code)
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 25, in enter_room
+    self.open_room_mode(room_code=room_code)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 16, in open_room_mode
+    return self.navigate(url)
+           ~~~~~~~~~~~~~^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 55, in navigate
+    self.log(f"navigate: {target}")
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 45, in log
+    print(f"[{self.__class__.__name__}] {message}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+[W 2026-06-01 21:19:22,342 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601211337', 'case_output': './outputs/20260601211337/test_06_truth_dare_core_flow/20260601211916418440'}
+[W 2026-06-01 21:19:22,569 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 21:19:23,620 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 21:19:23,826 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1040caba0>

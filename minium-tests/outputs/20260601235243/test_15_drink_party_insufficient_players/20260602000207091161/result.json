@@ -1,0 +1,152 @@
+{
+    "case_name": "test_15_drink_party_insufficient_players",
+    "run_time": "20260602 00:02:07",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780329727.7967901,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/setup.png",
+            "ts": 1780329727,
+            "datetime": "2026-06-02 00:02:07",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780329734,
+            "datetime": "2026-06-02 00:02:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_000248426582.png",
+            "ts": 1780329768,
+            "datetime": "2026-06-02 00:02:48",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_000300932953.png",
+            "ts": 1780329781,
+            "datetime": "2026-06-02 00:03:01",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/teardown.png",
+            "ts": 1780329781,
+            "datetime": "2026-06-02 00:03:01",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780329781.522132,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_15_drink_party_insufficient_players(self):\n",
+            "        self._run_insufficient_then_sufficient(\n",
+            "            DrinkPage, \"start_round\", \"\u8da3\u5473\u62bd\u7b7e\", min_players=2, insufficient=1\n",
+            "        )\n"
+        ],
+        "start": 435
+    },
+    "filename": "result.json"
+}

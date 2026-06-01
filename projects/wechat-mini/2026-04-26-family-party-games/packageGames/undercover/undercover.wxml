@@ -2,7 +2,7 @@
 <view class="page ucv2" wx:if="{{!roomId}}">
   <view class="hero rg-lobby-hero">
     <view class="hero-title">🕵️ 谁是卧底</view>
-    <view class="hero-subtitle">同场猜词：每人本机看词、投票。凭 6 位数字口令进组，至少 3 人且需凑满目标人数。</view>
+    <view class="hero-subtitle">同场猜词：每人本机看词、投票。凭 6 位数字口令进组，至少 3 人即可开局（进多少人就多少人）。</view>
   </view>
   <view class="rg-room-card">
     <view class="rg-lobby-label">昵称</view>
@@ -46,7 +46,7 @@
           <text class="rg-members-title">成员</text>
           <text class="rg-members-count muted">{{memberCountLine}}</text>
         </view>
-        <view class="rg-progress-wrap" wx:if="{{inWaiting && (state.maxPlayers || sizeList[sizeIndex])}}">
+        <view class="rg-progress-wrap" wx:if="{{inWaiting && playerProgressPct > 0 && playerProgressPct < 100}}">
           <view class="rg-progress-bar">
             <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
           </view>
@@ -78,22 +78,7 @@
     <block wx:if="{{inWaiting && view && view.isHost}}">
       <view class="rg-settings-card">
         <view class="rg-setting-item">
-          <text class="rg-label">目标人数</text>
-          <view class="rg-stepper-board">
-            <view
-              class="stepper-btn {{sizeIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
-              bindtap="onSizeDecrease"
-            >-</view>
-            <text class="stepper-value">{{sizeList[sizeIndex]}}</text>
-            <view
-              class="stepper-btn {{sizeIndex >= sizeList.length - 1 ? 'stepper-btn-disabled' : ''}}"
-              bindtap="onSizeIncrease"
-            >+</view>
-          </view>
-        </view>
-        <view class="rg-stepper-hint">{{ucSizeHint}}</view>
-        <view class="rg-setting-item">
-          <text class="rg-label">词库来源</text>
+          <text class="rg-label">出题方式</text>
           <picker
             mode="selector"
             range="{{wordSourceOptions}}"
@@ -123,7 +108,7 @@
         <view class="rg-ai-locked" wx:elif="{{aiButtonsEnabled}}">
           <button class="btn-ai ai-locked" bindtap="onAiUnlockTap">🔒 AI 生成词对</button>
         </view>
-        <view class="rg-settings-tip">仅生成预览，点「开始互动」后使用</view>
+        <view class="rg-settings-tip">{{ucSizeHint}} · 开局时由云端 AI 自动生成词对；预览仅供提前查看</view>
       </view>
       <button
         class="rg-btn-primary main-btn rg-start-btn {{canStart ? '' : 'rg-start-muted'}}"

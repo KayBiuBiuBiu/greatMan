@@ -2,7 +2,7 @@
  * 同场聚会组：成员展示、状态文案、进度
  */
 const { memberCountLine } = require('./roomUi')
-const { readLocalUserInfo } = require('../../utils/userHelper')
+const { readLocalUserInfo, getFallbackNickName } = require('../../utils/userHelper')
 const {
   patchLobbySelfReady,
   lobbyGuestReadyStats,
@@ -58,10 +58,14 @@ function enrichPlayers(pl, phase, hostOpenId) {
       ready = isHost || !!p.profileReady
       readyLabel = isHost ? '组长' : p.profileReady ? '已准备' : '未准备'
     } else if (ph !== 'waiting' && ph !== 'lobby' && ph) {
-      readyLabel = p.isAlive === false ? '暂离' : '在场'
+      if (p.isSheriff && p.isAlive !== false) {
+        readyLabel = '警长'
+      } else {
+        readyLabel = p.isAlive === false ? '暂离' : '在场'
+      }
     }
     const rawNick = (p.nickName || p.nick || '').toString().trim()
-    const nick = rawNick || '匿名'
+    const nick = rawNick || getFallbackNickName()
     const avatarUrl = (p.avatarUrl || '').toString().trim()
     return {
       openId: p.openId,
@@ -200,7 +204,7 @@ function patchLobbyUi(patch, opts, page) {
   } else if (maxPlayers > 0) {
     patch.memberCountLine = memberCountLine(n, maxPlayers)
   } else if (waiting) {
-    patch.memberCountLine = memberCountLine(n, minPlayers)
+    patch.memberCountLine = memberCountLine(n, 0, '至少 ' + minPlayers + ' 人可开始')
   } else {
     patch.memberCountLine = memberCountLine(n, 0, '至少 ' + minPlayers + ' 人可开始')
   }

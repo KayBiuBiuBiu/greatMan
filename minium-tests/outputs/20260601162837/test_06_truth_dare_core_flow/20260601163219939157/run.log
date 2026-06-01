@@ -1,0 +1,89 @@
+[I 2026-06-01 16:32:19,941 minium minitest#432 _miniSetUp] =========Current case: test_06_truth_dare_core_flow=========
+[I 2026-06-01 16:32:19,941 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_06_truth_dare_core_flow
+[I 2026-06-01 16:32:19,941 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 16:32:19,941 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 16:32:19,941 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 16:32:19,941 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 16:32:19,941 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 16:32:19,943 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 16:32:20,000 minium minitest#487 _miniSetUp] =========case: test_06_truth_dare_core_flow start=========
+[I 2026-06-01 16:32:20,000 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 16:32:20,002 minium.Conn0128 connection#668 __on_message] [faa30ec3-c221-407c-9fa5-a518d5baa412]: wx.cloud.callFunction not exists
+[I 2026-06-01 16:32:25,129 minium.App1632 app#891 navigate_to] NavigateTo: /packageGames/play/play?title=%E7%9C%9F%E5%BF%83%E8%AF%9D%E5%A4%A7%E5%86%92%E9%99%A9&config=%7B%22roomCode%22%3A%227614%22%7D
+[I 2026-06-01 16:32:26,181 minium.App1632 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/play/play', 'query': {'title': '%25E7%259C%259F%25E5%25BF%2583%25E8%25AF%259D%25E5%25A4%25A7%25E5%2586%2592%25E9%2599%25A9', 'config': '%257B%2522roomCode%2522%253A%25227614%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1780302746173, 'webviewId': 11, 'routeEventId': '11_1780302745426', 'renderer': 'webview'}, 1780302746174]}
+[I 2026-06-01 16:32:26,182 minium.Conn0128 connection#704 _handle_async_msg] received async msg: 6dfd7763-60b7-4e5d-ace7-dd3304f7ea21
+[I 2026-06-01 16:32:31,217 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 16:32:31,323 minium.Conn0128 connection#668 __on_message] [4c405124-c446-4565-9469-1f82a24fc205]: wx.cloud.callFunction not exists
+[E 2026-06-01 16:32:34,635 minium.Conn0128 connection#668 __on_message] [c0f73825-959e-418e-a617-f4e1df694d90]: wx.cloud.callFunction not exists
+[E 2026-06-01 16:32:38,206 minium.Conn0128 connection#668 __on_message] [b872b7f9-040e-4fc4-8b7c-15d2509c107d]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:38,209 minium.Conn0128 connection#668 __on_message] [8b8d2c00-1316-4d54-93f8-7ee5af7c76e5]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:38,211 minium.Conn0128 connection#668 __on_message] [9cb8fa30-759d-451e-bd66-ed9d37032a49]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:39,431 minium.Conn0128 connection#668 __on_message] [a0dc4f68-2bed-4296-a498-a72050dd585b]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:39,434 minium.Conn0128 connection#668 __on_message] [efb5a2c8-8608-4c6a-a2cd-28b2ebd97f90]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:39,437 minium.Conn0128 connection#668 __on_message] [a75d421c-8f9e-4c4b-9b15-aae5c2df1769]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:41,461 minium.Conn0128 connection#668 __on_message] [89488243-7bdc-4c56-b2eb-57e07b0d490a]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:41,464 minium.Conn0128 connection#668 __on_message] [ee27741d-1be8-417e-87ab-b1352a29098c]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:41,466 minium.Conn0128 connection#668 __on_message] [0d538ceb-a672-4aab-a743-c528691b213b]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:43,483 minium.Conn0128 connection#668 __on_message] [cf9d7d4c-44a2-4611-a44a-726282503af7]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:43,485 minium.Conn0128 connection#668 __on_message] [73a1e059-1e00-4682-ad29-9b16a0657e33]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:43,489 minium.Conn0128 connection#668 __on_message] [36e4c9d2-33b5-4764-bfa3-096fa51874ab]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:45,500 minium.Conn0128 connection#668 __on_message] [64216a7a-7923-4a94-85f2-7dbdadf8f627]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:45,501 minium.Conn0128 connection#668 __on_message] [a89dcf50-6c46-494b-85bf-e25554bb5cf4]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:45,502 minium.Conn0128 connection#668 __on_message] [43324d05-1b76-49cc-b365-6ea5debd4ebb]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:47,525 minium.Conn0128 connection#668 __on_message] [a5a89714-dc9a-48c3-bef8-fbeaed800b33]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:47,529 minium.Conn0128 connection#668 __on_message] [23b9c71d-7793-4335-b27e-a8666a25d990]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:47,531 minium.Conn0128 connection#668 __on_message] [2c90f569-4f25-4997-b1fd-22c2ed918424]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:49,546 minium.Conn0128 connection#668 __on_message] [53fc947e-8d9e-44c9-bac8-4cb0a3785fce]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:49,549 minium.Conn0128 connection#668 __on_message] [43718a68-4328-4673-a94d-2d3f6c5a2994]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:49,551 minium.Conn0128 connection#668 __on_message] [563c0fd6-2a31-44a6-85ae-9ed2cc819737]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:51,571 minium.Conn0128 connection#668 __on_message] [ab76036d-bef9-4794-a5e4-eaad64d00e5f]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:51,573 minium.Conn0128 connection#668 __on_message] [1f25eddb-bb98-4379-946a-862843012a14]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:51,575 minium.Conn0128 connection#668 __on_message] [930fb433-4516-4c5e-93fc-62312ff65d19]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:53,597 minium.Conn0128 connection#668 __on_message] [8edfa2fa-6d11-4d7e-8ba2-b34db77c9661]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:53,600 minium.Conn0128 connection#668 __on_message] [c8905171-c035-493c-bf01-85147e0f4d48]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:53,603 minium.Conn0128 connection#668 __on_message] [3922a85b-d458-4287-b31e-388710946a53]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:55,616 minium.Conn0128 connection#668 __on_message] [64e5f359-03d1-4993-b870-14e90c5a1e90]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:55,617 minium.Conn0128 connection#668 __on_message] [0b015bb5-c2e6-458d-b1e7-3813a4247273]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:55,618 minium.Conn0128 connection#668 __on_message] [6c39dd49-0a26-4f65-8480-71b04b941a21]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:57,638 minium.Conn0128 connection#668 __on_message] [5799c9e7-c077-40a6-8a38-b94a678f186e]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:57,641 minium.Conn0128 connection#668 __on_message] [199ae517-5d94-4801-9a24-978bcf2e1a0a]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:57,643 minium.Conn0128 connection#668 __on_message] [0c9abe1a-99f5-4a1b-b061-24627bc8578e]: CreateListFromArrayLike called on non-object
+[E 2026-06-01 16:32:59,653 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 197, in test_06_truth_dare_core_flow
+    page.wait_member_count_at_least(4)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 224, in wait_member_count_at_least
+    raise AssertionError(
+        f"member count did not reach {count}; last={last}"
+    )
+AssertionError: member count did not reach 4; last=2
+[I 2026-06-01 16:32:59,654 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 16:32:59,656 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 16:32:59,759 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 16:32:59,759 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 16:32:59,762 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_06_truth_dare_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_06_truth_dare_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 197, in test_06_truth_dare_core_flow
+    page.wait_member_count_at_least(4)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 224, in wait_member_count_at_least
+    raise AssertionError(
+        f"member count did not reach {count}; last={last}"
+    )
+AssertionError: member count did not reach 4; last=2
+[W 2026-06-01 16:32:59,763 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601162837', 'case_output': './outputs/20260601162837/test_06_truth_dare_core_flow/20260601163219939157'}
+[W 2026-06-01 16:32:59,763 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 16:32:59,763 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 16:32:59,763 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x105cb2f90>

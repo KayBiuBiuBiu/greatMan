@@ -1,0 +1,433 @@
+[I 2026-06-01 22:08:31,331 minium minitest#432 _miniSetUp] =========Current case: test_08_mystery_reason_core_flow=========
+[W 2026-06-01 22:08:31,526 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-01 22:08:31,864 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_08_mystery_reason_core_flow
+[I 2026-06-01 22:08:32,246 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 22:08:32,429 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-01 22:08:32,619 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-01 22:08:32,768 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 62.63392400741577 seconds for it
+[E 2026-06-01 22:08:32,999 minium wx_minium#848 connect_dev_tool] [9085b0c6-6c8f-4f70-b741-9491565efc89][call App.callWxMethod] command timeout cause by connection error: Connection to remote host was lost.
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 841, in connect_dev_tool
+    self._instantiate_app(not self.start_cmd or should_relaunch)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 878, in _instantiate_app
+    self._get_system_info()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 533, in _get_system_info
+    system_info = self.get_system_info()
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 909, in get_system_info
+    self._call_wx_method("getSystemInfoSync")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 498, in _receive_response
+    raise MiniTimeoutCauseByConnectionBreakError(
+        f"[{cmd.id}][{cmd.desc}] command timeout cause by {cmd.reason}"
+    )
+minium.framework.exception.MiniTimeoutCauseByConnectionBreakError: [9085b0c6-6c8f-4f70-b741-9491565efc89][call App.callWxMethod] command timeout cause by connection error: Connection to remote host was lost.
+[I 2026-06-01 22:08:33,896 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-01 22:08:34,459 minium.Conn7632 connection#352 _connect] connect to WebChatTools successfully
+[E 2026-06-01 22:08:34,813 minium.Conn2560 connection#739 destroy] 断开连接
+[I 2026-06-01 22:08:39,692 minium.Conn2560 connection#377 _ws_run_forever] websocket run forever shutdown
+[W 2026-06-01 22:08:48,507 minium.Conn7632 connection#330 notify] no observer listening event App.initialized
+[I 2026-06-01 22:08:49,248 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f7f8401b-c243-4789-ab71-bd37d43ffdab, maybe command ignore response
+[I 2026-06-01 22:08:50,298 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4ef69bfc-58fc-4bfd-8c01-fcd775b0511c, maybe command ignore response
+[I 2026-06-01 22:08:50,299 minium.App8640 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x105798a50>
+[I 2026-06-01 22:08:50,394 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ecc838fd-0777-4b6a-b1be-92839a224629, maybe command ignore response
+[I 2026-06-01 22:08:50,873 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9daaa462-362c-4cd4-99db-1888d9b438a4, maybe command ignore response
+[I 2026-06-01 22:08:51,044 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e137e034-99a2-4e26-b9e8-1fdeffef3102, maybe command ignore response
+[I 2026-06-01 22:08:51,279 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 85380135-a212-4e4c-8454-8b252a694ead, maybe command ignore response
+[I 2026-06-01 22:08:51,455 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 188f2428-1fce-4772-994f-bd11925d572d, maybe command ignore response
+[I 2026-06-01 22:08:51,610 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 24ae25bf-5bab-425f-9edf-e38390459789, maybe command ignore response
+[I 2026-06-01 22:08:51,921 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b77b00d1-95fe-4399-a718-f25e27e5c0e6, maybe command ignore response
+[I 2026-06-01 22:08:52,067 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d4888d35-12af-4d86-b6d0-90c5b985fdb4, maybe command ignore response
+[I 2026-06-01 22:08:52,260 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 7c880ba0-2f71-4bcd-a32e-74bfd9a5bba2, maybe command ignore response
+[I 2026-06-01 22:08:52,392 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9fa5b36c-922e-4f77-8bba-0388e9a06a84, maybe command ignore response
+[I 2026-06-01 22:08:52,468 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 6fecb9e8-6e99-4228-8c9d-4083551914c4, maybe command ignore response
+[I 2026-06-01 22:08:52,752 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3206c890-b514-45f2-bd22-ff9ca0f5013c, maybe command ignore response
+[I 2026-06-01 22:08:52,968 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 46daa840-7894-4dab-adcf-4dcc787ff8db, maybe command ignore response
+[I 2026-06-01 22:08:53,104 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c593cd61-b0e3-4120-b73c-200a49c862e3, maybe command ignore response
+[I 2026-06-01 22:08:53,230 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 5aa611a2-4ea8-4b27-8bd9-3b3d37301091, maybe command ignore response
+[I 2026-06-01 22:08:53,364 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d7cc543f-34a0-4d20-b11c-d46dcfc73877, maybe command ignore response
+[I 2026-06-01 22:08:53,473 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 5977d17e-7bbf-4e99-9ba3-cd40eac18b74, maybe command ignore response
+[I 2026-06-01 22:08:53,638 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 8b98da0e-0646-4b0e-8da1-eccda4c5dc62, maybe command ignore response
+[I 2026-06-01 22:08:53,978 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 86ccafb9-ea10-49b2-9da1-f72f42d02f90, maybe command ignore response
+[I 2026-06-01 22:08:54,146 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e58a0992-66df-47f9-9217-ac80abd24061, maybe command ignore response
+[I 2026-06-01 22:08:54,419 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 7b0c62fb-a13e-4ab4-bb65-65ec74d35ccf, maybe command ignore response
+[I 2026-06-01 22:08:54,957 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 85679425-2dcc-4696-ae50-0fa43ad54758, maybe command ignore response
+[I 2026-06-01 22:08:55,306 minium.Conn7632 connection#704 _handle_async_msg] received async msg: cc28f266-8bcc-4105-b963-90dc397cb19f, maybe command ignore response
+[I 2026-06-01 22:08:55,460 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4896d80b-fb2e-463a-84eb-a69eaef01514, maybe command ignore response
+[I 2026-06-01 22:08:55,796 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4ae07543-de75-4dae-b6e5-50ef0bf48acb, maybe command ignore response
+[I 2026-06-01 22:08:55,975 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x105a95bd0>, whether should relaunch: False
+[I 2026-06-01 22:08:56,384 minium wx_minium#688 _relaunch] end relaunch app
+[W 2026-06-01 22:08:57,403 minium wx_minium#1152 wait_app_relaunch] app is relaunch complete
+[I 2026-06-01 22:08:58,503 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 22:08:59,603 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 22:09:00,605 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 22:09:01,714 minium minitest#897 capture] capture setup.png
+[W 2026-06-01 22:09:22,809 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:09:22,840 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/setup.png not exists
+[I 2026-06-01 22:09:23,215 minium minitest#487 _miniSetUp] =========case: test_08_mystery_reason_core_flow start=========
+[I 2026-06-01 22:09:23,914 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 22:09:24,045 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-01 22:09:26,174 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:09:26,323 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertTrue-success.png not exists
+[E 2026-06-01 22:09:26,464 minium.Conn7632 connection#668 __on_message] [a7c06357-c15d-4e85-89ac-4de64168feeb]: wx.cloud.callFunction not exists
+[E 2026-06-01 22:09:28,583 minium.Conn7632 connection#668 __on_message] [e1b2be2b-7373-4a42-9da2-a08717a135e2]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:09:28,671 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e1b2be2b-7373-4a42-9da2-a08717a135e2, maybe command ignore response
+[I 2026-06-01 22:09:30,826 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-06-01 22:09:32,917 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 6a4afb77-cd4a-4f0e-875f-2e6356e19c44, maybe command ignore response
+[W 2026-06-01 22:09:32,962 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:09:33,217 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertTrue-success.png not exists
+[I 2026-06-01 22:09:33,502 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-01 22:09:35,628 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:09:35,665 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertTrue-success.png not exists
+[I 2026-06-01 22:09:59,512 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-01 22:10:01,519 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:10:01,598 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertTrue-success.png not exists
+[E 2026-06-01 22:10:07,734 minium.Conn7632 connection#668 __on_message] [43a150af-dde5-4ebc-8536-d59c1b472022]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:07,883 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 43a150af-dde5-4ebc-8536-d59c1b472022, maybe command ignore response
+[E 2026-06-01 22:10:08,008 minium.Conn7632 connection#668 __on_message] [cbb4a2c6-09dd-4441-94a3-dd657a75ccfc]: timeout
+[I 2026-06-01 22:10:08,406 minium.Conn7632 connection#704 _handle_async_msg] received async msg: cbb4a2c6-09dd-4441-94a3-dd657a75ccfc, maybe command ignore response
+[E 2026-06-01 22:10:08,514 minium.Conn7632 connection#668 __on_message] [9d2fe891-62dd-4589-ae26-8d03e4a04214]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:09,578 minium.App2464 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/headband/headband', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252210f00cf26a1d929c01352e401935431e%2522%252C%2520%2522roomCode%2522%253A%2520%2522893385%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780323009523, 'webviewId': 2, 'routeEventId': '2_1780323007731', 'renderer': 'webview'}, 1780323009524]}
+[I 2026-06-01 22:10:09,595 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3baf0dfc-0acf-470b-a3da-8d1dcd629dc4, maybe command ignore response
+[I 2026-06-01 22:10:10,042 minium.Conn7632 connection#704 _handle_async_msg] received async msg: db3242db-af56-4bb0-a6d1-adadf58984cb, maybe command ignore response
+[I 2026-06-01 22:10:10,283 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3f1eaa88-dfb0-4470-9257-54d946590b51, maybe command ignore response
+[I 2026-06-01 22:10:10,414 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a82c6634-b6db-4eac-ba95-55a0d3441d2d, maybe command ignore response
+[I 2026-06-01 22:10:10,671 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e48a6cbc-67ea-4477-ba01-c13e96c8e755, maybe command ignore response
+[I 2026-06-01 22:10:10,784 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 58fb1da4-e336-4e68-90ca-b922604a5f01, maybe command ignore response
+[I 2026-06-01 22:10:10,939 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d76f4761-87a9-4890-bafe-3fd15197ebd9, maybe command ignore response
+[I 2026-06-01 22:10:10,939 minium.App2464 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/headband/headband', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252210f00cf26a1d929c01352e401935431e%2522%252C%2520%2522roomCode%2522%253A%2520%2522893385%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1780323010004, 'webviewId': 4, 'routeEventId': '4_1780323009547', 'renderer': 'webview'}, 1780323010005]}
+[I 2026-06-01 22:10:12,317 minium.App2464 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%2293eed62b6a1d929a004c38455889ef14%22%2C%20%22roomCode%22%3A%20%22367223%22%7D
+[I 2026-06-01 22:10:14,271 minium.App2464 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252293eed62b6a1d929a004c38455889ef14%2522%252C%2520%2522roomCode%2522%253A%2520%2522367223%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780323014264, 'webviewId': 5, 'routeEventId': '5_1780323013761', 'renderer': 'webview'}, 1780323014265]}
+[I 2026-06-01 22:10:14,272 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4092a2c1-1e88-4304-a61e-02f91755d9ff
+[I 2026-06-01 22:10:14,465 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9a0932e2-ae97-4c64-b70c-e6d55df31275, maybe command ignore response
+[I 2026-06-01 22:10:14,590 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ea120dc7-361e-4f60-9236-2bc748745167, maybe command ignore response
+[I 2026-06-01 22:10:14,679 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 2648d75c-ad2b-4ace-8424-cf5ff9982c9a, maybe command ignore response
+[I 2026-06-01 22:10:14,768 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 28ec634a-2254-48fd-a087-1b013020fa5f, maybe command ignore response
+[I 2026-06-01 22:10:14,877 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c4d9272c-05e9-4b35-b5a1-8679ad3c80ef, maybe command ignore response
+[I 2026-06-01 22:10:15,939 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e03d10ea-9ab5-414a-b27e-9ed9c3870592, maybe command ignore response
+[E 2026-06-01 22:10:15,942 minium.Conn7632 connection#668 __on_message] [165d01bc-e522-4ef3-9d03-22963b5d0a7f]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:15,995 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 165d01bc-e522-4ef3-9d03-22963b5d0a7f, maybe command ignore response
+[E 2026-06-01 22:10:18,598 minium.Conn7632 connection#668 __on_message] [6a0cf477-9a85-402b-8741-fa130de3d34c]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:19,167 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ecfbf563-4fe0-4e1b-94be-35b079dbe09e, maybe command ignore response
+[I 2026-06-01 22:10:19,170 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 5d16f790-26bc-4613-8795-1d0ba41bc2f3, maybe command ignore response
+[I 2026-06-01 22:10:19,285 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a79cc07c-e564-437b-a8e1-2884cb846600, maybe command ignore response
+[I 2026-06-01 22:10:20,182 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d57aaa42-9267-46e7-b268-d57e1b715a82, maybe command ignore response
+[I 2026-06-01 22:10:20,254 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b468c379-f1dc-4111-b99f-2103ef3199cb, maybe command ignore response
+[I 2026-06-01 22:10:20,358 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 65af3ac2-6e88-4394-a638-5fc6a6fcd8ef, maybe command ignore response
+[I 2026-06-01 22:10:21,266 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 2361a1af-c310-4a53-89cb-5e32d5108ae9, maybe command ignore response
+[I 2026-06-01 22:10:21,349 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 87881986-3f8d-449d-832e-8609b1c17578, maybe command ignore response
+[I 2026-06-01 22:10:21,437 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 0e57a49e-4f55-4e10-b212-a88c92bc2998, maybe command ignore response
+[I 2026-06-01 22:10:21,671 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 22:10:21,886 minium.Conn7632 connection#668 __on_message] [cfeb2715-7f15-42bb-af90-7c0e5e7ec7a3]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:22,687 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 8caa573e-03f4-4d87-ba0b-6e0b6e7c8bb3, maybe command ignore response
+[I 2026-06-01 22:10:22,799 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 96186dd5-444b-4615-b55e-538505545cda, maybe command ignore response
+[I 2026-06-01 22:10:22,930 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 68ce1e35-32f1-4fce-bb3a-8cbda28a90cb, maybe command ignore response
+[I 2026-06-01 22:10:23,345 minium.Conn7632 connection#704 _handle_async_msg] received async msg: bd6b5143-54c6-4b98-89b9-ce015720fb50, maybe command ignore response
+[I 2026-06-01 22:10:23,366 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 0212986e-4d51-43e5-8c3d-70b57a119ec4, maybe command ignore response
+[I 2026-06-01 22:10:23,448 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1e19d6ac-33c2-4839-9495-a7a16941e905, maybe command ignore response
+[I 2026-06-01 22:10:24,378 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3a674a8c-415e-4b76-952a-2930dd64c15e, maybe command ignore response
+[I 2026-06-01 22:10:24,460 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b4c2fc6f-83f0-403c-a059-5cbb8c1d6f83, maybe command ignore response
+[I 2026-06-01 22:10:24,553 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 81a7ef9a-985f-41c9-b1ef-2fde34dba860, maybe command ignore response
+[I 2026-06-01 22:10:25,477 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 11fe8419-dc5e-49f4-9cf5-7724dd2150b4, maybe command ignore response
+[I 2026-06-01 22:10:25,556 minium.Conn7632 connection#704 _handle_async_msg] received async msg: db177c65-4fc7-4633-b3fb-5546b8b2646c, maybe command ignore response
+[I 2026-06-01 22:10:26,185 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 91b18dae-5035-4055-9189-3e688a8e6fa5, maybe command ignore response
+[I 2026-06-01 22:10:26,201 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 861a371f-ba30-472f-8b7e-606868a0649a, maybe command ignore response
+[I 2026-06-01 22:10:26,408 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e949f139-0080-4d49-b895-a4b9eb445f51, maybe command ignore response
+[E 2026-06-01 22:10:26,809 minium.Conn7632 connection#668 __on_message] [6dd66d36-6637-4d2f-94cf-d8dd1fa10e2e]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:26,906 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 6dd66d36-6637-4d2f-94cf-d8dd1fa10e2e, maybe command ignore response
+[E 2026-06-01 22:10:27,037 minium.Conn7632 connection#668 __on_message] [1e79eb56-2da7-496a-af23-8b821d725706]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:29,173 minium.Conn7632 connection#704 _handle_async_msg] received async msg: df43f77f-f702-48e9-969a-4b629a6b32ca, maybe command ignore response
+[I 2026-06-01 22:10:29,792 minium.Conn7632 connection#704 _handle_async_msg] received async msg: befc6fa8-528e-432e-9cfe-0e35dab9a7f9, maybe command ignore response
+[E 2026-06-01 22:10:29,795 minium.Conn7632 connection#668 __on_message] [e54bb0b4-7043-4eb7-a9ca-052727c6f9a6]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:29,919 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e54bb0b4-7043-4eb7-a9ca-052727c6f9a6, maybe command ignore response
+[I 2026-06-01 22:10:30,341 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-06-01 22:10:30,583 minium minitest#897 capture] capture assertTrue-success_221030583306.png
+[I 2026-06-01 22:10:30,750 minium minitest#897 capture] capture assertTrue-success_221030749231.png
+[I 2026-06-01 22:10:31,460 minium minitest#897 capture] capture assertTrue-success_221031460462.png
+[I 2026-06-01 22:10:31,859 minium minitest#897 capture] capture assertTrue-success_221031858874.png
+[I 2026-06-01 22:10:32,150 minium minitest#897 capture] capture assertTrue-success_221032149909.png
+[E 2026-06-01 22:10:32,625 minium.Conn7632 connection#668 __on_message] [1e5177e7-484c-4342-8cb0-fc38d06a3f85]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:32,627 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1e5177e7-484c-4342-8cb0-fc38d06a3f85, maybe command ignore response
+[I 2026-06-01 22:10:32,712 minium minitest#897 capture] capture assertTrue-success_221032711319.png
+[I 2026-06-01 22:10:33,490 minium minitest#897 capture] capture assertTrue-success_221033490165.png
+[I 2026-06-01 22:10:33,998 minium minitest#897 capture] capture assertTrue-success_221033996590.png
+[I 2026-06-01 22:10:34,334 minium minitest#897 capture] capture assertTrue-success_221034334372.png
+[I 2026-06-01 22:10:34,837 minium minitest#897 capture] capture assertTrue-success_221034837271.png
+[I 2026-06-01 22:10:35,027 minium minitest#897 capture] capture assertTrue-success_221035027824.png
+[I 2026-06-01 22:10:36,015 minium minitest#897 capture] capture assertTrue-success_221036015382.png
+[I 2026-06-01 22:10:36,050 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9b16d455-3aa0-447a-9f1a-0a1aed21210d, maybe command ignore response
+[I 2026-06-01 22:10:36,189 minium minitest#897 capture] capture assertNotIn-success.png
+[I 2026-06-01 22:10:37,581 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f4765aab-fdb3-46d1-8e5d-fdd2de114032, maybe command ignore response
+[I 2026-06-01 22:10:37,594 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e5449e14-c71a-47a8-8af4-f7f2960fcfb0, maybe command ignore response
+[I 2026-06-01 22:10:37,771 minium minitest#897 capture] capture assertNotIn-success_221037770888.png
+[I 2026-06-01 22:10:39,763 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1423bd9e-c544-491b-9351-6b462f77f6db, maybe command ignore response
+[W 2026-06-01 22:10:39,867 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:10:39,933 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotIn-success_221037770888.png not exists
+[I 2026-06-01 22:10:40,042 minium minitest#897 capture] capture assertNotIn-success_221040035676.png
+[I 2026-06-01 22:10:40,696 minium.Conn7632 connection#704 _handle_async_msg] received async msg: fe2486d4-cf2e-4c1d-b5f4-fcf949129938, maybe command ignore response
+[E 2026-06-01 22:10:40,698 minium.Conn7632 connection#668 __on_message] [f04ae7b7-5667-40d2-b088-7f29cfda9db1]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:40,747 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f04ae7b7-5667-40d2-b088-7f29cfda9db1, maybe command ignore response
+[W 2026-06-01 22:10:42,199 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:10:42,199 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotIn-success_221040035676.png not exists
+[I 2026-06-01 22:10:42,338 minium minitest#897 capture] capture assertNotIn-success_221042338327.png
+[I 2026-06-01 22:10:42,674 minium minitest#897 capture] capture assertNotIn-success_221042674435.png
+[I 2026-06-01 22:10:43,142 minium minitest#897 capture] capture assertNotIn-success_221043142125.png
+[I 2026-06-01 22:10:43,498 minium minitest#897 capture] capture assertNotIn-success_221043492090.png
+[I 2026-06-01 22:10:43,958 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ee45a520-4b32-429a-be87-c2abd5f6beaa, maybe command ignore response
+[I 2026-06-01 22:10:44,238 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f2157dd0-4de1-4664-81fd-20cb1ca59438, maybe command ignore response
+[E 2026-06-01 22:10:44,252 minium.Conn7632 connection#668 __on_message] [d2aabcb8-314b-411a-a233-8609993733bb]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:44,463 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d2aabcb8-314b-411a-a233-8609993733bb, maybe command ignore response
+[W 2026-06-01 22:10:45,632 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:10:45,742 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotIn-success_221043492090.png not exists
+[I 2026-06-01 22:10:45,894 minium minitest#897 capture] capture assertNotIn-success_221045894259.png
+[I 2026-06-01 22:10:46,425 minium minitest#897 capture] capture assertIn-success.png
+[I 2026-06-01 22:10:46,730 minium minitest#897 capture] capture assertIn-success_221046730669.png
+[I 2026-06-01 22:10:47,053 minium minitest#897 capture] capture assertIn-success_221047043027.png
+[I 2026-06-01 22:10:47,333 minium minitest#897 capture] capture assertTrue-success_221047333236.png
+[I 2026-06-01 22:10:47,370 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 784622c7-b571-41a7-9a2a-046361b8e352, maybe command ignore response
+[E 2026-06-01 22:10:47,611 minium.Conn7632 connection#668 __on_message] [076e6f19-7b60-4707-9855-3e8e3f940381]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:48,106 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 076e6f19-7b60-4707-9855-3e8e3f940381, maybe command ignore response
+[I 2026-06-01 22:10:48,202 minium minitest#897 capture] capture assertTrue-success_221048202603.png
+[I 2026-06-01 22:10:48,559 minium minitest#897 capture] capture assertTrue-success_221048558775.png
+[I 2026-06-01 22:10:48,897 minium minitest#897 capture] capture assertTrue-success_221048897499.png
+[I 2026-06-01 22:10:49,568 minium minitest#897 capture] capture assertTrue-success_221049568266.png
+[I 2026-06-01 22:10:49,948 minium minitest#897 capture] capture assertTrue-success_221049948531.png
+[I 2026-06-01 22:10:50,228 minium minitest#897 capture] capture assertTrue-success_221050228413.png
+[I 2026-06-01 22:10:50,356 minium minitest#897 capture] capture assertTrue-success_221050356415.png
+[I 2026-06-01 22:10:51,807 minium minitest#897 capture] capture assertTrue-success_221051804645.png
+[I 2026-06-01 22:10:52,158 minium.App2464 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25226cb23a706a1d92e300b29c21374a6520%2522%252C%2520%2522roomCode%2522%253A%2520%2522556104%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780323052148, 'webviewId': 6, 'routeEventId': '', 'renderer': 'webview'}, 1780323052148]}
+[I 2026-06-01 22:10:52,161 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ed280e62-486b-43f7-ac45-c602bfe8fd83, maybe command ignore response
+[I 2026-06-01 22:10:52,661 minium minitest#897 capture] capture assertTrue-success_221052661795.png
+[I 2026-06-01 22:10:53,114 minium minitest#897 capture] capture assertTrue-success_221053114099.png
+[I 2026-06-01 22:10:53,229 minium minitest#897 capture] capture assertNotIn-success_221053229150.png
+[I 2026-06-01 22:10:53,742 minium minitest#897 capture] capture assertNotIn-success_221053741572.png
+[I 2026-06-01 22:10:54,106 minium minitest#897 capture] capture assertNotIn-success_221054106655.png
+[I 2026-06-01 22:10:54,311 minium minitest#897 capture] capture assertNotIn-success_221054296665.png
+[I 2026-06-01 22:10:54,626 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ed0ac40f-33e9-4a3a-8354-6602734ac392, maybe command ignore response
+[I 2026-06-01 22:10:54,653 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3f62ecbf-00f4-4b92-8b92-97faeed736b7, maybe command ignore response
+[I 2026-06-01 22:10:54,735 minium.Conn7632 connection#704 _handle_async_msg] received async msg: cd69dcab-d7bb-475b-80d7-a33c4abc916d, maybe command ignore response
+[I 2026-06-01 22:10:54,907 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c80661b5-6596-45a9-9172-24f2b7a9880f, maybe command ignore response
+[I 2026-06-01 22:10:54,999 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 5a5d46ff-25e6-4c29-b1a7-e026af2bcbfa, maybe command ignore response
+[I 2026-06-01 22:10:55,165 minium minitest#897 capture] capture assertNotIn-success_221055164583.png
+[I 2026-06-01 22:10:55,757 minium minitest#897 capture] capture assertNotIn-success_221055755342.png
+[I 2026-06-01 22:10:56,109 minium minitest#897 capture] capture assertNotIn-success_221056109645.png
+[I 2026-06-01 22:10:56,275 minium minitest#897 capture] capture assertNotIn-success_221056275113.png
+[I 2026-06-01 22:10:56,667 minium minitest#897 capture] capture assertIn-success_221056667225.png
+[I 2026-06-01 22:10:56,710 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9c022142-26a3-4680-aba6-c59242a9c9e2, maybe command ignore response
+[E 2026-06-01 22:10:57,293 minium.Conn7632 connection#668 __on_message] [57257784-4ec9-4118-be0c-dbb5ae287f86]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:10:57,294 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 57257784-4ec9-4118-be0c-dbb5ae287f86, maybe command ignore response
+[I 2026-06-01 22:10:57,432 minium minitest#897 capture] capture assertIn-success_221057432197.png
+[I 2026-06-01 22:10:58,182 minium minitest#897 capture] capture assertIn-success_221058175971.png
+[I 2026-06-01 22:10:58,586 minium minitest#897 capture] capture assertTrue-success_221058586651.png
+[I 2026-06-01 22:10:58,869 minium minitest#897 capture] capture assertTrue-success_221058868434.png
+[I 2026-06-01 22:10:59,237 minium minitest#897 capture] capture assertTrue-success_221059237464.png
+[I 2026-06-01 22:10:59,491 minium minitest#897 capture] capture assertTrue-success_221059489860.png
+[I 2026-06-01 22:10:59,878 minium minitest#897 capture] capture assertTrue-success_221059877494.png
+[I 2026-06-01 22:11:00,541 minium minitest#897 capture] capture assertTrue-success_221100540497.png
+[I 2026-06-01 22:11:00,598 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 31bc799a-d2da-4836-b516-197c24f102c3, maybe command ignore response
+[E 2026-06-01 22:11:00,918 minium.Conn7632 connection#668 __on_message] [1cf3ce3b-cf07-4a6b-a5fc-543e3a813182]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:11:01,059 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1cf3ce3b-cf07-4a6b-a5fc-543e3a813182, maybe command ignore response
+[I 2026-06-01 22:11:02,277 minium minitest#897 capture] capture assertTrue-success_221102277124.png
+[I 2026-06-01 22:11:02,694 minium minitest#897 capture] capture assertTrue-success_221102693879.png
+[I 2026-06-01 22:11:03,628 minium minitest#897 capture] capture assertTrue-success_221103627175.png
+[I 2026-06-01 22:11:03,953 minium minitest#897 capture] capture assertTrue-success_221103952807.png
+[I 2026-06-01 22:11:04,308 minium minitest#897 capture] capture assertTrue-success_221104308497.png
+[I 2026-06-01 22:11:04,827 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e476d350-b927-4386-91db-836403b07705, maybe command ignore response
+[I 2026-06-01 22:11:04,860 minium minitest#897 capture] capture assertNotIn-success_221104859791.png
+[I 2026-06-01 22:11:05,443 minium minitest#897 capture] capture assertNotIn-success_221105443078.png
+[I 2026-06-01 22:11:05,816 minium minitest#897 capture] capture assertNotIn-success_221105816236.png
+[I 2026-06-01 22:11:06,113 minium minitest#897 capture] capture assertNotIn-success_221106113384.png
+[I 2026-06-01 22:11:06,419 minium minitest#897 capture] capture assertNotIn-success_221106419752.png
+[I 2026-06-01 22:11:06,590 minium minitest#897 capture] capture assertNotIn-success_221106589966.png
+[E 2026-06-01 22:11:06,979 minium.Conn7632 connection#668 __on_message] [4714a8b9-bf29-4f4c-820c-fa80574791ef]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:11:06,981 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4714a8b9-bf29-4f4c-820c-fa80574791ef, maybe command ignore response
+[I 2026-06-01 22:11:07,110 minium minitest#897 capture] capture assertNotIn-success_221107109905.png
+[I 2026-06-01 22:11:07,767 minium minitest#897 capture] capture assertNotIn-success_221107767187.png
+[I 2026-06-01 22:11:08,277 minium minitest#897 capture] capture assertIn-success_221108277119.png
+[I 2026-06-01 22:11:08,426 minium minitest#897 capture] capture assertIn-success_221108426339.png
+[I 2026-06-01 22:11:09,000 minium minitest#897 capture] capture assertIn-success_221109000268.png
+[I 2026-06-01 22:11:09,119 minium minitest#897 capture] capture assertTrue-success_221109119155.png
+[I 2026-06-01 22:11:09,550 minium minitest#897 capture] capture assertTrue-success_221109550276.png
+[I 2026-06-01 22:11:09,906 minium minitest#897 capture] capture assertTrue-success_221109900173.png
+[I 2026-06-01 22:11:10,383 minium minitest#897 capture] capture assertTrue-success_221110383060.png
+[I 2026-06-01 22:11:10,783 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 03b324cc-a543-4042-afb4-2083432a8eb6, maybe command ignore response
+[I 2026-06-01 22:11:10,856 minium minitest#897 capture] capture assertTrue-success_221110854756.png
+[I 2026-06-01 22:11:11,151 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 0a653b6b-25e1-4e03-8e17-5dd05e4b5156, maybe command ignore response
+[I 2026-06-01 22:11:11,486 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e0ec0572-4df0-41b5-b1d3-673229e14f5f, maybe command ignore response
+[I 2026-06-01 22:11:11,913 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a0bb111c-ba5f-4b4b-bc48-d1cf447dc73f, maybe command ignore response
+[I 2026-06-01 22:11:12,141 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 821bb1c8-067e-4d3d-89aa-be3539fc0501, maybe command ignore response
+[I 2026-06-01 22:11:12,327 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a20ca494-ce17-4517-8046-947c48ae94fa, maybe command ignore response
+[I 2026-06-01 22:11:12,662 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a7976016-7034-417b-bb96-15966d5a981a, maybe command ignore response
+[I 2026-06-01 22:11:13,016 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 332b2f6b-05da-42e7-861d-d033e2d6c15b, maybe command ignore response
+[W 2026-06-01 22:11:13,064 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:13,432 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertTrue-success_221110854756.png not exists
+[I 2026-06-01 22:11:13,470 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b8e8d080-e417-4658-8e0b-64d9f5579c26, maybe command ignore response
+[I 2026-06-01 22:11:13,621 minium minitest#897 capture] capture assertTrue-success_221113619800.png
+[I 2026-06-01 22:11:14,086 minium minitest#897 capture] capture assertTrue-success_221114086441.png
+[I 2026-06-01 22:11:14,398 minium minitest#897 capture] capture assertTrue-success_221114397956.png
+[I 2026-06-01 22:11:14,677 minium minitest#897 capture] capture assertTrue-success_221114676899.png
+[I 2026-06-01 22:11:14,822 minium minitest#897 capture] capture assertTrue-success_221114822418.png
+[I 2026-06-01 22:11:15,619 minium minitest#897 capture] capture assertTrue-success_221115619373.png
+[I 2026-06-01 22:11:15,756 minium minitest#897 capture] capture assertNotIn-success_221115756159.png
+[I 2026-06-01 22:11:16,379 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e2468d73-8656-4595-8373-ba54b73436ef, maybe command ignore response
+[I 2026-06-01 22:11:16,750 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f295b3e0-a7a5-4608-9d5d-f56bc1fa9381, maybe command ignore response
+[I 2026-06-01 22:11:16,984 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b6863967-302a-4553-bf09-e5574fab11c3, maybe command ignore response
+[I 2026-06-01 22:11:17,154 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1d3e6b02-1400-451b-8eff-c1a14ef1528d, maybe command ignore response
+[I 2026-06-01 22:11:17,589 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b3eb3c66-3a32-4b61-a6ad-0592f466d197, maybe command ignore response
+[I 2026-06-01 22:11:17,756 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 981c980d-bb06-4435-af52-4dbcea1b4c77, maybe command ignore response
+[W 2026-06-01 22:11:17,832 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:18,287 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotIn-success_221115756159.png not exists
+[I 2026-06-01 22:11:18,401 minium minitest#897 capture] capture assertNotIn-success_221118400898.png
+[I 2026-06-01 22:11:18,907 minium minitest#897 capture] capture assertNotIn-success_221118907849.png
+[I 2026-06-01 22:11:19,206 minium minitest#897 capture] capture assertNotIn-success_221119206600.png
+[I 2026-06-01 22:11:19,619 minium minitest#897 capture] capture assertNotIn-success_221119619286.png
+[I 2026-06-01 22:11:19,743 minium minitest#897 capture] capture assertNotIn-success_221119743221.png
+[I 2026-06-01 22:11:20,162 minium minitest#897 capture] capture assertNotIn-success_221120162051.png
+[I 2026-06-01 22:11:20,837 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b9947976-bd84-44f4-95ea-6486fcf801eb, maybe command ignore response
+[I 2026-06-01 22:11:21,062 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f4b9866b-60bc-497f-876e-680818c609e6, maybe command ignore response
+[I 2026-06-01 22:11:21,202 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ee3fb5ef-e1be-4d8c-8c2e-a3239df050ea, maybe command ignore response
+[I 2026-06-01 22:11:21,571 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ead945b4-60fa-4772-9df7-8647c4f82254, maybe command ignore response
+[I 2026-06-01 22:11:21,851 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f21ea016-959a-438e-9269-ad6c67e002d8, maybe command ignore response
+[W 2026-06-01 22:11:22,318 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:22,326 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotIn-success_221120162051.png not exists
+[I 2026-06-01 22:11:22,387 minium.Conn7632 connection#704 _handle_async_msg] received async msg: af830b40-e791-4f41-9089-1cd7cf255cb4, maybe command ignore response
+[I 2026-06-01 22:11:22,479 minium minitest#897 capture] capture assertNotIn-success_221122479290.png
+[I 2026-06-01 22:11:22,850 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1ea0e94b-9933-47f7-a4e4-9267fc533c4a, maybe command ignore response
+[I 2026-06-01 22:11:23,146 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c81a3084-e9bd-4cee-bcf2-d75bba6a6d1b, maybe command ignore response
+[I 2026-06-01 22:11:23,982 minium.Conn7632 connection#704 _handle_async_msg] received async msg: acb627e5-4834-4d4e-a20a-1dff3056b7db, maybe command ignore response
+[I 2026-06-01 22:11:24,109 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4a2edd30-5cd4-4a8d-b46b-e724765c1596, maybe command ignore response
+[I 2026-06-01 22:11:24,387 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e2608737-ff55-47d4-9ecf-f2fe5905b24b, maybe command ignore response
+[I 2026-06-01 22:11:24,646 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 7b489353-9f2d-4342-bb58-5551d7c831c0, maybe command ignore response
+[W 2026-06-01 22:11:24,961 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:25,099 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotIn-success_221122479290.png not exists
+[I 2026-06-01 22:11:25,251 minium minitest#897 capture] capture assertIn-success_221125250983.png
+[I 2026-06-01 22:11:25,740 minium minitest#897 capture] capture assertIn-success_221125740391.png
+[I 2026-06-01 22:11:26,112 minium minitest#897 capture] capture assertIn-success_221126111864.png
+[I 2026-06-01 22:11:26,335 minium minitest#897 capture] capture assertEqual-success_221126335571.png
+[I 2026-06-01 22:11:26,670 minium minitest#897 capture] capture assertNotEqual-success.png
+[I 2026-06-01 22:11:26,803 minium minitest#897 capture] capture assertNotEqual-success_221126803648.png
+[I 2026-06-01 22:11:27,776 minium.Conn7632 connection#704 _handle_async_msg] received async msg: cc8a8f3b-5897-4853-ab84-5b1b6ccbcc3c, maybe command ignore response
+[I 2026-06-01 22:11:28,037 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 6f3ee890-effa-4b33-ad3f-d952a2a534b3, maybe command ignore response
+[I 2026-06-01 22:11:28,393 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e9e42eb6-46db-4972-9991-cdd74deb1910, maybe command ignore response
+[I 2026-06-01 22:11:28,718 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 351b0efa-9f60-4e52-bc2d-cf4791205ba7, maybe command ignore response
+[W 2026-06-01 22:11:28,961 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:28,976 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotEqual-success_221126803648.png not exists
+[I 2026-06-01 22:11:29,111 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a3dd6f72-ac56-440c-ad38-cbd0c435209f, maybe command ignore response
+[I 2026-06-01 22:11:29,284 minium minitest#897 capture] capture assertNotEqual-success_221129284000.png
+[I 2026-06-01 22:11:29,654 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ffad73f1-ce61-4635-bd7a-911722ee4537, maybe command ignore response
+[I 2026-06-01 22:11:29,740 minium minitest#897 capture] capture assertNotEqual-success_221129740037.png
+[I 2026-06-01 22:11:30,350 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f67a12b0-12a3-4f00-a72f-14757b34a67b, maybe command ignore response
+[I 2026-06-01 22:11:30,485 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b3817b06-ee55-4a7c-b9f0-4b547c259683, maybe command ignore response
+[I 2026-06-01 22:11:30,860 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9a0cbbd8-6030-416d-ba05-9882aed97acf, maybe command ignore response
+[I 2026-06-01 22:11:31,135 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a0a44fb0-6e34-4489-b0bb-520777cf154f, maybe command ignore response
+[I 2026-06-01 22:11:31,453 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 6e05695d-4efb-4f29-ac06-f85bb45a87d7, maybe command ignore response
+[I 2026-06-01 22:11:31,564 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4174f4d2-8368-4651-96de-64baeeb72ba2, maybe command ignore response
+[W 2026-06-01 22:11:31,872 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:31,875 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotEqual-success_221129740037.png not exists
+[I 2026-06-01 22:11:31,957 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4dc051a4-ac4e-4554-85e9-3e4374cc2422, maybe command ignore response
+[I 2026-06-01 22:11:31,975 minium minitest#897 capture] capture assertNotEqual-success_221131975107.png
+[I 2026-06-01 22:11:32,035 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 5d241ec8-ad3c-416c-99f4-63e2b3b66ffc, maybe command ignore response
+[I 2026-06-01 22:11:32,816 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1b18ce49-5fbf-4b85-8558-584952c8b2c3, maybe command ignore response
+[I 2026-06-01 22:11:33,050 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c1aae66a-af7a-4dec-8c10-12fb5e057208, maybe command ignore response
+[I 2026-06-01 22:11:33,176 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 95e1ebd6-65d0-4e2c-8817-a251705fad93, maybe command ignore response
+[I 2026-06-01 22:11:33,607 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d320e51e-fc4e-43b0-8e4f-e7f56610a805, maybe command ignore response
+[I 2026-06-01 22:11:33,849 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b05747fd-5881-4fdf-8762-a9be90d807e0, maybe command ignore response
+[I 2026-06-01 22:11:34,161 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4aa417a7-405a-477a-a612-eac7fb93a636, maybe command ignore response
+[W 2026-06-01 22:11:34,179 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:34,447 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotEqual-success_221131975107.png not exists
+[I 2026-06-01 22:11:34,565 minium minitest#897 capture] capture assertNotEqual-success_221134564766.png
+[I 2026-06-01 22:11:35,095 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b8968781-f62f-496b-90b9-f80894fe06b4, maybe command ignore response
+[I 2026-06-01 22:11:35,137 minium minitest#897 capture] capture assertNotEqual-success_221135137662.png
+[I 2026-06-01 22:11:35,341 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e3e59eb2-ea7e-4baa-8721-07c4e6b1b86d, maybe command ignore response
+[I 2026-06-01 22:11:35,473 minium minitest#897 capture] capture assertNotEqual-success_221135472491.png
+[I 2026-06-01 22:11:35,766 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3d3c284b-d7d8-4892-9437-47a41094c599, maybe command ignore response
+[I 2026-06-01 22:11:36,553 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9974eee2-ee40-445d-8ab9-2ecb6477599d, maybe command ignore response
+[I 2026-06-01 22:11:36,783 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 02c05390-d7aa-42bc-af9e-1706a3a9de1e, maybe command ignore response
+[I 2026-06-01 22:11:36,896 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c8245036-9adb-4ee6-955c-575058155688, maybe command ignore response
+[I 2026-06-01 22:11:37,208 minium.Conn7632 connection#704 _handle_async_msg] received async msg: af8b75da-28a9-4f76-806c-09e54735c4b7, maybe command ignore response
+[I 2026-06-01 22:11:37,557 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 03131fef-2dbd-43af-a4d3-18ee144b7067, maybe command ignore response
+[I 2026-06-01 22:11:37,702 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 4d979266-35bf-40ca-99b1-ae9da0f4ec17, maybe command ignore response
+[W 2026-06-01 22:11:37,838 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:38,077 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertNotEqual-success_221135472491.png not exists
+[I 2026-06-01 22:11:38,191 minium minitest#897 capture] capture assertNotEqual-success_221138191501.png
+[I 2026-06-01 22:11:38,763 minium minitest#897 capture] capture assertNotEqual-success_221138763096.png
+[I 2026-06-01 22:11:38,954 minium minitest#897 capture] capture assertNotEqual-success_221138953834.png
+[I 2026-06-01 22:11:39,252 minium minitest#897 capture] capture assertNotEqual-success_221139252226.png
+[E 2026-06-01 22:11:39,363 minium.Conn7632 connection#668 __on_message] [d13c8f7a-aad3-43c8-853f-b95983f6633f]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:11:40,667 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9f4d5d7c-9fb3-412f-8287-76e606351756, maybe command ignore response
+[I 2026-06-01 22:11:40,953 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 0a418cfd-b810-4217-a7f3-034c72c48a29, maybe command ignore response
+[I 2026-06-01 22:11:41,077 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 2e2f97be-1be9-45bb-9f53-142be616e729, maybe command ignore response
+[I 2026-06-01 22:11:41,395 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 3445424e-162b-43c0-87f4-c4ac52b4b1b9, maybe command ignore response
+[I 2026-06-01 22:11:41,531 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9e483769-a702-4811-a322-b43f1e342d93, maybe command ignore response
+[I 2026-06-01 22:11:41,989 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b9294f1e-002f-495d-a1a1-f70ee7675bf4, maybe command ignore response
+[I 2026-06-01 22:11:42,207 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f2a3d880-7574-4f27-a056-f649cf74f71e, maybe command ignore response
+[I 2026-06-01 22:11:42,340 minium.Conn7632 connection#704 _handle_async_msg] received async msg: ba4575f9-80fe-45d8-9c54-745ff9aa5e15, maybe command ignore response
+[I 2026-06-01 22:11:42,663 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 522f5024-2b80-4389-bd3b-ad91e83f5bbc, maybe command ignore response
+[I 2026-06-01 22:11:42,822 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d51d61e2-7fdb-4e57-8443-e4f148bd2b3d, maybe command ignore response
+[I 2026-06-01 22:11:43,208 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 40abe4c2-5697-4345-85cb-1797f84c5e1d, maybe command ignore response
+[I 2026-06-01 22:11:43,584 minium.Conn7632 connection#704 _handle_async_msg] received async msg: cec16b85-f1cb-4551-b300-6758794600d7, maybe command ignore response
+[I 2026-06-01 22:11:43,805 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 7c9b6f5b-0bc9-4c6e-8574-40ec64d3c2fb, maybe command ignore response
+[I 2026-06-01 22:11:43,931 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 343aa766-beee-4a5c-8a61-db3d1934cb10, maybe command ignore response
+[I 2026-06-01 22:11:44,268 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 91eba3a2-33cb-4302-b871-dce84d72a8ee, maybe command ignore response
+[I 2026-06-01 22:11:44,525 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 29dc1e5d-597d-4d5d-b017-06e858e78cdb, maybe command ignore response
+[I 2026-06-01 22:11:44,955 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 5dfb0ce0-8987-405e-ad3d-8d6217440d02, maybe command ignore response
+[I 2026-06-01 22:11:45,035 minium minitest#897 capture] capture assertIn-success_221145034908.png
+[I 2026-06-01 22:11:45,472 minium.Conn7632 connection#704 _handle_async_msg] received async msg: f0aed360-2c5f-459e-ad76-243a7a1795c4, maybe command ignore response
+[I 2026-06-01 22:11:45,497 minium minitest#897 capture] capture assertIn-success_221145497639.png
+[I 2026-06-01 22:11:45,957 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 45a4d8dc-d1e7-48e8-aa15-d148e3556087, maybe command ignore response
+[I 2026-06-01 22:11:46,282 minium minitest#897 capture] capture assertIn-success_221146282569.png
+[I 2026-06-01 22:11:46,300 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 9769577d-32eb-4fca-bbe6-c3eda3876a58, maybe command ignore response
+[I 2026-06-01 22:11:46,901 minium.Conn7632 connection#704 _handle_async_msg] received async msg: b0045c6f-eeb1-44be-9d2e-ad110b05164d, maybe command ignore response
+[I 2026-06-01 22:11:47,033 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 2e5dba9b-f728-49d6-9437-bface47d7681, maybe command ignore response
+[I 2026-06-01 22:11:47,529 minium.Conn7632 connection#704 _handle_async_msg] received async msg: e6d981fc-d7f5-44e1-819d-844a86d4b07d, maybe command ignore response
+[I 2026-06-01 22:11:47,899 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 23e7642b-8fcf-4701-9a80-1cc811ac31f0, maybe command ignore response
+[I 2026-06-01 22:11:48,118 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 939d2e29-c8ad-4e76-9569-651ae66dfd0c, maybe command ignore response
+[W 2026-06-01 22:11:48,379 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:48,380 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertIn-success_221146282569.png not exists
+[I 2026-06-01 22:11:48,402 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 8c596486-51dc-4c69-a215-dc708b8a251c, maybe command ignore response
+[I 2026-06-01 22:11:48,447 minium minitest#897 capture] capture assertIn-success_221148447250.png
+[I 2026-06-01 22:11:49,057 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1a775d24-9913-48af-84bd-b7b41cbbe1a2, maybe command ignore response
+[I 2026-06-01 22:11:49,538 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 413cf590-47c9-4e57-99f2-f02922e5733f, maybe command ignore response
+[I 2026-06-01 22:11:49,662 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 609f7f52-4c75-41e2-84ad-5bac59860258, maybe command ignore response
+[I 2026-06-01 22:11:50,103 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 22:11:50,139 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x105a87bb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x105a87750>, <minium.miniprogram.base_driver.element.BaseElement object at 0x105c3def0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x105c3d950>, <minium.miniprogram.base_driver.element.BaseElement object at 0x105c3c190>]
+[I 2026-06-01 22:11:50,166 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 622f0d2a-d187-42ae-981d-eb320c551acf, maybe command ignore response
+[I 2026-06-01 22:11:50,368 minium minitest#897 capture] capture assertTrue-success_221150368578.png
+[I 2026-06-01 22:11:50,771 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 1abede5d-8879-4ff2-819a-b16e78a8cbf0, maybe command ignore response
+[I 2026-06-01 22:11:50,886 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 7a1b6088-040f-480a-9114-81174d6ddaa8, maybe command ignore response
+[I 2026-06-01 22:11:51,254 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a87b2da9-cf6c-4776-8333-63f772da31e7, maybe command ignore response
+[I 2026-06-01 22:11:51,504 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a58cabdb-3958-49d5-ae24-966eaaaf5e1f, maybe command ignore response
+[I 2026-06-01 22:11:51,687 minium.Conn7632 connection#704 _handle_async_msg] received async msg: a809a0a0-2aa1-42ec-9f1e-2afaf92cbc7f, maybe command ignore response
+[I 2026-06-01 22:11:51,933 minium.Conn7632 connection#704 _handle_async_msg] received async msg: d96df3e2-1e7c-4f06-87de-752e54bdf702, maybe command ignore response
+[I 2026-06-01 22:11:52,198 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 6dea4efa-71b7-4bce-8a6c-da8876637e1e, maybe command ignore response
+[I 2026-06-01 22:11:52,416 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 632e3d8d-bd23-4e15-926d-a5cd93006de3, maybe command ignore response
+[W 2026-06-01 22:11:52,444 minium.App2464 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 22:11:52,596 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601215108/test_08_mystery_reason_core_flow/20260601220831305155/images/assertTrue-success_221150368578.png not exists
+[I 2026-06-01 22:11:52,899 minium minitest#897 capture] capture assertTrue-success_221152899384.png
+[I 2026-06-01 22:11:52,926 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 8955f065-9081-4839-9f4c-f31da1acc2a0, maybe command ignore response
+[I 2026-06-01 22:11:53,171 minium minitest#897 capture] capture assertTrue-success_221153171345.png
+[I 2026-06-01 22:11:53,301 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 8ab18289-121d-4db5-baac-f25567dba190, maybe command ignore response
+[I 2026-06-01 22:11:53,447 minium minitest#897 capture] capture assertTrue-success_221153447573.png
+[I 2026-06-01 22:11:53,886 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 709c9564-5b9e-4176-a47a-01cbfeee546d, maybe command ignore response
+[I 2026-06-01 22:11:53,944 minium minitest#897 capture] capture assertTrue-success_221153944504.png
+[I 2026-06-01 22:11:54,019 minium minitest#897 capture] capture assertTrue-success_221154018897.png
+[I 2026-06-01 22:11:54,495 minium minitest#897 capture] capture assertTrue-success_221154494664.png
+[I 2026-06-01 22:11:54,905 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 22:11:54,976 minium.App2464 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-06-01 22:11:56,294 minium.App2464 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780323116260, 'webviewId': 7, 'routeEventId': '', 'renderer': 'webview'}, 1780323116262]}
+[I 2026-06-01 22:11:56,297 minium.Conn7632 connection#704 _handle_async_msg] received async msg: c26a6cde-a1d5-4bb3-a410-3c0213ce00dc
+[I 2026-06-01 22:11:56,362 minium.Conn7632 connection#704 _handle_async_msg] received async msg: 8754d4a2-c661-4819-aec0-80fb3b99cc0f, maybe command ignore response
+[E 2026-06-01 22:11:56,746 minium.Conn7632 connection#668 __on_message] [cb1ed72f-4dee-44eb-816f-2b399ad6a388]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:11:56,746 minium.Conn7632 connection#704 _handle_async_msg] received async msg: cb1ed72f-4dee-44eb-816f-2b399ad6a388, maybe command ignore response
+[I 2026-06-01 22:11:57,866 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 22:11:57,924 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 22:11:58,054 minium basenative#63 wrapper] call BaseNative.get_start_up end 

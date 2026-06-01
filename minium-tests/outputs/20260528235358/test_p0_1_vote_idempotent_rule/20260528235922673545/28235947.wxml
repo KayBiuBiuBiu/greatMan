@@ -1,0 +1,52 @@
+
+<view class="page rg-page mr-page">
+  <view class="hero">
+    <view class="hero-title">AI迷雾推理局</view>
+    <view class="hero-subtitle muted">线下亲友聚会 · AI 全自动推理剧本</view>
+  </view>
+  <view class="rg-status-banner">人齐后组长可开始互动</view>
+  <view class="rg-room-card">
+    <view class="mr-phase-title">等待开局</view>
+    <view class="muted">
+      聚会组口令：971528        
+      <text class="link"/>
+    </view>
+  </view>
+  <view class="rg-room-card rg-members-card">
+    <view class="section-title">成员 3/3</view>
+    <view class="rg-member-list">
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+    </view>
+  </view>
+  <view class="rg-room-card">
+    <view class="section-title">难度</view>
+    <picker mode="selector" range="[&quot;新手&quot;,&quot;进阶&quot;,&quot;烧脑&quot;]" value="0" aria-haspopup="true">
+      <view class="rg-setting-item">新手</view>
+    </picker>
+    <button class="btn btn-primary main-btn rg-btn-primary" role="button" aria-disabled="false">        开始互动      </button>
+  </view>
+  <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)" role="button" aria-disabled="false">邀请朋友</button>
+</view>

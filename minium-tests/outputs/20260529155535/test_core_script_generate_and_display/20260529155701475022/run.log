@@ -1,0 +1,148 @@
+[I 2026-05-29 15:57:01,476 minium minitest#432 _miniSetUp] =========Current case: test_core_script_generate_and_display=========
+[I 2026-05-29 15:57:01,550 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display
+[I 2026-05-29 15:57:01,601 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 15:57:01,633 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 15:57:01,665 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 15:57:01,699 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 15:57:01,732 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 15:57:01,767 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 15:57:01,912 minium minitest#487 _miniSetUp] =========case: test_core_script_generate_and_display start=========
+[I 2026-05-29 15:57:01,917 minium minitest#788 _callTestMethod] call test method
+[I 2026-05-29 15:57:01,951 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-29 15:57:02,103 minium.Conn5840 connection#668 __on_message] [e17018a7-0697-4a28-8e08-83f3eb7a7567]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:57:05,539 minium minitest#897 capture] capture assertTrue-success_155705537880.png
+[I 2026-05-29 15:57:05,600 minium minitest#897 capture] capture assertTrue-success_155705600161.png
+[E 2026-05-29 15:57:05,717 minium.Conn5840 connection#668 __on_message] [cff7e6fb-e976-4942-a5bd-a3f1060c2b3e]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:57:09,080 minium minitest#897 capture] capture assertTrue-success_155709075585.png
+[E 2026-05-29 15:57:09,150 minium.Conn5840 connection#668 __on_message] [460ddfe7-cb80-4b78-a014-ee6e619feb17]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:57:12,620 minium.App4832 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%2293eed62b6a1946d10000f888669f6d4f%22%2C%20%22roomCode%22%3A%20%22150197%22%7D
+[I 2026-05-29 15:57:13,674 minium.App4832 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252293eed62b6a1946d10000f888669f6d4f%2522%252C%2520%2522roomCode%2522%253A%2520%2522150197%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780041433670, 'webviewId': 5, 'routeEventId': '', 'renderer': 'webview'}, 1780041433670]}
+[I 2026-05-29 15:57:13,675 minium.Conn5840 connection#704 _handle_async_msg] received async msg: b13fc920-55a2-4763-9b5f-a44020b2517b
+[E 2026-05-29 15:57:17,875 minium.Conn5840 connection#668 __on_message] [aec9349a-ed70-4371-919e-817025f016e5]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:57:21,596 minium minitest#897 capture] capture assertTrue-success_155721590461.png
+[E 2026-05-29 15:57:21,680 minium.Conn5840 connection#668 __on_message] [0416159c-cbb0-4464-a905-2b514901ebbb]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:57:27,510 minium.Conn5840 connection#668 __on_message] [54e4c15b-1ad0-45d9-acd6-dd3d4b58450a]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:57:30,761 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-05-29 15:57:30,935 minium minitest#897 capture] capture assertTrue-success_155730935212.png
+[I 2026-05-29 15:57:31,032 minium minitest#897 capture] capture assertTrue-success_155731032666.png
+[I 2026-05-29 15:57:31,197 minium minitest#897 capture] capture assertTrue-success_155731197319.png
+[I 2026-05-29 15:57:31,262 minium minitest#897 capture] capture assertTrue-success_155731262440.png
+[I 2026-05-29 15:57:31,449 minium minitest#897 capture] capture assertTrue-success_155731448754.png
+[I 2026-05-29 15:57:31,507 minium minitest#897 capture] capture assertTrue-success_155731507256.png
+[I 2026-05-29 15:57:31,726 minium minitest#897 capture] capture assertTrue-success_155731725415.png
+[I 2026-05-29 15:57:31,806 minium minitest#897 capture] capture assertTrue-success_155731806558.png
+[I 2026-05-29 15:57:31,971 minium minitest#897 capture] capture assertTrue-success_155731970995.png
+[I 2026-05-29 15:57:32,038 minium minitest#897 capture] capture assertTrue-success_155732037512.png
+[I 2026-05-29 15:57:32,163 minium minitest#897 capture] capture assertTrue-success_155732163341.png
+[I 2026-05-29 15:57:32,379 minium minitest#897 capture] capture assertTrue-success_155732378381.png
+[I 2026-05-29 15:57:32,474 minium minitest#897 capture] capture assertNotIn-success.png
+[I 2026-05-29 15:57:32,625 minium minitest#897 capture] capture assertNotIn-success_155732624848.png
+[I 2026-05-29 15:57:32,736 minium minitest#897 capture] capture assertNotIn-success_155732736011.png
+[I 2026-05-29 15:57:32,836 minium minitest#897 capture] capture assertNotIn-success_155732836701.png
+[I 2026-05-29 15:57:32,954 minium minitest#897 capture] capture assertNotIn-success_155732954371.png
+[I 2026-05-29 15:57:33,148 minium minitest#897 capture] capture assertNotIn-success_155733148419.png
+[I 2026-05-29 15:57:33,255 minium minitest#897 capture] capture assertNotIn-success_155733255455.png
+[I 2026-05-29 15:57:33,418 minium minitest#897 capture] capture assertNotIn-success_155733418665.png
+[I 2026-05-29 15:57:33,516 minium minitest#897 capture] capture assertIn-success.png
+[I 2026-05-29 15:57:33,708 minium minitest#897 capture] capture assertIn-success_155733708403.png
+[I 2026-05-29 15:57:33,786 minium minitest#897 capture] capture assertIn-success_155733785839.png
+[I 2026-05-29 15:57:33,970 minium minitest#897 capture] capture assertTrue-success_155733970343.png
+[I 2026-05-29 15:57:34,053 minium minitest#897 capture] capture assertTrue-success_155734053434.png
+[I 2026-05-29 15:57:34,333 minium minitest#897 capture] capture assertTrue-success_155734333241.png
+[I 2026-05-29 15:57:34,587 minium minitest#897 capture] capture assertTrue-success_155734587763.png
+[I 2026-05-29 15:57:34,669 minium minitest#897 capture] capture assertTrue-success_155734669273.png
+[I 2026-05-29 15:57:34,783 minium minitest#897 capture] capture assertTrue-success_155734783240.png
+[I 2026-05-29 15:57:34,964 minium minitest#897 capture] capture assertTrue-success_155734964246.png
+[I 2026-05-29 15:57:35,039 minium minitest#897 capture] capture assertTrue-success_155735039554.png
+[I 2026-05-29 15:57:35,248 minium minitest#897 capture] capture assertTrue-success_155735248611.png
+[I 2026-05-29 15:57:35,326 minium minitest#897 capture] capture assertTrue-success_155735326532.png
+[I 2026-05-29 15:57:35,519 minium minitest#897 capture] capture assertTrue-success_155735519428.png
+[I 2026-05-29 15:57:35,595 minium minitest#897 capture] capture assertNotIn-success_155735595459.png
+[I 2026-05-29 15:57:35,779 minium minitest#897 capture] capture assertNotIn-success_155735778981.png
+[I 2026-05-29 15:57:35,855 minium minitest#897 capture] capture assertNotIn-success_155735855219.png
+[I 2026-05-29 15:57:35,989 minium minitest#897 capture] capture assertNotIn-success_155735989167.png
+[I 2026-05-29 15:57:36,194 minium minitest#897 capture] capture assertNotIn-success_155736193694.png
+[I 2026-05-29 15:57:36,272 minium minitest#897 capture] capture assertNotIn-success_155736272002.png
+[I 2026-05-29 15:57:36,390 minium minitest#897 capture] capture assertNotIn-success_155736390698.png
+[I 2026-05-29 15:57:36,570 minium minitest#897 capture] capture assertNotIn-success_155736570595.png
+[I 2026-05-29 15:57:36,648 minium minitest#897 capture] capture assertIn-success_155736648566.png
+[I 2026-05-29 15:57:36,832 minium minitest#897 capture] capture assertIn-success_155736832502.png
+[I 2026-05-29 15:57:36,908 minium minitest#897 capture] capture assertIn-success_155736908634.png
+[I 2026-05-29 15:57:37,093 minium minitest#897 capture] capture assertTrue-success_155737092979.png
+[I 2026-05-29 15:57:37,176 minium minitest#897 capture] capture assertTrue-success_155737175878.png
+[I 2026-05-29 15:57:37,361 minium minitest#897 capture] capture assertTrue-success_155737361424.png
+[I 2026-05-29 15:57:37,438 minium minitest#897 capture] capture assertTrue-success_155737437615.png
+[I 2026-05-29 15:57:37,633 minium minitest#897 capture] capture assertTrue-success_155737632970.png
+[I 2026-05-29 15:57:37,751 minium minitest#897 capture] capture assertTrue-success_155737751200.png
+[I 2026-05-29 15:57:37,913 minium minitest#897 capture] capture assertTrue-success_155737913317.png
+[I 2026-05-29 15:57:37,990 minium minitest#897 capture] capture assertTrue-success_155737990653.png
+[I 2026-05-29 15:57:38,122 minium minitest#897 capture] capture assertTrue-success_155738121780.png
+[I 2026-05-29 15:57:38,294 minium minitest#897 capture] capture assertTrue-success_155738294126.png
+[I 2026-05-29 15:57:38,372 minium minitest#897 capture] capture assertTrue-success_155738371830.png
+[I 2026-05-29 15:57:38,557 minium minitest#897 capture] capture assertNotIn-success_155738556833.png
+[I 2026-05-29 15:57:38,633 minium minitest#897 capture] capture assertNotIn-success_155738633601.png
+[I 2026-05-29 15:57:38,776 minium minitest#897 capture] capture assertNotIn-success_155738776324.png
+[I 2026-05-29 15:57:38,892 minium minitest#897 capture] capture assertNotIn-success_155738892622.png
+[I 2026-05-29 15:57:39,010 minium minitest#897 capture] capture assertNotIn-success_155739009788.png
+[I 2026-05-29 15:57:39,129 minium minitest#897 capture] capture assertNotIn-success_155739128972.png
+[I 2026-05-29 15:57:39,307 minium minitest#897 capture] capture assertNotIn-success_155739307672.png
+[I 2026-05-29 15:57:39,382 minium minitest#897 capture] capture assertNotIn-success_155739382540.png
+[I 2026-05-29 15:57:39,515 minium minitest#897 capture] capture assertIn-success_155739515139.png
+[I 2026-05-29 15:57:39,674 minium minitest#897 capture] capture assertIn-success_155739674815.png
+[I 2026-05-29 15:57:39,749 minium minitest#897 capture] capture assertIn-success_155739748978.png
+[I 2026-05-29 15:57:39,898 minium minitest#897 capture] capture assertTrue-success_155739898534.png
+[I 2026-05-29 15:57:40,060 minium minitest#897 capture] capture assertTrue-success_155740060207.png
+[I 2026-05-29 15:57:40,136 minium minitest#897 capture] capture assertTrue-success_155740136621.png
+[I 2026-05-29 15:57:40,441 minium minitest#897 capture] capture assertTrue-success_155740441141.png
+[I 2026-05-29 15:57:40,552 minium minitest#897 capture] capture assertTrue-success_155740552199.png
+[I 2026-05-29 15:57:40,708 minium minitest#897 capture] capture assertTrue-success_155740708195.png
+[I 2026-05-29 15:57:40,832 minium minitest#897 capture] capture assertTrue-success_155740832198.png
+[I 2026-05-29 15:57:40,932 minium minitest#897 capture] capture assertTrue-success_155740931813.png
+[I 2026-05-29 15:57:41,046 minium minitest#897 capture] capture assertTrue-success_155741045998.png
+[I 2026-05-29 15:57:41,157 minium minitest#897 capture] capture assertTrue-success_155741157089.png
+[I 2026-05-29 15:57:41,277 minium minitest#897 capture] capture assertTrue-success_155741276847.png
+[I 2026-05-29 15:57:41,393 minium minitest#897 capture] capture assertNotIn-success_155741393647.png
+[I 2026-05-29 15:57:41,504 minium minitest#897 capture] capture assertNotIn-success_155741504749.png
+[I 2026-05-29 15:57:41,644 minium minitest#897 capture] capture assertNotIn-success_155741644414.png
+[I 2026-05-29 15:57:41,775 minium minitest#897 capture] capture assertNotIn-success_155741775146.png
+[I 2026-05-29 15:57:41,914 minium minitest#897 capture] capture assertNotIn-success_155741914291.png
+[I 2026-05-29 15:57:42,047 minium minitest#897 capture] capture assertNotIn-success_155742047247.png
+[I 2026-05-29 15:57:42,145 minium minitest#897 capture] capture assertNotIn-success_155742143982.png
+[I 2026-05-29 15:57:42,265 minium minitest#897 capture] capture assertNotIn-success_155742264694.png
+[I 2026-05-29 15:57:42,380 minium minitest#897 capture] capture assertIn-success_155742380036.png
+[I 2026-05-29 15:57:42,497 minium minitest#897 capture] capture assertIn-success_155742497432.png
+[I 2026-05-29 15:57:42,614 minium minitest#897 capture] capture assertIn-success_155742613826.png
+[I 2026-05-29 15:57:42,734 minium minitest#897 capture] capture assertEqual-success_155742733991.png
+[I 2026-05-29 15:57:42,845 minium minitest#897 capture] capture assertNotEqual-success.png
+[I 2026-05-29 15:57:43,038 minium minitest#897 capture] capture assertNotEqual-success_155743038724.png
+[I 2026-05-29 15:57:43,149 minium minitest#897 capture] capture assertNotEqual-success_155743149407.png
+[I 2026-05-29 15:57:43,334 minium minitest#897 capture] capture assertNotEqual-success_155743334440.png
+[I 2026-05-29 15:57:43,444 minium minitest#897 capture] capture assertNotEqual-success_155743443891.png
+[I 2026-05-29 15:57:43,619 minium minitest#897 capture] capture assertNotEqual-success_155743619049.png
+[I 2026-05-29 15:57:43,695 minium minitest#897 capture] capture assertNotEqual-success_155743695411.png
+[I 2026-05-29 15:57:43,838 minium minitest#897 capture] capture assertNotEqual-success_155743838573.png
+[I 2026-05-29 15:57:43,956 minium minitest#897 capture] capture assertNotEqual-success_155743956481.png
+[I 2026-05-29 15:57:44,075 minium minitest#897 capture] capture assertNotEqual-success_155744074870.png
+[I 2026-05-29 15:57:44,192 minium minitest#897 capture] capture assertNotEqual-success_155744192226.png
+[I 2026-05-29 15:57:44,305 minium minitest#897 capture] capture assertNotEqual-success_155744305273.png
+[E 2026-05-29 15:57:44,487 minium.Conn5840 connection#668 __on_message] [9e5adf8f-63b0-4a4c-aaa0-f461a68c7a60]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:57:49,474 minium minitest#897 capture] capture assertIn-success_155749474372.png
+[I 2026-05-29 15:57:49,566 minium minitest#897 capture] capture assertIn-success_155749566600.png
+[I 2026-05-29 15:57:49,755 minium minitest#897 capture] capture assertIn-success_155749754904.png
+[I 2026-05-29 15:57:49,853 minium minitest#897 capture] capture assertIn-success_155749852577.png
+[I 2026-05-29 15:57:50,868 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-29 15:57:50,929 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103dcb380>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103e9b250>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103e98b90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103ef4d60>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103ef50f0>]
+[I 2026-05-29 15:57:50,974 minium minitest#897 capture] capture assertTrue-success_155750973982.png
+[I 2026-05-29 15:57:51,112 minium minitest#897 capture] capture assertTrue-success_155751111948.png
+[I 2026-05-29 15:57:51,252 minium minitest#897 capture] capture assertTrue-success_155751251645.png
+[I 2026-05-29 15:57:51,411 minium minitest#897 capture] capture assertTrue-success_155751411510.png
+[I 2026-05-29 15:57:51,499 minium minitest#897 capture] capture assertTrue-success_155751498874.png
+[I 2026-05-29 15:57:51,655 minium minitest#897 capture] capture assertTrue-success_155751655022.png
+[I 2026-05-29 15:57:51,847 minium minitest#897 capture] capture assertTrue-success_155751847747.png
+[I 2026-05-29 15:57:51,923 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 15:57:51,957 minium.App4832 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 15:57:52,940 minium.App4832 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780041472934, 'webviewId': 6, 'routeEventId': '', 'renderer': 'webview'}, 1780041472936]}
+[I 2026-05-29 15:57:52,941 minium.Conn5840 connection#704 _handle_async_msg] received async msg: a49b044d-dad5-452e-b129-1f24ebcc4691
+[I 2026-05-29 15:57:54,507 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 15:57:54,580 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 15:57:54,671 minium basenative#63 wrapper] call BaseNative.get_start_up end 

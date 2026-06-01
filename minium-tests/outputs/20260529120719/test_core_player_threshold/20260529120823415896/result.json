@@ -1,0 +1,206 @@
+{
+    "case_name": "test_core_player_threshold",
+    "run_time": "20260529 12:08:23",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": null,
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780027703.4951339,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780027703,
+            "datetime": "2026-05-29 12:08:23",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780027713,
+            "datetime": "2026-05-29 12:08:33",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_120833422330.png",
+            "ts": 1780027713,
+            "datetime": "2026-05-29 12:08:33",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_120836775841.png",
+            "ts": 1780027716,
+            "datetime": "2026-05-29 12:08:36",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success.png",
+            "ts": 1780027725,
+            "datetime": "2026-05-29 12:08:45",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_120848976994.png",
+            "ts": 1780027729,
+            "datetime": "2026-05-29 12:08:49",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_120855041384.png",
+            "ts": 1780027735,
+            "datetime": "2026-05-29 12:08:55",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1780027737,
+            "datetime": "2026-05-29 12:08:57",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780027737.6652858,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_core_player_threshold(self):\n",
+            "        room_id, _, snap = self._tcb_create_full_room(2)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        self.assertFalse(page.is_start_enabled())\n",
+            "\n",
+            "        seed_res = self._unwrap_cloud(\n",
+            "            self.cloud.seed_players(\n",
+            "                MysteryReasonPage.game_key, room_id=room_id, count=1, start_index=2\n",
+            "            )\n",
+            "        )\n",
+            "        self.assertTrue(self._is_cloud_success(seed_res))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "        self.assertTrue(page.is_start_enabled())\n"
+        ],
+        "start": 293
+    },
+    "filename": "result.json"
+}

@@ -1,0 +1,152 @@
+{
+    "case_name": "test_12_werewolf_insufficient_players",
+    "run_time": "20260601 18:42:24",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780310544.958173,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/setup.png",
+            "ts": 1780310544,
+            "datetime": "2026-06-01 18:42:24",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780310552,
+            "datetime": "2026-06-01 18:42:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/assertTrue-success_184310185684.png",
+            "ts": 1780310590,
+            "datetime": "2026-06-01 18:43:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/assertTrue-success_184318638699.png",
+            "ts": 1780310598,
+            "datetime": "2026-06-01 18:43:18",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/teardown.png",
+            "ts": 1780310598,
+            "datetime": "2026-06-01 18:43:18",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780310598.858337,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_12_werewolf_insufficient_players(self):\n",
+            "        self._run_insufficient_then_sufficient(\n",
+            "            WerewolfPage, \"start_game\", \"\u8eab\u4efd\u63a8\u7406\", min_players=6, insufficient=5\n",
+            "        )\n"
+        ],
+        "start": 322
+    },
+    "filename": "result.json"
+}

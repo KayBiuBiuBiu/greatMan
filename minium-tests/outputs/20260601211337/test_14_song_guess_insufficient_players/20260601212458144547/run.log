@@ -1,0 +1,1166 @@
+[I 2026-06-01 21:24:58,168 minium minitest#432 _miniSetUp] =========Current case: test_14_song_guess_insufficient_players=========
+[W 2026-06-01 21:24:58,303 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-01 21:24:58,433 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_14_song_guess_insufficient_players
+[I 2026-06-01 21:24:58,617 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:24:58,801 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-01 21:24:58,986 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-01 21:24:59,136 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 28.68180012702942 seconds for it
+[I 2026-06-01 21:25:03,891 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 21:25:05,347 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 21:25:10,421 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:25:10,478 minium.Conn3312 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:25:10,598 minium.Conn3312 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:25:10,974 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:25:11,119 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:25:11,791 minium.Conn1712 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:25:12,044 minium.Conn1712 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:25:12,215 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:25:12,290 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:25:12,443 minium.Conn7248 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:25:13,427 minium.Conn7248 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:25:13,843 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[E 2026-06-01 21:25:14,650 minium wx_minium#797 launch_dev_tool] three times try to connect Dev tool has all fail ..., restart now...
+[I 2026-06-01 21:25:15,308 minium wx_minium#811 launch_dev_tool] Starting dev tool again...
+[I 2026-06-01 21:25:16,320 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-01 21:25:23,481 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 21:25:23,535 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 21:25:23,749 minium wx_minium#816 launch_dev_tool] Restart success
+[W 2026-06-01 21:25:27,948 minium minitest#382 _check_debug_connection] app did not relaunch within 28.68180012702942 seconds
+[W 2026-06-01 21:25:28,297 minium minitest#449 _miniSetUp] check debug connection fail
+[I 2026-06-01 21:25:28,448 minium minitest#109 reset_minium] reset_minium
+[I 2026-06-01 21:25:28,761 minium minitest#89 reset_native] reset_native
+[I 2026-06-01 21:25:28,843 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-01 21:25:28,919 minium basenative#59 wrapper] call IdeNative.stop_wechat
+[E 2026-06-01 21:25:29,969 minium.Conn2592 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:25:31,034 minium basenative#63 wrapper] call IdeNative.stop_wechat end None
+[I 2026-06-01 21:25:32,147 minium.Conn2592 connection#377 _ws_run_forever] websocket run forever shutdown
+[I 2026-06-01 21:25:32,335 minium basenative#59 wrapper] call IdeNative.release
+[E 2026-06-01 21:25:32,552 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:25:32,773 minium basenative#59 wrapper] call BaseNative.release
+[I 2026-06-01 21:25:32,966 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-01 21:25:33,138 minium basenative#250 release] Native release
+[E 2026-06-01 21:25:33,394 minium.Conn7840 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:25:33,482 minium basenative#59 wrapper] call BaseNative.release_auto_authorize
+[I 2026-06-01 21:25:33,749 minium.Conn7840 connection#377 _ws_run_forever] websocket run forever shutdown
+[I 2026-06-01 21:25:34,033 minium basenative#63 wrapper] call BaseNative.release_auto_authorize end None
+[E 2026-06-01 21:25:34,668 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:25:35,722 minium basenative#63 wrapper] call BaseNative.release end None
+[I 2026-06-01 21:25:36,822 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-01 21:25:37,034 minium basenative#63 wrapper] call IdeNative.release end None
+[E 2026-06-01 21:25:37,359 minium.Conn4208 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:25:37,561 minium minitest#202 init_miniprogram] start init miniprogram
+[I 2026-06-01 21:25:37,748 minium.Conn4208 connection#377 _ws_run_forever] websocket run forever shutdown
+[I 2026-06-01 21:25:38,830 minium basenative#59 wrapper] call IdeNative.start_wechat
+[E 2026-06-01 21:25:39,939 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:25:41,018 minium basenative#63 wrapper] call IdeNative.start_wechat end None
+[E 2026-06-01 21:25:42,122 minium wx_minium#684 _relaunch] three times try to connect Dev tool has all fail ...
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 673, in _relaunch
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 823, in launch_dev_tool
+    self.connect_dev_tool(False)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+[I 2026-06-01 21:25:42,257 minium wx_minium#738 launch_dev_tool] Starting dev tool and launch MiniProgram project ...
+[I 2026-06-01 21:25:42,385 minium wx_minium#688 _relaunch] end relaunch app
+[I 2026-06-01 21:25:42,584 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-01 21:25:55,191 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 21:25:56,222 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 21:26:01,474 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:26:01,615 minium.Conn0256 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:26:01,895 minium.Conn0256 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:26:02,021 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:26:02,207 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:26:02,378 minium.Conn3664 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:26:02,568 minium.Conn3664 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:26:03,307 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:26:03,452 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:26:03,643 minium.Conn0256 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:26:03,847 minium.Conn0256 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:26:04,095 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[E 2026-06-01 21:26:04,254 minium wx_minium#797 launch_dev_tool] three times try to connect Dev tool has all fail ..., restart now...
+[I 2026-06-01 21:26:04,397 minium wx_minium#811 launch_dev_tool] Starting dev tool again...
+[I 2026-06-01 21:26:04,566 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-01 21:26:07,050 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 21:26:07,483 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 21:26:07,635 minium wx_minium#816 launch_dev_tool] Restart success
+[I 2026-06-01 21:26:12,838 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:26:12,909 minium.Conn2160 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:26:14,035 minium.Conn2160 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:26:15,136 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:26:16,222 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:26:17,363 minium.Conn0528 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:26:17,487 minium.Conn0528 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:26:17,783 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:26:17,967 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:26:18,187 minium.Conn2528 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:26:19,170 minium.Conn2528 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:26:19,550 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:26:19,790 minium minitest#897 capture] capture teardown.png
+[W 2026-06-01 21:26:19,957 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601211337/test_14_song_guess_insufficient_players/20260601212458144547/images/teardown.png not exists
+[E 2026-06-01 21:26:20,196 minium assertbase#390 _get_stack_info] <bound method MiniTest._miniSetUp of <testcases.test_all_games.TestAllGames testMethod=test_14_song_guess_insufficient_players>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 118, in run
+    self._miniSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 456, in _miniSetUp
+    self.init_miniprogram()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 408, in init_miniprogram
+    native, mini, _ = init_miniprogram(self.__class__.CONFIG)
+                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 204, in init_miniprogram
+    mini = get_minium(cfg)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 164, in get_minium
+    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py", line 28, in get_minium_driver
+    return APP[application](conf, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 160, in __init__
+    self.launch_weapp()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 635, in launch_weapp
+    self.launch_dev_tool()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 823, in launch_dev_tool
+    self.connect_dev_tool(False)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+[W 2026-06-01 21:26:20,431 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601211337', 'case_output': './outputs/20260601211337/test_14_song_guess_insufficient_players/20260601212458144547'}
+[W 2026-06-01 21:26:20,549 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 21:26:20,696 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1043ba990>

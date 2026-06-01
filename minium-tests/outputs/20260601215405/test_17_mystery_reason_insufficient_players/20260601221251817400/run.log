@@ -1,0 +1,196 @@
+[I 2026-06-01 22:12:51,818 minium minitest#432 _miniSetUp] =========Current case: test_17_mystery_reason_insufficient_players=========
+[W 2026-06-01 22:12:51,864 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-01 22:12:51,910 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_17_mystery_reason_insufficient_players
+[I 2026-06-01 22:12:51,958 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 22:12:52,006 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-01 22:12:52,053 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-01 22:12:52,193 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 64.85336685180664 seconds for it
+[I 2026-06-01 22:12:52,266 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 22:12:52,313 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 22:12:57,361 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 22:12:57,450 minium.Conn7440 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 22:12:57,539 minium.Conn7440 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 22:12:57,620 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 22:12:57,666 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 22:12:57,746 minium.Conn1792 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 22:12:57,871 minium.Conn1792 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 22:12:57,999 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 22:12:58,045 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 22:12:58,139 minium.Conn0768 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 22:12:58,211 minium.Conn0768 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 22:12:58,275 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[E 2026-06-01 22:12:58,321 minium wx_minium#797 launch_dev_tool] three times try to connect Dev tool has all fail ..., restart now...
+[I 2026-06-01 22:12:58,366 minium wx_minium#811 launch_dev_tool] Starting dev tool again...
+[I 2026-06-01 22:12:58,411 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-01 22:13:03,074 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 22:13:03,074 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 22:13:03,124 minium wx_minium#816 launch_dev_tool] Restart success
+[I 2026-06-01 22:13:08,176 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-01 22:13:08,410 minium.Conn3936 connection#352 _connect] connect to WebChatTools successfully
+[W 2026-06-01 22:13:22,370 minium.Conn3936 connection#330 notify] no observer listening event App.initialized
+[I 2026-06-01 22:13:22,384 minium.App1392 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x107c99f90>
+[I 2026-06-01 22:13:22,667 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x107ff8190>, whether should relaunch: False
+[I 2026-06-01 22:13:23,084 minium wx_minium#688 _relaunch] end relaunch app
+[W 2026-06-01 22:13:23,085 minium wx_minium#1152 wait_app_relaunch] app is relaunch complete
+[I 2026-06-01 22:13:23,214 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 22:13:23,314 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 22:13:23,458 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 22:13:23,531 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 22:13:24,005 minium minitest#487 _miniSetUp] =========case: test_17_mystery_reason_insufficient_players start=========
+[I 2026-06-01 22:13:24,134 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 22:13:24,196 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 22:13:24,982 minium.Conn3936 connection#668 __on_message] [26b20cfa-2853-4e60-8f29-4a5abc8c278c]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:13:29,139 minium minitest#897 capture] capture assertTrue-success_221329138725.png
+[I 2026-06-01 22:13:29,240 minium minitest#897 capture] capture assertTrue-success_221329240380.png
+[E 2026-06-01 22:13:29,697 minium.Conn3936 connection#668 __on_message] [c128afe0-3c1e-48c3-b78d-3ac8f5b0489e]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:13:32,809 minium minitest#897 capture] capture assertTrue-success_221332808627.png
+[E 2026-06-01 22:13:34,994 minium.Conn3936 connection#668 __on_message] [091d4e88-a3f8-4cf3-970b-3218ab20b533]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:13:37,486 minium.App2656 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%226cb23a706a1d938800b2aa011994d68e%22%2C%20%22roomCode%22%3A%20%22327665%22%7D
+[I 2026-06-01 22:13:39,145 minium.Conn3936 connection#704 _handle_async_msg] received async msg: 688b4fd3-e842-41d9-9c14-a06ec41dd1f3
+[I 2026-06-01 22:13:39,145 minium.App2656 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25226cb23a706a1d938800b2aa011994d68e%2522%252C%2520%2522roomCode%2522%253A%2520%2522327665%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780323219135, 'webviewId': 2, 'routeEventId': '2_1780323218572', 'renderer': 'webview'}, 1780323219136]}
+[E 2026-06-01 22:13:43,255 minium.Conn3936 connection#668 __on_message] [0ebebd98-7fd7-4515-81df-36b0ff36b424]: wx.cloud.callFunction not exists
+[E 2026-06-01 22:13:46,082 minium.Conn3936 connection#668 __on_message] [d565b83c-59c3-4cb3-b70a-36cf95ddfaa5]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:13:50,265 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-06-01 22:13:50,361 minium minitest#897 capture] capture assertFalse-success.png
+[E 2026-06-01 22:13:50,601 minium.Conn3936 connection#668 __on_message] [32738813-27de-4323-b2c3-f408744b4f48]: wx.cloud.callFunction not exists
+[E 2026-06-01 22:13:53,124 minium.Conn3936 connection#668 __on_message] [ca6b23c5-760a-4ecc-b018-3825dafbb2e9]: wx.cloud.callFunction not exists
+[I 2026-06-01 22:13:57,517 minium minitest#897 capture] capture assertTrue-success_221357517800.png
+[I 2026-06-01 22:13:57,633 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 22:13:57,680 minium.App2656 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-06-01 22:13:58,683 minium.Conn3936 connection#704 _handle_async_msg] received async msg: 2fb5bdb6-9fc2-48df-bafa-c005b0533232
+[I 2026-06-01 22:13:58,683 minium.App2656 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780323238678, 'webviewId': 4, 'routeEventId': '', 'renderer': 'webview'}, 1780323238679]}
+[I 2026-06-01 22:14:00,201 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 22:14:00,258 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 22:14:00,351 minium basenative#63 wrapper] call BaseNative.get_start_up end 

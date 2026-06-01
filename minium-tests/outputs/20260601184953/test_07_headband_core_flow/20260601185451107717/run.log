@@ -1,0 +1,76 @@
+[I 2026-06-01 18:54:51,108 minium minitest#432 _miniSetUp] =========Current case: test_07_headband_core_flow=========
+[I 2026-06-01 18:54:51,136 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_07_headband_core_flow
+[I 2026-06-01 18:54:51,166 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 18:54:51,196 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 18:54:51,225 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 18:54:51,252 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 18:54:51,278 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 18:54:51,309 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 18:54:51,492 minium minitest#487 _miniSetUp] =========case: test_07_headband_core_flow start=========
+[I 2026-06-01 18:54:51,492 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 18:54:51,532 minium.Conn6480 connection#668 __on_message] [302f2937-1d12-435c-9f4f-9b9a00e23322]: wx.cloud.callFunction not exists
+[I 2026-06-01 18:54:55,877 minium.App0640 app#950 relaunch] ReLaunch: /packageGames/headband/headband?config=%7B%22roomId%22%3A%20%226cb23a706a1d64ff00ad372166e25479%22%2C%20%22roomCode%22%3A%20%22315247%22%7D
+[I 2026-06-01 18:54:57,417 minium.App0640 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/headband/headband', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25226cb23a706a1d64ff00ad372166e25479%2522%252C%2520%2522roomCode%2522%253A%2520%2522315247%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780311297408, 'webviewId': 10, 'routeEventId': '10_1780311296442', 'renderer': 'webview'}, 1780311297408]}
+[I 2026-06-01 18:54:57,447 minium.Conn6480 connection#704 _handle_async_msg] received async msg: 3b49bb7f-e2f5-4c03-8e0b-e05852c092c0
+[I 2026-06-01 18:55:00,028 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 18:55:00,094 minium.Conn6480 connection#668 __on_message] [b791ae01-46c7-4e3d-bd6c-ddffd5ad998b]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:04,858 minium.Conn6480 connection#668 __on_message] [a9a4b491-7671-4ed3-b252-6ff832ec1965]: wx.cloud.callFunction not exists
+[I 2026-06-01 18:55:08,951 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 18:55:08,956 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103bcef30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103bcc190>]
+[E 2026-06-01 18:55:11,143 minium.Conn6480 connection#668 __on_message] [08d357ac-62c4-4844-8fe7-fcfb2a351c29]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:13,862 minium.Conn6480 connection#668 __on_message] [23034aec-0888-4bea-be52-492f8fb36186]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:18,829 minium.Conn6480 connection#668 __on_message] [dbe15394-99cf-4e96-92b1-05ccd6e052a6]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:23,404 minium.Conn6480 connection#668 __on_message] [e089dee1-683a-4fb1-afa5-181458d826ee]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:28,546 minium.Conn6480 connection#668 __on_message] [964f36e5-f037-4ff6-933c-81a63f5b13f0]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:33,180 minium.Conn6480 connection#668 __on_message] [bad1a36e-d3aa-4720-9851-b74de545af73]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:55:37,853 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 343, in test_07_headband_core_flow
+    host, _ = self._run_dynamic_core_flow(HeadbandPage, "start_game", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 238, in _run_dynamic_core_flow
+    self._wait_members(host, count, seed, room_id=rid)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 146, in _wait_members
+    host.wait_member_count_at_least(expected, cloud=self.cloud)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 286, in wait_member_count_at_least
+    raise AssertionError(
+        f"member count did not reach {count}; last={last}"
+    )
+AssertionError: member count did not reach 3; last=2
+[I 2026-06-01 18:55:37,856 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 18:55:37,899 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 18:55:38,018 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 18:55:38,018 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 18:55:38,054 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_07_headband_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_07_headband_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 343, in test_07_headband_core_flow
+    host, _ = self._run_dynamic_core_flow(HeadbandPage, "start_game", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 238, in _run_dynamic_core_flow
+    self._wait_members(host, count, seed, room_id=rid)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 146, in _wait_members
+    host.wait_member_count_at_least(expected, cloud=self.cloud)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 286, in wait_member_count_at_least
+    raise AssertionError(
+        f"member count did not reach {count}; last={last}"
+    )
+AssertionError: member count did not reach 3; last=2
+[W 2026-06-01 18:55:38,086 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601184953', 'case_output': './outputs/20260601184953/test_07_headband_core_flow/20260601185451107717'}
+[W 2026-06-01 18:55:38,116 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 18:55:38,145 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 18:55:38,174 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x103a66cf0>

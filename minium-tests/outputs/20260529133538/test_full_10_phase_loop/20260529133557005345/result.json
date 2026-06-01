@@ -1,0 +1,51 @@
+{
+    "case_name": "test_full_10_phase_loop",
+    "run_time": "20260529 13:35:57",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 836, in connect_dev_tool\n    self.connection = Connection.create(\n                      ~~~~~~~~~~~~~~~~~^\n        self.uri, timeout=self.conf.get(\"request_timeout\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 168, in create\n    instance = cls(uri, *args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 209, in __init__\n    self._connect()\n    ~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 361, in _connect\n    raise error_callback.result\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py\", line 327, in run_forever\n    self.sock.connect(\n    ~~~~~~~~~~~~~~~~~^\n        self.url, header=self.header, cookie=self.cookie,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n        host=host, origin=origin, suppress_origin=suppress_origin,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        proxy_type=proxy_type, socket=self.prepared_socket)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py\", line 248, in connect\n    self.handshake_response = handshake(self.sock, url, *addrs, **options)\n                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py\", line 57, in handshake\n    status, resp = _get_resp_headers(sock)\n                   ~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py\", line 148, in _get_resp_headers\n    raise WebSocketBadStatusException(\"Handshake status %d %s\", status, status_message, resp_headers)\nwebsocket._exceptions.WebSocketBadStatusException: Handshake status 404 Not Found\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 793, in launch_dev_tool\n    self.connect_dev_tool(is_port_in_use)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 851, in connect_dev_tool\n    raise MiniConnectError(\n        \"three times try to connect Dev tool has all fail ...\"\n    )\nminium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 836, in connect_dev_tool\n    self.connection = Connection.create(\n                      ~~~~~~~~~~~~~~~~~^\n        self.uri, timeout=self.conf.get(\"request_timeout\")\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 168, in create\n    instance = cls(uri, *args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 209, in __init__\n    self._connect()\n    ~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 361, in _connect\n    raise error_callback.result\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py\", line 327, in run_forever\n    self.sock.connect(\n    ~~~~~~~~~~~~~~~~~^\n        self.url, header=self.header, cookie=self.cookie,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n        host=host, origin=origin, suppress_origin=suppress_origin,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        proxy_type=proxy_type, socket=self.prepared_socket)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py\", line 248, in connect\n    self.handshake_response = handshake(self.sock, url, *addrs, **options)\n                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py\", line 57, in handshake\n    status, resp = _get_resp_headers(sock)\n                   ~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py\", line 148, in _get_resp_headers\n    raise WebSocketBadStatusException(\"Handshake status %d %s\", status, status_message, resp_headers)\nwebsocket._exceptions.WebSocketBadStatusException: Handshake status 404 Not Found\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/suite.py\", line 64, in _handleClassSetUp\n    _miniClassSetUp()\n    ~~~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 334, in _miniClassSetUp\n    native, mini, miniprogram = init_miniprogram(cls.CONFIG)\n                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 204, in init_miniprogram\n    mini = get_minium(cfg)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 164, in get_minium\n    g_minium = minium.miniprogram.get_minium_driver(conf=cfg, native=g_native)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/__init__.py\", line 28, in get_minium_driver\n    return APP[application](conf, *args, **kwargs)\n           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 160, in __init__\n    self.launch_weapp()\n    ~~~~~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 635, in launch_weapp\n    self.launch_dev_tool()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 823, in launch_dev_tool\n    self.connect_dev_tool(False)\n    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py\", line 851, in connect_dev_tool\n    raise MiniConnectError(\n        \"three times try to connect Dev tool has all fail ...\"\n    )\nminium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...\n",
+    "start_timestamp": 1780032957.00774,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 334,
+    "device": {},
+    "log_filename": "run.log",
+    "error_type": "MiniConnectError",
+    "error_value": "three times try to connect Dev tool has all fail ...",
+    "error_extra_info": "",
+    "error_stages": [
+        "_miniClassSetUp"
+    ],
+    "screen_info": [],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "stop_timestamp": 1780032957.01052,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    @classmethod\n",
+            "    def _miniClassSetUp(cls):\n",
+            "        logger.debug(\"=====================\")\n",
+            "        logger.debug(\"Testing class\uff1a%s\" % cls.__name__)\n",
+            "        logger.debug(\"=====================\")\n",
+            "        super(MiniTest, cls)._miniClassSetUp()\n",
+            "        if not cls.CONFIG.report_usage:\n",
+            "            minium.miniprogram.base_driver.minium_log.existFlag = 1\n",
+            "\n",
+            "        native, mini, miniprogram = init_miniprogram(cls.CONFIG)\n",
+            "        cls.native = native\n",
+            "        cls.mini = mini\n",
+            "        if cls.CONFIG.need_perf:  # start get perf thread\n",
+            "            cls.native.start_get_perf(timeinterval=0.8)\n",
+            "        cls.DEVICE_INFO[\"system_info\"] = miniprogram.system_info\n"
+        ],
+        "start": 325
+    },
+    "filename": "result.json"
+}

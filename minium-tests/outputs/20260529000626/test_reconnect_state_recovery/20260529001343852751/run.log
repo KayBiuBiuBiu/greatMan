@@ -1,0 +1,69 @@
+[I 2026-05-29 00:13:43,854 minium minitest#432 _miniSetUp] =========Current case: test_reconnect_state_recovery=========
+[I 2026-05-29 00:13:43,854 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery
+[I 2026-05-29 00:13:43,854 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 00:13:43,854 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 00:13:43,854 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 00:13:43,854 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 00:13:43,854 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 00:13:43,854 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 00:13:43,927 minium minitest#487 _miniSetUp] =========case: test_reconnect_state_recovery start=========
+[I 2026-05-29 00:13:43,927 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 00:13:43,929 minium.Conn5184 connection#668 __on_message] [cee32ea2-80db-400c-997e-eb3f8f3c473e]: wx.cloud.callFunction not exists
+[I 2026-05-29 00:13:47,334 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 00:13:47,409 minium minitest#897 capture] capture assertTrue-success_001347408863.png
+[E 2026-05-29 00:13:47,475 minium.Conn5184 connection#668 __on_message] [aa3b818a-bd13-4651-a7fd-1cba3aef5886]: wx.cloud.callFunction not exists
+[I 2026-05-29 00:13:50,685 minium minitest#897 capture] capture assertTrue-success_001350685673.png
+[E 2026-05-29 00:13:50,775 minium.Conn5184 connection#668 __on_message] [64c5db75-7ab8-4c18-9f7b-2ad740ca7e83]: wx.cloud.callFunction not exists
+[I 2026-05-29 00:13:53,868 minium.App5072 app#891 navigate_to] NavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22c5c2a88a6a1869bb011917563fbc7a9d%22%2C%20%22roomCode%22%3A%20%22812132%22%7D
+[I 2026-05-29 00:13:54,776 minium.Conn5184 connection#704 _handle_async_msg] received async msg: ebe204d0-d7cc-405e-a9d1-945cc39e0a67
+[I 2026-05-29 00:13:54,776 minium.App5072 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522c5c2a88a6a1869bb011917563fbc7a9d%2522%252C%2520%2522roomCode%2522%253A%2520%2522812132%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779984834768, 'webviewId': 10, 'routeEventId': '10_1779984834129', 'renderer': 'webview'}, 1779984834768]}
+[E 2026-05-29 00:13:58,907 minium.Conn5184 connection#668 __on_message] [b94ea582-f890-4058-8ff6-214d7f2de995]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:03,715 minium.Conn5184 connection#668 __on_message] [ee9a393b-cb65-47b2-ba85-9b0df48caf29]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:08,553 minium.Conn5184 connection#668 __on_message] [23ebe241-84be-40d2-9f05-6fae9d1d8224]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:11,889 minium.Conn5184 connection#668 __on_message] [9796f580-575a-42eb-b08e-0d5520b1c427]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:15,358 minium.Conn5184 connection#668 __on_message] [ad513b16-f8af-43ec-b729-082c90a2dd44]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:18,916 minium.Conn5184 connection#668 __on_message] [ed8cd6e0-7cf0-48d7-bbdc-eb58028c200e]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:22,169 minium.Conn5184 connection#668 __on_message] [e0d26715-68f3-4c5e-bd01-79dc87f4fc53]: wx.cloud.callFunction not exists
+[E 2026-05-29 00:14:27,219 minium.Conn5184 connection#668 __on_message] [07c7b142-be7a-42fa-822e-61f18366be0f]: wx.cloud.callFunction not exists
+[I 2026-05-29 00:14:30,418 minium minitest#897 capture] capture assertEqual-success.png
+[E 2026-05-29 00:14:30,552 minium assertbase#62 hook_assert] False is not true : 重连后公共证据丢失
+[I 2026-05-29 00:14:30,556 minium minitest#897 capture] capture assertTrue-failed.png
+[I 2026-05-29 00:14:30,631 minium page#716 _get_elements_by_css] try to get elements: page
+[I 2026-05-29 00:14:30,635 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x105152d70>]
+[E 2026-05-29 00:14:30,648 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 373, in test_reconnect_state_recovery
+    self.assertTrue(len(state.get("publicClue", [])) > 0, "重连后公共证据丢失")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 744, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true : 重连后公共证据丢失
+[I 2026-05-29 00:14:30,650 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 00:14:30,651 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 00:14:30,737 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 00:14:30,737 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-29 00:14:30,741 minium assertbase#390 _get_stack_info] <bound method TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_reconnect_state_recovery>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 373, in test_reconnect_state_recovery
+    self.assertTrue(len(state.get("publicClue", [])) > 0, "重连后公共证据丢失")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true : 重连后公共证据丢失
+[W 2026-05-29 00:14:30,742 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529000626', 'case_output': './outputs/20260529000626/test_reconnect_state_recovery/20260529001343852751'}
+[W 2026-05-29 00:14:30,742 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-29 00:14:30,742 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-29 00:14:30,742 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x104fdaa50>

@@ -8,6 +8,7 @@ const { callDraw } = require('../../utils/drawRoomCloud')
 const { callDrink } = require('../../utils/drinkRoomCloud')
 const { callHeadband } = require('../../utils/headbandCloud')
 const { callDontdoit } = require('../../utils/dontdoitCloud')
+const { callMysteryReason } = require('../../utils/mysteryReasonCloud')
 
 const {
   SIZES: WOLF_SIZES,
@@ -200,6 +201,14 @@ Page({
       })
       return
     }
+    if (this.data.screen === 'mysteryReason') {
+      wx.showModal({
+        title: 'AI迷雾推理局需多机同场',
+        content: '请创建聚会组并把 6 位口令发给同座；至少 3 人可开局。全程面对面口头推理，无打字聊天。',
+        showCancel: false
+      })
+      return
+    }
     if (this.data.screen === 'drawGuess') {
       wx.showModal({
         title: '你画我猜需多机同场',
@@ -254,6 +263,10 @@ Page({
     }
     if (this.data.screen === 'dontdoit') {
       this.createDontdoitRoom()
+      return
+    }
+    if (this.data.screen === 'mysteryReason') {
+      this.createMysteryReasonRoom()
       return
     }
     if (!wx.cloud) {
@@ -315,10 +328,8 @@ Page({
       return
     }
     wx.showLoading({ title: '建房' })
-    const maxPlayers = this.data.playerCount | 0
-    saveStoredSize(maxPlayers)
     callWerewolfService(
-      withJoinProfile({ action: 'create', maxPlayers }),
+      withJoinProfile({ action: 'create' }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -341,7 +352,7 @@ Page({
           })
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位数字口令告诉身边亲友，他们输入后进同一聚会组。人齐后选 6/8/10/12 人局。',
+            content: '把 6 位数字口令告诉身边亲友，他们输入后进同一聚会组。至少 6 人即可开局，进多少人就多少人。',
             confirmText: '开始互动',
             showCancel: false,
             success: (res) => {
@@ -405,7 +416,7 @@ Page({
           })
           wx.showModal({
             title: '聚会组口令：' + (code || '—'),
-            content: '把 6 位数字口令告诉身边亲友，他们输入后进同一聚会组。至少 3 人且需凑满设定人数。',
+            content: '把 6 位数字口令告诉身边亲友，他们输入后进同一聚会组。至少 3 人即可开局，进多少人就多少人。',
             confirmText: '开始互动',
             showCancel: false,
             success: (res) => {
@@ -582,6 +593,59 @@ Page({
     wx.navigateTo({ url: u, fail: (e) => { wx.showToast({ title: (e && e.errMsg) || '进房失败', icon: 'none' }) } })
   },
 
+  createMysteryReasonRoom() {
+    if (!wx.cloud) {
+      wx.showToast({ title: '请先开通云开发', icon: 'none' })
+      return
+    }
+    wx.showLoading({ title: '建房' })
+    callMysteryReason(
+      withJoinProfile({ action: 'create', difficulty: '新手' }),
+      {
+        onOk: (res) => {
+          wx.hideLoading()
+          const r = (res && res.result) || {}
+          if (r.errMsg || !r.roomId) {
+            wx.showToast({
+              title: r.errMsg || '创建聚会组失败，请重试',
+              icon: 'none'
+            })
+            return
+          }
+          const code = (r.roomCode || '').toString()
+          const cfg = { roomId: String(r.roomId), roomCode: code }
+          wx.showModal({
+            title: '聚会组口令：' + (code || '—'),
+            content:
+              '把 6 位数字口令发给同座；至少 3 人才能开始。全程面对面口头推理，本机仅查看剧本与线索。',
+            confirmText: '进入',
+            showCancel: false,
+            success: (m) => {
+              if (m.confirm) this.goMysteryReason(cfg)
+            }
+          })
+        },
+        onError: () => wx.hideLoading()
+      }
+    )
+  },
+
+  goMysteryReason(cfg) {
+    if (!((cfg && cfg.roomId) || '')) {
+      wx.showToast({ title: '组号无效', icon: 'none' })
+      return
+    }
+    const u =
+      '/packageGames/mystery-reason/mystery-reason?config=' +
+      encodeURIComponent(JSON.stringify(cfg || {}))
+    wx.navigateTo({
+      url: u,
+      fail: (e) => {
+        wx.showToast({ title: (e && e.errMsg) || '进组失败', icon: 'none' })
+      }
+    })
+  },
+
   createHeadbandRoom () {
     if (!wx.cloud) {
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
@@ -731,6 +795,10 @@ Page({
     }
     if (this.data.screen === 'dontdoit') {
       this.goDontdoit(extra || {})
+      return
+    }
+    if (this.data.screen === 'mysteryReason') {
+      this.goMysteryReason(extra || {})
       return
     }
     const page = 'play'

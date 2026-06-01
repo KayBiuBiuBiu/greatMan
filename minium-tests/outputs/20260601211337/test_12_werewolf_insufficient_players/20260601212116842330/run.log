@@ -1,0 +1,112 @@
+[I 2026-06-01 21:21:16,844 minium minitest#432 _miniSetUp] =========Current case: test_12_werewolf_insufficient_players=========
+[I 2026-06-01 21:21:17,087 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_12_werewolf_insufficient_players
+[I 2026-06-01 21:21:17,190 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:21:17,237 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 21:21:17,285 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 21:21:17,332 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 21:21:17,380 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 21:21:17,436 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 21:21:17,756 minium minitest#487 _miniSetUp] =========case: test_12_werewolf_insufficient_players start=========
+[I 2026-06-01 21:21:17,808 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 21:21:17,856 minium.Conn7200 connection#668 __on_message] [93abdab6-c542-45e4-810f-d298397148b2]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:21:18,963 minium.App1232 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/song-guess/song-guess', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1780320078956, 'webviewId': 37, 'routeEventId': '37_1780320078371', 'renderer': 'webview'}, 1780320078957]}
+[I 2026-06-01 21:21:18,967 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 527b066a-101d-46d1-a356-b96f2e7f7700, maybe command ignore response
+[I 2026-06-01 21:21:20,370 minium.Conn7200 connection#704 _handle_async_msg] received async msg: f2817eec-ee46-41ae-b525-5cd7e9c855de, maybe command ignore response
+[I 2026-06-01 21:21:20,425 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 72e7fef0-bf46-4b66-b659-9e53673755e3, maybe command ignore response
+[I 2026-06-01 21:21:20,444 minium.App1232 app#950 relaunch] ReLaunch: /packageGames/werewolf/werewolf?config=%7B%22roomId%22%3A%20%229824cfe06a1d8750006fc6bf0e557f95%22%2C%20%22roomCode%22%3A%20%22271288%22%7D
+[I 2026-06-01 21:21:20,476 minium.Conn7200 connection#704 _handle_async_msg] received async msg: e5b9b8d2-91eb-4996-9ada-c6bee6a25364, maybe command ignore response
+[I 2026-06-01 21:21:21,876 minium.Conn7200 connection#704 _handle_async_msg] received async msg: a6d402a3-7dbd-4f46-a49f-0c793cc2c693
+[I 2026-06-01 21:21:21,879 minium.App1232 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/werewolf/werewolf', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25229824cfe06a1d8750006fc6bf0e557f95%2522%252C%2520%2522roomCode%2522%253A%2520%2522271288%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780320081872, 'webviewId': 38, 'routeEventId': '38_1780320081155', 'renderer': 'webview'}, 1780320081873]}
+[I 2026-06-01 21:21:21,881 minium.Conn7200 connection#704 _handle_async_msg] received async msg: c56827d0-a200-4f11-9b8f-72ace2fd1cc4, maybe command ignore response
+[I 2026-06-01 21:21:22,500 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 08d8c747-b943-4bf0-8a27-769bccedd6b2, maybe command ignore response
+[I 2026-06-01 21:21:22,567 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 0db0192f-a8c4-4dd5-9d5a-dffd48a11923, maybe command ignore response
+[I 2026-06-01 21:21:22,833 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 841411b1-4e8b-4286-922c-108186685da0, maybe command ignore response
+[I 2026-06-01 21:21:24,346 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 4627f101-29a5-46c4-9381-021b920dd9cd, maybe command ignore response
+[I 2026-06-01 21:21:24,353 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 273ea2de-08cf-481b-9fb5-91ffd3369598, maybe command ignore response
+[I 2026-06-01 21:21:24,439 minium.Conn7200 connection#704 _handle_async_msg] received async msg: bdd56500-6899-4600-8d6d-b3e3306b91d7, maybe command ignore response
+[I 2026-06-01 21:21:24,830 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-06-01 21:21:24,863 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 03537488-6f8b-4aaa-a36f-353347e435ee, maybe command ignore response
+[E 2026-06-01 21:21:25,241 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 421, in test_12_werewolf_insufficient_players
+    self._run_insufficient_then_sufficient(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        WerewolfPage, "start_game", "身份推理", min_players=6, insufficient=5
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 321, in _run_insufficient_then_sufficient
+    seed_bad = self._join_players(
+        page_cls, room_code, bad_added, room_id=info.get("roomId")
+    )
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 81, in _join_players
+    result = self.cloud.seed_players(
+        game_key,
+    ...<3 lines>...
+        start_index=start_index,
+    )
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 246, in seed_players
+    raw = self.call_function(
+        service,
+    ...<6 lines>...
+        },
+    )
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 114, in call_function
+    self.log(f"callFunction {name}: {json.dumps(data or {}, ensure_ascii=False)}")
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 42, in log
+    print(f"[CloudHelper] {message}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+[I 2026-06-01 21:21:25,293 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:21:25,346 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 21:21:25,661 minium.Conn7200 connection#704 _handle_async_msg] received async msg: 0e5a9ba1-e5b7-4531-aaca-54789fecefd2, maybe command ignore response
+[I 2026-06-01 21:21:26,042 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:21:26,088 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 21:21:26,145 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_12_werewolf_insufficient_players of <testcases.test_all_games.TestAllGames testMethod=test_12_werewolf_insufficient_players>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 421, in test_12_werewolf_insufficient_players
+    self._run_insufficient_then_sufficient(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        WerewolfPage, "start_game", "身份推理", min_players=6, insufficient=5
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 321, in _run_insufficient_then_sufficient
+    seed_bad = self._join_players(
+        page_cls, room_code, bad_added, room_id=info.get("roomId")
+    )
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 81, in _join_players
+    result = self.cloud.seed_players(
+        game_key,
+    ...<3 lines>...
+        start_index=start_index,
+    )
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 246, in seed_players
+    raw = self.call_function(
+        service,
+    ...<6 lines>...
+        },
+    )
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 114, in call_function
+    self.log(f"callFunction {name}: {json.dumps(data or {}, ensure_ascii=False)}")
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 42, in log
+    print(f"[CloudHelper] {message}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe
+[W 2026-06-01 21:21:26,193 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601211337', 'case_output': './outputs/20260601211337/test_12_werewolf_insufficient_players/20260601212116842330'}
+[W 2026-06-01 21:21:26,241 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 21:21:26,291 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 21:21:26,339 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1040caba0>

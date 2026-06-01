@@ -1,0 +1,206 @@
+{
+    "case_name": "test_full_10_phase_loop",
+    "run_time": "20260529 11:54:11",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 243, in test_full_10_phase_loop\n    self._wait_phase(page, room_id, phase, timeout=90)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 123, in _wait_phase\n    page.wait_phase(\n    ~~~~~~~~~~~~~~~^\n        phase,\n        ^^^^^^\n    ...<2 lines>...\n        room_id=room_id,\n        ^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py\", line 117, in wait_phase\n    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)\n           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py\", line 191, in wait_phase_text\n    raise AssertionError(f\"phase text {text!r} not reached\")\nAssertionError: phase text '\u8bc1\u636e\u6d3e\u53d1' not reached\n",
+    "start_timestamp": 1780026851.8391612,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 243,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "phase text '\u8bc1\u636e\u6d3e\u53d1' not reached",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1780026851,
+            "datetime": "2026-05-29 11:54:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780026855,
+            "datetime": "2026-05-29 11:54:15",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_115415066767.png",
+            "ts": 1780026855,
+            "datetime": "2026-05-29 11:54:15",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_115418507984.png",
+            "ts": 1780026858,
+            "datetime": "2026-05-29 11:54:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_115430860579.png",
+            "ts": 1780026870,
+            "datetime": "2026-05-29 11:54:30",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertEqual-success.png",
+            "ts": 1780026875,
+            "datetime": "2026-05-29 11:54:35",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1780026990,
+            "datetime": "2026-05-29 11:56:30",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780026990.9599721,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_full_10_phase_loop(self):\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "\n",
+            "        self._start_and_reach_read_script(page, room_id)\n",
+            "\n",
+            "        for phase in (\n",
+            "            \"public_discuss\",\n",
+            "            \"get_evidence\",\n",
+            "            \"analyze_clue\",\n",
+            "            \"final_vote\",\n",
+            "            \"wait_unlock_review\",\n",
+            "        ):\n",
+            "            self._unwrap_cloud(self.cloud.force_next_phase(room_id))\n",
+            "            self._wait_phase(page, room_id, phase, timeout=90)\n",
+            "\n",
+            "        unlock_res = self._unwrap_cloud(self.cloud.unlock_review(room_id, verify=True))\n",
+            "        if not self._is_cloud_success(unlock_res):\n",
+            "            self._unwrap_cloud(self.cloud.advance_to_ai_review(room_id))\n",
+            "        self._wait_phase(page, room_id, \"ai_review\", timeout=120)\n",
+            "\n",
+            "        self._unwrap_cloud(self.cloud.force_next_phase(room_id))\n",
+            "        self._wait_phase(page, room_id, \"finished\", timeout=60)\n",
+            "\n",
+            "        self._unwrap_cloud(self.cloud.restart_game(room_id))\n",
+            "        self._wait_phase(page, room_id, \"waiting\", timeout=60)\n"
+        ],
+        "start": 229
+    },
+    "filename": "result.json"
+}

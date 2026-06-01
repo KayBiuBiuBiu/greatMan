@@ -1,0 +1,18 @@
+{
+    "session_error": {
+        "error_type": "LoadCaseError",
+        "error_value": "\u7528\u4f8b\u6570\u4e3a0"
+    },
+    "test_num": 0,
+    "errors": [],
+    "failures": [],
+    "class_errors": [],
+    "class_failures": [],
+    "import_error": {
+        "testcases.test_dontdoit_party": {
+            "error_type": "LoadCaseError",
+            "error_value": "No module named 'base.base_test'",
+            "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/caseinspect.py\", line 99, in get_mod\n    mod = import_module(module_name)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/caseinspect.py\", line 37, in import_module\n    mod = __import__(module_name)\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_dontdoit_party.py\", line 1, in <module>\n    from base.base_test import BaseMiniTest\nminium.framework.exception.LoadCaseError: No module named 'base.base_test'\n"
+        }
+    }
+}

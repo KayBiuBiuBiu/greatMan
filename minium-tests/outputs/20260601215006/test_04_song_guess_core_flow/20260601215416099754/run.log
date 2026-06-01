@@ -1,0 +1,441 @@
+[I 2026-06-01 21:54:16,100 minium minitest#432 _miniSetUp] =========Current case: test_04_song_guess_core_flow=========
+[I 2026-06-01 21:54:16,227 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_04_song_guess_core_flow
+[I 2026-06-01 21:54:16,271 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:54:16,316 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-01 21:54:16,360 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-01 21:54:16,404 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 67.38176107406616 seconds for it
+[I 2026-06-01 21:54:17,608 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:54:17,678 minium.Conn6224 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:54:17,756 minium.Conn6224 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:54:17,904 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:54:17,950 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:54:18,034 minium.Conn0592 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:54:18,052 minium.Conn0592 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:54:18,123 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[I 2026-06-01 21:54:18,162 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[E 2026-06-01 21:54:18,281 minium.Conn2112 connection#642 _on_error] [Errno 61] Connection refused
+[I 2026-06-01 21:54:18,375 minium.Conn2112 connection#377 _ws_run_forever] websocket run forever shutdown
+[E 2026-06-01 21:54:18,748 minium wx_minium#848 connect_dev_tool] [Errno 61] Connection refused
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 244, in connect
+    self.sock, addrs = connect(url, self.sock_opt, proxy_info(**options),
+                       ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                               options.pop('socket', None))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 130, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 205, in _open_socket
+    raise err
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_http.py", line 185, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+[E 2026-06-01 21:54:18,913 minium wx_minium#797 launch_dev_tool] three times try to connect Dev tool has all fail ..., restart now...
+[I 2026-06-01 21:54:18,961 minium wx_minium#811 launch_dev_tool] Starting dev tool again...
+[I 2026-06-01 21:54:19,008 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-01 21:54:24,598 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:13273
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-01 21:54:24,658 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-01 21:54:24,713 minium wx_minium#816 launch_dev_tool] Restart success
+[I 2026-06-01 21:54:29,794 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-01 21:54:30,241 minium.Conn9088 connection#352 _connect] connect to WebChatTools successfully
+[I 2026-06-01 21:54:34,410 minium.Conn9088 connection#704 _handle_async_msg] received async msg: cf776853-98a4-4e7c-9e1e-7f0f0c88a4c7, maybe command ignore response
+[E 2026-06-01 21:54:40,459 minium.Conn9088 connection#668 __on_message] [b379ac80-a6c1-48b3-b427-6b1ff0c5c7db]: element destroyed
+[I 2026-06-01 21:54:40,460 minium.Conn9088 connection#704 _handle_async_msg] received async msg: b379ac80-a6c1-48b3-b427-6b1ff0c5c7db, maybe command ignore response
+[W 2026-06-01 21:54:41,850 minium.Conn9088 connection#330 notify] no observer listening event App.initialized
+[I 2026-06-01 21:54:41,886 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 5693764e-93d4-46de-a450-649ea686051e, maybe command ignore response
+[I 2026-06-01 21:54:42,191 minium.App8224 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x120efde50>
+[I 2026-06-01 21:54:42,192 minium.Conn9088 connection#704 _handle_async_msg] received async msg: fdbe41f6-7968-413c-bef2-76eb0ef9e5be, maybe command ignore response
+[I 2026-06-01 21:54:42,597 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 63e40ef5-5f49-49dd-a5f0-6c9680148458, maybe command ignore response
+[I 2026-06-01 21:54:42,922 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ad8fd9a7-44a1-487e-a20f-8f4a98fd6605, maybe command ignore response
+[I 2026-06-01 21:54:42,981 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c2076c27-875d-40af-b87c-4d2dd0cd5d82, maybe command ignore response
+[I 2026-06-01 21:54:43,026 minium.Conn9088 connection#704 _handle_async_msg] received async msg: fe1115da-a18b-4f80-9f0b-6632ae54022b, maybe command ignore response
+[I 2026-06-01 21:54:43,564 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 4caae293-bfad-4725-90f8-58d184267cf6, maybe command ignore response
+[I 2026-06-01 21:54:43,568 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c15510e0-8fd4-447c-a664-a0fa8855daf2, maybe command ignore response
+[I 2026-06-01 21:54:43,681 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3321b109-5260-49cc-bd58-882166a59d88, maybe command ignore response
+[I 2026-06-01 21:54:43,727 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0466e6e1-b806-486c-8294-368cea3d00ab, maybe command ignore response
+[I 2026-06-01 21:54:44,136 minium.Conn9088 connection#704 _handle_async_msg] received async msg: f71f10c9-1ac7-4453-a393-3a9ea3d63c98, maybe command ignore response
+[I 2026-06-01 21:54:44,235 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 6d5582d7-83cb-4eee-956a-d4d5689aedc1, maybe command ignore response
+[I 2026-06-01 21:54:44,462 minium.Conn9088 connection#704 _handle_async_msg] received async msg: eaf3c8d3-0972-4cb0-94d7-1b5ec390c0eb, maybe command ignore response
+[I 2026-06-01 21:54:44,491 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 165e4616-3ea6-4cd7-9d1e-2c3d688a92c2, maybe command ignore response
+[I 2026-06-01 21:54:44,557 minium.Conn9088 connection#704 _handle_async_msg] received async msg: d328d364-44e5-4c1d-bfe8-7022757c6264, maybe command ignore response
+[I 2026-06-01 21:54:44,603 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 9567a9e7-5779-4d21-b184-aea3cce3dba2, maybe command ignore response
+[I 2026-06-01 21:54:45,588 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0b29abba-7215-47e6-845c-5771ccea111a, maybe command ignore response
+[I 2026-06-01 21:54:45,604 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 99174daa-6e77-4260-8eec-7e5bc60051a1, maybe command ignore response
+[I 2026-06-01 21:54:45,969 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 5dea27c1-ba7d-440c-b5aa-29f6a964f4c5, maybe command ignore response
+[I 2026-06-01 21:54:46,297 minium.Conn9088 connection#704 _handle_async_msg] received async msg: fc7112e8-3e0f-4fc7-8bf9-63c0901968b7, maybe command ignore response
+[I 2026-06-01 21:54:46,309 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 610efbd6-1439-46b1-b311-1ab1066cc819, maybe command ignore response
+[I 2026-06-01 21:54:46,696 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 954dceaa-1a2f-43da-a1a2-a3aa0a4186d9, maybe command ignore response
+[I 2026-06-01 21:54:46,741 minium.Conn9088 connection#704 _handle_async_msg] received async msg: a14f9cf5-9a5c-47d3-96d5-22c8570e4a25, maybe command ignore response
+[I 2026-06-01 21:54:47,154 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3e2f722c-1afc-40ae-a59c-75ab27cbe2ff, maybe command ignore response
+[I 2026-06-01 21:54:47,159 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 2cc2a9a4-c19d-4750-b304-38fb7983e9e5, maybe command ignore response
+[I 2026-06-01 21:54:47,525 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 58031df9-0cdc-4440-9179-9885388eb885, maybe command ignore response
+[I 2026-06-01 21:54:47,569 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 44e95264-f557-44f5-abb6-eede27d53981, maybe command ignore response
+[I 2026-06-01 21:54:48,521 minium.Conn9088 connection#704 _handle_async_msg] received async msg: fd85379b-920f-46b7-9c93-07855e4b6d26, maybe command ignore response
+[I 2026-06-01 21:54:48,699 minium.Conn9088 connection#704 _handle_async_msg] received async msg: a6222835-85d7-4257-8f50-2e6675deb497, maybe command ignore response
+[I 2026-06-01 21:54:48,746 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8da989ca-dd44-4af5-9f6c-b118f0537a6f, maybe command ignore response
+[I 2026-06-01 21:54:49,223 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 237d5c5a-ddcb-4eee-8ed9-3e9c3834f484, maybe command ignore response
+[I 2026-06-01 21:54:49,238 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8b153348-615a-4f3c-a04c-2d3773a837e3, maybe command ignore response
+[I 2026-06-01 21:54:49,406 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 6e4cd172-91d0-4b2f-9342-c7f9263246e9, maybe command ignore response
+[I 2026-06-01 21:54:50,087 minium.Conn9088 connection#704 _handle_async_msg] received async msg: b84d1686-3745-4e95-bcf7-02de28e5da88, maybe command ignore response
+[I 2026-06-01 21:54:50,101 minium.Conn9088 connection#704 _handle_async_msg] received async msg: d1cfa7ad-c02b-4baa-9769-18227a226d75, maybe command ignore response
+[I 2026-06-01 21:54:50,229 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 906fd450-a616-4b0c-b66b-6d979c45ad30, maybe command ignore response
+[I 2026-06-01 21:54:50,372 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 418afd55-fad5-4471-b14f-039802be1d07, maybe command ignore response
+[I 2026-06-01 21:54:51,287 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ee684631-6912-4739-b7f9-1b8e0ba8a05d, maybe command ignore response
+[I 2026-06-01 21:54:51,536 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 88faf49c-bb18-4403-8112-055688e78c51, maybe command ignore response
+[I 2026-06-01 21:54:51,536 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x120efefd0>, whether should relaunch: False
+[I 2026-06-01 21:54:51,626 minium wx_minium#688 _relaunch] end relaunch app
+[W 2026-06-01 21:54:51,672 minium wx_minium#1152 wait_app_relaunch] app is relaunch complete
+[I 2026-06-01 21:54:51,718 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 21:54:51,830 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 21:54:52,151 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 21:54:52,250 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 21:54:52,463 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 69c144b6-8e50-4f89-ba53-05b8769a0b57, maybe command ignore response
+[I 2026-06-01 21:54:52,480 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3d879359-46ad-42c9-a7c3-e93ea91bcf67, maybe command ignore response
+[I 2026-06-01 21:54:52,799 minium.Conn9088 connection#704 _handle_async_msg] received async msg: cbb2f0ce-e772-4057-81a8-3414f8a9344b, maybe command ignore response
+[I 2026-06-01 21:54:52,978 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 65ac5400-0039-4969-ad27-abca26b083f3, maybe command ignore response
+[I 2026-06-01 21:54:52,988 minium minitest#487 _miniSetUp] =========case: test_04_song_guess_core_flow start=========
+[I 2026-06-01 21:54:53,454 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3542932b-5caf-4e8f-95b8-ef1b846c1f26, maybe command ignore response
+[I 2026-06-01 21:54:53,581 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 21:54:54,019 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8b2ffec5-554d-480d-bb1d-822d3eea72d5, maybe command ignore response
+[I 2026-06-01 21:54:54,206 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 03fea825-9345-4020-8207-9a9fad1509f5, maybe command ignore response
+[E 2026-06-01 21:54:54,252 minium.Conn9088 connection#668 __on_message] [95db144f-4c47-481f-beae-2dc6eb0cf69e]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:54:54,302 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 95db144f-4c47-481f-beae-2dc6eb0cf69e, maybe command ignore response
+[I 2026-06-01 21:54:54,358 minium.Conn9088 connection#704 _handle_async_msg] received async msg: dd4d8d89-30f2-4390-a827-7e0ea1a4a236, maybe command ignore response
+[I 2026-06-01 21:54:54,405 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8da2f3de-9360-4139-b41d-209bf548ca33, maybe command ignore response
+[I 2026-06-01 21:54:54,468 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 1226b793-69f8-4de8-8883-2eacdd1dc0c8, maybe command ignore response
+[I 2026-06-01 21:54:54,525 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 862e83c0-8dc4-4644-9f31-7f86001e5792, maybe command ignore response
+[I 2026-06-01 21:54:54,574 minium.Conn9088 connection#704 _handle_async_msg] received async msg: f0a4f22d-d634-4fc6-960d-3a5f59452d14, maybe command ignore response
+[I 2026-06-01 21:54:55,437 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8df86c29-e340-4e30-a437-e07287386b8a, maybe command ignore response
+[E 2026-06-01 21:54:55,696 minium.Conn9088 connection#668 __on_message] [6be9270b-e0f6-4391-809c-1d077f00140e]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:54:55,912 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c85b3b1e-1117-41cd-b8a1-87c4100d0eb3, maybe command ignore response
+[I 2026-06-01 21:54:56,485 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 410ec62d-c31d-499b-90d5-8cff1623a6dc, maybe command ignore response
+[I 2026-06-01 21:54:56,491 minium.Conn9088 connection#704 _handle_async_msg] received async msg: bb22c1a7-05e8-4c58-99ff-3f10eb1158ff, maybe command ignore response
+[I 2026-06-01 21:54:56,558 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 7e15386c-abe9-4b34-9145-a5bc91bde342, maybe command ignore response
+[I 2026-06-01 21:54:58,517 minium.Conn9088 connection#704 _handle_async_msg] received async msg: f3e9a55e-b33c-476f-9f8f-6271c4b29471, maybe command ignore response
+[I 2026-06-01 21:54:58,659 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 844cbbfd-9fac-4374-8d06-6ea947854e0f, maybe command ignore response
+[E 2026-06-01 21:54:58,803 minium.Conn9088 connection#668 __on_message] [30d60aa1-d8ea-4eca-a589-931076a1d38c]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:54:59,031 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 30d60aa1-d8ea-4eca-a589-931076a1d38c, maybe command ignore response
+[I 2026-06-01 21:55:02,842 minium.App2704 app#891 navigate_to] NavigateTo: /packageGames/song-guess/song-guess
+[W 2026-06-01 21:55:04,778 minium.Conn9088 connection#330 notify] no observer listening event showToast_before_1780322089107
+[W 2026-06-01 21:55:04,781 minium.Conn9088 connection#330 notify] no observer listening event showToast_before_1780322091288
+[I 2026-06-01 21:55:04,865 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 5877fd7c-0b09-46dd-a32e-cab2f8772c57, maybe command ignore response
+[I 2026-06-01 21:55:04,865 minium.App2704 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/draw-guess/draw-guess', 'query': {'roomId': '9824cfe06a1d8f30007082a917221ff7', 'roomCode': '749797'}, 'openType': 'reLaunch', 'timeStamp': 1780322104768, 'webviewId': 2, 'routeEventId': '2_1780322099965', 'renderer': 'webview'}, 1780322104769]}
+[W 2026-06-01 21:55:04,948 minium.Conn9088 connection#330 notify] no observer listening event showToast_callback_1780322089107
+[W 2026-06-01 21:55:05,319 minium.Conn9088 connection#330 notify] no observer listening event showToast_callback_1780322091288
+[I 2026-06-01 21:55:05,367 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 79306d8f-1264-4ff5-8c04-5979c6a24ee8
+[W 2026-06-01 21:55:05,413 minium.App2704 app#894 navigate_to] NavigateTo(/packageGames/song-guess/song-guess) but(/packageGames/draw-guess/draw-guess)
+[I 2026-06-01 21:55:06,463 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-01 21:55:06,856 minium.App2704 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {'roomId': '6cb23a706a1d8f3600b226e16d7e03ec', 'roomCode': '915684'}, 'openType': 'reLaunch', 'timeStamp': 1780322106851, 'webviewId': 4, 'routeEventId': '4_1780322106475', 'renderer': 'webview'}, 1780322106851]}
+[I 2026-06-01 21:55:06,857 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 5178d0c0-13f4-4100-a5f2-5b0d63a45d67, maybe command ignore response
+[I 2026-06-01 21:55:07,433 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-01 21:55:07,817 minium.Conn9088 connection#704 _handle_async_msg] received async msg: d8dc5a59-85f6-4851-809a-15317976d32c, maybe command ignore response
+[I 2026-06-01 21:55:07,820 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0922c138-ba3d-4611-9e9e-980cd35565ea, maybe command ignore response
+[I 2026-06-01 21:55:07,878 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c120e3bb-b141-4cc3-b488-ef740f9eae33, maybe command ignore response
+[I 2026-06-01 21:55:07,933 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ddf6d900-41da-4d7b-b575-729b983c888b, maybe command ignore response
+[I 2026-06-01 21:55:07,981 minium.Conn9088 connection#704 _handle_async_msg] received async msg: e3d1b0ff-bfc0-4f06-91f8-ef1ad2e73a92, maybe command ignore response
+[I 2026-06-01 21:55:08,030 minium.Conn9088 connection#704 _handle_async_msg] received async msg: bf46754c-3af1-452e-97c8-3e137652ebf5, maybe command ignore response
+[I 2026-06-01 21:55:08,091 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 823cce75-118d-4cf9-a4f2-9eae1ecc3131, maybe command ignore response
+[E 2026-06-01 21:55:08,137 minium.Conn9088 connection#668 __on_message] [a1c678ab-7893-4201-8282-01922950a179]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:55:08,185 minium.Conn9088 connection#704 _handle_async_msg] received async msg: a1c678ab-7893-4201-8282-01922950a179, maybe command ignore response
+[I 2026-06-01 21:55:09,153 minium.Conn9088 connection#704 _handle_async_msg] received async msg: f5a0673a-a1ee-45a0-9af0-b6fdbf81e974, maybe command ignore response
+[I 2026-06-01 21:55:09,204 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 2aef39db-9536-4cd5-81ea-1aaf668a4d91, maybe command ignore response
+[I 2026-06-01 21:55:09,250 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 7010049c-845d-4e55-9f84-9dc2ec99580b, maybe command ignore response
+[I 2026-06-01 21:55:09,296 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0eee448a-bd45-4158-9d9c-dcec7bd9d8e4, maybe command ignore response
+[I 2026-06-01 21:55:09,906 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 93548bed-d229-412a-9c6d-5afb2d2f4145, maybe command ignore response
+[E 2026-06-01 21:55:10,301 minium.Conn9088 connection#668 __on_message] [2fecf540-15c2-41e7-9d1f-dd9e4b630116]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:55:10,353 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 2fecf540-15c2-41e7-9d1f-dd9e4b630116, maybe command ignore response
+[I 2026-06-01 21:55:11,080 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 52a007c1-e8f6-43f0-8570-d9e30b3ac079, maybe command ignore response
+[I 2026-06-01 21:55:12,189 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0fec8944-9e5c-4279-9247-9d7fdf308407, maybe command ignore response
+[E 2026-06-01 21:55:12,521 minium.Conn9088 connection#668 __on_message] [57bdd23a-ec2a-4faf-b944-b81678c27a60]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:55:12,522 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 57bdd23a-ec2a-4faf-b944-b81678c27a60, maybe command ignore response
+[I 2026-06-01 21:55:15,458 minium.Conn9088 connection#704 _handle_async_msg] received async msg: fedd6790-78a2-4f82-9056-7f949c20d788, maybe command ignore response
+[I 2026-06-01 21:55:16,739 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 76a9fc0f-d6a2-45f3-b41f-622882217194, maybe command ignore response
+[I 2026-06-01 21:55:16,848 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c510fa46-5698-4203-b6fb-ca6c3526ff59, maybe command ignore response
+[I 2026-06-01 21:55:16,984 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 76a95c47-5ac9-4c73-bd2c-8321cc5f7dcc, maybe command ignore response
+[I 2026-06-01 21:55:17,862 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3e49cee3-80f2-40cf-8aaf-9c879eb0df8b, maybe command ignore response
+[I 2026-06-01 21:55:17,941 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 94ef869b-5225-495c-96e6-6cd034019001, maybe command ignore response
+[I 2026-06-01 21:55:17,987 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 2dd84f10-127d-4a9b-86b6-6b6a112a3bd1, maybe command ignore response
+[I 2026-06-01 21:55:18,955 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8b17eb71-e2d2-4332-a99b-9c7ebcf553de, maybe command ignore response
+[I 2026-06-01 21:55:19,018 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c67b3e69-e13e-4aac-a10e-8c7d513bedb5, maybe command ignore response
+[I 2026-06-01 21:55:19,066 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0195f2ec-c727-45a4-a728-ec7b6e7a583c, maybe command ignore response
+[W 2026-06-01 21:55:19,450 minium page#747 _get_elements_by_css] Could not found any element 'input' you need
+[E 2026-06-01 21:55:19,452 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 369, in get_element
+    r = self.get_elements(
+        _selector,
+        max_timeout,
+        auto_fix=auto_fix
+    )
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 452, in get_elements
+    return self._get_elements_by_css(_selector, max_timeout, index=_selector.index, auto_fix=auto_fix)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 719, in _get_elements_by_css
+    els = search_elements(_selector_list)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 64, in wrapper
+    r = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 711, in search_elements
+    return self.__search_child(
+           ~~~~~~~~~~~~~~~~~~~^
+        _selectors[0:], index=index
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # __search_child回pop元素，第一次search失败后重试会有问题，copy一份
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 670, in __search_child
+    els = self.__get_elements(_selector)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 90, in wrapper
+    ret = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 648, in __get_elements
+    ret = self._send("Page.getElements", {"selector": selector.css})
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.PageDestroyed: page destroyed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 382, in test_04_song_guess_core_flow
+    host, _ = self._run_dynamic_core_flow(SongPage, "start_round", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 286, in _run_dynamic_core_flow
+    info = self._create_host_room(page_cls, host)
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 222, in _create_host_room
+    return host.create_room(cloud=self.cloud)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/song_page.py", line 44, in create_room
+    self.input_text("input", nick)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 337, in input_text
+    el = self.get(selector, timeout=timeout)
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 298, in get
+    return self.page.get_element(selector, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 302, in wrapper
+    return attr(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 375, in get_element
+    raise MiniElementNotFoundError(_selector)
+minium.framework.exception.MiniElementNotFoundError: element[input] not found
+[I 2026-06-01 21:55:19,501 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:55:19,552 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 21:55:19,709 minium page#716 _get_elements_by_css] try to get elements: page
+[I 2026-06-01 21:55:19,959 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x120e2f770>]
+[I 2026-06-01 21:55:19,980 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:55:20,239 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[I 2026-06-01 21:55:20,311 minium.Conn9088 connection#704 _handle_async_msg] received async msg: efec6943-34e4-4738-83f4-25e98809e3f0, maybe command ignore response
+[W 2026-06-01 21:55:20,490 minium findwxml#780 search] 没有找到任何[input]对应的元素
+[I 2026-06-01 21:55:20,914 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ff9535e6-7c10-42b7-a7f7-8c4284ab0fe0, maybe command ignore response
+[W 2026-06-01 21:55:21,144 minium findwxml#897 log_search_result] 未查找任何符合的元素
+[I 2026-06-01 21:55:21,273 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 1556b614-c62a-4210-9314-65cfd18acfc6, maybe command ignore response
+[E 2026-06-01 21:55:21,555 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_04_song_guess_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_04_song_guess_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 369, in get_element
+    r = self.get_elements(
+        _selector,
+        max_timeout,
+        auto_fix=auto_fix
+    )
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 452, in get_elements
+    return self._get_elements_by_css(_selector, max_timeout, index=_selector.index, auto_fix=auto_fix)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 719, in _get_elements_by_css
+    els = search_elements(_selector_list)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 64, in wrapper
+    r = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 711, in search_elements
+    return self.__search_child(
+           ~~~~~~~~~~~~~~~~~~~^
+        _selectors[0:], index=index
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # __search_child回pop元素，第一次search失败后重试会有问题，copy一份
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 670, in __search_child
+    els = self.__get_elements(_selector)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 90, in wrapper
+    ret = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 648, in __get_elements
+    ret = self._send("Page.getElements", {"selector": selector.css})
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.PageDestroyed: page destroyed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 382, in test_04_song_guess_core_flow
+    host, _ = self._run_dynamic_core_flow(SongPage, "start_round", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 286, in _run_dynamic_core_flow
+    info = self._create_host_room(page_cls, host)
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 222, in _create_host_room
+    return host.create_room(cloud=self.cloud)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/song_page.py", line 44, in create_room
+    self.input_text("input", nick)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 337, in input_text
+    el = self.get(selector, timeout=timeout)
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 298, in get
+    return self.page.get_element(selector, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 302, in wrapper
+    return attr(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 375, in get_element
+    raise MiniElementNotFoundError(_selector)
+minium.framework.exception.MiniElementNotFoundError: element[input] not found
+[I 2026-06-01 21:55:21,597 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 6bb0ce34-c91b-444f-8556-805e7f281d35, maybe command ignore response
+[W 2026-06-01 21:55:21,642 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601215006', 'case_output': './outputs/20260601215006/test_04_song_guess_core_flow/20260601215416099754'}
+[I 2026-06-01 21:55:21,688 minium.Conn9088 connection#704 _handle_async_msg] received async msg: e7856179-eaa5-456e-a09b-0f426a8c0374, maybe command ignore response
+[W 2026-06-01 21:55:21,735 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[I 2026-06-01 21:55:21,781 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3e7b3f3c-895f-4ec1-8e0a-19c0d0d378b1, maybe command ignore response
+[W 2026-06-01 21:55:21,936 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[I 2026-06-01 21:55:21,985 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 25d70514-df94-41ff-b9e3-f43b44749d44, maybe command ignore response
+[I 2026-06-01 21:55:21,986 minium.App2704 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/song-guess/song-guess', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1780322120891, 'webviewId': 5, 'routeEventId': '5_1780322120199', 'renderer': 'webview'}, 1780322120892]}
+[W 2026-06-01 21:55:22,030 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x120e2eba0>

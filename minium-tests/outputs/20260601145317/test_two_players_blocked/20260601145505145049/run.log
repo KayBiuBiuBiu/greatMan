@@ -1,0 +1,28 @@
+[I 2026-06-01 14:55:05,146 minium minitest#432 _miniSetUp] =========Current case: test_two_players_blocked=========
+[I 2026-06-01 14:55:05,146 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_undercover, case info: TestUndercoverDynamicPlayers.test_two_players_blocked
+[I 2026-06-01 14:55:05,146 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 14:55:05,146 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 14:55:05,146 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 14:55:05,146 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 14:55:05,146 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 14:55:05,148 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 14:55:05,200 minium minitest#487 _miniSetUp] =========case: test_two_players_blocked start=========
+[I 2026-06-01 14:55:05,200 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 14:55:05,200 minium.App0048 app#950 relaunch] ReLaunch: /packageGames/undercover/undercover
+[I 2026-06-01 14:55:06,191 minium.App0048 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780296906189, 'webviewId': 7, 'routeEventId': '', 'renderer': 'webview'}, 1780296906190]}
+[I 2026-06-01 14:55:06,194 minium.Conn6016 connection#704 _handle_async_msg] received async msg: 396331ea-1fb5-483e-afbe-5865b3e2c9d0
+[I 2026-06-01 14:55:07,699 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-01 14:55:07,716 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x1060c55b0>]
+[I 2026-06-01 14:55:08,038 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 14:55:08,051 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106395090>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106394d70>]
+[E 2026-06-01 14:55:10,174 minium.Conn6016 connection#668 __on_message] [acf37ad9-f711-4941-9662-84d79118a899]: wx.cloud.callFunction not exists
+[E 2026-06-01 14:55:13,581 minium.Conn6016 connection#668 __on_message] [b7ffff4b-1021-411d-8c05-a9e488acdb41]: wx.cloud.callFunction not exists
+[I 2026-06-01 14:55:18,498 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-06-01 14:55:18,579 minium minitest#897 capture] capture assertFalse-success.png
+[I 2026-06-01 14:55:18,640 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 14:55:18,641 minium.App0048 app#950 relaunch] ReLaunch: /packageGames/undercover/undercover
+[I 2026-06-01 14:55:19,634 minium.App0048 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780296919628, 'webviewId': 8, 'routeEventId': '', 'renderer': 'webview'}, 1780296919629]}
+[I 2026-06-01 14:55:19,635 minium.Conn6016 connection#704 _handle_async_msg] received async msg: 729b9248-924e-41b8-9632-6fb396fad689
+[I 2026-06-01 14:55:21,139 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 14:55:21,217 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 14:55:21,217 minium basenative#63 wrapper] call BaseNative.get_start_up end 

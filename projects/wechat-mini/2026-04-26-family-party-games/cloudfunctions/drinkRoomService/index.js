@@ -3,6 +3,7 @@
  */
 const cloud = require('wx-server-sdk')
 const jp = require('./joinPlayerPatch')
+const { assertTestAction, seedPlayersCollection } = require('./testSeedPlayers')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -12,11 +13,15 @@ const P = 'drink_players'
 const S = 'drink_gameState'
 const V = 'drink_votes'
 
-const COUNTDOWN_MS = 10000
+const COUNTDOWN_MS = 6000
 const VOTE_MS = 30000
 const AGENT_AUTH = 'family-party-agent-v1'
 let _currentEvent = null
 const t = () => Date.now()
+const ts = (v) => {
+  const n = Number(v || 0)
+  return Number.isFinite(n) ? n : 0
+}
 
 function agentOk() {
   return !!(_currentEvent && _currentEvent._agentAuth === AGENT_AUTH)
@@ -142,10 +147,12 @@ function buildPub(room, players, g) {
     hostOpenId: room.hostOpenId,
     currentRound: st.currentRound | 0,
     phase: st.phase || 'waiting',
-    countdownEndsAt: st.countdownEndsAt | 0,
+    countdownEndsAt: ts(st.countdownEndsAt),
     targetOpenId: st.targetOpenId || '',
     targetNick: st.targetNick || '',
-    votingDeadline: st.votingDeadline | 0,
+    starterOpenId: st.starterOpenId || room.hostOpenId || '',
+    starterNick: st.starterNick || '',
+    votingDeadline: ts(st.votingDeadline),
     votesByVoter: m,
     voteTally: st.voteTally && typeof st.voteTally === 'object' ? st.voteTally : recomputeTally(m),
     voteProgress: { cast, need },
@@ -233,6 +240,52 @@ async function assertHostRid(rid) {
   }
   return { room, openId: o }
 }
+function resolveStarterOpenId(st, room, pls) {
+  let starter = String((st && st.starterOpenId) || (room && room.hostOpenId) || '')
+  if (starter && pls && !pls.some((p) => p.openId === starter)) {
+    starter = String((room && room.hostOpenId) || '')
+  }
+  return starter
+}
+async function assertRoundStarter(rid) {
+  const room = await gRoom(rid)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const ctx = await assertInRoom(rid)
+  const st = (await gState(rid)) || {}
+  const pls = ctx.players || []
+  const starter = resolveStarterOpenId(st, room, pls)
+  if (agentOk()) {
+    return { room, openId: ctx.openId, st, starterOpenId: starter, players: pls }
+  }
+  if (ctx.openId !== starter) {
+    const nick = st.starterNick || nn(pls, starter)
+    throw new Error('请等待「' + (nick || '本轮主持') + '」开始')
+  }
+  return { room, openId: ctx.openId, st, starterOpenId: starter, players: pls }
+}
+async function assertCanNextRound(rid) {
+  const room = await gRoom(rid)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const ctx = await assertInRoom(rid)
+  const st = (await gState(rid)) || {}
+  const pls = ctx.players || []
+  let ringer = String(st.targetOpenId || '')
+  if (ringer && !pls.some((p) => p.openId === ringer)) {
+    ringer = String(room.hostOpenId || '')
+  }
+  if (agentOk()) {
+    return { room, openId: ctx.openId, st, ringerOpenId: ringer, players: pls }
+  }
+  if (ctx.openId !== ringer) {
+    const nick = st.targetNick || nn(pls, ringer)
+    throw new Error('请等待「' + (nick || '响铃者') + '」点下一轮')
+  }
+  return { room, openId: ctx.openId, st, ringerOpenId: ringer, players: pls }
+}
 
 exports.main = async (event) => {
   _currentEvent = event
@@ -286,7 +339,72 @@ async function run(event) {
   if (action === 'rerollRinger') {
     return doRerollRinger(event)
   }
+  if (action === '__testSeedPlayers') {
+    return doTestSeedPlayers(event)
+  }
+  if (action === '__testResetWaiting') {
+    return doTestResetWaiting(event)
+  }
   return { errMsg: '未知 action' }
+}
+
+async function doTestSeedPlayers(event) {
+  const rid = String((event && event.roomId) || '')
+  const room = rid ? await gRoom(rid) : await gRoomByCode(String((event && event.roomCode) || '').replace(/\D/g, ''))
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const st = (await gState(room._id)) || {}
+  if (st.phase && st.phase !== 'waiting' && !(event && event._test)) {
+    throw new Error('对局进行中，无法注入测试玩家')
+  }
+  return seedPlayersCollection({
+    event,
+    db,
+    playersCol: P,
+    jp,
+    roomId: String(room._id),
+    roomCode: room.roomCode,
+    cap: 12,
+    listPlayers: gPlayers,
+    baseFields: (p) => ({
+      roomId: String(room._id),
+      openId: String(p.openId || '').trim(),
+      isHost: false,
+      joinedAt: t()
+    }),
+    refreshState: async (id) => {
+      const r2 = await gRoom(id)
+      const st2 = (await gState(id)) || {}
+      await setFullState(r2, st2)
+    }
+  })
+}
+
+async function doTestResetWaiting(event) {
+  if (!event || !event._test) {
+    throw new Error('test action denied')
+  }
+  const rid = String((event && event.roomId) || '')
+  const room = await gRoom(rid)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  await db
+    .collection(R)
+    .doc(rid)
+    .update({ data: { status: 'waiting', updatedAt: t() } })
+  await setFullState(room, {
+    phase: 'waiting',
+    countdownEndsAt: 0,
+    votingDeadline: 0,
+    result: null,
+    votesByVoter: {},
+    voteTally: {},
+    targetOpenId: '',
+    targetNick: ''
+  })
+  return { ok: true, phase: 'waiting' }
 }
 
 async function doSyncState(event) {
@@ -449,6 +567,8 @@ async function doCreate(event) {
       result: null,
       targetOpenId: '',
       targetNick: '',
+      starterOpenId: o,
+      starterNick: String(nick0).trim().slice(0, 12) || '房主',
       countdownEndsAt: 0,
       votingDeadline: 0
     })
@@ -537,7 +657,16 @@ async function doStartRound(event) {
   if (!rid) {
     return { errMsg: '无房间' }
   }
-  const { room } = await assertHostRid(rid)
+  let room
+  if (event && event._test) {
+    room = await gRoom(rid)
+    if (!room) {
+      return { errMsg: '房间不存在' }
+    }
+  } else {
+    const r = await assertRoundStarter(rid)
+    room = r.room
+  }
   const pls = byJoin(await gPlayers(rid))
   if (pls.length < 2) {
     return { errMsg: '至少 2 人才能开' }
@@ -620,7 +749,7 @@ async function doSubmitVote(event) {
   if (st.phase !== 'voting') {
     return { errMsg: '当前非投票' }
   }
-  if (t() > (st.votingDeadline | 0) + 500) {
+  if (t() > ts(st.votingDeadline) + 500) {
     return { errMsg: '投票已结束' }
   }
   const pids = new Set(pls.map((p) => p.openId))
@@ -668,7 +797,7 @@ async function doSubmitAbstain(event) {
   if (st.phase !== 'voting') {
     return { errMsg: '当前非投票' }
   }
-  if (t() > (st.votingDeadline | 0) + 500) {
+  if (t() > ts(st.votingDeadline) + 500) {
     return { errMsg: '投票已结束' }
   }
   const rno = st.currentRound | 0
@@ -711,7 +840,7 @@ async function doFinalizeVoting(event) {
   const now = t()
   if (
     !force &&
-    now < (st.votingDeadline | 0) - 300 &&
+    now < ts(st.votingDeadline) - 300 &&
     !(committed0 >= allIn && allIn > 0)
   ) {
     return { errMsg: '未到时' }
@@ -735,8 +864,8 @@ async function doNextRound(event) {
   if (!rid) {
     return { errMsg: '无房间' }
   }
-  const { room } = await assertHostRid(rid)
-  const g = (await gState(rid)) || {}
+  const { room, st, players } = await assertCanNextRound(rid)
+  const g = st || {}
   if (g.phase === 'countdown') {
     return { errMsg: '请先等待本回合结束' }
   }
@@ -746,15 +875,31 @@ async function doNextRound(event) {
   if (g.phase !== 'result') {
     return { errMsg: '无待结算' }
   }
-  await setFullState(room, {
-    phase: 'waiting',
+  const pls = byJoin(players && players.length ? players : await gPlayers(rid))
+  if (pls.length < 2) {
+    return { errMsg: '至少 2 人才能继续' }
+  }
+  const nextR = (room.currentRound | 0) + 1
+  await db
+    .collection(R)
+    .doc(rid)
+    .update({ data: { currentRound: nextR, status: 'playing', updatedAt: t() } })
+  const dline = t() + COUNTDOWN_MS
+  const nextStarter = String(g.targetOpenId || room.hostOpenId || '')
+  const nextNick = String(g.targetNick || nn(pls, nextStarter))
+  const room2 = await gRoom(rid)
+  await setFullState(room2, {
+    currentRound: nextR,
+    phase: 'countdown',
+    countdownEndsAt: dline,
     targetOpenId: '',
     targetNick: '',
+    starterOpenId: nextStarter,
+    starterNick: nextNick,
     result: null,
     votesByVoter: {},
     voteTally: {},
-    countdownEndsAt: 0,
     votingDeadline: 0
   })
-  return { ok: true, phase: 'waiting' }
+  return { ok: true, currentRound: nextR, countdownEndsAt: dline, phase: 'countdown' }
 }

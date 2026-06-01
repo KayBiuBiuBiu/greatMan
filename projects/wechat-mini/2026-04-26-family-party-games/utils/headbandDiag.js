@@ -2,10 +2,9 @@
  * 贴头猜词 · 一键连通性诊断（建房失败时先用这个）
  */
 const { callHeadband } = require('./headbandCloud')
-const { callGenerateCharacters } = require('./generateCharactersCloud')
-const { getCloudEnvId } = require('./cloudInit')
+const { getCloudEnvId, getCallFunctionConfig } = require('./cloudInit')
 
-const HB_BUILD_ID = 'headband-repo-v5'
+const HB_BUILD_ID = 'headband-repo-v8'
 
 function step(lines, name, ok, detail) {
   lines.push((ok ? '✅ ' : '❌ ') + name + (detail ? '\n   ' + detail : ''))
@@ -25,7 +24,7 @@ function showDiagReport(lines) {
 }
 
 /**
- * 依次检测：云环境 → headbandRoomService → 数据库集合 → generateCharacters
+ * 依次检测：云环境 → headbandRoomService → 数据库集合 → aiPartyService
  */
 function runHeadbandDiag() {
   if (!wx.cloud) {
@@ -68,37 +67,39 @@ function runHeadbandDiag() {
                 .join('；') || 'ping 未通过'
         )
 
-        callGenerateCharacters(
-          { category: 'entertainment', difficulty: 'easy', count: 3 },
-          {
-            silent: true,
-            onOk: (res2) => {
-              wx.hideLoading()
-              const r2 = (res2 && res2.result) || {}
-              const n = (r2.data && r2.data.length) | 0
-              step(
-                lines,
-                'generateCharacters',
-                r2.code === 0 && n > 0,
-                r2.code === 0 ? '返回 ' + n + ' 条词条' : r2.message || 'code=' + r2.code
-              )
-              showDiagReport(lines)
-            },
-            onError: (err) => {
-              wx.hideLoading()
-              const m = (err && err.message) || '调用失败'
-              step(
-                lines,
-                'generateCharacters',
-                false,
-                /NOT_FOUND|未部署/i.test(m)
-                  ? m + '\n   请在云开发控制台确认该函数已部署到同一环境'
-                  : m
-              )
-              showDiagReport(lines)
-            }
+        wx.cloud.callFunction({
+          name: 'aiPartyService',
+          config: getCallFunctionConfig(),
+          data: {
+            action: 'chat',
+            system: '你是测试助手，只返回一句话。',
+            prompt: '回复：AI 可用'
+          },
+          success: (res2) => {
+            wx.hideLoading()
+            const r2 = (res2 && res2.result) || {}
+            step(
+              lines,
+              'aiPartyService',
+              !!(r2.text && !r2.errMsg),
+              r2.errMsg || (r2.text ? '返回：' + String(r2.text).slice(0, 30) : '未返回 text')
+            )
+            showDiagReport(lines)
+          },
+          fail: (err) => {
+            wx.hideLoading()
+            const m = (err && (err.errMsg || err.message)) || '调用失败'
+            step(
+              lines,
+              'aiPartyService',
+              false,
+              /NOT_FOUND|未部署/i.test(m)
+                ? m + '\n   请在云开发控制台确认该函数已部署到同一环境'
+                : m
+            )
+            showDiagReport(lines)
           }
-        )
+        })
       },
       onError: (err) => {
         wx.hideLoading()

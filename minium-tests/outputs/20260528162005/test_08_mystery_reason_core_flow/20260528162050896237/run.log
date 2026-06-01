@@ -1,0 +1,109 @@
+[I 2026-05-28 16:20:50,908 minium minitest#432 _miniSetUp] =========Current case: test_08_mystery_reason_core_flow=========
+[I 2026-05-28 16:20:50,908 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReason.test_08_mystery_reason_core_flow
+[I 2026-05-28 16:20:50,908 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-28 16:20:50,908 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-28 16:20:50,908 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-28 16:20:50,909 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-28 16:20:50,909 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-28 16:20:50,911 minium.App9472 app#950 relaunch] ReLaunch: /pages/index/index
+[I 2026-05-28 16:20:52,162 minium.App9472 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'pages/index/index', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1779956452157, 'webviewId': 2, 'routeEventId': '', 'renderer': 'webview'}, 1779956452158]}
+[I 2026-05-28 16:20:52,163 minium.Conn5360 connection#704 _handle_async_msg] received async msg: 13a8aa03-2bc0-473b-972e-bf3e8a00481f
+[I 2026-05-28 16:20:52,175 minium minitest#897 capture] capture setup.png
+[I 2026-05-28 16:20:52,318 minium minitest#487 _miniSetUp] =========case: test_08_mystery_reason_core_flow start=========
+[I 2026-05-28 16:20:52,320 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-28 16:20:52,322 minium.Conn5360 connection#668 __on_message] [8bbd556c-965c-4f64-9920-e09fca5cd5d0]: wx.cloud.callFunction not exists
+[I 2026-05-28 16:20:56,304 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-28 16:20:56,416 minium.Conn5360 connection#668 __on_message] [6dac96db-eec9-4ec2-a499-40b80a34d232]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:21:00,131 minium.Conn5360 connection#668 __on_message] [a9d74974-c6d6-4218-a8b9-c65836aa89d1]: wx.cloud.callFunction not exists
+[I 2026-05-28 16:21:03,346 minium.App9472 app#891 navigate_to] NavigateTo: /packageGames/mystery-reason/mystery-reason
+[W 2026-05-28 16:21:04,041 minium.Conn5360 connection#330 notify] no observer listening event App.exceptionThrown
+[I 2026-05-28 16:21:04,267 minium.App9472 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1779956464261, 'webviewId': 4, 'routeEventId': '4_1779956464007', 'renderer': 'webview'}, 1779956464262]}
+[I 2026-05-28 16:21:04,268 minium.Conn5360 connection#704 _handle_async_msg] received async msg: ba61d642-7be4-4374-bfb1-d4702e078d76
+[E 2026-05-28 16:21:05,289 minium.Conn5360 connection#668 __on_message] [2b321fc4-92e0-41d1-927c-98a32946c94e]: page.applyTestRoomBootstrap not exists
+[I 2026-05-28 16:22:08,319 minium minitest#897 capture] capture assertGreaterEqual-success.png
+[E 2026-05-28 16:22:08,377 minium.Conn5360 connection#668 __on_message] [397e4c5b-43fb-4fac-b0f2-e1a53df4f77a]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:22:12,207 minium.Conn5360 connection#668 __on_message] [3b17f8db-661c-49b3-b81d-4aa260a0e5fb]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:22:15,507 minium.Conn5360 connection#668 __on_message] [40dc4bd4-b93c-4651-b3f9-d0285fa225c7]: page.applyTestRoomBootstrap not exists
+[E 2026-05-28 16:23:17,534 minium.Conn5360 connection#668 __on_message] [7e389ae6-7670-462b-99a9-a086b6246666]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:23:21,028 minium.Conn5360 connection#668 __on_message] [6a38cc7c-5643-49f3-86e6-d7faeaecdf5c]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:23:24,361 minium.Conn5360 connection#668 __on_message] [842be367-5308-4078-94de-97a49691f30f]: page.applyTestRoomBootstrap not exists
+[E 2026-05-28 16:24:26,398 minium.Conn5360 connection#668 __on_message] [66a572cc-8752-48ce-a3da-7ae0e6a99bd5]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:24:29,950 minium.Conn5360 connection#668 __on_message] [566e9e65-c1b6-4431-ab1c-71bdcd2b2f6c]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:24:33,254 minium.Conn5360 connection#668 __on_message] [9e83ab4f-01ca-4dbe-ae3a-bba18f1aee0c]: page.applyTestRoomBootstrap not exists
+[E 2026-05-28 16:24:33,254 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_08_mystery_reason_core_flow
+    self._run_core_flow(self.min_players)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 103, in _run_core_flow
+    host.play_core_flow(self.cloud, room_id)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 250, in play_core_flow
+    self.try_call_page_method("applyTestRoomBootstrap", snap)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 304, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 383, in call_method
+    return self._send("Page.callMethod", {"method": method, "args": args})
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.MiniCommandError: page.applyTestRoomBootstrap not exists
+[I 2026-05-28 16:24:33,263 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-28 16:24:33,265 minium minitest#897 capture] capture teardown.png
+[I 2026-05-28 16:24:33,302 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-28 16:24:33,302 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-28 16:24:33,304 minium assertbase#390 _get_stack_info] <bound method TestMysteryReason.test_08_mystery_reason_core_flow of <testcases.test_mystery_reason.TestMysteryReason testMethod=test_08_mystery_reason_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_08_mystery_reason_core_flow
+    self._run_core_flow(self.min_players)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 103, in _run_core_flow
+    host.play_core_flow(self.cloud, room_id)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 250, in play_core_flow
+    self.try_call_page_method("applyTestRoomBootstrap", snap)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 304, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 383, in call_method
+    return self._send("Page.callMethod", {"method": method, "args": args})
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.MiniCommandError: page.applyTestRoomBootstrap not exists
+[W 2026-05-28 16:24:33,305 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': True, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 60, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': False, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528162005', 'case_output': './outputs/20260528162005/test_08_mystery_reason_core_flow/20260528162050896237'}
+[W 2026-05-28 16:24:33,305 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-28 16:24:33,305 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-28 16:24:33,305 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1041caa50>

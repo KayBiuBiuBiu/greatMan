@@ -1,0 +1,1104 @@
+[D 2026-05-28 23:53:58 minium loader#620 main] [35mcase directory path not specified, use current path[0m
+[I 2026-05-28 23:53:58 minium miniconfig#153 from_file] [32mload config from config.json[0m
+[I 2026-05-28 23:53:58 minium loader#300 run_session] [32mstart session with fork mode 
+{'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358'}
+[0m
+after load None
+g_case_list size: 1
+
+test_core_player_threshold (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_core_player_threshold)
+test_core_script_generate_and_display (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display)
+test_evidence_private_public_isolate (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_evidence_private_public_isolate)
+test_evidence_round_timing_and_idempotent (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_evidence_round_timing_and_idempotent)
+test_full_10_phase_loop (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_full_10_phase_loop)
+test_p0_1_vote_idempotent_rule (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_p0_1_vote_idempotent_rule)
+test_p0_2_no_input_ui_clean (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_p0_2_no_input_ui_clean)
+test_reconnect_state_recovery (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery)
+test_review_unlock_single_open_all_view (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_review_unlock_single_open_all_view)
+test_vote_tie_auto_analysis (testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis)
+
+
+{'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[I 2026-05-28 23:53:59 minium minitest#202 init_miniprogram] [32mstart init miniprogram[0m
+[I 2026-05-28 23:53:59 minium basenative#59 wrapper] [32mcall IdeNative.start_wechat[0m
+[I 2026-05-28 23:53:59 minium basenative#63 wrapper] [32mcall IdeNative.start_wechat end None[0m
+[I 2026-05-28 23:53:59 minium wx_minium#738 launch_dev_tool] [32mStarting dev tool and launch MiniProgram project ...[0m
+[I 2026-05-28 23:53:59 minium minium_object#83 _do_shell] [32mde shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 29483[0m
+[I 2026-05-28 23:54:02 minium minium_object#101 _do_shell] [32merr:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:29483
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+[0m
+[I 2026-05-28 23:54:02 minium minium_object#102 _do_shell] [32mout:
+[0m
+[I 2026-05-28 23:54:07 minium wx_minium#835 connect_dev_tool] [32mTrying to connect Dev tool ...[0m
+[E 2026-05-28 23:54:07 minium.Conn4752 connection#642 _on_error] Handshake status 404 Not Found
+[I 2026-05-28 23:54:08 minium.Conn4752 connection#377 _ws_run_forever] [32mwebsocket run forever shutdown[0m
+[E 2026-05-28 23:54:08 minium wx_minium#848 connect_dev_tool] Handshake status 404 Not Found
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 248, in connect
+    self.handshake_response = handshake(self.sock, url, *addrs, **options)
+                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 57, in handshake
+    status, resp = _get_resp_headers(sock)
+                   ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 148, in _get_resp_headers
+    raise WebSocketBadStatusException("Handshake status %d %s", status, status_message, resp_headers)
+websocket._exceptions.WebSocketBadStatusException: Handshake status 404 Not Found
+[I 2026-05-28 23:54:08 minium wx_minium#835 connect_dev_tool] [32mTrying to connect Dev tool ...[0m
+[E 2026-05-28 23:54:08 minium.Conn7872 connection#642 _on_error] Handshake status 404 Not Found
+[I 2026-05-28 23:54:08 minium.Conn7872 connection#377 _ws_run_forever] [32mwebsocket run forever shutdown[0m
+[E 2026-05-28 23:54:08 minium wx_minium#848 connect_dev_tool] Handshake status 404 Not Found
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 248, in connect
+    self.handshake_response = handshake(self.sock, url, *addrs, **options)
+                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 57, in handshake
+    status, resp = _get_resp_headers(sock)
+                   ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 148, in _get_resp_headers
+    raise WebSocketBadStatusException("Handshake status %d %s", status, status_message, resp_headers)
+websocket._exceptions.WebSocketBadStatusException: Handshake status 404 Not Found
+[I 2026-05-28 23:54:08 minium wx_minium#835 connect_dev_tool] [32mTrying to connect Dev tool ...[0m
+[E 2026-05-28 23:54:08 minium.Conn1072 connection#642 _on_error] Handshake status 404 Not Found
+[I 2026-05-28 23:54:08 minium.Conn1072 connection#377 _ws_run_forever] [32mwebsocket run forever shutdown[0m
+[E 2026-05-28 23:54:08 minium wx_minium#848 connect_dev_tool] Handshake status 404 Not Found
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 248, in connect
+    self.handshake_response = handshake(self.sock, url, *addrs, **options)
+                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 57, in handshake
+    status, resp = _get_resp_headers(sock)
+                   ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 148, in _get_resp_headers
+    raise WebSocketBadStatusException("Handshake status %d %s", status, status_message, resp_headers)
+websocket._exceptions.WebSocketBadStatusException: Handshake status 404 Not Found
+[E 2026-05-28 23:54:08 minium wx_minium#797 launch_dev_tool] [31mthree times try to connect Dev tool has all fail ..., restart now...[0m
+[I 2026-05-28 23:54:08 minium wx_minium#811 launch_dev_tool] [32mStarting dev tool again...[0m
+[I 2026-05-28 23:54:08 minium minium_object#83 _do_shell] [32mde shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 29483[0m
+[I 2026-05-28 23:54:10 minium minium_object#101 _do_shell] [32merr:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:29483
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+[0m
+[I 2026-05-28 23:54:10 minium minium_object#102 _do_shell] [32mout:
+[0m
+[I 2026-05-28 23:54:10 minium wx_minium#816 launch_dev_tool] [32mRestart success[0m
+[I 2026-05-28 23:54:15 minium wx_minium#835 connect_dev_tool] [32mTrying to connect Dev tool ...[0m
+[I 2026-05-28 23:54:15 minium.Conn6368 connection#352 _connect] [32mconnect to WebChatTools successfully[0m
+[E 2026-05-28 23:54:35 minium wx_minium#848 connect_dev_tool] [27397626-4e51-4b61-99ad-cf02c6cf83f7][call App.callWxMethod] receive from remote timeout
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 836, in connect_dev_tool
+    self.connection = Connection.create(
+                      ~~~~~~~~~~~~~~~~~^
+        self.uri, timeout=self.conf.get("request_timeout")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 168, in create
+    instance = cls(uri, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 209, in __init__
+    self._connect()
+    ~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 361, in _connect
+    raise error_callback.result
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_app.py", line 327, in run_forever
+    self.sock.connect(
+    ~~~~~~~~~~~~~~~~~^
+        self.url, header=self.header, cookie=self.cookie,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        host=host, origin=origin, suppress_origin=suppress_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        proxy_type=proxy_type, socket=self.prepared_socket)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_core.py", line 248, in connect
+    self.handshake_response = handshake(self.sock, url, *addrs, **options)
+                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 57, in handshake
+    status, resp = _get_resp_headers(sock)
+                   ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/websocket/_handshake.py", line 148, in _get_resp_headers
+    raise WebSocketBadStatusException("Handshake status %d %s", status, status_message, resp_headers)
+websocket._exceptions.WebSocketBadStatusException: Handshake status 404 Not Found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 793, in launch_dev_tool
+    self.connect_dev_tool(is_port_in_use)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 851, in connect_dev_tool
+    raise MiniConnectError(
+        "three times try to connect Dev tool has all fail ..."
+    )
+minium.framework.exception.MiniConnectError: three times try to connect Dev tool has all fail ...
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 841, in connect_dev_tool
+    self._instantiate_app(not self.start_cmd or should_relaunch)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 878, in _instantiate_app
+    self._get_system_info()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 533, in _get_system_info
+    system_info = self.get_system_info()
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 909, in get_system_info
+    self._call_wx_method("getSystemInfoSync")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 501, in _receive_response
+    raise MiniTimeoutError(
+        f"[{cmd.id}][{cmd.desc}] receive from remote timeout"
+    )
+minium.framework.exception.MiniTimeoutError: [27397626-4e51-4b61-99ad-cf02c6cf83f7][call App.callWxMethod] receive from remote timeout
+[I 2026-05-28 23:54:36 minium wx_minium#835 connect_dev_tool] [32mTrying to connect Dev tool ...[0m
+[I 2026-05-28 23:54:36 minium.Conn9104 connection#352 _connect] [32mconnect to WebChatTools successfully[0m
+[E 2026-05-28 23:54:36 minium.Conn6368 connection#739 destroy] [31m断开连接[0m
+[I 2026-05-28 23:54:36 minium.Conn6368 connection#377 _ws_run_forever] [32mwebsocket run forever shutdown[0m
+[W 2026-05-28 23:54:36 minium.Conn9104 connection#330 notify] [33mno observer listening event App.initialized[0m
+[I 2026-05-28 23:54:36 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: 27397626-4e51-4b61-99ad-cf02c6cf83f7, maybe command ignore response[0m
+[I 2026-05-28 23:54:36 minium wx_minium#893 _instantiate_app] [32mnew app instanst <minium.miniprogram.base_driver.app.App object at 0x1105b7cb0>, whether should relaunch: False[0m
+[I 2026-05-28 23:54:36 minium basenative#59 wrapper] [32mcall IdeNative.send[0m
+[W 2026-05-28 23:54:41 minium idenative#77 _send] [33mhandle clickCoverView error: clickCoverView failed[0m
+[I 2026-05-28 23:54:41 minium basenative#63 wrapper] [32mcall IdeNative.send end False[0m
+[I 2026-05-28 23:54:41 minium minitest#218 init_miniprogram] [32mend init miniprogram[0m
+[I 2026-05-28 23:54:41 minium minitest#432 _miniSetUp] [32m=========Current case: test_core_player_threshold=========[0m
+[I 2026-05-28 23:54:41 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_core_player_threshold[0m
+[I 2026-05-28 23:54:41 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:54:41 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:54:41 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:54:41 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:54:41 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:54:42 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:54:42 minium minitest#487 _miniSetUp] [32m=========case: test_core_player_threshold start=========[0m
+[I 2026-05-28 23:54:42 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:54:42 minium.Conn9104 connection#668 __on_message] [31m[ebc482e1-6a24-4b02-b04f-3b63701a96a4]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:54:47 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:54:47 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:54:47 minium.Conn9104 connection#668 __on_message] [31m[45ddfaa5-c9dc-4407-a442-ef6e50704e9a]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:54:52 minium minitest#897 capture] [32mcapture assertFalse-success_235452411224.png[0m
+[E 2026-05-28 23:54:52 minium.Conn9104 connection#668 __on_message] [31m[687e6d57-90e7-4097-bff1-ae0fb72f8ac2]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:54:56 minium.App8448 app#891 navigate_to] [32mNavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%2221dd03466a1865470119d9d33340036f%22%2C%20%22roomCode%22%3A%20%22570302%22%7D[0m
+[I 2026-05-28 23:54:57 minium.App8448 app#1226 _on_route_changed] [32mRoute changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252221dd03466a1865470119d9d33340036f%2522%252C%2520%2522roomCode%2522%253A%2520%2522570302%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779983697538, 'webviewId': 2, 'routeEventId': '2_1779983696874', 'renderer': 'webview'}, 1779983697539]}[0m
+[I 2026-05-28 23:54:57 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: e53e9a90-61c6-423a-a0bb-36f32c305799[0m
+[I 2026-05-28 23:55:01 minium minitest#897 capture] [32mcapture assertFalse-success_235501711136.png[0m
+[E 2026-05-28 23:55:01 minium.Conn9104 connection#668 __on_message] [31m[e38504f9-19f8-4533-a8b6-9aade9438fd0]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:55:07 minium.Conn9104 connection#668 __on_message] [31m[6417e1ed-3bd1-4a15-af34-3964bb78321c]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:55:11 minium minitest#897 capture] [32mcapture assertTrue-success_235511609533.png[0m
+[I 2026-05-28 23:55:11 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-28 23:55:11 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-28 23:55:11 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-28 23:55:11 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[I 2026-05-28 23:55:11 minium minitest#432 _miniSetUp] [32m=========Current case: test_core_script_generate_and_display=========[0m
+[I 2026-05-28 23:55:11 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display[0m
+[I 2026-05-28 23:55:11 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:55:11 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:55:11 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:55:11 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:55:11 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:55:11 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:55:12 minium minitest#487 _miniSetUp] [32m=========case: test_core_script_generate_and_display start=========[0m
+[I 2026-05-28 23:55:12 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:55:12 minium.Conn9104 connection#668 __on_message] [31m[37dad1af-445e-4244-b309-628efaa9854d]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:55:15 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:55:15 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:55:15 minium.Conn9104 connection#668 __on_message] [31m[3466cfe1-fff0-4c37-8ba9-c55e73f4010d]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:55:18 minium minitest#897 capture] [32mcapture assertFalse-success_235518935565.png[0m
+[E 2026-05-28 23:55:19 minium.Conn9104 connection#668 __on_message] [31m[405a2650-332b-4c94-a13b-65bdb11735d7]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:55:22 minium.App8448 app#891 navigate_to] [32mNavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22f9d11e1d6a1865630116decb52a88dab%22%2C%20%22roomCode%22%3A%20%22544107%22%7D[0m
+[I 2026-05-28 23:55:23 minium.App8448 app#1226 _on_route_changed] [32mRoute changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522f9d11e1d6a1865630116decb52a88dab%2522%252C%2520%2522roomCode%2522%253A%2520%2522544107%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779983723028, 'webviewId': 4, 'routeEventId': '4_1779983722379', 'renderer': 'webview'}, 1779983723029]}[0m
+[I 2026-05-28 23:55:23 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: 9f6efd8f-666f-4bee-ae07-64ca0214caae[0m
+[E 2026-05-28 23:55:27 minium.Conn9104 connection#668 __on_message] [31m[14983709-3a23-4365-974a-9803e445dc44]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:55:50 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 147, in test_core_script_generate_and_display
+    page.wait_phase("generate_script", timeout=20)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 157, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text 'AI 生成剧本' not reached
+[I 2026-05-28 23:55:50 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-28 23:55:50 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-28 23:55:51 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-28 23:55:51 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-28 23:55:51 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_core_script_generate_and_display>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 147, in test_core_script_generate_and_display
+    page.wait_phase("generate_script", timeout=20)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 157, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text 'AI 生成剧本' not reached
+[W 2026-05-28 23:55:51 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_core_script_generate_and_display/20260528235511870508'}[0m
+[W 2026-05-28 23:55:51 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-28 23:55:51 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-28 23:55:51 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-28 23:55:51 minium minitest#432 _miniSetUp] [32m=========Current case: test_evidence_private_public_isolate=========[0m
+[I 2026-05-28 23:55:51 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_evidence_private_public_isolate[0m
+[I 2026-05-28 23:55:51 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:55:51 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:55:51 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:55:51 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:55:51 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:55:51 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:55:51 minium minitest#487 _miniSetUp] [32m=========case: test_evidence_private_public_isolate start=========[0m
+[I 2026-05-28 23:55:51 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:55:51 minium.Conn9104 connection#668 __on_message] [31m[94d287ad-b48c-4e40-88c1-fc8b462439f4]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:55:55 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:55:56 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:55:56 minium.Conn9104 connection#668 __on_message] [31m[5292a7d6-9258-43bc-af23-040e60ea8b39]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:56:01 minium minitest#897 capture] [32mcapture assertFalse-success_235601060060.png[0m
+[E 2026-05-28 23:56:01 minium.Conn9104 connection#668 __on_message] [31m[856bfea3-b9cc-42c7-a411-ed4260eeae19]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:04 minium.Conn9104 connection#668 __on_message] [31m[a7bf7e8e-1145-4114-8b64-bdaef33b8461]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:09 minium.Conn9104 connection#668 __on_message] [31m[af0236aa-23f1-4a9d-b304-0f80cec28661]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:14 minium.Conn9104 connection#668 __on_message] [31m[f362c605-704a-4fd2-bb44-72da57b2d628]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:17 minium.Conn9104 connection#668 __on_message] [31m[8fd9eec0-35d8-46ab-9175-32eb410c8086]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:21 minium.Conn9104 connection#668 __on_message] [31m[5770828e-410e-4151-bac3-e8e071f90135]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:24 minium.Conn9104 connection#668 __on_message] [31m[a02166a1-6bb5-4830-a261-68e7fd39d3a0]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:56:28 minium minitest#897 capture] [32mcapture assertNotIn-success.png[0m
+[I 2026-05-28 23:56:28 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-28 23:56:28 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-28 23:56:28 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-28 23:56:28 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[I 2026-05-28 23:56:28 minium minitest#432 _miniSetUp] [32m=========Current case: test_evidence_round_timing_and_idempotent=========[0m
+[I 2026-05-28 23:56:28 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_evidence_round_timing_and_idempotent[0m
+[I 2026-05-28 23:56:28 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:56:28 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:56:28 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:56:28 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:56:28 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:56:29 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:56:29 minium minitest#487 _miniSetUp] [32m=========case: test_evidence_round_timing_and_idempotent start=========[0m
+[I 2026-05-28 23:56:29 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:56:29 minium.Conn9104 connection#668 __on_message] [31m[f336c1ae-1749-4ee2-92f5-47ab7022ebfe]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:56:32 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:56:32 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:56:32 minium.Conn9104 connection#668 __on_message] [31m[6b0a2758-c34d-4190-b251-1061ccb07301]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:56:36 minium minitest#897 capture] [32mcapture assertFalse-success_235636041855.png[0m
+[E 2026-05-28 23:56:36 minium.Conn9104 connection#668 __on_message] [31m[a12c2b50-c789-4fad-9f7e-f764baea5f23]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:39 minium.Conn9104 connection#668 __on_message] [31m[10c1c8ad-0ebd-4936-83e8-650bfea2cc6a]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:42 minium.Conn9104 connection#668 __on_message] [31m[ac86f1d0-c438-4962-b86b-a611d74dd691]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:46 minium.Conn9104 connection#668 __on_message] [31m[6587fd82-950b-417a-8a5c-0ed085112977]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:49 minium.Conn9104 connection#668 __on_message] [31m[fd607907-1340-4709-973d-4a61ea6c4fbf]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:53 minium.Conn9104 connection#668 __on_message] [31m[6f401889-16e1-41b6-a0d2-867c76c15081]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:56:56 minium.Conn9104 connection#668 __on_message] [31m[a7edfec5-317c-43af-8d58-b9532b8f4309]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:57:00 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 248, in test_evidence_round_timing_and_idempotent
+    self.assertTrue(r1_repeat["success"])
+                    ~~~~~~~~~^^^^^^^^^^^
+KeyError: 'success'
+[I 2026-05-28 23:57:00 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-28 23:57:00 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-28 23:57:00 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-28 23:57:00 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-28 23:57:00 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_evidence_round_timing_and_idempotent of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_evidence_round_timing_and_idempotent>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 248, in test_evidence_round_timing_and_idempotent
+    self.assertTrue(r1_repeat["success"])
+                    ~~~~~~~~~^^^^^^^^^^^
+KeyError: 'success'
+[W 2026-05-28 23:57:00 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_evidence_round_timing_and_idempotent/20260528235628944426'}[0m
+[W 2026-05-28 23:57:00 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-28 23:57:00 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-28 23:57:00 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-28 23:57:00 minium minitest#432 _miniSetUp] [32m=========Current case: test_full_10_phase_loop=========[0m
+[I 2026-05-28 23:57:00 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_full_10_phase_loop[0m
+[I 2026-05-28 23:57:00 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:57:00 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:57:00 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:57:00 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:57:00 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:57:00 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:57:00 minium minitest#487 _miniSetUp] [32m=========case: test_full_10_phase_loop start=========[0m
+[I 2026-05-28 23:57:00 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:57:00 minium.Conn9104 connection#668 __on_message] [31m[ce6016be-afff-47b9-a92c-dfc4ab44222d]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:57:06 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:57:06 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:57:06 minium.Conn9104 connection#668 __on_message] [31m[f3bdf3c6-70f0-4cae-aaea-fa9dede684d4]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:57:10 minium minitest#897 capture] [32mcapture assertFalse-success_235710064000.png[0m
+[E 2026-05-28 23:57:10 minium.Conn9104 connection#668 __on_message] [31m[4b487214-8091-43bc-8843-4a71279b0073]: wx.cloud.callFunction not exists[0m
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a1865470119d9d33340036f", "roomCode": "570302", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a1865470119d9d33340036f", "roomCode": "570302", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a1865470119d9d33340036f", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a1865470119d9d33340036f", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a1865470119d9d33340036f", "roomCode": null, "players": [{"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a1865470119d9d33340036f", "roomCode": null, "players": [{"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a1865470119d9d33340036f", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a1865470119d9d33340036f", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "f9d11e1d6a1865630116decb52a88dab", "roomCode": "544107", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "f9d11e1d6a1865630116decb52a88dab", "roomCode": "544107", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "f9d11e1d6a1865630116decb52a88dab", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "f9d11e1d6a1865630116decb52a88dab", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "f9d11e1d6a1865630116decb52a88dab", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "f9d11e1d6a1865630116decb52a88dab", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": "834420", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": "834420", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本[I 2026-05-28 23:57:13 minium.App8448 app#891 navigate_to] [32mNavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22a54a659b6a1865d20116e3684d035873%22%2C%20%22roomCode%22%3A%20%22115167%22%7D[0m
+[I 2026-05-28 23:57:14 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: 6554420c-4e65-4720-aa57-686732e11cad[0m
+[I 2026-05-28 23:57:14 minium.App8448 app#1226 _on_route_changed] [32mRoute changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522a54a659b6a1865d20116e3684d035873%2522%252C%2520%2522roomCode%2522%253A%2520%2522115167%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779983834604, 'webviewId': 5, 'routeEventId': '5_1779983834009', 'renderer': 'webview'}, 1779983834605]}[0m
+[E 2026-05-28 23:57:18 minium.Conn9104 connection#668 __on_message] [31m[3971da4d-9829-4f4a-be93-5995a495ad04]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:59:22 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 194, in test_full_10_phase_loop
+    page.wait_phase("generate_script")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 157, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text 'AI 生成剧本' not reached
+[I 2026-05-28 23:59:22 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-28 23:59:22 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-28 23:59:22 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-28 23:59:22 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-28 23:59:22 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_full_10_phase_loop of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_full_10_phase_loop>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 194, in test_full_10_phase_loop
+    page.wait_phase("generate_script")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 157, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text 'AI 生成剧本' not reached
+[W 2026-05-28 23:59:22 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_full_10_phase_loop/20260528235700709682'}[0m
+[W 2026-05-28 23:59:22 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-28 23:59:22 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-28 23:59:22 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-28 23:59:22 minium minitest#432 _miniSetUp] [32m=========Current case: test_p0_1_vote_idempotent_rule=========[0m
+[I 2026-05-28 23:59:22 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_p0_1_vote_idempotent_rule[0m
+[I 2026-05-28 23:59:22 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:59:22 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:59:22 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:59:22 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:59:22 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:59:22 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:59:22 minium minitest#487 _miniSetUp] [32m=========case: test_p0_1_vote_idempotent_rule start=========[0m
+[I 2026-05-28 23:59:22 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:59:22 minium.Conn9104 connection#668 __on_message] [31m[ced1a768-fe7f-40b1-b1fa-c2aff34ba12f]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:59:26 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:59:26 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:59:26 minium.Conn9104 connection#668 __on_message] [31m[692f5a16-b792-43a5-a8c7-8f9ce2bff81d]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:59:30 minium minitest#897 capture] [32mcapture assertFalse-success_235930398177.png[0m
+[E 2026-05-28 23:59:30 minium.Conn9104 connection#668 __on_message] [31m[51dc27b9-0b7a-46fc-ba5f-5948a6fbaae2]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:59:33 minium.App8448 app#891 navigate_to] [32mNavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%223f895cc36a18665e011894554033ecda%22%2C%20%22roomCode%22%3A%20%22971528%22%7D[0m
+[I 2026-05-28 23:59:35 minium.App8448 app#1226 _on_route_changed] [32mRoute changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25223f895cc36a18665e011894554033ecda%2522%252C%2520%2522roomCode%2522%253A%2520%2522971528%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779983974997, 'webviewId': 6, 'routeEventId': '6_1779983974351', 'renderer': 'webview'}, 1779983974998]}[0m
+[I 2026-05-28 23:59:35 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: c409c0b9-216d-46b9-9c54-3dcce90aeb4e[0m
+[E 2026-05-28 23:59:39 minium.Conn9104 connection#668 __on_message] [31m[3613c76f-8f4c-48b5-b4db-108bbff514f7]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:59:43 minium.Conn9104 connection#668 __on_message] [31m[29c4d36e-9605-4c0f-82c7-b9c54c6e21cd]: wx.cloud.callFunction not exists[0m
+[E 2026-05-28 23:59:47 minium assertbase#62 hook_assert] None is not true
+[I 2026-05-28 23:59:47 minium minitest#897 capture] [32mcapture assertTrue-failed.png[0m
+[I 2026-05-28 23:59:47 minium page#716 _get_elements_by_css] [32mtry to get elements: page[0m
+[I 2026-05-28 23:59:47 minium page#749 _get_elements_by_css] [32mfind elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x1105b7770>][0m
+[E 2026-05-28 23:59:47 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_p0_1_vote_idempotent_rule
+    self.assertTrue(v1.get("success"))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 744, in assertTrue
+    raise self.failureException(msg)
+AssertionError: None is not true
+[I 2026-05-28 23:59:47 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-28 23:59:47 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-28 23:59:47 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-28 23:59:47 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-28 23:59:47 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_p0_1_vote_idempotent_rule of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_p0_1_vote_idempotent_rule>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_p0_1_vote_idempotent_rule
+    self.assertTrue(v1.get("success"))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: None is not true
+[W 2026-05-28 23:59:47 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_p0_1_vote_idempotent_rule/20260528235922673545'}[0m
+[W 2026-05-28 23:59:47 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-28 23:59:47 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-28 23:59:47 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-28 23:59:47 minium minitest#432 _miniSetUp] [32m=========Current case: test_p0_2_no_input_ui_clean=========[0m
+[I 2026-05-28 23:59:47 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_p0_2_no_input_ui_clean[0m
+[I 2026-05-28 23:59:47 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-28 23:59:47 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-28 23:59:47 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-28 23:59:47 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-28 23:59:47 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-28 23:59:47 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-28 23:59:47 minium minitest#487 _miniSetUp] [32m=========case: test_p0_2_no_input_ui_clean start=========[0m
+[I 2026-05-28 23:59:47 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-28 23:59:47 minium.Conn9104 connection#668 __on_message] [31m[21d4dd33-85d2-4b33-b073-12521fffd77d]: wx.cloud.callFunction not exists[0m
+[I 2026-05-28 23:59:51 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-28 23:59:51 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-28 23:59:51 minium.Conn9104 connection#668 __on_message] [31m[e00329ba-c80e-403a-a11a-96cfd5e94521]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:00:07 minium minitest#897 capture] [32mcapture assertFalse-success_000007332167.png[0m
+[E 2026-05-29 00:00:07 minium.Conn9104 connection#668 __on_message] [31m[7325f257-31bb-4425-b917-38e90d42e8bf]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:00:16 minium.App8448 app#891 navigate_to] [32mNavigateTo: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%225290ec146a1866770118aa1203c45916%22%2C%20%22roomCode%22%3A%20%22609583%22%7D[0m
+[I 2026-05-29 00:00:18 minium.App8448 app#1226 _on_route_changed] [32mRoute changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25225290ec146a1866770118aa1203c45916%2522%252C%2520%2522roomCode%2522%253A%2520%2522609583%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1779984018149, 'webviewId': 7, 'routeEventId': '7_1779984017532', 'renderer': 'webview'}, 1779984018150]}[0m
+[I 2026-05-29 00:00:18 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: 0a0b5203-1566-4a98-bba2-a98a1b1cd232[0m
+[I 2026-05-29 00:00:22 minium page#716 _get_elements_by_css] [32mtry to get elements: input[0m
+[W 2026-05-29 00:00:22 minium page#747 _get_elements_by_css] [33mCould not found any element 'input' you need[0m
+[I 2026-05-29 00:00:22 minium page#716 _get_elements_by_css] [32mtry to get elements: textarea[0m
+[W 2026-05-29 00:00:22 minium page#747 _get_elements_by_css] [33mCould not found any element 'textarea' you need[0m
+[I 2026-05-29 00:00:22 minium minitest#897 capture] [32mcapture assertFalse-success_000022508312.png[0m
+[I 2026-05-29 00:00:22 minium page#716 _get_elements_by_css] [32mtry to get elements: textarea[0m
+[W 2026-05-29 00:00:22 minium page#747 _get_elements_by_css] [33mCould not found any element 'textarea' you need[0m
+[I 2026-05-29 00:00:22 minium page#716 _get_elements_by_css] [32mtry to get elements: .chat-input[0m
+[W 2026-05-29 00:00:22 minium page#747 _get_elements_by_css] [33mCould not found any element '.chat-input' you need[0m
+[I 2026-05-29 00:00:22 minium page#716 _get_elements_by_css] [32mtry to get elements: .mr-chat[0m
+[W 2026-05-29 00:00:22 minium page#747 _get_elements_by_css] [33mCould not found any element '.mr-chat' you need[0m
+[I 2026-05-29 00:00:22 minium page#716 _get_elements_by_css] [32mtry to get elements: input[0m
+[W 2026-05-29 00:00:22 minium page#747 _get_elements_by_css] [33mCould not found any element 'input' you need[0m
+[I 2026-05-29 00:00:22 minium minitest#897 capture] [32mcapture assertFalse-success_000022726277.png[0m
+[I 2026-05-29 00:00:22 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-29 00:00:22 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-29 00:00:22 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-29 00:00:22 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[I 2026-05-29 00:00:23 minium minitest#432 _miniSetUp] [32m=========Current case: test_reconnect_state_recovery=========[0m
+[I 2026-05-29 00:00:23 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery[0m
+[I 2026-05-29 00:00:23 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-29 00:00:23 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-29 00:00:23 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-29 00:00:23 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-29 00:00:23 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-29 00:00:23 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-29 00:00:23 minium minitest#487 _miniSetUp] [32m=========case: test_reconnect_state_recovery start=========[0m
+[I 2026-05-29 00:00:23 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-29 00:00:23 minium.Conn9104 connection#668 __on_message] [31m[9fb482f0-49a4-4e92-9c2a-43c654b6390a]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:00:27 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-29 00:00:27 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-29 00:00:27 minium.Conn9104 connection#668 __on_message] [31m[70dd5956-123d-405c-b518-6ed9f36d0a93]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:00:31 minium minitest#897 capture] [32mcapture assertFalse-success_000031920971.png[0m
+[E 2026-05-29 00:00:31 minium.Conn9104 connection#668 __on_message] [31m[ad8bc7c8-4839-4e2e-a4fb-288ed7bdb357]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:00:36 minium.Conn9104 connection#668 __on_message] [31m[f7375c29-efaf-4a36-b6e4-f35cf6beb7ef]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:00:40 minium.Conn9104 connection#668 __on_message] [31m[67bab93b-194b-49f1-a711-68a7e45dfa25]: wx.cloud.callFunction not exists[0m
+
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": null, "phase": "analyze_clue", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "roomCode": null, "phase": "analyze_clue", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "bc7ee4c56a18658c01195ada3535a3fb", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "roomCode": "558192", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "roomCode": "558192", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 1, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 1, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 2, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 2, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 3, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 3, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 1, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "refreshEvidence", "roomId": "21dd03466a1865b00119df9a78c6b9e3", "round": 1, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "a54a659b6a1865d20116e3684d035873", "roomCode": "115167", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "a54a659b6a1865d20116e3684d035873", "roomCode": "115167", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1865d20116e3684d035873", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1865d20116e3684d035873", "_test": true}[E 2026-05-29 00:00:44 minium.Conn9104 connection#668 __on_message] [31m[0338928e-b9fe-4e9b-a87c-367d432d1c12]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:00:48 minium.Conn9104 connection#668 __on_message] [31m[8ba22b76-d2fa-4fe1-a45a-f3f5bb0ddc41]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:00:52 minium.Conn9104 connection#668 __on_message] [31m[e82bea10-8e0b-45d0-a147-143c147dad0e]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:00:55 minium.Conn9104 connection#668 __on_message] [31m[43679f90-2e61-4770-bfb6-b8d7b001b1ac]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:00:58 minium minitest#897 capture] [32mcapture assertEqual-success.png[0m
+[E 2026-05-29 00:00:58 minium assertbase#62 hook_assert] False is not true
+[I 2026-05-29 00:00:58 minium minitest#897 capture] [32mcapture assertTrue-failed.png[0m
+[I 2026-05-29 00:00:59 minium page#716 _get_elements_by_css] [32mtry to get elements: page[0m
+[I 2026-05-29 00:00:59 minium page#749 _get_elements_by_css] [32mfind elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x11089a210>][0m
+[E 2026-05-29 00:00:59 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 308, in test_reconnect_state_recovery
+    self.assertTrue(len(new_snap["state"]["publicClue"]) > 0)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 744, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true
+[I 2026-05-29 00:00:59 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-29 00:00:59 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-29 00:00:59 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-29 00:00:59 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-29 00:00:59 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_reconnect_state_recovery>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 308, in test_reconnect_state_recovery
+    self.assertTrue(len(new_snap["state"]["publicClue"]) > 0)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true
+[W 2026-05-29 00:00:59 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_reconnect_state_recovery/20260529000023006817'}[0m
+[W 2026-05-29 00:00:59 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-29 00:00:59 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-29 00:00:59 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-29 00:00:59 minium minitest#432 _miniSetUp] [32m=========Current case: test_review_unlock_single_open_all_view=========[0m
+[I 2026-05-29 00:00:59 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_review_unlock_single_open_all_view[0m
+[I 2026-05-29 00:00:59 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-29 00:00:59 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-29 00:00:59 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-29 00:00:59 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-29 00:00:59 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-29 00:00:59 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-29 00:00:59 minium minitest#487 _miniSetUp] [32m=========case: test_review_unlock_single_open_all_view start=========[0m
+[I 2026-05-29 00:00:59 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-29 00:00:59 minium.Conn9104 connection#668 __on_message] [31m[7be458d1-7df0-472d-8667-3c997a41cb63]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:01:03 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-29 00:01:03 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-29 00:01:03 minium.Conn9104 connection#668 __on_message] [31m[4b66badd-a3f3-4c97-b0b5-2581d92d2788]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:01:06 minium minitest#897 capture] [32mcapture assertFalse-success_000106922939.png[0m
+[E 2026-05-29 00:01:07 minium.Conn9104 connection#668 __on_message] [31m[dd4d86ec-ec7c-40bf-824b-e4098d5aed23]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:10 minium.Conn9104 connection#668 __on_message] [31m[d737fd6f-bba3-4370-922f-9d60247f8d52]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:14 minium.Conn9104 connection#668 __on_message] [31m[2d7d832a-b74d-4a41-a4f2-245669f79a77]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:17 minium.Conn9104 connection#668 __on_message] [31m[12ee49e3-a22b-4fa5-ab7e-387807dd1798]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:01:22 minium minitest#897 capture] [32mcapture assertFalse-success_000122258115.png[0m
+[E 2026-05-29 00:01:22 minium.Conn9104 connection#668 __on_message] [31m[6e9f6f79-e1b8-46e1-84ca-e32fb1fdfde3]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:29 minium.Conn9104 connection#668 __on_message] [31m[2543638f-4947-42b7-9d43-aef0e5d3ee63]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:33 minium assertbase#62 hook_assert] False is not true
+[I 2026-05-29 00:01:33 minium minitest#897 capture] [32mcapture assertTrue-failed.png[0m
+[I 2026-05-29 00:01:33 minium page#716 _get_elements_by_css] [32mtry to get elements: page[0m
+[I 2026-05-29 00:01:34 minium page#749 _get_elements_by_css] [32mfind elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x11089bed0>][0m
+[E 2026-05-29 00:01:34 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 279, in test_review_unlock_single_open_all_view
+    self.assertTrue(state_after["state"]["reviewUnlocked"])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 744, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true
+[I 2026-05-29 00:01:34 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-29 00:01:34 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-29 00:01:34 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-29 00:01:34 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-29 00:01:34 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_review_unlock_single_open_all_view of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_review_unlock_single_open_all_view>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 279, in test_review_unlock_single_open_all_view
+    self.assertTrue(state_after["state"]["reviewUnlocked"])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true
+[W 2026-05-29 00:01:34 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_review_unlock_single_open_all_view/20260529000059210557'}[0m
+[W 2026-05-29 00:01:34 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-29 00:01:34 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-29 00:01:34 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-29 00:01:34 minium minitest#432 _miniSetUp] [32m=========Current case: test_vote_tie_auto_analysis=========[0m
+[I 2026-05-29 00:01:34 minium minitest#435 _miniSetUp] [32mpackage info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis[0m
+[I 2026-05-29 00:01:34 minium basenative#59 wrapper] [32mcall BaseNative.check_connection[0m
+[I 2026-05-29 00:01:34 minium basenative#63 wrapper] [32mcall BaseNative.check_connection end True[0m
+[I 2026-05-29 00:01:34 minium basenative#59 wrapper] [32mcall BaseNative.back_to_miniprogram[0m
+[I 2026-05-29 00:01:34 minium basenative#794 back_to_miniprogram] [32mtry back_to_miniprogram 3[0m
+[I 2026-05-29 00:01:34 minium basenative#63 wrapper] [32mcall BaseNative.back_to_miniprogram end [0m
+[I 2026-05-29 00:01:34 minium minitest#897 capture] [32mcapture setup.png[0m
+[I 2026-05-29 00:01:34 minium minitest#487 _miniSetUp] [32m=========case: test_vote_tie_auto_analysis start=========[0m
+[I 2026-05-29 00:01:34 minium minitest#788 _callTestMethod] [32mcall test method[0m
+[E 2026-05-29 00:01:34 minium.Conn9104 connection#668 __on_message] [31m[7ae135f1-fbbf-43f9-b154-442434cf121f]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:01:37 minium minitest#897 capture] [32mcapture assertFalse-success.png[0m
+[I 2026-05-29 00:01:37 minium minitest#897 capture] [32mcapture assertTrue-success.png[0m
+[E 2026-05-29 00:01:37 minium.Conn9104 connection#668 __on_message] [31m[9a343ed7-6168-4652-b5d5-f7929bbc4c54]: wx.cloud.callFunction not exists[0m
+[I 2026-05-29 00:01:41 minium minitest#897 capture] [32mcapture assertFalse-success_000141810388.png[0m
+[E 2026-05-29 00:01:41 minium.Conn9104 connection#668 __on_message] [31m[a333e507-25e3-4013-8f94-d01150218a26]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:45 minium.Conn9104 connection#668 __on_message] [31m[f5d3b5ce-d051-4904-852f-88f4fbc2756c]: wx.cloud.callFunction not exists[0m
+
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "a54a659b6a1865d20116e3684d035873", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "a54a659b6a1865d20116e3684d035873", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "3f895cc36a18665e011894554033ecda", "roomCode": "971528", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "3f895cc36a18665e011894554033ecda", "roomCode": "971528", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "3f895cc36a18665e011894554033ecda", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "3f895cc36a18665e011894554033ecda", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "3f895cc36a18665e011894554033ecda", "roomCode": null, "phase": "final_vote", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "3f895cc36a18665e011894554033ecda", "roomCode": null, "phase": "final_vote", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "submitVote", "roomId": "3f895cc36a18665e011894554033ecda", "targetId": "targetA", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "submitVote", "roomId": "3f895cc36a18665e011894554033ecda", "targetId": "targetA", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "5290ec146a1866770118aa1203c45916", "roomCode": "609583", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "5290ec146a1866770118aa1203c45916", "roomCode": "609583", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "5290ec146a1866770118aa1203c45916", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "5290ec146a1866770118aa1203c45916", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": "580328", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": "580328", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a18669b011a091a71d87a83", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a18669b011a091a71d87a83", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "21dd03466a18669b011a091a71d87a83", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "21dd03466a18669b011a091a71d87a83", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": null, "phase": "analyze_clue", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": null, "phase": "analyze_clue", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a18669b011a091a71d87a83", "_test": true}[E 2026-05-29 00:01:49 minium.Conn9104 connection#668 __on_message] [31m[df163856-e298-4549-b06a-3af96aa62e32]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:53 minium.Conn9104 connection#668 __on_message] [31m[862ac12e-90eb-4c22-8bdc-f8fc56167c6d]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:01:57 minium.Conn9104 connection#668 __on_message] [31m[7ef0bfec-d18b-4d44-b882-50455035a0c8]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:02:00 minium.Conn9104 connection#668 __on_message] [31m[63b0363a-59c4-4be5-9053-f5727bb326ce]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:02:07 minium.Conn9104 connection#668 __on_message] [31m[69cd7b2e-9358-47f1-bae7-96e1b6e5aa48]: wx.cloud.callFunction not exists[0m
+[E 2026-05-29 00:02:11 minium minitest#793 _callTestMethod] [31mtest exception[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 295, in test_vote_tie_auto_analysis
+    self.assertIn("平票", state["state"]["reviewContent"])
+                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'reviewContent'
+[I 2026-05-29 00:02:11 minium minitest#796 _callTestMethod] [32mend test method[0m
+[I 2026-05-29 00:02:11 minium minitest#897 capture] [32mcapture teardown.png[0m
+[I 2026-05-29 00:02:12 minium basenative#59 wrapper] [32mcall BaseNative.get_start_up[0m
+[I 2026-05-29 00:02:12 minium basenative#63 wrapper] [32mcall BaseNative.get_start_up end [0m
+[E 2026-05-29 00:02:12 minium assertbase#390 _get_stack_info] [31m<bound method TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_vote_tie_auto_analysis>>[0m
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 295, in test_vote_tie_auto_analysis
+    self.assertIn("平票", state["state"]["reviewContent"])
+                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'reviewContent'
+[W 2026-05-29 00:02:12 minium assertbase#354 _log_info_when_error] [33mconfig: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528235358', 'case_output': './outputs/20260528235358/test_vote_tie_auto_analysis/20260529000134224282'}[0m
+[W 2026-05-29 00:02:12 minium assertbase#355 _log_info_when_error] [33mbuild info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}[0m
+[W 2026-05-29 00:02:12 minium minitest#1029 _log_info_when_error] [33mmini: 基础库3.15.2, 开发者工具2.01.2510290[0m
+[W 2026-05-29 00:02:12 minium minitest#1031 _log_info_when_error] [33mnative: <minium.native.wx_native.idenative.IdeNative object at 0x1105b6ba0>[0m
+[I 2026-05-29 00:02:12 minium miniresult#143 print_shot_msg] [32m
+====================case num:10, failed num:5, error num:2====================TestMysteryReasonFullClosedLoop:test_evidence_round_timing_and_idempotent has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 248, in test_evidence_round_timing_and_idempotent
+    self.assertTrue(r1_repeat["success"])
+                    ~~~~~~~~~^^^^^^^^^^^
+KeyError: 'success'
+
+------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_vote_tie_auto_analysis has error:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 295, in test_vote_tie_auto_analysis
+    self.assertIn("平票", state["state"]["reviewContent"])
+                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'reviewContent'
+
+------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_core_script_generate_and_display has failure:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 147, in test_core_script_generate_and_display
+    page.wait_phase("generate_script", timeout=20)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 157, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text 'AI 生成剧本' not reached
+
+------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_full_10_phase_loop has failure:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 194, in test_full_10_phase_loop
+    page.wait_phase("generate_script")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 117, in wait_phase
+    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 157, in wait_phase_text
+    raise AssertionError(f"phase text {text!r} not reached")
+AssertionError: phase text 'AI 生成剧本' not reached
+
+------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_p0_1_vote_idempotent_rule has failure:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_p0_1_vote_idempotent_rule
+    self.assertTrue(v1.get("success"))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: None is not true
+
+------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_reconnect_state_recovery has failure:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 308, in test_reconnect_state_recovery
+    self.assertTrue(len(new_snap["state"]["publicClue"]) > 0)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true
+
+------------------------------------------------------------------------------
+TestMysteryReasonFullClosedLoop:test_review_unlock_single_open_all_view has failure:
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 279, in test_review_unlock_single_open_all_view
+    self.assertTrue(state_after["state"]["reviewUnlocked"])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true
+
+------------------------------------------------------------------------------
+[0m
+[I 2026-05-29 00:02:22 minium.SESSION session#67 run] [32mcase queue is empty, test complete, release None[0m
+[I 2026-05-29 00:02:22 minium minitest#109 reset_minium] [32mreset_minium[0m
+[I 2026-05-29 00:02:22 minium.Conn9104 connection#704 _handle_async_msg] [32mreceived async msg: 5eed5ba4-7e87-405c-8736-19e0433c4e4f, maybe command ignore response[0m
+[E 2026-05-29 00:02:22 minium.Conn9104 connection#642 _on_error] Connection to remote host was lost.
+[I 2026-05-29 00:02:22 minium.Conn9104 connection#377 _ws_run_forever] [32mwebsocket run forever shutdown[0m
+[I 2026-05-29 00:02:23 minium minitest#89 reset_native] [32mreset_native[0m
+[I 2026-05-29 00:02:23 minium basenative#59 wrapper] [32mcall IdeNative.stop_wechat[0m
+[I 2026-05-29 00:02:23 minium basenative#63 wrapper] [32mcall IdeNative.stop_wechat end None[0m
+[I 2026-05-29 00:02:23 minium basenative#59 wrapper] [32mcall IdeNative.release[0m
+[I 2026-05-29 00:02:23 minium basenative#59 wrapper] [32mcall BaseNative.release[0m
+[I 2026-05-29 00:02:23 minium basenative#250 release] [32mNative release[0m
+[I 2026-05-29 00:02:23 minium basenative#59 wrapper] [32mcall BaseNative.release_auto_authorize[0m
+[I 2026-05-29 00:02:23 minium basenative#63 wrapper] [32mcall BaseNative.release_auto_authorize end None[0m
+[I 2026-05-29 00:02:23 minium basenative#63 wrapper] [32mcall BaseNative.release end None[0m
+[I 2026-05-29 00:02:23 minium basenative#63 wrapper] [32mcall IdeNative.release end None[0m
+
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a18669b011a091a71d87a83", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": null, "phase": "get_evidence", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": null, "phase": "analyze_clue", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "21dd03466a18669b011a091a71d87a83", "roomCode": null, "phase": "analyze_clue", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a18669b011a091a71d87a83", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "21dd03466a18669b011a091a71d87a83", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "a54a659b6a1866bf011712855b4a39d8", "roomCode": "563151", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "a54a659b6a1866bf011712855b4a39d8", "roomCode": "563151", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1866bf011712855b4a39d8", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1866bf011712855b4a39d8", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "a54a659b6a1866bf011712855b4a39d8", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "a54a659b6a1866bf011712855b4a39d8", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "a54a659b6a1866bf011712855b4a39d8", "roomCode": null, "phase": "wait_unlock_review", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "a54a659b6a1866bf011712855b4a39d8", "roomCode": null, "phase": "wait_unlock_review", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1866bf011712855b4a39d8", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1866bf011712855b4a39d8", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "unlockReview", "roomId": "a54a659b6a1866bf011712855b4a39d8", "shareVerify": true, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "unlockReview", "roomId": "a54a659b6a1866bf011712855b4a39d8", "shareVerify": true, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1866bf011712855b4a39d8", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "a54a659b6a1866bf011712855b4a39d8", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "create", "difficulty": "新手", "nickname": "Minium组长", "avatar": "", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "3f895cc36a1866e10118b1225ef216d6", "roomCode": "468082", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSeedPlayers", "roomId": "3f895cc36a1866e10118b1225ef216d6", "roomCode": "468082", "players": [{"openId": "minium_test_mysteryReason_1", "nickName": "Minium玩家1", "avatarUrl": "", "profileReady": true}, {"openId": "minium_test_mysteryReason_2", "nickName": "Minium玩家2", "avatarUrl": "", "profileReady": true}], "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "3f895cc36a1866e10118b1225ef216d6", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "3f895cc36a1866e10118b1225ef216d6", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "3f895cc36a1866e10118b1225ef216d6", "difficulty": "新手", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testStartGame", "roomId": "3f895cc36a1866e10118b1225ef216d6", "difficulty": "新手", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "3f895cc36a1866e10118b1225ef216d6", "roomCode": null, "phase": "final_vote", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "3f895cc36a1866e10118b1225ef216d6", "roomCode": null, "phase": "final_vote", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testBatchVoteTie", "roomId": "3f895cc36a1866e10118b1225ef216d6", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testBatchVoteTie", "roomId": "3f895cc36a1866e10118b1225ef216d6", "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "3f895cc36a1866e10118b1225ef216d6", "roomCode": null, "phase": null, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testAdvanceRound", "roomId": "3f895cc36a1866e10118b1225ef216d6", "roomCode": null, "phase": null, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "unlockReview", "roomId": "3f895cc36a1866e10118b1225ef216d6", "shareVerify": true, "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "unlockReview", "roomId": "3f895cc36a1866e10118b1225ef216d6", "shareVerify": true, "_test": true}
+[CloudHelper] callFunction mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "3f895cc36a1866e10118b1225ef216d6", "_test": true}
+[CloudHelper] minium cloud fallback → tcb: Minium cannot call wx.cloud.callFunction: wx.cloud.callFunction未实现, 请更换更新的基础库版本
+[CloudHelper] tcb invoke mysteryReasonRoomService: {"action": "__testSyncSnapshot", "roomId": "3f895cc36a1866e10118b1225ef216d6", "_test": true}

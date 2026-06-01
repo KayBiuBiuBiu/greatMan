@@ -1,0 +1,109 @@
+[I 2026-06-01 21:10:49,182 minium minitest#432 _miniSetUp] =========Current case: test_01_drink_party_core_flow=========
+[I 2026-06-01 21:10:49,286 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_01_drink_party_core_flow
+[I 2026-06-01 21:10:49,508 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:10:49,621 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 21:10:49,749 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 21:10:49,808 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 21:10:49,880 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 21:10:49,936 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 21:10:56,447 minium minitest#487 _miniSetUp] =========case: test_01_drink_party_core_flow start=========
+[I 2026-06-01 21:10:56,448 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 21:10:56,646 minium.Conn7408 connection#668 __on_message] [40a2b381-303c-46aa-a5f3-cda7ae7c6053]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:03,776 minium.App8016 app#950 relaunch] ReLaunch: /packageGames/drink-party/drink-party?roomId=93eed62b6a1d84e7004b52ab04b1c71f&roomCode=479905
+[I 2026-06-01 21:11:05,521 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 1fa4ca73-1146-4855-9fc6-92b6070be78f
+[I 2026-06-01 21:11:05,523 minium.App8016 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {'roomId': '93eed62b6a1d84e7004b52ab04b1c71f', 'roomCode': '479905'}, 'openType': 'reLaunch', 'timeStamp': 1780319465475, 'webviewId': 2, 'routeEventId': '2_1780319465391', 'renderer': 'webview'}, 1780319465476]}
+[I 2026-06-01 21:11:07,609 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 21:11:07,671 minium.Conn7408 connection#668 __on_message] [27f8eefa-327a-47ba-a628-90489ad5bb81]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:14,487 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:11:14,541 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103bcb620>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103c9a0d0>]
+[E 2026-06-01 21:11:16,671 minium.Conn7408 connection#668 __on_message] [574d7e4a-8216-43f5-af51-6f168cec7de1]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:19,262 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 8bc17665-fe0a-404c-8d45-e4b32ef4ca1c, maybe command ignore response
+[I 2026-06-01 21:11:19,310 minium.Conn7408 connection#704 _handle_async_msg] received async msg: ac1ba5ef-ee6a-449c-b505-3ac8942cb059, maybe command ignore response
+[I 2026-06-01 21:11:19,352 minium.Conn7408 connection#704 _handle_async_msg] received async msg: c0b39e67-4280-4739-89f3-d5c0f8322a1b, maybe command ignore response
+[I 2026-06-01 21:11:19,391 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 040ff334-a15d-4db7-b733-4a0abe686bc9, maybe command ignore response
+[I 2026-06-01 21:11:19,429 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 3c83963b-c785-44db-bebe-3ccc78f1df93, maybe command ignore response
+[I 2026-06-01 21:11:19,472 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 25c6bf63-924d-4638-b422-f90a71b65e0b, maybe command ignore response
+[I 2026-06-01 21:11:19,511 minium.Conn7408 connection#704 _handle_async_msg] received async msg: d1022bb9-4166-4bbb-8ed8-a9e501e6f5d0, maybe command ignore response
+[I 2026-06-01 21:11:19,553 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 9e445a78-6647-4cd6-817b-93fcffc37278, maybe command ignore response
+[I 2026-06-01 21:11:19,593 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 1a52a630-c8ff-4d88-aa12-8c4b84e509f5, maybe command ignore response
+[I 2026-06-01 21:11:19,633 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 34a3f75a-e817-40cd-a231-4424c7b72441, maybe command ignore response
+[I 2026-06-01 21:11:19,670 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 022f8280-9e1d-41ec-badc-41c42a219e94, maybe command ignore response
+[I 2026-06-01 21:11:19,710 minium.Conn7408 connection#704 _handle_async_msg] received async msg: d2a22a6d-a8aa-4a9c-948c-c476cf23f43a, maybe command ignore response
+[I 2026-06-01 21:11:19,750 minium.Conn7408 connection#704 _handle_async_msg] received async msg: f0c69193-45e5-4828-8f29-ad569ebd8dbb, maybe command ignore response
+[I 2026-06-01 21:11:19,789 minium.Conn7408 connection#704 _handle_async_msg] received async msg: b3e4a4dd-ab70-4301-b0af-c3190d97735b, maybe command ignore response
+[I 2026-06-01 21:11:19,834 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 506fbca4-778e-4d96-b219-5521facb1bf9, maybe command ignore response
+[I 2026-06-01 21:11:19,874 minium.Conn7408 connection#704 _handle_async_msg] received async msg: ec0376d8-8e2a-406e-99cc-26a2b3d3eee6, maybe command ignore response
+[I 2026-06-01 21:11:19,914 minium.Conn7408 connection#704 _handle_async_msg] received async msg: d930705d-0dc4-4fcb-8c55-a250d7a4ec07, maybe command ignore response
+[I 2026-06-01 21:11:19,953 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 77323279-8c70-444a-b09f-01b83820fa01, maybe command ignore response
+[I 2026-06-01 21:11:19,991 minium.Conn7408 connection#704 _handle_async_msg] received async msg: c58a465a-c580-448b-ba13-40f9114a267a, maybe command ignore response
+[I 2026-06-01 21:11:20,030 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 5a1b30a8-167d-4a1e-b7ee-faa6b141f808, maybe command ignore response
+[I 2026-06-01 21:11:20,068 minium.Conn7408 connection#704 _handle_async_msg] received async msg: a1673560-2d10-453c-ba98-46e65e99bddd, maybe command ignore response
+[I 2026-06-01 21:11:20,105 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 32bd2442-8935-416a-81fe-d9d4d656539d, maybe command ignore response
+[I 2026-06-01 21:11:20,144 minium.Conn7408 connection#704 _handle_async_msg] received async msg: a9df766d-47f5-4964-bf32-38e887c79396, maybe command ignore response
+[I 2026-06-01 21:11:20,184 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 2cd10c94-4192-4f4b-b6db-a28f46793ff2, maybe command ignore response
+[I 2026-06-01 21:11:20,773 minium.Conn7408 connection#704 _handle_async_msg] received async msg: c195eefc-a990-420e-b03e-89aec27bf49c, maybe command ignore response
+[I 2026-06-01 21:11:20,796 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 26131862-c3f7-49a6-a3df-2e550a530026, maybe command ignore response
+[I 2026-06-01 21:11:20,840 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 27b39d01-22c6-43ad-80cf-d469e8602120, maybe command ignore response
+[I 2026-06-01 21:11:21,377 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 2f62c791-ed73-47de-baf3-96699149fdf6, maybe command ignore response
+[E 2026-06-01 21:11:21,381 minium.Conn7408 connection#668 __on_message] [b47852f0-a28d-45a2-a81f-8269182765ae]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:21,693 minium.Conn7408 connection#704 _handle_async_msg] received async msg: e52cd4bc-42f1-4720-a05d-f9ac3f041b1e, maybe command ignore response
+[I 2026-06-01 21:11:21,703 minium.Conn7408 connection#704 _handle_async_msg] received async msg: c57a592f-d956-47b9-9da8-29e4b35e93af, maybe command ignore response
+[E 2026-06-01 21:11:21,929 minium.Conn7408 connection#668 __on_message] [a890820d-5a55-4001-bf2a-dc76eb9db83a]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:21,972 minium.Conn7408 connection#704 _handle_async_msg] received async msg: a890820d-5a55-4001-bf2a-dc76eb9db83a, maybe command ignore response
+[I 2026-06-01 21:11:24,563 minium minitest#897 capture] capture assertTrue-success_211124563211.png
+[E 2026-06-01 21:11:24,631 minium.Conn7408 connection#668 __on_message] [cfc45f03-5c2d-4c0b-b4f4-31bb250ad3be]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:25,950 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 6d9fd4b9-1a27-4e06-b6cc-fb2b5933d1cb, maybe command ignore response
+[I 2026-06-01 21:11:25,952 minium.App8016 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {'roomId': '6cb23a706a1d84fc00b0e3c003b8979a', 'roomCode': '408027'}, 'openType': 'reLaunch', 'timeStamp': 1780319485942, 'webviewId': 4, 'routeEventId': '', 'renderer': 'webview'}, 1780319485943]}
+[E 2026-06-01 21:11:27,639 minium.Conn7408 connection#668 __on_message] [c8b1a769-131a-4261-803e-042452280b5f]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:27,973 minium.Conn7408 connection#704 _handle_async_msg] received async msg: d5f167bd-cdaf-40f2-a5ea-1f5ae3498249, maybe command ignore response
+[I 2026-06-01 21:11:27,975 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 505b7608-cf2b-402a-bb1d-4b7a2494389a, maybe command ignore response
+[I 2026-06-01 21:11:28,017 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 1aa8c75c-47c9-4919-a05c-09b5c9dca4a0, maybe command ignore response
+[I 2026-06-01 21:11:28,065 minium.Conn7408 connection#704 _handle_async_msg] received async msg: fb1f59a7-e128-4a18-8306-0cd31528dfe9, maybe command ignore response
+[I 2026-06-01 21:11:28,122 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 7e4228e4-b5d3-4330-b6a5-96c90ba06b5b, maybe command ignore response
+[E 2026-06-01 21:11:28,363 minium.Conn7408 connection#668 __on_message] [125afd80-6740-4c9e-8afe-6447d1e7abfa]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:28,406 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 125afd80-6740-4c9e-8afe-6447d1e7abfa, maybe command ignore response
+[E 2026-06-01 21:11:32,576 minium.Conn7408 connection#668 __on_message] [c29b3941-8f9b-453c-bce7-b72ae9e586df]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:32,975 minium.Conn7408 connection#704 _handle_async_msg] received async msg: e2cb1d3e-97ff-4c24-9e1d-ded39d4d7c2b, maybe command ignore response
+[I 2026-06-01 21:11:34,275 minium.Conn7408 connection#704 _handle_async_msg] received async msg: c26e9f8a-4942-4f81-beb9-b0c05d7a2075, maybe command ignore response
+[I 2026-06-01 21:11:34,350 minium.Conn7408 connection#704 _handle_async_msg] received async msg: a7468f11-7ea9-425f-a5ca-1bd4a28903bb, maybe command ignore response
+[I 2026-06-01 21:11:34,393 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 1aa158bc-38d6-44da-bf57-5957d7702d13, maybe command ignore response
+[I 2026-06-01 21:11:35,367 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 4b5995d2-3c84-4048-ab76-0fefeec61626, maybe command ignore response
+[E 2026-06-01 21:11:35,463 minium.Conn7408 connection#668 __on_message] [5a747a68-e4b0-41b3-a798-447499292c71]: page.loadView not exists
+[I 2026-06-01 21:11:35,508 minium.Conn7408 connection#704 _handle_async_msg] received async msg: af3a036f-8f12-48ca-9283-efb52ee79a16, maybe command ignore response
+[E 2026-06-01 21:11:35,724 minium.Conn7408 connection#668 __on_message] [2480725b-4f17-4336-a081-42bf360a48b6]: page._refreshView not exists
+[I 2026-06-01 21:11:35,727 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 8b444c0e-ec70-4720-92c9-af1451a1b61f, maybe command ignore response
+[I 2026-06-01 21:11:36,872 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 5fbaf57f-d282-4d06-8d76-db1e0d3f07d7, maybe command ignore response
+[I 2026-06-01 21:11:36,970 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 1357e038-a9b9-43e8-8f0f-c09180ca5a2c, maybe command ignore response
+[I 2026-06-01 21:11:36,973 minium.Conn7408 connection#704 _handle_async_msg] received async msg: a097f077-1819-497a-b6b1-497fd04d4174, maybe command ignore response
+[I 2026-06-01 21:11:37,352 minium minitest#897 capture] capture assertTrue-success_211137351959.png
+[I 2026-06-01 21:11:37,999 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 4a2c6af7-b9d9-48a4-9aa6-ab783d925599, maybe command ignore response
+[I 2026-06-01 21:11:38,232 minium.Conn7408 connection#704 _handle_async_msg] received async msg: b5a38a96-cdbb-4ea7-b282-e5a561b2b3a1, maybe command ignore response
+[I 2026-06-01 21:11:38,235 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 99e1568f-40ad-4bc2-b2fc-39bffdd051f4, maybe command ignore response
+[I 2026-06-01 21:11:38,289 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 7f62dcd9-a9b4-41fa-9616-e2d1ee020dcc, maybe command ignore response
+[I 2026-06-01 21:11:38,408 minium.Conn7408 connection#704 _handle_async_msg] received async msg: e6cd214c-bddd-4f43-b4c0-72edf8937ed3, maybe command ignore response
+[I 2026-06-01 21:11:38,452 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 530545f5-946b-4b9c-bce4-84f472be3799, maybe command ignore response
+[I 2026-06-01 21:11:38,553 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:11:38,671 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103c9b750>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103cd15b0>]
+[I 2026-06-01 21:11:39,423 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 3d4431b7-fd42-4d40-a3fc-982daa3f9351, maybe command ignore response
+[I 2026-06-01 21:11:39,594 minium.Conn7408 connection#704 _handle_async_msg] received async msg: b2927607-d827-4f98-8f86-c318f9cb78ed, maybe command ignore response
+[I 2026-06-01 21:11:39,635 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 3b254bd0-240c-4432-8623-c14502ac6115, maybe command ignore response
+[I 2026-06-01 21:11:39,692 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:11:39,778 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103cd15b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103dafbf0>]
+[I 2026-06-01 21:11:40,619 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 4926f1a5-bc4a-4dd0-90cc-3709d86b42ca, maybe command ignore response
+[I 2026-06-01 21:11:40,695 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 6bfc44e7-c252-4c22-9679-98c3af0df3e5, maybe command ignore response
+[I 2026-06-01 21:11:40,737 minium.Conn7408 connection#704 _handle_async_msg] received async msg: b6f5a911-3295-4f5f-9be7-8f6a31f90729, maybe command ignore response
+[I 2026-06-01 21:11:40,881 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:11:40,966 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103d19040>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103d18e20>]
+[I 2026-06-01 21:11:41,786 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 6a088305-000b-4f45-b247-03b068e0c80c, maybe command ignore response
+[I 2026-06-01 21:11:41,880 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 5d9942e5-b51f-4995-9329-2fb2637c253d, maybe command ignore response
+[I 2026-06-01 21:11:41,921 minium.Conn7408 connection#704 _handle_async_msg] received async msg: aed2ed43-a75a-4b4e-b9df-79904def25c8, maybe command ignore response
+[E 2026-06-01 21:11:41,962 minium.Conn7408 connection#668 __on_message] [030a547a-992b-410c-a0d8-649acd3b9347]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:11:42,005 minium.Conn7408 connection#704 _handle_async_msg] received async msg: 030a547a-992b-410c-a0d8-649acd3b9347, maybe command ignore response
+[I 2026-06-01 21:11:42,061 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:11:42,179 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103d1c850>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103d1d050>]
+[I 2026-06-01 21:11:43,190 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:11:43,196 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103d0ad50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103d0ae40>]
+[I 2026-06-01 21:11:43,257 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:11:43,298 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 21:11:43,484 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:11:43,523 minium basenative#63 wrapper] call BaseNative.get_start_up end 

@@ -1,0 +1,88 @@
+[I 2026-06-01 20:59:38,390 minium minitest#432 _miniSetUp] =========Current case: test_15_drink_party_insufficient_players=========
+[I 2026-06-01 20:59:38,430 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_15_drink_party_insufficient_players
+[I 2026-06-01 20:59:38,474 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 20:59:38,512 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 20:59:38,555 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 20:59:38,594 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 20:59:38,635 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 20:59:38,674 minium minitest#897 capture] capture setup.png
+[W 2026-06-01 20:59:40,716 minium.App0240 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 20:59:40,717 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601204845/test_15_drink_party_insufficient_players/20260601205938390069/images/setup.png not exists
+[I 2026-06-01 20:59:40,772 minium minitest#487 _miniSetUp] =========case: test_15_drink_party_insufficient_players start=========
+[I 2026-06-01 20:59:40,821 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 20:59:40,887 minium.Conn2224 connection#668 __on_message] [54a7ffd3-74d7-49e3-8a40-c98eaacfaaf2]: wx.cloud.callFunction not exists
+[I 2026-06-01 20:59:46,080 minium.App0240 app#950 relaunch] ReLaunch: /packageGames/drink-party/drink-party?roomId=6cb23a706a1d824100b089b917ed9238&roomCode=863124
+[I 2026-06-01 20:59:46,317 minium.Conn2224 connection#704 _handle_async_msg] received async msg: 560eed62-d268-4cad-9fc2-67e241a39a9f, maybe command ignore response
+[I 2026-06-01 20:59:47,481 minium.App0240 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {'roomId': '6cb23a706a1d824100b089b917ed9238', 'roomCode': '863124'}, 'openType': 'reLaunch', 'timeStamp': 1780318787478, 'webviewId': 17, 'routeEventId': '17_1780318786854', 'renderer': 'webview'}, 1780318787479]}
+[I 2026-06-01 20:59:47,481 minium.Conn2224 connection#704 _handle_async_msg] received async msg: 36fe1a28-f4fa-41ae-86e0-036ebcf14d61
+[I 2026-06-01 20:59:49,586 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-01 20:59:51,592 minium.App0240 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 20:59:51,646 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601204845/test_15_drink_party_insufficient_players/20260601205938390069/images/assertTrue-success.png not exists
+[I 2026-06-01 20:59:52,902 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 20:59:52,911 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1032ef6b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032efa70>]
+[E 2026-06-01 20:59:55,133 minium.Conn2224 connection#668 __on_message] [c5118f93-1999-4930-b74c-3de90d39bf42]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:59:59,068 minium.Conn2224 connection#668 __on_message] [2057a8ff-12ab-45bc-aee2-cd13b1ba40b8]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:00:02,228 minium page#716 _get_elements_by_css] try to get elements: view
+[I 2026-06-01 21:00:02,245 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1032efe30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ef7f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032efbb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee850>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee030>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032eed50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ec5f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ec9b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee670>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ef250>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee2b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032eead0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032eedf0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032edf90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ed810>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325f390>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325f430>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325e490>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325cc30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325ca50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325cb90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325f890>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325f750>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325e350>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325e850>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325c9b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10325efd0>]
+[E 2026-06-01 21:00:02,373 minium.Conn2224 connection#668 __on_message] [0aacae7f-a653-45e7-85b6-fd4e7cc71676]: wx.cloud.callFunction not exists
+[E 2026-06-01 21:00:05,072 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 421, in test_15_drink_party_insufficient_players
+    self._run_insufficient_then_sufficient(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        DrinkPage, "start_round", "趣味抽签", min_players=2, insufficient=1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 328, in _run_insufficient_then_sufficient
+    seed_more = self._join_players(
+        page_cls,
+    ...<3 lines>...
+        room_id=info.get("roomId"),
+    )
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 89, in _join_players
+    raise AssertionError(
+        f"seed_players({game_key}) failed: {err} roomId={room_id} code={room_code}"
+    )
+AssertionError: seed_players(drinkParty) failed: 对局进行中，无法注入测试玩家 roomId=6cb23a706a1d824100b089b917ed9238 code=863124
+[I 2026-06-01 21:00:05,082 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:00:05,126 minium minitest#897 capture] capture teardown.png
+[W 2026-06-01 21:00:07,166 minium.App0240 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 21:00:07,172 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601204845/test_15_drink_party_insufficient_players/20260601205938390069/images/teardown.png not exists
+[I 2026-06-01 21:00:07,210 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:00:07,251 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 21:00:07,296 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_15_drink_party_insufficient_players of <testcases.test_all_games.TestAllGames testMethod=test_15_drink_party_insufficient_players>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 421, in test_15_drink_party_insufficient_players
+    self._run_insufficient_then_sufficient(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        DrinkPage, "start_round", "趣味抽签", min_players=2, insufficient=1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 328, in _run_insufficient_then_sufficient
+    seed_more = self._join_players(
+        page_cls,
+    ...<3 lines>...
+        room_id=info.get("roomId"),
+    )
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 89, in _join_players
+    raise AssertionError(
+        f"seed_players({game_key}) failed: {err} roomId={room_id} code={room_code}"
+    )
+AssertionError: seed_players(drinkParty) failed: 对局进行中，无法注入测试玩家 roomId=6cb23a706a1d824100b089b917ed9238 code=863124
+[W 2026-06-01 21:00:07,335 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601204845', 'case_output': './outputs/20260601204845/test_15_drink_party_insufficient_players/20260601205938390069'}
+[W 2026-06-01 21:00:07,383 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 21:00:07,422 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 21:00:07,460 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1030aeba0>

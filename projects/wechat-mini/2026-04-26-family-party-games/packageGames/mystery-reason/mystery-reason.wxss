@@ -1,0 +1,196 @@
+@import "../../styles/room-game.wxss";
+
+.mr-page {
+  background: #fef8f0;
+  min-height: 100vh;
+}
+
+.mr-phase-title {
+  font-size: var(--font-card-title-size);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  margin-bottom: var(--space-sm);
+  color: #ff7a2f;
+}
+
+.mr-countdown {
+  text-align: center;
+  color: #ff7a2f;
+  font-size: var(--font-body-size);
+  margin-bottom: var(--space-md);
+}
+
+.mr-ai-hint {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: #fff7ed;
+  border-radius: var(--radius-md);
+  font-size: var(--font-caption-size);
+  color: #9a3412;
+  line-height: 1.5;
+}
+
+.mr-code-slots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+}
+
+.mr-code-slot {
+  width: 72rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  color: var(--color-text-secondary);
+}
+
+.mr-code-slot.filled {
+  background: #fff;
+  border: 2rpx solid #ff7a2f;
+  color: var(--color-text);
+}
+
+.mr-numpad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.mr-numpad-key {
+  width: calc(33.33% - 12rpx);
+  text-align: center;
+  padding: var(--space-md) 0;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  font-size: var(--font-body-size);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.mr-evidence-head {
+  text-align: center;
+  font-size: var(--font-caption-size);
+  color: #ff7a2f;
+  margin-bottom: var(--space-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.mr-clue-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.mr-clue-tab {
+  flex: 1;
+  text-align: center;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  font-size: var(--font-caption-size);
+}
+
+.mr-clue-tab.on {
+  background: #ff7a2f;
+  color: #fff;
+}
+
+.mr-clue-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-sm);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.mr-clue-card.private {
+  background: #fff8f0;
+  border: 1rpx solid #fed7aa;
+}
+
+.mr-clue-title {
+  font-size: var(--font-body-size);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-xs);
+}
+
+.mr-clue-body {
+  font-size: var(--font-caption-size);
+  color: var(--color-text-secondary, #555);
+  line-height: 1.5;
+}
+
+.mr-clue-source {
+  margin-top: var(--space-sm);
+  font-size: 22rpx;
+  color: #7b7280;
+}
+
+.mr-clue-doubt {
+  font-size: 22rpx;
+  color: #9ca3af;
+  margin-top: 4rpx;
+}
+
+.mr-star-btn {
+  margin-top: var(--space-sm);
+  font-size: var(--font-caption-size);
+  color: #ff7a2f;
+}
+
+.mr-script-box {
+  max-height: 60vh;
+  padding: var(--space-md);
+}
+
+.mr-script-section {
+  margin-bottom: var(--space-md);
+}
+
+.mr-script-label {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.mr-script-body {
+  display: block;
+  white-space: pre-wrap;
+  line-height: 1.55;
+  font-size: var(--font-body-size);
+}
+
+.mr-vote-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
+}
+
+.mr-vote-check {
+  margin-left: auto;
+  color: #07c160;
+  font-weight: var(--font-weight-medium);
+}
+
+.mr-review-box {
+  white-space: pre-wrap;
+  font-size: var(--font-caption-size);
+  line-height: 1.55;
+  padding: var(--space-md);
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+}
+
+.rg-btn-primary {
+  background: #ff7a2f !important;
+}

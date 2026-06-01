@@ -8,18 +8,42 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 let aiProvider = 'hunyuan-v3'
 let aiModels = ['hy3-preview']
+/** OpenAPI（HUNYUAN_API_KEY）用 hunyuan-lite；extend.AI 用 hy3-preview */
+let openApiModels = ['hunyuan-lite']
 let hunyuanApiBase = 'https://api.hunyuan.cloud.tencent.com/v1/'
 try {
   const cfg = require('./cloud-env.js')
   if (cfg.aiProvider) aiProvider = cfg.aiProvider
   if (cfg.aiModels && cfg.aiModels.length) aiModels = cfg.aiModels.slice()
+  if (cfg.openApiModels && cfg.openApiModels.length) openApiModels = cfg.openApiModels.slice()
   if (cfg.hunyuanApiBase) hunyuanApiBase = cfg.hunyuanApiBase
 } catch (e) {
   /* defaults */
 }
 
+let deploySecrets = null
+try {
+  deploySecrets = require('./deploySecrets')
+} catch (e) {
+  deploySecrets = null
+}
+
 function getApiKey() {
-  return String(process.env.HUNYUAN_API_KEY || '').trim()
+  const fromEnv = String(process.env.HUNYUAN_API_KEY || '').trim()
+  if (fromEnv) return fromEnv
+  if (deploySecrets && deploySecrets.HUNYUAN_API_KEY) {
+    return String(deploySecrets.HUNYUAN_API_KEY).trim()
+  }
+  return ''
+}
+
+function getApiBase() {
+  const fromEnv = String(process.env.HUNYUAN_API_BASE || '').trim()
+  if (fromEnv) return fromEnv
+  if (deploySecrets && deploySecrets.HUNYUAN_API_BASE) {
+    return String(deploySecrets.HUNYUAN_API_BASE).trim()
+  }
+  return hunyuanApiBase
 }
 
 function extractText(res) {
@@ -84,12 +108,12 @@ async function chatViaExtendAi(prompt, system) {
 async function chatViaOpenApi(prompt, system) {
   const apiKey = getApiKey()
   let lastErr = null
-  for (let i = 0; i < aiModels.length; i++) {
-    const modelName = aiModels[i]
+  for (let i = 0; i < openApiModels.length; i++) {
+    const modelName = openApiModels[i]
     try {
       const r = await chatCompletions({
         apiKey,
-        baseUrl: process.env.HUNYUAN_API_BASE || hunyuanApiBase,
+        baseUrl: getApiBase(),
         model: modelName,
         prompt,
         system,
@@ -114,15 +138,28 @@ async function chat(event) {
   const system = String((event && event.system) || '').trim()
   if (!prompt) throw new Error('缺少 prompt')
 
-  if (getApiKey()) {
+  const apiKey = getApiKey()
+  if (apiKey) {
     try {
       return await chatViaOpenApi(prompt, system)
     } catch (e1) {
-      console.warn('[aiPartyService] OpenAPI 失败，尝试 extend.AI', e1.message || e1)
+      const msg = String((e1 && e1.message) || e1)
+      console.warn('[aiPartyService] OpenAPI 失败', msg)
+      throw new Error('混元 API 调用失败：' + msg)
     }
   }
 
-  return chatViaExtendAi(prompt, system)
+  try {
+    return await chatViaExtendAi(prompt, system)
+  } catch (e2) {
+    const msg = String((e2 && e2.message) || e2)
+    if (/extend\.AI/.test(msg)) {
+      throw new Error(
+        '未配置 HUNYUAN_API_KEY。请运行 node scripts/deploy-ai-party-service.js 或在云开发控制台为 aiPartyService 添加环境变量后重新部署'
+      )
+    }
+    throw e2
+  }
 }
 
 exports.main = async function (event) {

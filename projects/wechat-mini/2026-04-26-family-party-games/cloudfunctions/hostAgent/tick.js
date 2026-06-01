@@ -32,7 +32,8 @@ function planDrink(state, now, roomId) {
     return { actions, speak }
   }
   const ph = state.phase
-  if (ph === 'countdown' && now >= (state.countdownEndsAt | 0) - 100) {
+  const countdownEndsAt = Number(state.countdownEndsAt || 0)
+  if (ph === 'countdown' && countdownEndsAt > 0 && now >= countdownEndsAt - 100) {
     actions.push({ service: 'drink', action: 'revealRinger', roomId: rid })
     speak = '倒计时结束，揭晓谁喝几口'
   }

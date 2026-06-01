@@ -11,6 +11,7 @@ const ROOT = path.join(__dirname, '..')
 const FN_DIR = path.join(ROOT, 'cloudfunctions/aiPartyService')
 const SECRETS = path.join(FN_DIR, 'secrets.local.json')
 const CONFIG = path.join(FN_DIR, 'config.json')
+const DEPLOY_SECRETS = path.join(FN_DIR, 'deploySecrets.js')
 const ENV_ID = 'cloud1-d9g01no7m292bc511-d5e875d'
 const CLI =
   process.platform === 'darwin'
@@ -32,6 +33,24 @@ function readSecrets() {
   return s
 }
 
+function writeDeploySecrets(secrets) {
+  const key = String(secrets.HUNYUAN_API_KEY).trim()
+  const base = String(
+    secrets.HUNYUAN_API_BASE || 'https://api.hunyuan.cloud.tencent.com/v1/'
+  ).trim()
+  const content =
+    '/** 由 scripts/deploy-ai-party-service.js 生成，勿提交 Git */\n' +
+    'module.exports = {\n' +
+    '  HUNYUAN_API_KEY: ' +
+    JSON.stringify(key) +
+    ',\n' +
+    '  HUNYUAN_API_BASE: ' +
+    JSON.stringify(base) +
+    '\n}\n'
+  fs.writeFileSync(DEPLOY_SECRETS, content)
+  console.log('[deploy] 已生成 deploySecrets.js（打包进云函数，勿提交 Git）')
+}
+
 function patchConfig(secrets) {
   const cfg = JSON.parse(fs.readFileSync(CONFIG, 'utf8'))
   cfg.envVariables = {
@@ -41,7 +60,7 @@ function patchConfig(secrets) {
     ).trim()
   }
   fs.writeFileSync(CONFIG, JSON.stringify(cfg, null, 2) + '\n')
-  console.log('[deploy] 已写入 config.json envVariables（勿提交含 Key 的 config.json）')
+  console.log('[deploy] 已写入 config.json envVariables（双保险）')
 }
 
 function restoreConfig() {
@@ -53,6 +72,7 @@ function restoreConfig() {
 
 function main() {
   const secrets = readSecrets()
+  writeDeploySecrets(secrets)
   patchConfig(secrets)
   let code = 1
   try {

@@ -1,65 +1,35 @@
 {
   "schema_version": 1,
-  "date": "2026-05-22",
-  "generated_at": "2026-05-22T15:10:35",
+  "date": "2026-06-01",
+  "generated_at": "2026-06-01T15:10:09",
   "holdings": [
     {
-      "code": "000967",
-      "name": "盈峰环境",
-      "hold_shares": 400,
-      "cost_price": 13.2125,
-      "close_price": 12.98,
-      "unrealized_profit": -93.0,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
-      "code": "002237",
-      "name": "恒邦股份",
-      "hold_shares": 300,
-      "cost_price": 15.6167,
-      "close_price": 14.35,
-      "unrealized_profit": -380.0,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
-      "code": "301149",
-      "name": "隆华新材",
-      "hold_shares": 400,
-      "cost_price": 13.7125,
-      "close_price": 13.12,
-      "unrealized_profit": -237.0,
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.2878,
+      "close_price": 23.94,
+      "unrealized_profit": -3913.0,
       "tags": "持仓",
       "source": "broker_xls"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 5900,
-      "cost_price": 12.4485,
-      "close_price": 12.45,
-      "unrealized_profit": 9.01,
+      "hold_shares": 9700,
+      "cost_price": 12.3205,
+      "close_price": 12.2,
+      "unrealized_profit": -1169.1,
       "tags": "持仓",
       "source": "broker_xls"
     },
     {
-      "code": "603007",
-      "name": "顺景科技",
-      "hold_shares": 700,
-      "cost_price": 7.3072,
-      "close_price": 6.89,
-      "unrealized_profit": -292.05,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
-      "code": "603717",
-      "name": "天域生物",
-      "hold_shares": 700,
-      "cost_price": 7.2222,
-      "close_price": 7.05,
-      "unrealized_profit": -120.55,
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 16.92,
+      "unrealized_profit": -2883.2,
       "tags": "持仓",
       "source": "broker_xls"
     }
@@ -67,1556 +37,1786 @@
   "signals_today": [
     {
       "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:53"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:59:17"
+      "fired_iso": "2026-06-01T14:56:07"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:44"
+      "fired_iso": "2026-06-01T14:56:07"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002237",
+      "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:44"
+      "fired_iso": "2026-06-01T14:56:06"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T14:56:06"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "600711",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:43"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:43"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:42"
+      "fired_iso": "2026-06-01T14:56:06"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:42"
+      "fired_iso": "2026-06-01T14:50:51"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "603717",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:54:07"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:49:24"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:49:24"
+      "fired_iso": "2026-06-01T14:50:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:49:23"
+      "fired_iso": "2026-06-01T14:50:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:49:23"
+      "fired_iso": "2026-06-01T14:50:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T14:45:44"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:49:22"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:49:22"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:48:48"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:44:09"
+      "fired_iso": "2026-06-01T14:45:44"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:44:08"
+      "fired_iso": "2026-06-01T14:45:43"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002386",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:44:08"
+      "fired_iso": "2026-06-01T14:45:43"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:44:07"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:44:07"
+      "fired_iso": "2026-06-01T14:40:36"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:44:07"
+      "fired_iso": "2026-06-01T14:40:36"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "603717",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:43:33"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:38:54"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:38:54"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:38:53"
+      "fired_iso": "2026-06-01T14:40:36"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:38:52"
+      "fired_iso": "2026-06-01T14:40:36"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:38:52"
+      "fired_iso": "2026-06-01T14:35:28"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002237",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:38:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:37:43"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:33:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:33:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:33:41"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:33:41"
+      "fired_iso": "2026-06-01T14:35:28"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:33:40"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:33:40"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:32:31"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:28:23"
+      "fired_iso": "2026-06-01T14:35:27"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:28:22"
+      "fired_iso": "2026-06-01T14:35:27"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:28:21"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:28:21"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:28:20"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:28:20"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:27:12"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:23:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:23:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:23:13"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:23:13"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:23:12"
+      "fired_iso": "2026-06-01T14:30:20"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:23:12"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:19:11"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:18:03"
+      "fired_iso": "2026-06-01T14:30:19"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:18:02"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:18:02"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:18:02"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:18:01"
+      "fired_iso": "2026-06-01T14:30:19"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:18:00"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:12:49"
+      "fired_iso": "2026-06-01T14:30:19"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:12:48"
+      "fired_iso": "2026-06-01T14:25:13"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:12:48"
+      "fired_iso": "2026-06-01T14:25:13"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002386",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:12:48"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:12:47"
+      "fired_iso": "2026-06-01T14:25:12"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:12:46"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:07:38"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:07:38"
+      "fired_iso": "2026-06-01T14:25:12"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:07:37"
+      "fired_iso": "2026-06-01T14:20:06"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:07:37"
+      "fired_iso": "2026-06-01T14:20:06"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "001234",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:07:36"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:07:36"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:02:28"
+      "fired_iso": "2026-06-01T14:20:06"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:02:27"
+      "fired_iso": "2026-06-01T14:20:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T14:14:59"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T14:14:59"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T14:14:59"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:02:27"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:02:26"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:02:26"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T14:02:25"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:57:15"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:57:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:57:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:57:12"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:57:12"
+      "fired_iso": "2026-06-01T14:14:58"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:57:11"
+      "fired_iso": "2026-06-01T14:09:53"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "000967",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:52:06"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:52:05"
+      "fired_iso": "2026-06-01T14:09:53"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:52:05"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:52:04"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:52:04"
+      "fired_iso": "2026-06-01T14:09:52"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:52:04"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:46:56"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:46:56"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:46:55"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:46:55"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:46:54"
+      "fired_iso": "2026-06-01T14:09:52"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:46:54"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:41:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:41:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:41:41"
+      "fired_iso": "2026-06-01T14:04:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:41:41"
+      "fired_iso": "2026-06-01T14:04:50"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:41:40"
+      "fired_iso": "2026-06-01T14:04:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:41:39"
+      "fired_iso": "2026-06-01T14:04:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:36:33"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:36:32"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:36:32"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:36:31"
+      "fired_iso": "2026-06-01T13:59:44"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:36:31"
+      "fired_iso": "2026-06-01T13:59:43"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002237",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:36:30"
+      "fired_iso": "2026-06-01T13:59:43"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:59:42"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:54:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:54:40"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:31:25"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:31:24"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:31:24"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:31:23"
+      "fired_iso": "2026-06-01T13:54:39"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:31:23"
+      "fired_iso": "2026-06-01T13:54:39"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002386",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:31:22"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:27:21"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:26:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:26:14"
+      "fired_iso": "2026-06-01T13:49:35"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:26:13"
+      "fired_iso": "2026-06-01T13:49:35"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:26:12"
+      "fired_iso": "2026-06-01T13:49:34"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:26:12"
+      "fired_iso": "2026-06-01T13:49:34"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:26:11"
+      "fired_iso": "2026-06-01T13:44:33"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "603717",
+      "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:22:09"
+      "fired_iso": "2026-06-01T13:44:32"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:20:59"
+      "fired_iso": "2026-06-01T13:44:32"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:20:58"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:20:57"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:20:56"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:20:56"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:20:55"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:16:25"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:15:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "000967",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:15:51"
+      "fired_iso": "2026-06-01T13:44:32"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:15:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:15:50"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:15:49"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:15:49"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603717",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:11:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:10:40"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:10:39"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:10:39"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:10:38"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:10:37"
+      "fired_iso": "2026-06-01T13:39:28"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:10:37"
+      "fired_iso": "2026-06-01T13:39:28"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "603717",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:06:03"
+      "fired_iso": "2026-06-01T13:39:28"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:39:28"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:05:29"
+      "fired_iso": "2026-06-01T13:33:55"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "002386",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:05:28"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:05:28"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:05:27"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:05:26"
+      "fired_iso": "2026-06-01T13:33:55"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:05:26"
+      "fired_iso": "2026-06-01T13:33:55"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "603717",
+      "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:51"
+      "fired_iso": "2026-06-01T13:33:54"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:28:51"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:18"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600711",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:18"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "300798",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:16"
+      "fired_iso": "2026-06-01T13:28:51"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T13:00:15"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002386",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:55:11"
+      "fired_iso": "2026-06-01T13:28:51"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:55:10"
+      "fired_iso": "2026-06-01T13:28:51"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:55:09"
+      "fired_iso": "2026-06-01T13:23:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "000967",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:55:09"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "002237",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:55:08"
+      "fired_iso": "2026-06-01T13:23:50"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "001234",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:55:08"
+      "fired_iso": "2026-06-01T13:23:50"
     },
     {
       "alert_type": "risk_stop_take",
-      "code": "600711",
+      "code": "603206",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:50:06"
+      "fired_iso": "2026-06-01T13:23:49"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:18:46"
     },
     {
       "alert_type": "risk_stop_take",
       "code": "300798",
       "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-05-22T12:50:06"
+      "fired_iso": "2026-06-01T13:18:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:18:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:18:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:13:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:13:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:13:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:13:45"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:08:43"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:08:43"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:08:43"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:08:42"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:03:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:03:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:03:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T13:03:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:58:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:58:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:58:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:58:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:53:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:53:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:53:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:53:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:48:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:48:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:48:38"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:48:38"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:43:38"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:43:37"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:43:37"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:43:36"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:38:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:38:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:38:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:38:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:33:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:33:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:33:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:33:03"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:28:03"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:28:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:28:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:28:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:23:03"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:23:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:23:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:23:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:18:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:18:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:18:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:18:00"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:12:59"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:12:58"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:12:58"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:12:58"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:07:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:07:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:07:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:07:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:02:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:02:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:02:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T12:02:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:57:55"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:57:55"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:57:55"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:57:54"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:52:55"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:52:54"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:52:54"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:52:54"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:47:22"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:47:21"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:47:21"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:47:21"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:41:49"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:41:49"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:41:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:41:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:36:15"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:36:15"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:36:15"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:36:15"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:30:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:30:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:30:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:30:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:25:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:25:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:25:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:25:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:20:53"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:20:53"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:20:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:20:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:15:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:15:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:15:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:15:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:10:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:10:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:10:47"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:10:47"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:05:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:05:46"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:05:45"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:05:45"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:00:42"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:00:42"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:00:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T11:00:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:55:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:55:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:55:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:55:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:50:35"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:50:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:50:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "300798",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:50:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "000967",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:45:33"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:45:32"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-01T10:45:32"
     }
   ],
   "daily_picks_quality": [
     {
-      "code": "300162",
-      "name": "雷曼光电",
-      "score": 7.1,
+      "code": "002156",
+      "name": "通富微电",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002465",
-      "name": "海格通信",
-      "score": 7.1,
+      "code": "301322",
+      "name": "绿通科技",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301297",
-      "name": "富乐德",
-      "score": 7.1,
+      "code": "300779",
+      "name": "惠城环保",
+      "score": 9.1,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "605358",
-      "name": "立昂微",
-      "score": 7.1,
+      "code": "001258",
+      "name": "立新能源",
+      "score": 8.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300077",
-      "name": "国民技术",
-      "score": 7.1,
+      "code": "002938",
+      "name": "鹏鼎控股",
+      "score": 8.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "603636",
-      "name": "南威软件",
-      "score": 7.1,
+      "code": "300560",
+      "name": "中富通",
+      "score": 8.2,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002375",
-      "name": "亚厦股份",
-      "score": 7.1,
+      "code": "600460",
+      "name": "士兰微",
+      "score": 8.2,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301590",
-      "name": "优优绿能",
+      "code": "601566",
+      "name": "九牧王",
+      "score": 8.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "603661",
+      "name": "恒林股份",
+      "score": 8.1,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "001896",
+      "name": "豫能控股",
+      "score": 7.9,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600596",
+      "name": "新安股份",
+      "score": 7.9,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "300504",
+      "name": "天邑股份",
+      "score": 7.6,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "000725",
+      "name": "京东方Ａ",
+      "score": 7.6,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "002579",
+      "name": "中京电子",
+      "score": 7.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "000509",
+      "name": "华塑控股",
+      "score": 7.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "002585",
+      "name": "双星新材",
+      "score": 7.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "603223",
+      "name": "恒通股份",
+      "score": 7.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "603236",
+      "name": "移远通信",
       "score": 7.1,
       "reason_head": "因子与回测双重达标"
     },
     {
       "code": "603206",
       "name": "嘉环科技",
-      "score": 7.1,
+      "score": 6.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300219",
-      "name": "鸿利智汇",
-      "score": 7.1,
+      "code": "600186",
+      "name": "莲花控股",
+      "score": 6.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300566",
-      "name": "激智科技",
-      "score": 7.1,
+      "code": "002305",
+      "name": "*ST南置",
+      "score": 6.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002669",
-      "name": "康达新材",
-      "score": 7.1,
+      "code": "000967",
+      "name": "盈峰环境",
+      "score": 6.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "605018",
-      "name": "长华集团",
-      "score": 7.1,
+      "code": "300626",
+      "name": "华瑞股份",
+      "score": 6.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "600449",
-      "name": "宁夏建材",
-      "score": 7.1,
+      "code": "002156",
+      "name": "通富微电",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002729",
-      "name": "好利科技",
-      "score": 7.1,
+      "code": "301322",
+      "name": "绿通科技",
+      "score": 9.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "300779",
+      "name": "惠城环保",
+      "score": 9.1,
       "reason_head": "因子与回测双重达标"
     },
     {
       "code": "001258",
       "name": "立新能源",
-      "score": 7.1,
+      "score": 8.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "603082",
-      "name": "北自科技",
-      "score": 6.4,
+      "code": "002938",
+      "name": "鹏鼎控股",
+      "score": 8.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301313",
-      "name": "凡拓数创",
-      "score": 6.4,
+      "code": "300560",
+      "name": "中富通",
+      "score": 8.2,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300681",
-      "name": "英搏尔",
-      "score": 6.4,
+      "code": "600460",
+      "name": "士兰微",
+      "score": 8.2,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "601991",
-      "name": "大唐发电",
-      "score": 6.4,
+      "code": "601566",
+      "name": "九牧王",
+      "score": 8.2,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002226",
-      "name": "江南化工",
-      "score": 6.1,
+      "code": "603661",
+      "name": "恒林股份",
+      "score": 8.1,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300162",
-      "name": "雷曼光电",
-      "score": 7.1,
+      "code": "001896",
+      "name": "豫能控股",
+      "score": 7.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002465",
-      "name": "海格通信",
-      "score": 7.1,
+      "code": "600596",
+      "name": "新安股份",
+      "score": 7.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301297",
-      "name": "富乐德",
-      "score": 7.1,
+      "code": "300504",
+      "name": "天邑股份",
+      "score": 7.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "605358",
-      "name": "立昂微",
-      "score": 7.1,
+      "code": "000725",
+      "name": "京东方Ａ",
+      "score": 7.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300077",
-      "name": "国民技术",
-      "score": 7.1,
+      "code": "002579",
+      "name": "中京电子",
+      "score": 7.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "603636",
-      "name": "南威软件",
-      "score": 7.1,
+      "code": "000509",
+      "name": "华塑控股",
+      "score": 7.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002375",
-      "name": "亚厦股份",
-      "score": 7.1,
+      "code": "002585",
+      "name": "双星新材",
+      "score": 7.2,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301590",
-      "name": "优优绿能",
+      "code": "603223",
+      "name": "恒通股份",
+      "score": 7.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "603236",
+      "name": "移远通信",
       "score": 7.1,
       "reason_head": "因子与回测双重达标"
     },
     {
       "code": "603206",
       "name": "嘉环科技",
-      "score": 7.1,
+      "score": 6.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300219",
-      "name": "鸿利智汇",
-      "score": 7.1,
+      "code": "600186",
+      "name": "莲花控股",
+      "score": 6.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300566",
-      "name": "激智科技",
-      "score": 7.1,
+      "code": "002305",
+      "name": "*ST南置",
+      "score": 6.6,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002669",
-      "name": "康达新材",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "605018",
-      "name": "长华集团",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "600449",
-      "name": "宁夏建材",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "002729",
-      "name": "好利科技",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "001258",
-      "name": "立新能源",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603082",
-      "name": "北自科技",
+      "code": "000967",
+      "name": "盈峰环境",
       "score": 6.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301313",
-      "name": "凡拓数创",
+      "code": "300626",
+      "name": "华瑞股份",
       "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300681",
-      "name": "英搏尔",
-      "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "601991",
-      "name": "大唐发电",
-      "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "002226",
-      "name": "江南化工",
-      "score": 6.1,
       "reason_head": "因子与回测双重达标"
     }
   ],
   "daily_picks_watch": [
     {
-      "code": "300665",
-      "name": "飞鹿股份",
-      "score": 7.1,
+      "code": "002617",
+      "name": "露笑科技",
+      "score": 7.2,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "603915",
-      "name": "国茂股份",
-      "score": 7.1,
+      "code": "603010",
+      "name": "万盛股份",
+      "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300802",
+      "name": "矩子科技",
+      "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "601138",
+      "name": "工业富联",
+      "score": 6.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300013",
+      "name": "新宁物流",
+      "score": 6.6,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301371",
+      "name": "敷尔佳",
+      "score": 6.6,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300223",
+      "name": "北京君正",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300041",
+      "name": "回天新材",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "603578",
+      "name": "三星新材",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301285",
+      "name": "鸿日达",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "002277",
+      "name": "友阿股份",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "002243",
+      "name": "力合科创",
+      "score": 6.1,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "002638",
+      "name": "勤上股份",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301607",
+      "name": "富特科技",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301295",
+      "name": "美硕科技",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000668",
+      "name": "*ST荣控",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301188",
+      "name": "力诺药包",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000988",
+      "name": "华工科技",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "002273",
+      "name": "水晶光电",
+      "score": 5.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "001301",
+      "name": "尚太科技",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
       "code": "002617",
       "name": "露笑科技",
-      "score": 7.1,
+      "score": 7.2,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002266",
-      "name": "浙富控股",
+      "code": "603010",
+      "name": "万盛股份",
+      "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300802",
+      "name": "矩子科技",
+      "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "601138",
+      "name": "工业富联",
+      "score": 6.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300013",
+      "name": "新宁物流",
+      "score": 6.6,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301371",
+      "name": "敷尔佳",
+      "score": 6.6,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "300223",
+      "name": "北京君正",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002611",
-      "name": "东方精工",
+      "code": "300041",
+      "name": "回天新材",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300568",
-      "name": "星源材质",
+      "code": "603578",
+      "name": "三星新材",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300319",
-      "name": "麦捷科技",
+      "code": "301285",
+      "name": "鸿日达",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002034",
-      "name": "旺能环境",
+      "code": "002277",
+      "name": "友阿股份",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000883",
-      "name": "湖北能源",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "601222",
-      "name": "林洋能源",
+      "code": "002243",
+      "name": "力合科创",
       "score": 6.1,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300603",
-      "name": "立昂技术",
-      "score": 6.1,
+      "code": "002638",
+      "name": "勤上股份",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "600831",
-      "name": "广电网络",
-      "score": 6.1,
+      "code": "301607",
+      "name": "富特科技",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "603602",
-      "name": "纵横通信",
-      "score": 6.1,
+      "code": "301295",
+      "name": "美硕科技",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "301218",
-      "name": "华是科技",
-      "score": 6.1,
+      "code": "000668",
+      "name": "*ST荣控",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000716",
-      "name": "黑芝麻",
-      "score": 6.1,
+      "code": "301188",
+      "name": "力诺药包",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002718",
-      "name": "友邦吊顶",
-      "score": 5.8,
+      "code": "000988",
+      "name": "华工科技",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002350",
-      "name": "北京科锐",
-      "score": 5.8,
+      "code": "002273",
+      "name": "水晶光电",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300849",
-      "name": "锦盛新材",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "605389",
-      "name": "长龄液压",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300866",
-      "name": "安克创新",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300665",
-      "name": "飞鹿股份",
-      "score": 7.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "603915",
-      "name": "国茂股份",
-      "score": 7.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002617",
-      "name": "露笑科技",
-      "score": 7.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002266",
-      "name": "浙富控股",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002611",
-      "name": "东方精工",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300568",
-      "name": "星源材质",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300319",
-      "name": "麦捷科技",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002034",
-      "name": "旺能环境",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000883",
-      "name": "湖北能源",
-      "score": 6.4,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "601222",
-      "name": "林洋能源",
-      "score": 6.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300603",
-      "name": "立昂技术",
-      "score": 6.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "600831",
-      "name": "广电网络",
-      "score": 6.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "603602",
-      "name": "纵横通信",
-      "score": 6.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "301218",
-      "name": "华是科技",
-      "score": 6.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000716",
-      "name": "黑芝麻",
-      "score": 6.1,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002718",
-      "name": "友邦吊顶",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002350",
-      "name": "北京科锐",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300849",
-      "name": "锦盛新材",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "605389",
-      "name": "长龄液压",
-      "score": 5.8,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "300866",
-      "name": "安克创新",
-      "score": 5.8,
+      "code": "001301",
+      "name": "尚太科技",
+      "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     }
   ],
   "console_quality_codes_eod": [
+    "000509",
+    "000725",
+    "000967",
     "001258",
-    "002226",
-    "002375",
-    "002465",
-    "002669",
-    "002729",
-    "300077",
-    "300162",
-    "300219",
-    "300566",
-    "300681",
-    "301297",
-    "301313",
-    "301590",
-    "600449",
-    "601991",
-    "603082",
+    "001896",
+    "002156",
+    "002305",
+    "002579",
+    "002585",
+    "002938",
+    "300504",
+    "300560",
+    "300626",
+    "300779",
+    "301322",
+    "600186",
+    "600460",
+    "600596",
+    "601566",
     "603206",
-    "603636",
-    "605018",
-    "605358"
+    "603223",
+    "603236",
+    "603661"
   ],
   "dip_pick_codes_eod": [],
   "afternoon_opportunities": [],
   "backtest_weekly_json": {
-    "updated_rows": 5350,
+    "updated_rows": 5026,
     "by_alert_type": {
       "drawdown": {
         "n": 299,
-        "n_hit_scored": 247,
-        "hit_rate": 0.5748987854251012,
-        "avg_ret_1d": -0.024411811678355003,
-        "avg_ret_3d": -0.09379409610594908,
-        "avg_ret_5d": -0.13508282911422814
+        "n_hit_scored": 299,
+        "hit_rate": 0.9565217391304348,
+        "avg_ret_1d": -0.027285831464572894,
+        "avg_ret_3d": -0.08001749222815804,
+        "avg_ret_5d": -0.09562018789102487
       },
       "position_suggestion": {
-        "n": 32,
-        "n_hit_scored": 5,
-        "hit_rate": 0.8,
-        "avg_ret_1d": -0.019916157093753533,
-        "avg_ret_3d": -0.05572736026950215,
-        "avg_ret_5d": -0.06672406301700158
+        "n": 58,
+        "n_hit_scored": 28,
+        "hit_rate": 0.9642857142857143,
+        "avg_ret_1d": -0.02298264818749809,
+        "avg_ret_3d": -0.057066304747920724,
+        "avg_ret_5d": -0.07309948122506045
       },
       "risk_stop_take": {
-        "n": 2799,
-        "n_hit_scored": 1960,
-        "hit_rate": 0.3862244897959184,
-        "avg_ret_1d": 0.005679298409050145,
-        "avg_ret_3d": -0.0012905270377147231,
-        "avg_ret_5d": -0.03671049095208419
+        "n": 4617,
+        "n_hit_scored": 4288,
+        "hit_rate": 0.6714085820895522,
+        "avg_ret_1d": -0.01311510087529485,
+        "avg_ret_3d": -0.038099626222882994,
+        "avg_ret_5d": -0.06365811506073024
       },
       "strategy": {
-        "n": 3755,
-        "n_hit_scored": 2688,
-        "hit_rate": 0.49404761904761907,
-        "avg_ret_1d": 0.0012198432092622104,
-        "avg_ret_3d": 0.012336413307847908,
-        "avg_ret_5d": -0.012112799301804263
+        "n": 4031,
+        "n_hit_scored": 3098,
+        "hit_rate": 0.5090380890897354,
+        "avg_ret_1d": 0.0028951821564638324,
+        "avg_ret_3d": -0.0006743509990504294,
+        "avg_ret_5d": -0.020693869829188485
       },
       "trend_slip": {
         "n": 25,
@@ -1632,10 +1832,10 @@
   "health": {
     "notes": [],
     "kline_db_path": "/Users/haha/greatMan/stock-price-alert/data/daily_klines.db",
-    "kline_db_mtime_iso": "2026-05-22T15:10:42",
+    "kline_db_mtime_iso": "2026-06-01T15:10:11",
     "heartbeat_path": "/Users/haha/greatMan/stock-price-alert/logs/data_heartbeat.json",
     "heartbeat": {},
-    "picks_history_snapshot_count": 12
+    "picks_history_snapshot_count": 18
   },
   "trades": {
     "buys": [],
@@ -1643,61 +1843,34 @@
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
     "realized_profit": 0.0,
-    "unrealized_profit": -18680.0802,
-    "net_profit": -18680.08,
+    "unrealized_profit": -16870.58,
+    "net_profit": -16870.58,
     "unrealized_positions": [
       {
-        "code": "000967",
-        "name": "盈峰环境",
-        "hold_shares": 400,
-        "cost_price": 13.2125,
-        "close_price": 12.98,
-        "float_pnl_est": -93.0,
-        "source": "broker_xls"
-      },
-      {
-        "code": "002237",
-        "name": "恒邦股份",
-        "hold_shares": 300,
-        "cost_price": 15.6167,
-        "close_price": 14.35,
-        "float_pnl_est": -380.0,
-        "source": "broker_xls"
-      },
-      {
-        "code": "301149",
-        "name": "隆华新材",
-        "hold_shares": 400,
-        "cost_price": 13.7125,
-        "close_price": 13.12,
-        "float_pnl_est": -237.0,
+        "code": "001234",
+        "name": "泰慕士",
+        "hold_shares": 900,
+        "cost_price": 28.2878,
+        "close_price": 23.94,
+        "float_pnl_est": -3913.0,
         "source": "broker_xls"
       },
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 5900,
-        "cost_price": 12.4485,
-        "close_price": 12.45,
-        "float_pnl_est": 9.01,
+        "hold_shares": 9700,
+        "cost_price": 12.3205,
+        "close_price": 12.2,
+        "float_pnl_est": -1169.1,
         "source": "broker_xls"
       },
       {
-        "code": "603007",
-        "name": "顺景科技",
-        "hold_shares": 700,
-        "cost_price": 7.3072,
-        "close_price": 6.89,
-        "float_pnl_est": -292.05,
-        "source": "broker_xls"
-      },
-      {
-        "code": "603717",
-        "name": "天域生物",
-        "hold_shares": 700,
-        "cost_price": 7.2222,
-        "close_price": 7.05,
-        "float_pnl_est": -120.55,
+        "code": "603206",
+        "name": "嘉环科技",
+        "hold_shares": 1000,
+        "cost_price": 19.8032,
+        "close_price": 16.92,
+        "float_pnl_est": -2883.2,
         "source": "broker_xls"
       }
     ],
@@ -1708,159 +1881,99 @@
   },
   "position_operations_today": [],
   "account_pnl": {
-    "as_of": "2026-05-22",
+    "as_of": "2026-06-01",
     "positions": [
       {
         "code": "000967",
         "name": "盈峰环境",
         "hold_shares": 400,
-        "avg_cost": 13.94,
-        "last_close": 12.05,
+        "avg_cost": 13.8842,
+        "last_close": 10.69,
         "last_close_basis": "raw",
-        "daily_pnl_est": -412.0,
-        "float_pnl_est": -756.0
+        "daily_pnl_est": -168.0,
+        "float_pnl_est": -1277.68
       },
       {
         "code": "001234",
         "name": "泰慕士",
         "hold_shares": 900,
-        "avg_cost": 28.2768,
-        "last_close": 25.33,
+        "avg_cost": 28.2878,
+        "last_close": 23.94,
         "last_close_basis": "raw",
-        "daily_pnl_est": -468.0,
-        "float_pnl_est": -2652.1
-      },
-      {
-        "code": "002237",
-        "name": "恒邦股份",
-        "hold_shares": 1200,
-        "avg_cost": 16.3193,
-        "last_close": 13.9,
-        "last_close_basis": "raw",
-        "daily_pnl_est": -552.0,
-        "float_pnl_est": -2903.1
-      },
-      {
-        "code": "002386",
-        "name": "天原股份",
-        "hold_shares": 1000,
-        "avg_cost": 6.6001,
-        "last_close": 6.07,
-        "last_close_basis": "raw",
-        "daily_pnl_est": -230.0,
-        "float_pnl_est": -530.1
+        "daily_pnl_est": -333.0,
+        "float_pnl_est": -3913.02
       },
       {
         "code": "300798",
         "name": "锦鸡股份",
         "hold_shares": 800,
-        "avg_cost": 10.6,
-        "last_close": 8.7,
+        "avg_cost": 10.6125,
+        "last_close": 7.88,
         "last_close_basis": "raw",
-        "daily_pnl_est": -720.0,
-        "float_pnl_est": -1520.0
-      },
-      {
-        "code": "301149",
-        "name": "隆华新材",
-        "hold_shares": 400,
-        "avg_cost": 13.7,
-        "last_close": 12.89,
-        "last_close_basis": "raw",
-        "daily_pnl_est": -292.0,
-        "float_pnl_est": -324.0
+        "daily_pnl_est": -288.0,
+        "float_pnl_est": -2186.0
       },
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 8100,
-        "avg_cost": 13.1838,
-        "last_close": 12.0,
+        "hold_shares": 10800,
+        "avg_cost": 12.8121,
+        "last_close": 12.2,
         "last_close_basis": "raw",
-        "daily_pnl_est": -2754.0,
-        "float_pnl_est": -9588.78
+        "daily_pnl_est": -1404.0,
+        "float_pnl_est": -6610.68
       },
       {
-        "code": "603717",
-        "name": "天域生物",
-        "hold_shares": 700,
-        "avg_cost": 7.43,
-        "last_close": 6.85,
+        "code": "603206",
+        "name": "嘉环科技",
+        "hold_shares": 1000,
+        "avg_cost": 19.8032,
+        "last_close": 16.92,
         "last_close_basis": "raw",
-        "daily_pnl_est": -287.0,
-        "float_pnl_est": -406.0
+        "daily_pnl_est": -1070.0,
+        "float_pnl_est": -2883.2
       }
     ],
     "realized_today": 0.0,
-    "daily_float_change_est": -5715.0,
-    "unrealized_total_est": -18680.08,
-    "account_today_change_est": -5715.0,
+    "daily_float_change_est": -3263.0,
+    "unrealized_total_est": -16870.58,
+    "account_today_change_est": -3263.0,
     "ledger_events": [],
     "notes": []
   },
   "sell_events_today": [],
   "holdings_broker": [
     {
-      "code": "000967",
-      "name": "盈峰环境",
-      "hold_shares": 400,
-      "cost_price": 13.2125,
-      "close_price": 12.98,
-      "unrealized_profit": -93.0,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
-      "code": "002237",
-      "name": "恒邦股份",
-      "hold_shares": 300,
-      "cost_price": 15.6167,
-      "close_price": 14.35,
-      "unrealized_profit": -380.0,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
-      "code": "301149",
-      "name": "隆华新材",
-      "hold_shares": 400,
-      "cost_price": 13.7125,
-      "close_price": 13.12,
-      "unrealized_profit": -237.0,
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.2878,
+      "close_price": 23.94,
+      "unrealized_profit": -3913.0,
       "tags": "持仓",
       "source": "broker_xls"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 5900,
-      "cost_price": 12.4485,
-      "close_price": 12.45,
-      "unrealized_profit": 9.01,
+      "hold_shares": 9700,
+      "cost_price": 12.3205,
+      "close_price": 12.2,
+      "unrealized_profit": -1169.1,
       "tags": "持仓",
       "source": "broker_xls"
     },
     {
-      "code": "603007",
-      "name": "顺景科技",
-      "hold_shares": 700,
-      "cost_price": 7.3072,
-      "close_price": 6.89,
-      "unrealized_profit": -292.05,
-      "tags": "持仓",
-      "source": "broker_xls"
-    },
-    {
-      "code": "603717",
-      "name": "天域生物",
-      "hold_shares": 700,
-      "cost_price": 7.2222,
-      "close_price": 7.05,
-      "unrealized_profit": -120.55,
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 16.92,
+      "unrealized_profit": -2883.2,
       "tags": "持仓",
       "source": "broker_xls"
     }
   ],
-  "holdings_broker_as_of": "2026-05-22",
-  "broker_summary_synced_at": "2026-05-25T08:59:42"
+  "holdings_broker_as_of": "2026-06-01",
+  "broker_summary_synced_at": "2026-06-01T15:10:14"
 }

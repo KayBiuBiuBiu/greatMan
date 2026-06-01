@@ -1,5 +1,10 @@
 const { gameGroups } = require('../../data/game-data')
-const { isDrawGuessEnabled, isHomeGameEnabled, isWerewolfEnabled } = require('../../data/feature-flags')
+const {
+  isDrawGuessEnabled,
+  isHomeGameEnabled,
+  isWerewolfEnabled,
+  isMysteryReasonEnabled
+} = require('../../data/feature-flags')
 const { callRoomService } = require('../../utils/roomCloud')
 const { callWerewolfService } = require('../../utils/werewolfCloud')
 const { callUndercoverService } = require('../../utils/undercoverRoomCloud')
@@ -10,6 +15,7 @@ const { callDraw } = require('../../utils/drawRoomCloud')
 const { callDrink } = require('../../utils/drinkRoomCloud')
 const { callHeadband } = require('../../utils/headbandCloud')
 const { callDontdoit } = require('../../utils/dontdoitCloud')
+const { callMysteryReason } = require('../../utils/mysteryReasonCloud')
 const {
   enableShareMenus,
   handleShareAppMessage,
@@ -34,6 +40,7 @@ const meta = {
   趣味抽签: ['🎫', '同场同步', 'drinkParty', '趣味抽签', '至少 2 人；随机响铃、喝 1～10 口。'],
   贴头猜词: ['🎯', '同场同步', 'headband', '贴头猜词', '6 位口令；自己词卡保密，猜对自己获胜。'],
   不要做挑战: ['🚫', '同场同步', 'dontdoit', '不要做挑战', '6 位口令；禁止动作保密，坚持到最后。'],
+  AI迷雾推理局: ['🌫️', '同场同步', 'mysteryReason', 'AI迷雾推理', '至少 3 人；AI 剧本，线下口头推理，本机看剧本。'],
   '谁是卧底': ['探', '同场同步', 'undercover', '谁是卧底', '至少 3 人；本机看词与投票。'],
   '真心话大冒险': ['🎲', '同场投票', 'play', '真心话', '4 位口令同房，每人用自己手机投票。'],
   '海龟汤': ['🧩', '推理', 'play', '海龟汤', '看汤面，推理汤底。'],
@@ -67,7 +74,8 @@ const SORT_TIER = {
   真心话大冒险: 2,
   海龟汤: 3,
   贴头猜词: 4,
-  不要做挑战: 5
+  不要做挑战: 5,
+  AI迷雾推理局: 6
 }
 /** 开发中卡片统一靠后；数字越小在「开发中」区块内越靠前。 */
 const DEV_SORT_TIER = 10
@@ -104,6 +112,7 @@ Page({
           })
           .filter((g) => g.screen !== 'drawGuess' || isDrawGuessEnabled())
           .filter((g) => g.screen !== 'werewolf' || isWerewolfEnabled())
+          .filter((g) => g.screen !== 'mysteryReason' || isMysteryReasonEnabled())
       )
     }, [])
   },
@@ -293,6 +302,22 @@ Page({
     if (!title && !screen) {
       return
     }
+    if (screen === 'werewolf') {
+      if (!isWerewolfEnabled()) {
+        wx.showToast({ title: '身份推理暂未开放', icon: 'none' })
+        return
+      }
+      if (title && wx.cloud) {
+        callGameStats(
+          { action: 'bumpStart', title },
+          { silent: true, onOk: () => {}, onError: () => {} }
+        )
+      }
+      wx.navigateTo({
+        url: '/pages/setup/setup?title=' + encodeURIComponent(title) + '&screen=werewolf'
+      })
+      return
+    }
     if (title && !isHomeGameEnabled(title)) {
       wx.showToast({ title: '正在开发中', icon: 'none' })
       return
@@ -302,16 +327,6 @@ Page({
         { action: 'bumpStart', title },
         { silent: true, onOk: () => {}, onError: () => {} }
       )
-    }
-    if (screen === 'werewolf') {
-      if (!isWerewolfEnabled()) {
-        wx.showToast({ title: '身份推理暂未开放', icon: 'none' })
-        return
-      }
-      wx.navigateTo({
-        url: '/pages/setup/setup?title=' + encodeURIComponent(title) + '&screen=werewolf'
-      })
-      return
     }
     if (screen === 'songGuess') {
       wx.navigateTo({
@@ -344,6 +359,17 @@ Page({
     if (screen === 'dontdoit') {
       wx.navigateTo({
         url: '/pages/setup/setup?title=' + encodeURIComponent(title) + '&screen=dontdoit'
+      })
+      return
+    }
+    if (screen === 'mysteryReason') {
+      if (!isMysteryReasonEnabled()) {
+        wx.showToast({ title: 'AI迷雾推理局暂未开放', icon: 'none' })
+        return
+      }
+      wx.navigateTo({
+        url:
+          '/pages/setup/setup?title=' + encodeURIComponent(title) + '&screen=mysteryReason'
       })
       return
     }
@@ -486,6 +512,64 @@ Page({
       wx.showModal({
         title: '不要做挑战未就绪',
         content: '请部署云函数 dontdoitRoomService（云端安装依赖）',
+        showCancel: false
+      })
+      return
+    }
+    if (/组不存在|找不到|房间不存在|无效|不存在|已结束/.test(msg)) {
+      this.joinMysteryReasonByCode(digits, true)
+      return
+    }
+    if (fromChain) {
+      wx.hideLoading()
+    }
+    wx.showToast({ title: msg || '进组失败', icon: 'none' })
+  },
+
+  joinMysteryReasonByCode(digits, fromChain) {
+    if (!fromChain) {
+      wx.showLoading({ title: '加入中' })
+    }
+    callMysteryReason(
+      withJoinProfile({ action: 'join', roomCode: digits }),
+      {
+        silent: true,
+        onOk: (res) => {
+          wx.hideLoading()
+          const r = (res && res.result) || {}
+          if (r.errMsg) {
+            this.handleMysteryReasonJoinError(digits, { message: r.errMsg }, fromChain)
+            return
+          }
+          if (!r.roomId) {
+            this.joinUndercoverByCode(digits, true)
+            return
+          }
+          const cfg = { roomId: r.roomId, roomCode: digits }
+          wx.navigateTo({
+            url:
+              '/packageGames/mystery-reason/mystery-reason?config=' +
+              encodeURIComponent(JSON.stringify(cfg))
+          })
+        },
+        onError: (e) => {
+          this.handleMysteryReasonJoinError(digits, e, fromChain)
+        }
+      }
+    )
+  },
+
+  handleMysteryReasonJoinError(digits, e, fromChain) {
+    const msg = (e && e.message) || ''
+    if (/FUNCTION_NOT_FOUND|未部署|502001|mysteryReasonRoomService/i.test(msg)) {
+      if (fromChain) {
+        this.joinUndercoverByCode(digits, true)
+        return
+      }
+      wx.hideLoading()
+      wx.showModal({
+        title: 'AI迷雾推理局未就绪',
+        content: '请部署云函数 mysteryReasonRoomService（云端安装依赖）',
         showCancel: false
       })
       return

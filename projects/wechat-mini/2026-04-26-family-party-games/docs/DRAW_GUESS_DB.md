@@ -19,7 +19,7 @@
 - `wordCategory`：`all` 或 `动物`/`食物`/`日常`/`职业`/`其他`（与 `words.js` 中 `c` 一致）
 - `usedWordIds`：本局已用题目 id
 - `currentWordId`：当轮题 id（不要在前端公屏上暴露「词面」；判题在云端）
-- `currentWordText`：当轮词面汉字（AI/自定义题必填；系统词库可冗余存储，供 `submitGuess` 判题）
+- `currentWordText`：当轮词面汉字（由 `aiPartyService` 生成，供 `submitGuess` 判题）
 
 ## `draw_gameState` 主要字段
 

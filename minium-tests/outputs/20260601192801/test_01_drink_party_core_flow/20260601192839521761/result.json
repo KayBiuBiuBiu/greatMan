@@ -1,0 +1,90 @@
+{
+    "case_name": "test_01_drink_party_core_flow",
+    "run_time": "20260601 19:28:39",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/Users/haha/greatMan/minium-tests/pages/drink_page.py\", line 31, in enter_room\n    self.app.reLaunch(url)\n    ^^^^^^^^^^^^^^^^^\nAttributeError: 'App' object has no attribute 'reLaunch'. Did you mean: 'relaunch'?\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 362, in test_01_drink_party_core_flow\n    host, _ = self._run_dynamic_core_flow(DrinkPage, \"start_round\", player_count=3)\n              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 271, in _run_dynamic_core_flow\n    info = self._create_host_room(page_cls, host)\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 207, in _create_host_room\n    return host.create_room(cloud=self.cloud)\n           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/drink_page.py\", line 55, in create_room\n    return self.enter_room(info[\"roomId\"], info[\"roomCode\"])\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/drink_page.py\", line 33, in enter_room\n    self.app.navigate_to(url)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 892, in navigate_to\n    page = self._change_route_async(\"navigateTo\", url, is_wait_url_change)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 1165, in _change_route_async\n    cmd.get_open_result(wait_timeout)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 133, in get_open_result\n    raise MiniTimeoutError(\n        f\"[{self._open_id}][{self.open_type}] receive from remote timeout\"\n    )\nminium.framework.exception.MiniTimeoutError: [7b2c172c-2a98-4aa8-b5f3-b40dd9f6efb7][navigateTo] receive from remote timeout\n",
+    "start_timestamp": 1780313340.6452448,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 362,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "MiniTimeoutError",
+    "error_value": "[7b2c172c-2a98-4aa8-b5f3-b40dd9f6efb7][navigateTo] receive from remote timeout",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780313369.146194,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_01_drink_party_core_flow(self):\n",
+            "        host, _ = self._run_dynamic_core_flow(DrinkPage, \"start_round\", player_count=3)\n",
+            "        host.reveal_if_needed().next_round()\n"
+        ],
+        "start": 361
+    },
+    "filename": "result.json"
+}

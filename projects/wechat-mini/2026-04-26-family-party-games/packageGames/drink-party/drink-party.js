@@ -1,5 +1,5 @@
 const { callDrink, ensure } = require('../../utils/drinkRoomCloud')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const { joinRoomWithUi, enterCloudRoomOnLoad } = require('../utils/roomJoin')
 const {
   ensureInRoomPoll,
@@ -40,27 +40,55 @@ const { stopLobbyPoll } = require('../utils/roomSync')
 const lobbyReady = require('../utils/roomLobbyReady')
 const { overlayLobbyProfileReady } = lobbyReady
 
-/** 抽签倒计时 10 秒（与云端 COUNTDOWN_MS 一致；揭晓后才响铃/震动） */
-const COUNTDOWN_UI_MS = 10000
-const COUNTDOWN_SEC = 10
+/** 抽签倒计时 6 秒（与云端 COUNTDOWN_MS 一致；揭晓后才响铃/震动） */
+const COUNTDOWN_UI_MS = 6000
+const COUNTDOWN_SEC = 6
+/** 抽签/结果阶段 syncState 兜底间隔（毫秒） */
+const SYNC_FAST_MS = 1500
+
+function ts(v) {
+  const n = Number(v || 0)
+  return Number.isFinite(n) ? n : 0
+}
 
 function defNick() {
-  return (wx.getStorageSync('drink_nick') || '参与者').toString()
+  return (wx.getStorageSync('drink_nick') || getFallbackNickName()).toString()
 }
 function fromWatch(s) {
-  return s && (s.data != null ? s.data : s.doc)
+  if (!s) {
+    return null
+  }
+  if (s.data != null) {
+    return s.data
+  }
+  if (s.doc != null) {
+    return s.doc
+  }
+  if (Array.isArray(s.docs) && s.docs.length) {
+    return s.docs[0]
+  }
+  if (Array.isArray(s.docChanges) && s.docChanges.length) {
+    const change = s.docChanges[s.docChanges.length - 1]
+    return change && change.doc ? change.doc : null
+  }
+  return null
 }
 
-function buildDrinkPhaseHint(phase, isHost) {
+function buildDrinkPhaseHint(phase, opts) {
   const ph = phase || 'waiting'
+  const o = opts || {}
+  const isRoundStarter = !!o.isRoundStarter
+  const iAmRinger = !!o.iAmRinger
+  const starterNick = (o.starterNick || '').toString()
+  const who = starterNick ? '「' + starterNick + '」' : '本轮主持'
   if (ph === 'waiting') {
-    return isHost ? '⏳ 等待组长「开始本轮」' : '👥 等待组长开始本轮'
+    return isRoundStarter ? '⏳ 请你点「开始本轮」' : '👥 等待' + who + '开始本轮'
   }
   if (ph === 'countdown') {
     return '🎲 抽签中，请屏息等待…'
   }
   if (ph === 'result' || ph === 'voting') {
-    return isHost ? '🍻 结果揭晓，组长可点「下一轮」' : '🍻 结果揭晓'
+    return iAmRinger ? '🍻 结果揭晓，请你点「下一轮」开始抽签' : '🍻 结果揭晓，等待响铃者点「下一轮」'
   }
   return ''
 }
@@ -124,6 +152,7 @@ function enrichDrinkDisplayPlayers(list, state, page) {
   const d = state || {}
   const ph = d.phase || ''
   const hostOpenId = d.hostOpenId || ''
+  const starterOpenId = d.starterOpenId || hostOpenId
   const targetOid = (d.result && d.result.targetOpenId) || d.targetOpenId || ''
   const src = overlayLobbyProfileReady(list || [], null, page)
   const base = enrichPlayers(
@@ -143,6 +172,8 @@ function enrichDrinkDisplayPlayers(list, state, page) {
     const sips = (d.result && d.result.drinkSips) | 0
     if (ph === 'result' && targetOid && p.openId === targetOid) {
       readyLabel = sips > 0 ? '喝 ' + sips + ' 口' : '本机响了'
+    } else if (ph === 'waiting' && starterOpenId && p.openId === starterOpenId) {
+      readyLabel = '主持本轮'
     }
     return Object.assign({}, p, { readyLabel })
   })
@@ -157,6 +188,7 @@ Page({
     nick: defNick(),
     state: null,
     isHost: false,
+    isRoundStarter: false,
     iAmRinger: false,
     drinkSips: 0,
     drinkResultText: '',
@@ -195,7 +227,14 @@ Page({
   _countdownShownAt: 0,
   _cdRound: 0,
   _countdownEndOverride: 0,
-  _countdownEndAt() {
+  _countdownEndAt(stateOpt) {
+    const st = stateOpt || this.data.state
+    if (st && st.phase === 'countdown') {
+      const cloud = ts(st.countdownEndsAt)
+      if (cloud > 0) {
+        return cloud
+      }
+    }
     if (this._countdownEndOverride > 0) {
       return this._countdownEndOverride
     }
@@ -204,23 +243,28 @@ Page({
     }
     return 0
   },
-  _beginCountdown(round, _cloudEndsAt) {
+  _beginCountdown(round, cloudEndsAt) {
     const r = round | 0
     const now = Date.now()
-    const end = now + COUNTDOWN_UI_MS
-    if (this._cdRound === r && this._countdownShownAt > 0 && now < this._countdownEndAt()) {
+    const end = (cloudEndsAt | 0) > 0 ? (cloudEndsAt | 0) : now + COUNTDOWN_UI_MS
+    if (
+      this._cdRound === r &&
+      this._countdownEndOverride > 0 &&
+      Math.abs(this._countdownEndOverride - end) < 300 &&
+      now < end + 800
+    ) {
       return
     }
     this._cdRound = r
-    this._countdownShownAt = now
     this._countdownEndOverride = end
+    this._countdownShownAt = end - COUNTDOWN_UI_MS
   },
-  _buildCountdownUiPatch() {
-    const left = this._countdownSecLeft()
-    const pulseMs = this._memberPulseDurationMs()
-    const st = this.data.state || {}
+  _buildCountdownUiPatch(stateOpt) {
+    const left = this._countdownSecLeft(stateOpt)
+    const pulseMs = this._memberPulseDurationMs(stateOpt)
+    const st = stateOpt || this.data.state || {}
     return {
-      inCountdown: left > 0,
+      inCountdown: left > 0 || st.phase === 'countdown',
       countdownSec: left,
       memberPulseDuration: pulseMs,
       phaseHint:
@@ -228,19 +272,19 @@ Page({
       displayPlayers: enrichDrinkDisplayPlayers(st.publicPlayers || [], st, this)
     }
   },
-  _countdownDone() {
-    const end = this._countdownEndAt()
+  _countdownDone(stateOpt) {
+    const end = this._countdownEndAt(stateOpt)
     return end > 0 && Date.now() >= end
   },
-  _countdownSecLeft() {
-    const end = this._countdownEndAt()
+  _countdownSecLeft(stateOpt) {
+    const end = this._countdownEndAt(stateOpt)
     if (!end) {
       return 0
     }
     return Math.max(0, Math.ceil((end - Date.now()) / 1000))
   },
-  _memberPulseDurationMs() {
-    const end = this._countdownEndAt()
+  _memberPulseDurationMs(stateOpt) {
+    const end = this._countdownEndAt(stateOpt)
     const start = end - COUNTDOWN_UI_MS
     if (!end || !start) {
       return 400
@@ -249,6 +293,16 @@ Page({
     const elapsed = Math.min(total, Math.max(0, Date.now() - start))
     const progress = elapsed / total
     return Math.round(320 + progress * 1500)
+  },
+  _syncPollForPhase(phase) {
+    const fast = phase === 'countdown' || phase === 'result' || phase === 'voting'
+    const ms = fast ? SYNC_FAST_MS : 0
+    if (this._syncPollMs === ms && this._roomPollTimer) {
+      return
+    }
+    this._syncPollMs = ms
+    stopInRoomPoll(this)
+    ensureInRoomPoll(this, this._refreshRoomState, ms > 0 ? ms : undefined)
   },
   _shareCtx() {
     return {
@@ -403,8 +457,15 @@ Page({
   },
   /** 仅被抽中的响铃者：倒计时结束且揭晓后响铃 + 强震 */
   _playRingAlert(drinkSips) {
-    const ph = (this.data.state && this.data.state.phase) || ''
-    if (this.data.inCountdown || ph === 'countdown') {
+    const st = this.data.state || {}
+    const ph = st.phase || ''
+    if (this.data.inCountdown || ph === 'countdown' || ph !== 'result') {
+      return
+    }
+    const my = this._my || (this.data.myOpenId || '')
+    const targetOid =
+      (st.result && st.result.targetOpenId) || st.targetOpenId || ''
+    if (!my || !targetOid || targetOid !== my) {
       return
     }
     this.setData({ ringFlash: true })
@@ -563,7 +624,7 @@ Page({
           this._refreshRoomState()
         }
       },
-      intervalMs: 2500
+      intervalMs: 1500
     })
   },
   onAiUnlockTap() {
@@ -592,10 +653,19 @@ Page({
     this._my = my
     const isHost = !!(d && d.hostOpenId && my && d.hostOpenId === my)
     const rPh = norm.phase
+    const targetOid = norm.targetOid
+    const ringPh = rPh === 'result' || rPh === 'voting'
+    const iAmRinger = !!(my && targetOid && targetOid === my && ringPh)
+    const starterOid = (d && (d.starterOpenId || d.hostOpenId)) || ''
+    const isRoundStarter = !!(my && starterOid && starterOid === my)
+    const starterNick = (d && d.starterNick) || ''
+    const phaseOpts = { isRoundStarter, iAmRinger, starterNick }
     const patch = {
       state: d,
       roundDisp: rDisp,
       isHost,
+      isRoundStarter,
+      iAmRinger,
       drinkSips: norm.drinkSips,
       drinkResultText: norm.drinkResultText,
       showDrinkResult: norm.showResult
@@ -616,16 +686,21 @@ Page({
       maxPlayers: 0,
       isHost,
       myOpenId: my,
-      hostWaiting: '⏳ 等待组长「开始本轮」',
-      guestWaiting: '👥 等待组长开始本轮'
+      hostWaiting: isRoundStarter ? '⏳ 请你点「开始本轮」' : '⏳ 等待开始本轮',
+      guestWaiting: starterNick
+        ? '👥 等待「' + starterNick + '」开始本轮'
+        : '👥 等待本轮主持开始'
     }, this)
+    if (!isRoundStarter) {
+      patch.canStart = false
+    }
     if (rPh === 'countdown') {
-      Object.assign(patch, this._buildCountdownUiPatch())
+      Object.assign(patch, this._buildCountdownUiPatch(d))
     } else if (phase === 'waiting') {
-      patch.phaseHint = patch.statusHint || buildDrinkPhaseHint(phase, isHost)
+      patch.phaseHint = patch.statusHint || buildDrinkPhaseHint(phase, phaseOpts)
       patch.displayPlayers = enrichDrinkDisplayPlayers((d && d.publicPlayers) || [], d, this)
     } else {
-      patch.phaseHint = buildDrinkPhaseHint(phase, isHost)
+      patch.phaseHint = buildDrinkPhaseHint(phase, phaseOpts)
       patch.inCountdown = false
       patch.countdownSec = 0
       patch.displayPlayers = enrichDrinkDisplayPlayers((d && d.publicPlayers) || [], d, this)
@@ -635,17 +710,18 @@ Page({
         patch.displayPlayers ||
         enrichDrinkDisplayPlayers((d && d.publicPlayers) || [], d, this)
     }
-    const targetOid = norm.targetOid
-    const ringPh = rPh === 'result' || rPh === 'voting'
     this.setData(patch, () => {
-      const iAmRinger = !!(my && targetOid && targetOid === my && ringPh)
-      this.setData({ iAmRinger })
+      this._syncPollForPhase(rPh || phase)
       if (rPh === 'voting') {
         this._skipLegacyVoteIfNeeded(d)
       }
-      this._onRingerMaybe(d, my, ringPh ? 'result' : rPh)
+      this._onRingerMaybe(d, my, rPh)
       if (rPh === 'countdown') {
         this._startCountdownTimer()
+        const endAt = ts(d && d.countdownEndsAt)
+        if (endAt > 0 && Date.now() >= endAt + 300) {
+          this._tryReveal()
+        }
       } else {
         this._stopCountdownTimer()
         if (this.data.inCountdown) {
@@ -697,7 +773,9 @@ Page({
     if (!d || d.phase !== 'countdown' || this._revealBusy) {
       return
     }
-    if (!this._countdownDone()) {
+    const cloudEnd = ts(d.countdownEndsAt)
+    const due = this._countdownDone() || (cloudEnd > 0 && Date.now() >= cloudEnd - 80)
+    if (!due) {
       return
     }
     this._revealBusy = true
@@ -747,7 +825,7 @@ Page({
     if (!ensure()) {
       return
     }
-    const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const n = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('drink_nick', n)
     this.setData({ opBusy: true })
     callDrink(
@@ -790,7 +868,7 @@ Page({
       wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
-    const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const n = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('drink_nick', n)
     this.setData({ opBusy: true })
     joinRoomWithUi(
@@ -829,13 +907,14 @@ Page({
       extra.push({ fail: true, title: box.title, content: box.content })
     }
     const checks = buildStartChecks({
-      isHost: this.data.isHost,
+      isHost: this.data.isRoundStarter,
       playerCount: n,
       minPlayers: 2,
       kind: 'drink',
       ctx,
       players: (st && st.publicPlayers) || [],
       hostOpenId: (st && st.hostOpenId) || '',
+      hostLabel: '本轮主持',
       startVerb: '开始本轮',
       extra
     })
@@ -850,15 +929,14 @@ Page({
         const r = (res && res.result) || {}
         const base = this.data.state || {}
         const nextR = (r.currentRound | 0) || (base.currentRound | 0)
-        const endsAt = (r.countdownEndsAt | 0) || Date.now() + COUNTDOWN_UI_MS
+        const endsAt = ts(r.countdownEndsAt) || Date.now() + COUNTDOWN_UI_MS
         this._beginCountdown(nextR, endsAt)
         const optimistic = Object.assign({}, base, {
           phase: 'countdown',
-          countdownEndsAt: this._countdownEndOverride,
+          countdownEndsAt: endsAt,
           currentRound: nextR
         })
         this._applyS(optimistic)
-        this._startCountdownTimer()
         this._refreshRoomState()
       },
       onFinally: () => {
@@ -871,10 +949,24 @@ Page({
     callDrink(
       { action: 'nextRound', roomId: this.data.roomId },
       {
-        onOk: () => {
-          this.setData({ opBusy: false })
+        onOk: (res) => {
+          const r = (res && res.result) || {}
+          const base = this.data.state || {}
+          const nextR = (r.currentRound | 0) || (base.currentRound | 0) + 1
+          const endsAt = ts(r.countdownEndsAt) || Date.now() + COUNTDOWN_UI_MS
           this._ringAlertKey = ''
+          this._beginCountdown(nextR, endsAt)
+          const optimistic = Object.assign({}, base, {
+            phase: 'countdown',
+            countdownEndsAt: endsAt,
+            currentRound: nextR,
+            targetOpenId: '',
+            targetNick: '',
+            result: null
+          })
+          this._applyS(optimistic)
           this._refreshRoomState()
+          this.setData({ opBusy: false })
         },
         onError: () => { this.setData({ opBusy: false }) }
       }

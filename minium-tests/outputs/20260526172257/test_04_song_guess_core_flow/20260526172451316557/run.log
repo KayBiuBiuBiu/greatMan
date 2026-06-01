@@ -1,0 +1,84 @@
+[I 2026-05-26 17:24:51,318 minium minitest#432 _miniSetUp] =========Current case: test_04_song_guess_core_flow=========
+[I 2026-05-26 17:24:51,318 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_04_song_guess_core_flow
+[I 2026-05-26 17:24:51,319 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-26 17:24:51,319 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-26 17:24:51,319 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-26 17:24:51,319 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-26 17:24:51,319 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-26 17:24:51,319 minium.App4656 app#950 relaunch] ReLaunch: /pages/index/index
+[I 2026-05-26 17:24:52,296 minium.Conn0624 connection#704 _handle_async_msg] received async msg: 1d478347-972b-4723-817a-9a3517b44f6f
+[I 2026-05-26 17:24:52,297 minium.App4656 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'pages/index/index', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1779787492290, 'webviewId': 10, 'routeEventId': '', 'renderer': 'webview'}, 1779787492291]}
+[I 2026-05-26 17:24:52,305 minium minitest#897 capture] capture setup.png
+[I 2026-05-26 17:24:52,400 minium minitest#487 _miniSetUp] =========case: test_04_song_guess_core_flow start=========
+[I 2026-05-26 17:24:52,400 minium minitest#788 _callTestMethod] call test method
+[I 2026-05-26 17:24:52,401 minium.App4656 app#891 navigate_to] NavigateTo: /packageGames/song-guess/song-guess
+[I 2026-05-26 17:24:53,269 minium.App4656 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/song-guess/song-guess', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1779787493263, 'webviewId': 11, 'routeEventId': '11_1779787492650', 'renderer': 'webview'}, 1779787493264]}
+[I 2026-05-26 17:24:53,270 minium.Conn0624 connection#704 _handle_async_msg] received async msg: 1a3ae5f0-381e-4300-bf67-15e2d1262762
+[I 2026-05-26 17:24:54,273 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-05-26 17:24:54,280 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x103a30640>]
+[I 2026-05-26 17:24:54,597 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-26 17:24:54,604 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103a30640>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103a117f0>]
+[I 2026-05-26 17:24:56,701 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-26 17:25:19,178 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 134, in test_04_song_guess_core_flow
+    host, _ = self._run_six_player_core_flow(SongPage, "start_round")
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 84, in _run_six_player_core_flow
+    host.wait_member_count_at_least(self.standard_players)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 203, in wait_member_count_at_least
+    return self.wait_until(
+           ~~~~~~~~~~~~~~~^
+        lambda: self.member_count() >= count,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        timeout=timeout or 20,
+        ^^^^^^^^^^^^^^^^^^^^^^
+        message=f"member count did not reach {count}",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 288, in wait_until
+    raise AssertionError(f"{message}; last={last}")
+AssertionError: member count did not reach 6; last=False
+[I 2026-05-26 17:25:19,183 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-26 17:25:19,189 minium minitest#897 capture] capture teardown.png
+[I 2026-05-26 17:25:19,271 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-26 17:25:19,271 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-26 17:25:19,289 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_04_song_guess_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_04_song_guess_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 134, in test_04_song_guess_core_flow
+    host, _ = self._run_six_player_core_flow(SongPage, "start_round")
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 84, in _run_six_player_core_flow
+    host.wait_member_count_at_least(self.standard_players)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 203, in wait_member_count_at_least
+    return self.wait_until(
+           ~~~~~~~~~~~~~~~^
+        lambda: self.member_count() >= count,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        timeout=timeout or 20,
+        ^^^^^^^^^^^^^^^^^^^^^^
+        message=f"member count did not reach {count}",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 288, in wait_until
+    raise AssertionError(f"{message}; last={last}")
+AssertionError: member count did not reach 6; last=False
+[W 2026-05-26 17:25:19,290 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': True, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 60, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 36320, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'cloud_env_id': 'cloud1-d9g01no7m292bc511', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': False, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260526172257', 'case_output': './outputs/20260526172257/test_04_song_guess_core_flow/20260526172451316557'}
+[W 2026-05-26 17:25:19,290 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-26 17:25:19,291 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-26 17:25:19,291 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x103936a50>

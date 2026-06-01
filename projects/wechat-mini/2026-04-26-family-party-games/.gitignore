@@ -6,6 +6,7 @@ config.local.js
 !.env.example
 **/secrets.*
 cloudfunctions/aiPartyService/secrets.local.json
+cloudfunctions/aiPartyService/deploySecrets.js
 
 # 云函数依赖（部署前 npm install）
 **/node_modules/

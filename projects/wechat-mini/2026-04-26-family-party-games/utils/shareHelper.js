@@ -17,6 +17,16 @@ const PRESETS = {
       return 'config=' + encodeURIComponent(JSON.stringify(cfg))
     }
   },
+  mysteryReason: {
+    page: '/packageGames/mystery-reason/mystery-reason',
+    defaultTitle: '家庭聚会助手 - AI迷雾推理局',
+    codeLen: 6,
+    roomTitle: (code) => '一起来玩AI迷雾推理局！口令 ' + code,
+    buildQuery: (ctx) => {
+      const cfg = { roomId: ctx.roomId, roomCode: ctx.code }
+      return 'config=' + encodeURIComponent(JSON.stringify(cfg))
+    }
+  },
   headband: {
     page: '/packageGames/headband/headband',
     defaultTitle: '家庭聚会助手 - 贴头猜词',

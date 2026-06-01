@@ -567,6 +567,63 @@ Page({
     )
   },
 
+  _parseAiQuestionText(text) {
+    const raw = String(text || '').trim()
+    if (!raw) {
+      return ''
+    }
+    try {
+      const obj = JSON.parse(raw)
+      return String(obj.detail || obj.question || obj.word || '').trim()
+    } catch (e) {
+      const m = raw.match(/\{[\s\S]*\}/)
+      if (m) {
+        try {
+          const obj = JSON.parse(m[0])
+          return String(obj.detail || obj.question || obj.word || '').trim()
+        } catch (e2) {}
+      }
+    }
+    return raw
+  },
+
+  _generateAiQuestion(kind, title, onOk) {
+    if (!wx.cloud) {
+      wx.showToast({ title: '需开通云开发', icon: 'none' })
+      return
+    }
+    const k = kind === 'dare' ? '大冒险' : kind === 'draw' ? '你画我猜' : '真心话'
+    const system =
+      '你是家庭聚会小游戏出题助手。只返回 JSON，不要解释。题目必须适合全年龄线下聚会，幽默、有互动性，避免低俗、危险和隐私伤害。'
+    const prompt =
+      k === '你画我猜'
+        ? '请生成 1 个你画我猜题目。返回格式严格为：{"detail":"题目"}。题目 2 到 6 个中文字符，容易画出来。'
+        : '请生成 1 条' + k + '题目。返回格式严格为：{"detail":"题目内容"}。内容 10 到 45 个中文字符。'
+    wx.showLoading({ title: 'AI 出题中…', mask: true })
+    wx.cloud.callFunction({
+      name: 'aiPartyService',
+      data: { action: 'chat', system: system, prompt: prompt },
+      success: (res) => {
+        wx.hideLoading()
+        const r = (res && res.result) || {}
+        if (r.errMsg) {
+          wx.showToast({ title: 'AI 出题失败', icon: 'none' })
+          return
+        }
+        const detail = this._parseAiQuestionText(r.text).slice(0, 80)
+        if (!detail) {
+          wx.showToast({ title: 'AI 题目无效', icon: 'none' })
+          return
+        }
+        onOk && onOk({ title: title, detail: detail })
+      },
+      fail: () => {
+        wx.hideLoading()
+        wx.showToast({ title: 'AI 出题失败', icon: 'none' })
+      }
+    })
+  },
+
   _applyRoomPlayers(r, myOpenId) {
     if (!r || this.data.mode !== 'truthDareRoom') {
       return
@@ -624,6 +681,16 @@ Page({
       lobbyReady.patchLobbySelfReady(patch, plReady, myOid, true, this)
     }
     this.setData(patch)
+  },
+
+  applyTestRoomSync(payload) {
+    const p = payload || {}
+    if (p.room) {
+      this._applyRoomPlayers(p.room, p.myOpenId || '')
+    }
+    if (p.td) {
+      this.applyTdState(p.td)
+    }
   },
 
   refreshRoomPlayers() {
@@ -804,17 +871,17 @@ Page({
     if (!lt || lt.tie || !lt.winner) {
       return
     }
-    const list = lt.winner === 'truth' ? truthQuestions : dareQuestions
     const title = lt.winner === 'truth' ? '真心话' : '大冒险'
-    const detail = pickOne(list)
     if (this.data.mode === 'truthDareRoom') {
-      this._tdPublishQuestion(title, detail, lt.winner)
+      this._tdPublishQuestion(title, '', lt.winner)
       return
     }
-    this.setData({
-      tdShowQuestion: true,
-      questionType: lt.winner,
-      prompt: { title: title, detail: detail }
+    this._generateAiQuestion(lt.winner, title, (prompt) => {
+      this.setData({
+        tdShowQuestion: true,
+        questionType: lt.winner,
+        prompt: prompt
+      })
     })
   },
 
@@ -828,7 +895,7 @@ Page({
       return
     }
     if (title.indexOf('你画我猜') >= 0) {
-      this.setData({ mode: 'draw', prompt: { title: pickOne(drawWords), detail: '给表演者看词，其他人猜。' } })
+      this.setData({ mode: 'draw', prompt: { title: 'AI 出题中…', detail: '给表演者看词，其他人猜。' } }, () => this.nextPrompt())
       return
     }
     if (title === '故事接龙') {
@@ -861,12 +928,16 @@ Page({
 
   nextPrompt() {
     if (this.data.mode === 'truthDare') {
-      const list = this.data.questionType === 'truth' ? truthQuestions : dareQuestions
-      this.setData({ prompt: { title: this.data.questionType === 'truth' ? '真心话' : '大冒险', detail: pickOne(list) } })
+      const title = this.data.questionType === 'truth' ? '真心话' : '大冒险'
+      this._generateAiQuestion(this.data.questionType, title, (prompt) => {
+        this.setData({ prompt: prompt })
+      })
       return
     }
     if (this.data.mode === 'draw') {
-      this.setData({ prompt: { title: pickOne(drawWords), detail: '给表演者看词，其他人猜。' } })
+      this._generateAiQuestion('draw', '你画我猜', (prompt) => {
+        this.setData({ prompt: { title: prompt.detail, detail: '给表演者看词，其他人猜。' } })
+      })
       return
     }
     if (this.data.mode === 'story') {

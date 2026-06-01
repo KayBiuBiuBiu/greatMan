@@ -20,7 +20,7 @@
 <view class="page ddi-page ddi-page-inroom" wx:else>
   <view class="hero ddi-hero-compact">
     <view class="hero-title">不要做挑战</view>
-    <view class="hero-subtitle text-caption" wx:if="{{view.roomCode}}">口令 {{view.roomCode}} · 存活 {{aliveCount}} 人</view>
+    <view class="hero-subtitle text-caption" wx:if="{{view.roomCode}}">口令 {{view.roomCode}} · 当前 {{aliveCount}} 人</view>
   </view>
 
   <view class="ddi-card" wx:if="{{view.roomCode}}">
@@ -89,15 +89,22 @@
     bind:tapready="onLobbyReadyTap"
   />
 
-  <view class="ddi-card" wx:if="{{isHost && (inWaiting || inFinished)}}">
+  <view class="ddi-card" wx:if="{{inWaiting}}">
+    <view class="section-title compact">我的禁止动作</view>
+    <input
+      class="ddi-inp"
+      maxlength="20"
+      placeholder="输入你的禁止动作（如：不能说话）"
+      value="{{myAction}}"
+      bindinput="onMyActionInput"
+      disabled="{{inPlaying}}"
+    />
+    <view class="text-caption" style="margin-top: 8rpx">8-20个中文字符，开始后随机分配给大家</view>
+  </view>
+
+  <view class="ddi-card" wx:if="{{isHost && inFinished}}">
     <view class="section-title compact">游戏设置</view>
-    <picker mode="selector" range="{{difficultyLabels}}" value="{{difficultyIdx}}" bindchange="onDifficultyPick">
-      <view class="ddi-picker-line">
-        <text>难度</text>
-        <text class="muted">{{difficultyLabels[difficultyIdx]}}</text>
-      </view>
-    </picker>
-    <view class="text-caption" style="margin-top: 12rpx">开局时按人数每人分配 1 个禁止动作（互不重复）</view>
+    <view class="text-caption" style="margin-top: 12rpx">下一局的难度设置（仅供参考）</view>
   </view>
 
   <button

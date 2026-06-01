@@ -1,0 +1,70 @@
+[I 2026-05-26 17:13:04,850 minium minitest#432 _miniSetUp] =========Current case: test_01_drink_party_core_flow=========
+[I 2026-05-26 17:13:04,850 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_01_drink_party_core_flow
+[I 2026-05-26 17:13:04,850 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-26 17:13:04,851 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-26 17:13:04,851 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-26 17:13:04,851 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-26 17:13:04,851 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-26 17:13:04,853 minium.App0896 app#950 relaunch] ReLaunch: /pages/index/index
+[I 2026-05-26 17:13:06,470 minium.App0896 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'pages/index/index', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1779786786463, 'webviewId': 2, 'routeEventId': '', 'renderer': 'webview'}, 1779786786464]}
+[I 2026-05-26 17:13:06,472 minium.Conn6864 connection#704 _handle_async_msg] received async msg: a361c485-ca3f-48bb-b77c-3835a997e96d
+[I 2026-05-26 17:13:06,477 minium minitest#897 capture] capture setup.png
+[I 2026-05-26 17:13:06,600 minium minitest#487 _miniSetUp] =========case: test_01_drink_party_core_flow start=========
+[I 2026-05-26 17:13:06,601 minium minitest#788 _callTestMethod] call test method
+[I 2026-05-26 17:13:06,602 minium.App0896 app#891 navigate_to] NavigateTo: /packageGames/drink-party/drink-party
+[I 2026-05-26 17:13:07,719 minium.App0896 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1779786787684, 'webviewId': 4, 'routeEventId': '4_1779786787612', 'renderer': 'webview'}, 1779786787685]}
+[I 2026-05-26 17:13:07,720 minium.Conn6864 connection#704 _handle_async_msg] received async msg: 8c7c9038-85a7-465b-b1ec-d5576157c86a
+[I 2026-05-26 17:13:08,722 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-05-26 17:13:08,730 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x1041c1160>]
+[I 2026-05-26 17:13:09,046 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-26 17:13:09,053 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1041c1160>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1041a5a90>]
+[I 2026-05-26 17:13:11,291 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-26 17:13:11,382 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 147, in test_01_drink_party_core_flow
+    host, _ = self._run_six_player_core_flow(DrinkPage, "start_round")
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 108, in _run_six_player_core_flow
+    self._join_players(page_cls, room_code, self.standard_players - 1)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 95, in _join_players
+    app = self._launch_new_app()
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 87, in _launch_new_app
+    raise RuntimeError(
+        "Minium multi-instance API not found. Expected self.mini.launch_new_weapp()."
+    )
+RuntimeError: Minium multi-instance API not found. Expected self.mini.launch_new_weapp().
+[I 2026-05-26 17:13:11,384 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-26 17:13:11,386 minium minitest#897 capture] capture teardown.png
+[I 2026-05-26 17:13:11,458 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-26 17:13:11,458 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-26 17:13:11,459 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_01_drink_party_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_01_drink_party_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 147, in test_01_drink_party_core_flow
+    host, _ = self._run_six_player_core_flow(DrinkPage, "start_round")
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 108, in _run_six_player_core_flow
+    self._join_players(page_cls, room_code, self.standard_players - 1)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 95, in _join_players
+    app = self._launch_new_app()
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 87, in _launch_new_app
+    raise RuntimeError(
+        "Minium multi-instance API not found. Expected self.mini.launch_new_weapp()."
+    )
+RuntimeError: Minium multi-instance API not found. Expected self.mini.launch_new_weapp().
+[W 2026-05-26 17:13:11,460 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': True, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 60, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 36320, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'cloud_env_id': 'cloud1-d9g01no7m292bc511', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': False, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260526171158', 'case_output': './outputs/20260526171158/test_01_drink_party_core_flow/20260526171304848368'}
+[W 2026-05-26 17:13:11,460 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-26 17:13:11,460 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-26 17:13:11,460 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1040caa50>

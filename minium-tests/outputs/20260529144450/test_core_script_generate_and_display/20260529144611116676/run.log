@@ -1,0 +1,120 @@
+[I 2026-05-29 14:46:11,119 minium minitest#432 _miniSetUp] =========Current case: test_core_script_generate_and_display=========
+[I 2026-05-29 14:46:11,156 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display
+[I 2026-05-29 14:46:11,186 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 14:46:11,214 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 14:46:11,245 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 14:46:11,273 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 14:46:11,303 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 14:46:11,335 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 14:46:11,641 minium minitest#487 _miniSetUp] =========case: test_core_script_generate_and_display start=========
+[I 2026-05-29 14:46:11,642 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 14:46:11,673 minium.Conn4576 connection#668 __on_message] [3d6e4cb7-4578-4a4e-9068-a39d722b838b]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:15,245 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 14:46:15,319 minium minitest#897 capture] capture assertTrue-success_144615318917.png
+[E 2026-05-29 14:46:15,428 minium.Conn4576 connection#668 __on_message] [1ce5e824-a2f7-46d4-8e1d-f740deef2b96]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:18,998 minium minitest#897 capture] capture assertTrue-success_144618998775.png
+[E 2026-05-29 14:46:19,129 minium.Conn4576 connection#668 __on_message] [fa240f3b-7cdc-4f43-be8b-f63574ebda07]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:22,777 minium.App3904 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22e040f8876a19363700075f8c6956f4c4%22%2C%20%22roomCode%22%3A%20%22558060%22%7D
+[I 2026-05-29 14:46:23,767 minium.App3904 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522e040f8876a19363700075f8c6956f4c4%2522%252C%2520%2522roomCode%2522%253A%2520%2522558060%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780037183763, 'webviewId': 5, 'routeEventId': '', 'renderer': 'webview'}, 1780037183763]}
+[I 2026-05-29 14:46:23,769 minium.Conn4576 connection#704 _handle_async_msg] received async msg: b4211512-1680-4063-88a9-fb2209e2af6c
+[E 2026-05-29 14:46:27,965 minium.Conn4576 connection#668 __on_message] [ca2a9846-37fb-4b86-88f4-f463b45f19a6]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:31,382 minium minitest#897 capture] capture assertTrue-success_144631381626.png
+[E 2026-05-29 14:46:31,453 minium.Conn4576 connection#668 __on_message] [54399bc9-ca63-4fc2-bde2-815d229c0932]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:37,350 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-05-29 14:46:37,445 minium minitest#897 capture] capture assertTrue-success_144637444680.png
+[I 2026-05-29 14:46:37,543 minium minitest#897 capture] capture assertGreaterEqual-success.png
+[I 2026-05-29 14:46:37,700 minium minitest#897 capture] capture assertTrue-success_144637700016.png
+[I 2026-05-29 14:46:37,760 minium minitest#897 capture] capture assertTrue-success_144637760141.png
+[E 2026-05-29 14:46:37,889 minium.Conn4576 connection#668 __on_message] [4e1b49c3-ed52-4558-8af4-6efdd9148246]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:41,035 minium minitest#897 capture] capture assertTrue-success_144641035216.png
+[I 2026-05-29 14:46:41,105 minium minitest#897 capture] capture assertTrue-success_144641105042.png
+[I 2026-05-29 14:46:41,243 minium minitest#897 capture] capture assertGreaterEqual-success_144641243258.png
+[I 2026-05-29 14:46:41,336 minium minitest#897 capture] capture assertTrue-success_144641336731.png
+[I 2026-05-29 14:46:41,433 minium minitest#897 capture] capture assertGreaterEqual-success_144641433412.png
+[I 2026-05-29 14:46:41,531 minium minitest#897 capture] capture assertTrue-success_144641531269.png
+[I 2026-05-29 14:46:41,628 minium minitest#897 capture] capture assertGreaterEqual-success_144641627867.png
+[I 2026-05-29 14:46:41,723 minium minitest#897 capture] capture assertTrue-success_144641723274.png
+[I 2026-05-29 14:46:41,869 minium minitest#897 capture] capture assertGreaterEqual-success_144641868854.png
+[E 2026-05-29 14:46:42,002 minium.Conn4576 connection#668 __on_message] [9c7dcf40-96f7-402f-b312-dae591de4e2b]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:45,374 minium minitest#897 capture] capture assertTrue-success_144645373960.png
+[I 2026-05-29 14:46:45,444 minium minitest#897 capture] capture assertTrue-success_144645444463.png
+[I 2026-05-29 14:46:45,568 minium minitest#897 capture] capture assertGreaterEqual-success_144645568083.png
+[I 2026-05-29 14:46:45,716 minium minitest#897 capture] capture assertTrue-success_144645715946.png
+[I 2026-05-29 14:46:45,773 minium minitest#897 capture] capture assertGreaterEqual-success_144645773121.png
+[I 2026-05-29 14:46:45,919 minium minitest#897 capture] capture assertTrue-success_144645918876.png
+[I 2026-05-29 14:46:46,067 minium minitest#897 capture] capture assertGreaterEqual-success_144646067678.png
+[I 2026-05-29 14:46:46,134 minium minitest#897 capture] capture assertTrue-success_144646134733.png
+[I 2026-05-29 14:46:46,264 minium minitest#897 capture] capture assertGreaterEqual-success_144646264329.png
+[E 2026-05-29 14:46:46,419 minium.Conn4576 connection#668 __on_message] [27961715-7e77-4093-a973-d85df55dc627]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:46:51,432 minium minitest#897 capture] capture assertTrue-success_144651431719.png
+[I 2026-05-29 14:46:51,506 minium minitest#897 capture] capture assertTrue-success_144651506247.png
+[I 2026-05-29 14:46:51,603 minium minitest#897 capture] capture assertGreaterEqual-success_144651603427.png
+[I 2026-05-29 14:46:51,770 minium minitest#897 capture] capture assertTrue-success_144651769859.png
+[I 2026-05-29 14:46:51,865 minium minitest#897 capture] capture assertGreaterEqual-success_144651864995.png
+[I 2026-05-29 14:46:52,017 minium minitest#897 capture] capture assertTrue-success_144652017233.png
+[I 2026-05-29 14:46:52,077 minium minitest#897 capture] capture assertGreaterEqual-success_144652076763.png
+[I 2026-05-29 14:46:52,202 minium minitest#897 capture] capture assertTrue-success_144652202861.png
+[I 2026-05-29 14:46:52,411 minium minitest#897 capture] capture assertGreaterEqual-success_144652410909.png
+[I 2026-05-29 14:46:52,485 minium minitest#897 capture] capture assertEqual-success_144652485356.png
+[I 2026-05-29 14:46:52,611 minium minitest#897 capture] capture assertEqual-success_144652611062.png
+[I 2026-05-29 14:46:52,778 minium minitest#897 capture] capture assertEqual-success_144652777886.png
+[I 2026-05-29 14:46:52,870 minium minitest#897 capture] capture assertIn-success.png
+[I 2026-05-29 14:46:53,029 minium minitest#897 capture] capture assertNotIn-success.png
+[I 2026-05-29 14:46:53,090 minium minitest#897 capture] capture assertNotIn-success_144653089757.png
+[I 2026-05-29 14:46:53,218 minium minitest#897 capture] capture assertNotIn-success_144653217641.png
+[I 2026-05-29 14:46:53,376 minium minitest#897 capture] capture assertNotIn-success_144653376100.png
+[I 2026-05-29 14:46:53,435 minium minitest#897 capture] capture assertIn-success_144653434707.png
+[I 2026-05-29 14:46:53,558 minium minitest#897 capture] capture assertNotIn-success_144653557650.png
+[I 2026-05-29 14:46:53,678 minium minitest#897 capture] capture assertNotIn-success_144653678481.png
+[I 2026-05-29 14:46:53,842 minium minitest#897 capture] capture assertNotIn-success_144653842676.png
+[I 2026-05-29 14:46:53,976 minium minitest#897 capture] capture assertNotIn-success_144653976468.png
+[I 2026-05-29 14:46:54,100 minium minitest#897 capture] capture assertIn-success_144654100822.png
+[I 2026-05-29 14:46:54,201 minium minitest#897 capture] capture assertNotIn-success_144654201745.png
+[I 2026-05-29 14:46:54,327 minium minitest#897 capture] capture assertNotIn-success_144654327483.png
+[I 2026-05-29 14:46:54,429 minium minitest#897 capture] capture assertNotIn-success_144654429555.png
+[I 2026-05-29 14:46:54,550 minium minitest#897 capture] capture assertNotIn-success_144654550326.png
+[I 2026-05-29 14:46:54,709 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-29 14:46:54,714 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1061cb4d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10629b250>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10629b390>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1062f5220>]
+[I 2026-05-29 14:46:54,751 minium minitest#897 capture] capture assertTrue-success_144654751000.png
+[I 2026-05-29 14:46:55,683 minium page#716 _get_elements_by_css] try to get elements: view
+[I 2026-05-29 14:46:55,690 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1062f5480>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1066017f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10623bce0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10623bac0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106370450>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106370850>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10625a4e0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106306210>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10627fd90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10627f3f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106397930>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1063a4290>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1063a4350>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106276fc0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106277490>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a0d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a3f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630ac10>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630aad0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1063089b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a8f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106309ef0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a710>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106308b90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a5d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630aa30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a530>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a490>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106309f90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630ad50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10630a990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106308910>]
+[E 2026-05-29 14:46:55,861 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 362, in test_core_script_generate_and_display
+    page.assert_script_modal_sections(host_script)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 163, in assert_script_modal_sections
+    self.assertTrue(expected, f"弹窗区块 {label} 内容为空")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'MysteryReasonPage' object has no attribute 'assertTrue'
+[I 2026-05-29 14:46:55,894 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 14:46:55,924 minium.App3904 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 14:46:56,897 minium.App3904 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780037216891, 'webviewId': 6, 'routeEventId': '', 'renderer': 'webview'}, 1780037216892]}
+[I 2026-05-29 14:46:56,900 minium.Conn4576 connection#704 _handle_async_msg] received async msg: 7894a1b1-0bf9-4007-8c82-30670a2789b1
+[I 2026-05-29 14:46:58,471 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 14:46:58,628 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 14:46:58,672 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-29 14:46:58,704 minium assertbase#390 _get_stack_info] <bound method TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display of <testcases.test_mystery_reason.TestMysteryReasonFullClosedLoop testMethod=test_core_script_generate_and_display>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 362, in test_core_script_generate_and_display
+    page.assert_script_modal_sections(host_script)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 163, in assert_script_modal_sections
+    self.assertTrue(expected, f"弹窗区块 {label} 内容为空")
+    ^^^^^^^^^^^^^^^
+AttributeError: 'MysteryReasonPage' object has no attribute 'assertTrue'
+[W 2026-05-29 14:46:58,735 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 31113, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260529144450', 'case_output': './outputs/20260529144450/test_core_script_generate_and_display/20260529144611116676'}
+[W 2026-05-29 14:46:58,764 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-29 14:46:58,793 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-29 14:46:58,821 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1061caba0>

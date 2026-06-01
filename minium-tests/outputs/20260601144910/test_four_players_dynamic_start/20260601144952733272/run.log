@@ -1,0 +1,67 @@
+[I 2026-06-01 14:49:52,734 minium minitest#432 _miniSetUp] =========Current case: test_four_players_dynamic_start=========
+[I 2026-06-01 14:49:52,735 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_undercover, case info: TestUndercoverDynamicPlayers.test_four_players_dynamic_start
+[I 2026-06-01 14:49:52,735 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 14:49:52,735 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 14:49:52,735 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 14:49:52,735 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 14:49:52,735 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 14:49:52,735 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 14:49:52,834 minium minitest#487 _miniSetUp] =========case: test_four_players_dynamic_start start=========
+[I 2026-06-01 14:49:52,835 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 14:49:52,838 minium.Conn6864 connection#668 __on_message] [111013ef-8bad-41da-b01a-8c0c9b465986]: wx.cloud.callFunction not exists
+[I 2026-06-01 14:50:05,945 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-06-01 14:50:06,043 minium.App6016 app#891 navigate_to] NavigateTo: /packageGames/undercover/undercover?config=%7B%22mode%22%3A%20%22v2%22%2C%20%22roomId%22%3A%20%2293eed62b6a1d2b9d0044d29f09929dc5%22%2C%20%22roomCode%22%3A%20%22889817%22%7D
+[I 2026-06-01 14:50:07,925 minium.App6016 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {'config': '%257B%2522mode%2522%253A%2520%2522v2%2522%252C%2520%2522roomId%2522%253A%2520%252293eed62b6a1d2b9d0044d29f09929dc5%2522%252C%2520%2522roomCode%2522%253A%2520%2522889817%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1780296607878, 'webviewId': 2, 'routeEventId': '2_1780296607532', 'renderer': 'webview'}, 1780296607879]}
+[I 2026-06-01 14:50:07,926 minium.Conn6864 connection#704 _handle_async_msg] received async msg: 4a3b52c8-aec4-4053-b6ab-84a3e0448e91
+[E 2026-06-01 14:50:09,938 minium.Conn6864 connection#668 __on_message] [7c8eae94-4951-42e2-aaea-07a32aa65de9]: wx.cloud.callFunction not exists
+[I 2026-06-01 14:50:15,145 minium minitest#897 capture] capture assertGreaterEqual-success.png
+[E 2026-06-01 14:50:35,442 minium assertbase#62 hook_assert] False is not true : 组长应可开始互动
+[I 2026-06-01 14:50:35,443 minium minitest#897 capture] capture assertTrue-failed.png
+[I 2026-06-01 14:50:35,528 minium page#716 _get_elements_by_css] try to get elements: page
+[I 2026-06-01 14:50:35,533 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x103b14c20>]
+[E 2026-06-01 14:50:35,548 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_undercover.py", line 94, in test_four_players_dynamic_start
+    self._assert_can_start(page, 4)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_undercover.py", line 74, in _assert_can_start
+    self.assertTrue(page.wait_until_start_enabled(), "组长应可开始互动")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 744, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true : 组长应可开始互动
+[I 2026-06-01 14:50:35,549 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 14:50:35,552 minium.App6016 app#950 relaunch] ReLaunch: /packageGames/undercover/undercover
+[I 2026-06-01 14:50:36,688 minium.App6016 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780296636681, 'webviewId': 4, 'routeEventId': '', 'renderer': 'webview'}, 1780296636682]}
+[I 2026-06-01 14:50:36,690 minium.Conn6864 connection#704 _handle_async_msg] received async msg: b06bfc6b-534a-46b7-ba55-3fe9b5de3e3f
+[I 2026-06-01 14:50:38,195 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 14:50:38,257 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 14:50:38,258 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 14:50:38,259 minium assertbase#390 _get_stack_info] <bound method TestUndercoverDynamicPlayers.test_four_players_dynamic_start of <testcases.test_undercover.TestUndercoverDynamicPlayers testMethod=test_four_players_dynamic_start>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_undercover.py", line 94, in test_four_players_dynamic_start
+    self._assert_can_start(page, 4)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_undercover.py", line 74, in _assert_can_start
+    self.assertTrue(page.wait_until_start_enabled(), "组长应可开始互动")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true : 组长应可开始互动
+[W 2026-06-01 14:50:38,260 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601144910', 'case_output': './outputs/20260601144910/test_four_players_dynamic_start/20260601144952733272'}
+[W 2026-06-01 14:50:38,260 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 14:50:38,260 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 14:50:38,260 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1039a27b0>

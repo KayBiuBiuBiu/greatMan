@@ -60,9 +60,6 @@ function errMsgFromCloud(err, extra) {
 
 function memberCountLine(n, need, minHint) {
   const c = (n | 0)
-  if ((need | 0) > 0) {
-    return '当前 ' + c + ' / ' + (need | 0) + ' 人'
-  }
   if (minHint) {
     return '当前 ' + c + ' 人（' + minHint + '）'
   }
@@ -101,8 +98,8 @@ function explainHeadbandStartFail(msg, ctx) {
   }
   if (/词库|wordBank|生成/.test(m)) {
     return {
-      title: '词库未就绪',
-      content: '请确认云函数 generateCharacters 已部署，或稍后重试。'
+      title: 'AI 出题未就绪',
+      content: '请确认 aiPartyService 已部署且 AI 配置可用，或稍后重试。'
     }
   }
   if (/仅房主|组长/.test(m)) {
@@ -174,7 +171,7 @@ function explainWerewolfStartFail(msg, ctx) {
     return {
       title: '人未满',
       content:
-        `本局需 ${need} 名参与者（不含主持），当前 ${n} 人，还差 ${Math.max(0, need - n)} 人。\n\n请分享口令邀请进组后再发牌。`
+        `本局需 ${need} 人（含组长），当前 ${n} 人，还差 ${Math.max(0, need - n)} 人。\n\n请分享口令邀请进组后再发牌。`
     }
   }
   if (/人数与板子/.test(m)) {

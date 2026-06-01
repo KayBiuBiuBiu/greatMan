@@ -1,0 +1,207 @@
+{
+    "case_name": "test_core_script_generate_and_display",
+    "run_time": "20260529 00:07:41",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u6838\u5fc3\u5267\u672c\u95ed\u73af\u6d4b\u8bd5\uff08\u5168\u91cf\u4fee\u590d\uff09\n\u4fee\u590d\uff1astart_game \u540e\u4e0d\u5237\u65b0\u5feb\u7167\u5bfc\u81f4 UI \u5361\u4f4f\n\u4fee\u590d\uff1a\u4e91\u51fd\u6570\u65e0success\u5b57\u6bb5\u5224\u65ad",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 169, in test_core_script_generate_and_display\n    page.wait_phase(\"generate_script\", timeout=30)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py\", line 117, in wait_phase\n    return self.wait_phase_text(label, timeout=timeout, cloud=cloud, room_id=room_id)\n           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py\", line 157, in wait_phase_text\n    raise AssertionError(f\"phase text {text!r} not reached\")\nAssertionError: phase text 'AI \u751f\u6210\u5267\u672c' not reached\n",
+    "start_timestamp": 1779984462.026548,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 169,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "phase text 'AI \u751f\u6210\u5267\u672c' not reached",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1779984462,
+            "datetime": "2026-05-29 00:07:42",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1779984467,
+            "datetime": "2026-05-29 00:07:47",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000747047166.png",
+            "ts": 1779984467,
+            "datetime": "2026-05-29 00:07:47",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000750858259.png",
+            "ts": 1779984470,
+            "datetime": "2026-05-29 00:07:50",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000803341688.png",
+            "ts": 1779984483,
+            "datetime": "2026-05-29 00:08:03",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1779984520,
+            "datetime": "2026-05-29 00:08:40",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779984520.096728,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_core_script_generate_and_display(self):\n",
+            "        \"\"\"\n",
+            "        \u6838\u5fc3\u5267\u672c\u95ed\u73af\u6d4b\u8bd5\uff08\u5168\u91cf\u4fee\u590d\uff09\n",
+            "        \u4fee\u590d\uff1astart_game \u540e\u4e0d\u5237\u65b0\u5feb\u7167\u5bfc\u81f4 UI \u5361\u4f4f\n",
+            "        \u4fee\u590d\uff1a\u4e91\u51fd\u6570\u65e0success\u5b57\u6bb5\u5224\u65ad\n",
+            "        \"\"\"\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "\n",
+            "        # \u89e6\u53d1\u5f00\u5c40AI\u751f\u6210\u5267\u672c + \u5f3a\u5236\u540c\u6b65\u5feb\u7167\uff08\u5173\u952e\u4fee\u590d\uff09\n",
+            "        start_res = self._unwrap_cloud(self.cloud.start_game(MysteryReasonPage.game_key, room_id))\n",
+            "        self.assertTrue(self._is_cloud_success(start_res), \"\u5f00\u5c40\u542f\u52a8\u5931\u8d25\")\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "\n",
+            "        # \u7cbe\u51c6\u7b49\u5f85\u9636\u6bb5 + \u6301\u7eed\u540c\u6b65\u5feb\u7167\u9632\u5361\u4f4f\n",
+            "        page.wait_phase(\"generate_script\", timeout=30)\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "\n",
+            "        # \u62c9\u53d6\u5feb\u7167\u6821\u9a8cAI\u5267\u672c\u751f\u6210\u6210\u529f\n",
+            "        state = self._unwrap_cloud(self.cloud.sync_snapshot(MysteryReasonPage.game_key, room_id)).get(\"state\", {})\n",
+            "        player_info = state.get(\"playerInfo\", {})\n",
+            "        self.assertTrue(len(player_info) >= 3, \"\u73a9\u5bb6\u4eba\u8bbe\u5267\u672c\u6570\u636e\u7f3a\u5931\")\n",
+            "\n",
+            "        # \u6821\u9a8c\u5f53\u524d\u73a9\u5bb6\u5267\u672c\u975e\u7a7a\u3001\u5b8c\u6574\n",
+            "        self_player = player_info.get(page.openId, {})\n",
+            "        self.assertTrue(self_player.get(\"roleName\"), \"\u89d2\u8272\u540d\u7f3a\u5931\")\n",
+            "        self.assertTrue(self_player.get(\"roleScript\"), \"\u4e2a\u4eba\u4e3b\u5267\u672c\u4e3a\u7a7a\")\n",
+            "        self.assertTrue(self_player.get(\"secret\"), \"\u4e2a\u4eba\u9690\u85cf\u79d8\u5bc6\u7f3a\u5931\")\n",
+            "        self.assertTrue(self_player.get(\"timeline\"), \"\u4e2a\u4eba\u65f6\u95f4\u7ebf\u7f3a\u5931\")\n",
+            "\n",
+            "        # \u6821\u9a8c\u5168\u5c40\u6848\u4ef6\u80cc\u666f\u751f\u6210\u6210\u529f\n",
+            "        self.assertTrue(state.get(\"caseBackground\"), \"\u6848\u4ef6\u80cc\u666f\u5267\u672c\u7f3a\u5931\")\n",
+            "\n",
+            "        # \u8fdb\u5165\u8bfb\u672c\u9636\u6bb5\u5e76\u540c\u6b65\u5feb\u7167\n",
+            "        self._unwrap_cloud(self.cloud.force_next_phase(room_id))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "        page.wait_phase(\"read_script\")\n",
+            "\n",
+            "        # UI\u6e32\u67d3\u6821\u9a8c\n",
+            "        self.assertTrue(page.has_script_display(), \"\u8bfb\u672c\u9875\u9762\u5267\u672c\u672a\u6e32\u67d3\")\n",
+            "        self.assertTrue(page.has_secret_tag(), \"\u4e2a\u4eba\u79d8\u5bc6\u6807\u7b7e\u672a\u5c55\u793a\")\n",
+            "        self.assertTrue(page.has_timeline_content(), \"\u65f6\u95f4\u7ebf\u5185\u5bb9\u672a\u5c55\u793a\")\n"
+        ],
+        "start": 154
+    },
+    "filename": "result.json"
+}

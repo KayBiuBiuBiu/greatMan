@@ -1,0 +1,66 @@
+[I 2026-06-01 19:31:10,862 minium minitest#432 _miniSetUp] =========Current case: test_04_song_guess_core_flow=========
+[I 2026-06-01 19:31:10,895 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_04_song_guess_core_flow
+[I 2026-06-01 19:31:10,927 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 19:31:10,964 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 19:31:11,005 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 19:31:11,039 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 19:31:11,073 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 19:31:11,107 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 19:31:11,282 minium minitest#487 _miniSetUp] =========case: test_04_song_guess_core_flow start=========
+[I 2026-06-01 19:31:11,283 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 19:31:11,317 minium.App6176 app#891 navigate_to] NavigateTo: /packageGames/song-guess/song-guess
+[I 2026-06-01 19:31:12,384 minium.App6176 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/song-guess/song-guess', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1780313472371, 'webviewId': 7, 'routeEventId': '7_1780313471698', 'renderer': 'webview'}, 1780313472371]}
+[I 2026-06-01 19:31:12,387 minium.Conn5856 connection#704 _handle_async_msg] received async msg: afb93c3b-4971-4f8d-b62d-c48a0209b216
+[I 2026-06-01 19:31:13,485 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-01 19:31:13,491 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x10629b110>]
+[I 2026-06-01 19:31:13,864 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:31:13,878 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1065dcc30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1065ddc70>]
+[I 2026-06-01 19:31:16,110 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 19:31:16,250 minium.Conn5856 connection#668 __on_message] [fd172633-559b-496a-b2c0-b2616306dc26]: wx.cloud.callFunction not exists
+[E 2026-06-01 19:31:19,091 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 373, in test_04_song_guess_core_flow
+    host, _ = self._run_dynamic_core_flow(SongPage, "start_round", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 275, in _run_dynamic_core_flow
+    seed = self._join_players(
+        page_cls, room_code, added, room_id=info.get("roomId")
+    )
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 89, in _join_players
+    raise AssertionError(
+        f"seed_players({game_key}) failed: {err} roomId={room_id} code={room_code}"
+    )
+AssertionError: seed_players(songGuess) failed: setState is not defined roomId=6cb23a706a1d6d8200ae32e07c19b947 code=664409
+[I 2026-06-01 19:31:19,096 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 19:31:19,142 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 19:31:19,288 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 19:31:19,289 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 19:31:19,329 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_04_song_guess_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_04_song_guess_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 373, in test_04_song_guess_core_flow
+    host, _ = self._run_dynamic_core_flow(SongPage, "start_round", player_count=3)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 275, in _run_dynamic_core_flow
+    seed = self._join_players(
+        page_cls, room_code, added, room_id=info.get("roomId")
+    )
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 89, in _join_players
+    raise AssertionError(
+        f"seed_players({game_key}) failed: {err} roomId={room_id} code={room_code}"
+    )
+AssertionError: seed_players(songGuess) failed: setState is not defined roomId=6cb23a706a1d6d8200ae32e07c19b947 code=664409
+[W 2026-06-01 19:31:19,370 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601192801', 'case_output': './outputs/20260601192801/test_04_song_guess_core_flow/20260601193110861989'}
+[W 2026-06-01 19:31:19,411 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 19:31:19,450 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 19:31:19,487 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1060beba0>

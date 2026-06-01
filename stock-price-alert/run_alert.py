@@ -821,6 +821,15 @@ DEFAULT_DIP_DISPLAY_FILTER: dict[str, Any] = {
     "max_change_pct": 5.0,
     "max_intraday_position": 0.85,
 }
+DEFAULT_QUALITY_STOCK_FILTERS: dict[str, Any] = {
+    # 控制台「今日优质股」「热门板块优质股」回调过滤：非持仓才过滤；持仓 hold_shares>0 豁免
+    "enabled": True,
+    "min_change_pct": -2.0,
+    "max_change_pct": 5.0,
+    "max_intraday_position": 0.7,
+    "min_volume_ratio": 1.0,
+    "require_buy_signal": False,
+}
 DEFAULT_DISPLAY: dict[str, Any] = {
     # 控制台「热门板块优质股」分区：申万一级 5 日超额前 30% 行业内的盘前优质股
     "hot_sector_quality_enabled": True,
@@ -828,6 +837,23 @@ DEFAULT_DISPLAY: dict[str, Any] = {
     "hot_sector_top_fraction": 0.3,
     "hot_sector_max_stocks": 10,
     "hot_sector_index_benchmark_ts_code": "000001.SH",
+    "hot_sector_use_realtime": True,
+    "hot_sector_realtime_refresh_sec": 60,
+    "show_factor_summary": True,
+    "show_factor_comment": True,
+    "simplify_factor_text": True,
+    "show_moneyflow_in_factor": True,
+    "show_industry_moneyflow_in_factor": True,
+    "show_hot_stock_in_factor": True,
+    "show_hot_concept_in_factor": True,
+    "show_broker_recommend_in_factor": True,
+    "show_hot_stock_list": False,
+    "hot_stock_list_top_n": 10,
+    "show_hot_stock_quality": True,
+    "hot_stock_display_count": 10,
+    "hot_stock_top_n": 50,
+    "hot_stock_quality_section_order": "after_quality",
+    "quality_stock_filters": dict(DEFAULT_QUALITY_STOCK_FILTERS),
 }
 DEFAULT_MIDDAY_OPS: dict[str, Any] = {
     # 午休 11:30–13:00 增量：控制台「今日优质股」过滤、持仓策略临近价提示等（不写 daily_picks.json）
@@ -905,6 +931,45 @@ DEFAULT_QUANT_SELECTOR = {
     "use_stock_basic_cache_universe": True,
     "per_stock_sleep_sec": 0.0,
     "daily_select_max_workers": 6,
+    "enable_financial_factors": True,
+    "enable_margin_factors": True,
+    "enable_top_inst_factors": True,
+    "enable_moneyflow_factors": True,
+    "enable_industry_moneyflow_factors": True,
+    "enable_hot_stock_factors": True,
+    "enable_hot_concept_factors": True,
+    "hot_concept_top_n": 5,
+    "enable_broker_recommend_factors": True,
+    "factor_intraday_refresh_enabled": True,
+    "factor_refresh_interval_sec": 600,
+    "hot_stock_intraday_refresh_enabled": True,
+    "hot_stock_refresh_interval_sec": 1800,
+    "factor_weights": {
+        "trend": 3.0,
+        "box_position": 2.0,
+        "volatility": 1.5,
+        "volume_ratio": 1.5,
+        "roe_min": 0.08,
+        "revenue_yoy_min": 0.10,
+        "margin_change_pct_threshold": 0.03,
+        "inst_buy_net_threshold": 1_000_000.0,
+        "moneyflow_individual_threshold1": 5e7,
+        "moneyflow_individual_threshold2": 2e8,
+        "moneyflow_individual_bonus1": 1.0,
+        "moneyflow_individual_bonus2": 2.0,
+        "moneyflow_industry_threshold1": 5e8,
+        "moneyflow_industry_threshold2": 2e9,
+        "moneyflow_industry_bonus1": 1.0,
+        "moneyflow_industry_bonus2": 2.0,
+        "hot_stock_bonus": 1.0,
+        "hot_stock_extra_bonus": 1.0,
+        "hot_concept_bonus": 1.0,
+        "broker_recommend_bonus1": 1.0,
+        "broker_recommend_bonus2": 2.0,
+        "broker_recommend_count1": 2,
+        "broker_recommend_count2": 5,
+        "max_bonus": 3.0,
+    },
     "use_sqlite_cache": True,
     "max_stale_calendar_days": 2,
     "afternoon_repeat_boost": {
@@ -951,6 +1016,10 @@ DEFAULT_STRATEGY_BUY_FILTER = {
     "use_intraday_position_filter": False,
     "min_intraday_position": 0.3,
     "max_intraday_position": 0.85,
+    # 买入信号基本面闸门：只读因子缓存，不在轮询中实时请求 Tushare。
+    "require_basic_quality": True,
+    "basic_quality_roe_min": 0.10,
+    "basic_quality_pe_max": 30.0,
 }
 DEFAULT_SECTOR_BUY_CROSS_CHECK = {
     "enabled": False,
@@ -992,6 +1061,8 @@ DEFAULT_POSITION_SUGGESTION = {
             "box_high_threshold": 0.85,
             "volume_ratio_low": 0.8,
             "market_weak_bear_sell": True,
+            "margin_retreat_enabled": True,
+            "margin_retreat_threshold": -0.20,
         },
         "add": {
             "loss_min": -0.20,
@@ -1279,6 +1350,9 @@ def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) ->
         mt = pack.get("_strategy_buy_mood_tier")
         if mt == "weak_bear":
             reasons.append("大盘 weak_bear")
+    bq = _basic_quality_buy_block_reason(pack, sbf)
+    if bq:
+        reasons.append(bq)
     if bool(sbf.get("use_intraday_position_filter", False)):
         qd = pack.get("q")
         if isinstance(qd, dict):
@@ -1306,6 +1380,73 @@ def _strategy_buy_realtime_blocked(pack: dict[str, Any], cfg: dict[str, Any]) ->
     if scc_r:
         reasons.append(scc_r)
     return "；".join(reasons) if reasons else None
+
+
+def _pack_code_for_factor(pack: dict[str, Any]) -> str | None:
+    q = pack.get("q") if isinstance(pack, dict) else None
+    rule = pack.get("rule") if isinstance(pack, dict) else None
+    raw = ""
+    if isinstance(q, dict):
+        raw = str(q.get("code") or "").strip()
+    if not raw and isinstance(rule, dict):
+        raw = str(rule.get("code") or "").strip()
+    return normalize_stock_code(raw)
+
+
+def _basic_quality_buy_block_reason(pack: dict[str, Any], sbf: dict[str, Any]) -> str | None:
+    if not bool(sbf.get("require_basic_quality", False)):
+        return None
+    code6 = _pack_code_for_factor(pack)
+    if not code6:
+        return "基本面数据缺失"
+    try:
+        from quote_tushare import fetch_financial_factors
+
+        fin = fetch_financial_factors(code6, cache_only=True) or {}
+    except Exception:
+        fin = {}
+    try:
+        roe_min = float(sbf.get("basic_quality_roe_min", 0.10) or 0.10)
+    except (TypeError, ValueError):
+        roe_min = 0.10
+    try:
+        pe_max = float(sbf.get("basic_quality_pe_max", 30.0) or 30.0)
+    except (TypeError, ValueError):
+        pe_max = 30.0
+    roe = _factor_float(fin.get("roe_ttm"))
+    pe = _factor_float(fin.get("pe_ttm"))
+    misses: list[str] = []
+    if roe is None or roe < roe_min:
+        s = "—" if roe is None else f"{roe * 100.0:.1f}%"
+        misses.append(f"净资产收益率{s}（需≥{roe_min * 100.0:.0f}%）")
+    if pe is None or pe <= 0 or pe > pe_max:
+        s = "—" if pe is None else f"{pe:.1f}"
+        misses.append(f"市盈率{s}（需≤{pe_max:g}）")
+    return "基本面未达标：" + "、".join(misses) if misses else None
+
+
+def _margin_retreat_sell_reason(pack: dict[str, Any], sell_r: dict[str, Any]) -> str | None:
+    if not bool(sell_r.get("margin_retreat_enabled", True)):
+        return None
+    code6 = _pack_code_for_factor(pack)
+    if not code6:
+        return None
+    try:
+        th = float(sell_r.get("margin_retreat_threshold", -0.20) or -0.20)
+    except (TypeError, ValueError):
+        th = -0.20
+    try:
+        from quote_tushare import fetch_margin_factor
+
+        margin = fetch_margin_factor(code6, cache_only=True) or {}
+    except Exception:
+        margin = {}
+    chg = _factor_float(margin.get("margin_change_pct_5d"))
+    if chg is None:
+        return None
+    if chg <= th:
+        return f"融资盘撤退，5日融资余额下降{abs(chg) * 100.0:.1f}%，考虑减仓"
+    return None
 
 
 def _ml_bearish_prob_for_position_suggestion(
@@ -1393,6 +1534,10 @@ def _get_position_suggestion(
     bp_th = _f("bearish_prob_threshold", 0.7)
     if bearish_prob is not None and float(bearish_prob) >= bp_th:
         return "卖出", f"下跌概率{bearish_prob * 100:.1f}%，规避风险"
+
+    margin_retreat = _margin_retreat_sell_reason(pack, sell_r)
+    if margin_retreat:
+        return "卖出", margin_retreat
 
     bh = _f("box_high_threshold", 0.85)
     vr_lo = _f("volume_ratio_low", 0.8)
@@ -1829,7 +1974,13 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(cfg["display"], dict):
         cfg["display"] = {}
     disp_m = dict(DEFAULT_DISPLAY)
-    disp_m.update(cfg["display"])
+    user_disp = cfg["display"]
+    disp_m.update({k: v for k, v in user_disp.items() if k != "quality_stock_filters"})
+    qsf_m = dict(DEFAULT_QUALITY_STOCK_FILTERS)
+    user_qsf = user_disp.get("quality_stock_filters")
+    if isinstance(user_qsf, dict):
+        qsf_m.update(user_qsf)
+    disp_m["quality_stock_filters"] = qsf_m
     cfg["display"] = disp_m
     cfg.setdefault("midday_ops", {})
     if not isinstance(cfg["midday_ops"], dict):
@@ -1885,6 +2036,12 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
             _arb = dict(qs_m["afternoon_repeat_boost"])
             _arb.update(_v)
             qs_m["afternoon_repeat_boost"] = _arb
+        elif _k == "factor_weights" and isinstance(_v, dict) and isinstance(
+            qs_m.get("factor_weights"), dict
+        ):
+            _fw = dict(qs_m["factor_weights"])
+            _fw.update(_v)
+            qs_m["factor_weights"] = _fw
         else:
             qs_m[_k] = _v
     cfg["quant_selector"] = qs_m
@@ -2209,16 +2366,121 @@ def _benchmark_return_fraction_fallback(
     return None
 
 
-def _resolve_hot_sw_l1_set(
+def _hot_sector_realtime_refresh_sec(disp: dict[str, Any]) -> int:
+    try:
+        return max(15, int(disp.get("hot_sector_realtime_refresh_sec", 60) or 60))
+    except (TypeError, ValueError):
+        return 60
+
+
+def _hot_sectors_from_realtime_df(
+    df: Any,
+    *,
+    top_fraction: float,
+) -> frozenset[str]:
+    """按 pct_chg 降序取 top_fraction 比例申万一级代码。"""
+    import math
+
+    if df is None or getattr(df, "empty", True):
+        return frozenset()
+    pct_col = "pct_chg" if "pct_chg" in df.columns else "pct_change"
+    if pct_col not in df.columns:
+        return frozenset()
+    rank_map: dict[str, float] = {}
+    for _, row in df.iterrows():
+        tc = str(row.get("ts_code") or "").strip().upper()
+        if not tc.endswith(".SI"):
+            continue
+        try:
+            pct = float(row.get(pct_col))
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(pct):
+            rank_map[tc] = pct
+    if not rank_map:
+        return frozenset()
+    return _hot_sw_l1_top_fraction(rank_map, top_fraction=top_fraction)
+
+
+def _resolve_hot_sw_l1_set_realtime(
+    cfg: dict[str, Any],
+    *,
+    root: Path,
+    state: dict[str, Any],
+) -> frozenset[str] | None:
+    """
+    盘中 rt_sw_k 实时涨跌幅排序热门申万一级。
+    成功返回 frozenset；失败/应降级返回 None（由日 K 路径接管）。
+    """
+    import time
+
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    log = logging.getLogger(__name__)
+    try:
+        top_frac = float(disp.get("hot_sector_top_fraction", 0.3) or 0.3)
+    except (TypeError, ValueError):
+        top_frac = 0.3
+    refresh_sec = _hot_sector_realtime_refresh_sec(disp)
+    now = time.time()
+    cache = state.get("__hot_sector_cache__")
+    if isinstance(cache, dict):
+        codes_raw = cache.get("codes") or []
+        fetched_at = cache.get("fetched_at")
+        if codes_raw and fetched_at is not None:
+            try:
+                age = now - float(fetched_at)
+            except (TypeError, ValueError):
+                age = refresh_sec + 1.0
+            if age < refresh_sec:
+                log.debug(
+                    "[热门板块] 使用实时缓存（%.0fs 前，TTL %ss）",
+                    age,
+                    refresh_sec,
+                )
+                return frozenset(str(x).strip().upper() for x in codes_raw if str(x).strip())
+
+    try:
+        from quote_tushare import fetch_all_sectors_realtime
+
+        df = fetch_all_sectors_realtime(root=root)
+    except Exception as exc:
+        log.warning("[热门板块] 实时申万行情拉取异常，将降级日K：%s", exc)
+        return None
+
+    if df is None or getattr(df, "empty", True):
+        log.warning("[热门板块] 实时申万行情为空，将降级日K")
+        return None
+
+    hot = _hot_sectors_from_realtime_df(df, top_fraction=top_frac)
+    if not hot:
+        log.warning("[热门板块] 实时排序后无有效行业，将降级日K")
+        return None
+
+    state["__hot_sector_cache__"] = {
+        "fetched_at": now,
+        "codes": sorted(hot),
+        "top_fraction": top_frac,
+        "rank_mode": "realtime_pct_chg",
+        "sector_count": int(len(df)),
+    }
+    log.info(
+        "[热门板块] 实时刷新成功：%s 个行业行情，热门 %s 个（top %.0f%%）",
+        len(df),
+        len(hot),
+        top_frac * 100.0,
+    )
+    return hot
+
+
+def _resolve_hot_sw_l1_set_from_daily_kline(
     cfg: dict[str, Any],
     *,
     root: Path,
     state: dict[str, Any],
     picks_path: Path,
 ) -> frozenset[str]:
+    """基于本地日 K / Tushare 的 N 日超额或绝对涨幅（原逻辑）。"""
     disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
-    if not bool(disp.get("hot_sector_quality_enabled", True)):
-        return frozenset()
     today = date.today().isoformat()
     cache = state.get("__hot_sw_l1_daily__")
     if isinstance(cache, dict) and cache.get("date") == today:
@@ -2308,6 +2570,78 @@ def _resolve_hot_sw_l1_set(
         "rank_mode": rank_mode,
     }
     return hot
+
+
+def _resolve_hot_sw_l1_set(
+    cfg: dict[str, Any],
+    *,
+    root: Path,
+    state: dict[str, Any],
+    picks_path: Path,
+) -> frozenset[str]:
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    if not bool(disp.get("hot_sector_quality_enabled", True)):
+        return frozenset()
+
+    if bool(disp.get("hot_sector_use_realtime", True)):
+        hot_rt = _resolve_hot_sw_l1_set_realtime(cfg, root=root, state=state)
+        if hot_rt is not None and hot_rt:
+            return hot_rt
+        if hot_rt is not None and not hot_rt:
+            logging.getLogger(__name__).warning(
+                "[热门板块] 实时热门列表为空，降级日K超额/绝对涨幅"
+            )
+        elif hot_rt is None:
+            logging.getLogger(__name__).warning(
+                "[热门板块] 实时申万接口不可用或失败，降级日K超额/绝对涨幅"
+            )
+
+    return _resolve_hot_sw_l1_set_from_daily_kline(
+        cfg, root=root, state=state, picks_path=picks_path
+    )
+
+
+def resolve_hot_sw_l1_for_scoring(
+    cfg: dict[str, Any],
+    *,
+    root: Path | None = None,
+    state: dict[str, Any] | None = None,
+    picks_path: Path | None = None,
+) -> frozenset[str]:
+    """选股加分用：解析当前热门申万一级（与控制台热门板块同源逻辑）。"""
+    _root = root or ROOT
+    _state = state if isinstance(state, dict) else {}
+    _picks = picks_path or _root / "daily_picks.json"
+    return _resolve_hot_sw_l1_set(cfg, root=_root, state=_state, picks_path=_picks)
+
+
+def stock_is_dual_hot_resonance(
+    code: str,
+    cfg: dict[str, Any],
+    *,
+    root: Path | None = None,
+    state: dict[str, Any] | None = None,
+    picks_path: Path | None = None,
+) -> bool:
+    """同花顺热股榜 + 所属申万一级处于当日热门板块。"""
+    c6 = normalize_stock_code(code)
+    if not c6:
+        return False
+    try:
+        from quote_tushare import is_hot_stock
+
+        if not is_hot_stock(c6, cache_only=True):
+            return False
+    except Exception:
+        return False
+    hot_sw = resolve_hot_sw_l1_for_scoring(
+        cfg, root=root, state=state, picks_path=picks_path
+    )
+    if not hot_sw:
+        return False
+    _root = root or ROOT
+    sw = str(_load_stock_to_sw_l1_map(_root).get(c6) or "").strip().upper()
+    return bool(sw.endswith(".SI") and sw in hot_sw)
 
 
 def _daily_picks_quality_rows_in_order(picks_path: Path) -> list[dict[str, Any]]:
@@ -2415,7 +2749,10 @@ def _build_hot_sector_quality_items(
             break
 
     hot_items = [pack_by_code[c] for c in selected_codes]
-    return _filter_watch_packs_by_strategy_sell_score(
+    hot_items = _filter_watch_packs_by_strategy_sell_score(
+        hot_items, cfg, log_label="热门板块优质"
+    )
+    return _filter_watch_packs_for_quality_display(
         hot_items, cfg, log_label="热门板块优质"
     )
 
@@ -2440,6 +2777,108 @@ def _daily_picks_quality_rows_by_code(picks_path: Path) -> dict[str, dict[str, A
             if nc:
                 out[nc] = row
     return out
+
+
+def _daily_picks_scored_rows_by_code(picks_path: Path) -> dict[str, dict[str, Any]]:
+    """daily_picks.json 中带形态 score 的行（优质股/优质标的/观察股）。"""
+    if not picks_path.is_file():
+        return {}
+    try:
+        j = json.loads(picks_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for key in ("优质股", "优质标的", "观察股"):
+        rows = j.get(key)
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            nc = normalize_stock_code(str(row.get("code") or "").strip())
+            if nc:
+                out[nc] = row
+    return out
+
+
+def _hot_stock_rank_map_from_cache() -> dict[str, int]:
+    try:
+        from quote_tushare import _hot_stock_rank_map_from_blob, _read_hot_stock_cache_blob
+
+        return _hot_stock_rank_map_from_blob(_read_hot_stock_cache_blob())
+    except Exception:
+        return {}
+
+
+def _build_hot_stock_quality_items(
+    items: list[dict[str, Any]],
+    *,
+    picks_path: Path,
+    cfg: dict[str, Any],
+    scored_rows_by_code: dict[str, dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    """热股榜 ∩ daily_picks 有 score 的标的，按形态评分降序取前 N。"""
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    if not bool(disp.get("show_hot_stock_quality", True)):
+        return []
+    try:
+        display_n = max(1, int(disp.get("hot_stock_display_count", 10) or 10))
+    except (TypeError, ValueError):
+        display_n = 10
+    try:
+        hot_top_n = max(display_n, int(disp.get("hot_stock_top_n", 50) or 50))
+    except (TypeError, ValueError):
+        hot_top_n = 50
+
+    try:
+        from quote_tushare import fetch_hot_stocks
+
+        hot_codes = fetch_hot_stocks(cache_only=True, top_n=hot_top_n)
+    except Exception:
+        logging.getLogger(__name__).debug("读取热股榜缓存失败", exc_info=True)
+        return []
+    if not hot_codes:
+        return []
+
+    rank_map = _hot_stock_rank_map_from_cache()
+    rows = scored_rows_by_code or _daily_picks_scored_rows_by_code(picks_path)
+
+    pack_by_code: dict[str, dict[str, Any]] = {}
+    for x in items:
+        if x.get("tagged"):
+            continue
+        c = _pack_stock_code(x)
+        if c:
+            pack_by_code[c] = x
+
+    ranked: list[tuple[float, int, str]] = []
+    for i, c in enumerate(hot_codes):
+        nc = normalize_stock_code(c)
+        if not nc or nc not in pack_by_code:
+            continue
+        row = rows.get(nc)
+        if not isinstance(row, dict) or row.get("score") is None:
+            continue
+        try:
+            score_f = float(row["score"])
+        except (TypeError, ValueError):
+            continue
+        hot_rank = int(rank_map.get(nc, i + 1))
+        ranked.append((score_f, hot_rank, nc))
+
+    ranked.sort(key=lambda t: (-t[0], t[1]))
+    out_items: list[dict[str, Any]] = []
+    for _sc, rk, nc in ranked[:display_n]:
+        pack = pack_by_code[nc]
+        pack["_hot_stock_rank"] = rk
+        out_items.append(pack)
+
+    out_items = _filter_watch_packs_by_strategy_sell_score(
+        out_items, cfg, log_label="热股榜精选"
+    )
+    return _filter_watch_packs_for_quality_display(
+        out_items, cfg, log_label="热股榜精选"
+    )
 
 
 def _reason_head_segment(reason: str) -> str:
@@ -2501,6 +2940,512 @@ def _emit_quality_pick_reason_lines(
     )
 
 
+def _emit_hot_stock_quality_reason_lines(
+    row: dict[str, Any],
+    *,
+    hot_rank: int | None,
+    code: str,
+    rk: str | None,
+) -> None:
+    """【热股榜精选】：热股排名 + 形态评分（及可选回测摘要）。"""
+    head: list[str] = []
+    if hot_rank is not None:
+        head.append(f"热股榜排名 {hot_rank}")
+    sc = row.get("score")
+    if sc is not None:
+        try:
+            head.append(f"形态评分 {float(sc):.2f}")
+        except (TypeError, ValueError):
+            head.append(f"形态评分 {sc}")
+    if not head:
+        return
+    _emit_watch_line(
+        "      └ 入选理由：" + "｜".join(head),
+        event="watch_hot_stock_quality_reason",
+        code=code,
+        rk=rk,
+    )
+    bt = row.get("backtest")
+    bt_d = bt if isinstance(bt, dict) else {}
+    y1 = bt_d.get("1y")
+    y1_d = y1 if isinstance(y1, dict) else {}
+    pf = y1_d.get("profit")
+    extra: list[str] = []
+    if pf is not None:
+        try:
+            extra.append(f"1年回测收益 {float(pf):+.1f}%")
+        except (TypeError, ValueError):
+            pass
+    rh = _reason_head_segment(str(row.get("reason") or ""))
+    if rh:
+        extra.append(f"逻辑 {rh}")
+    if extra:
+        _emit_watch_line(
+            "      └ " + "｜".join(extra),
+            event="watch_hot_stock_quality_extra",
+            code=code,
+            rk=rk,
+        )
+
+
+def _factor_float(v: Any) -> float | None:
+    if v is None or str(v).strip() in ("", "nan", "None"):
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def _pct_factor(v: Any) -> str | None:
+    f = _factor_float(v)
+    if f is None or f == 0:
+        return None
+    return f"{f * 100.0:+.1f}%"
+
+
+def _money_wan_factor(v: Any) -> str | None:
+    f = _factor_float(v)
+    if f is None or f == 0:
+        return None
+    return f"{f / 10000.0:+.0f}万"
+
+
+def _pct_factor_cn(v: Any, *, abnormal_high: float | None = None) -> str | None:
+    f = _factor_float(v)
+    if f is None or f == 0:
+        return None
+    pct = f * 100.0
+    s = f"{pct:+.1f}%"
+    if abnormal_high is not None and abs(pct) > abnormal_high:
+        s += "（异常高）"
+    return s
+
+
+def _plain_pct_factor_cn(v: Any, *, abnormal_high: float | None = None) -> str | None:
+    s = _pct_factor_cn(v, abnormal_high=abnormal_high)
+    return s[1:] if s and s.startswith("+") else s
+
+
+def _format_roe(roe: Any) -> str | None:
+    f = _factor_float(roe)
+    if f is None or f == 0:
+        return None
+    pct = f * 100.0
+    if pct < -30.0:
+        return f"{pct:.1f}%（严重亏损）"
+    if pct < 0.0:
+        return f"{pct:.1f}%（亏损）"
+    if pct > 50.0:
+        return f"{pct:.1f}%（异常高）"
+    return f"{pct:.1f}%"
+
+
+def _format_profit_yoy(profit_yoy: Any) -> str | None:
+    f = _factor_float(profit_yoy)
+    if f is None or f == 0:
+        return None
+    pct = f * 100.0
+    s = f"{pct:+.1f}%"
+    if pct < -50.0:
+        s += "（暴降）"
+    return s
+
+
+def _margin_change_factor_cn(v: Any) -> str | None:
+    f = _factor_float(v)
+    if f is None or f == 0:
+        return None
+    if abs(f) > 1.0:
+        return "大幅波动"
+    return f"{f * 100.0:+.1f}%"
+
+
+def _money_yi_factor(v: Any) -> str | None:
+    f = _factor_float(v)
+    if f is None or f == 0:
+        return None
+    return f"{f / 100000000.0:.2f}亿"
+
+
+def _flow_yi_factor(v_yi: Any, *, yuan: Any = None) -> str | None:
+    """资金流展示：优先亿元字段，否则由元换算；格式 +X.X亿。"""
+    f = _factor_float(v_yi)
+    if f is None and yuan is not None:
+        y = _factor_float(yuan)
+        if y is not None:
+            f = y / 100000000.0
+    if f is None or f == 0:
+        return None
+    return f"{f:+.1f}亿"
+
+
+def _format_margin_balance(balance: Any) -> str | None:
+    f = _factor_float(balance)
+    if f is None or f <= 0:
+        return None
+    # margin_detail.rzye 为个股融资余额（元）；误用 pro.margin 交易所汇总约 1e12 级
+    yi = f / 100000000.0
+    if yi > 500.0:
+        return None
+    return f"{yi:.2f}亿"
+
+
+def _factor_percent_points(v: Any) -> float | None:
+    f = _factor_float(v)
+    if f is None:
+        return None
+    return f * 100.0 if abs(f) <= 5.0 else f
+
+
+def _get_factor_comment(factors: dict[str, Any], *, dual_hot: bool = False) -> str:
+    """按优先级把财务/融资/机构因子翻成一句通俗简评。"""
+    if dual_hot:
+        return "🔥🔥 双热点共振，可重点关注"
+    fs = factors if isinstance(factors, dict) else {}
+    roe = _factor_percent_points(fs.get("roe_ttm"))
+    revenue = _factor_percent_points(fs.get("revenue_yoy"))
+    profit = _factor_percent_points(fs.get("profit_yoy"))
+    margin_chg = _factor_percent_points(fs.get("margin_change_pct_5d"))
+    pe = _factor_float(fs.get("pe_ttm"))
+    inst_buy_net = _factor_float(fs.get("inst_buy_net"))
+    inst_buy_count = _factor_float(fs.get("inst_buy_count"))
+
+    if roe is not None and roe < -20.0:
+        return "⚠️ 严重亏损，风险极高，建议卖出"
+    if roe is not None and -20.0 <= roe < 0.0:
+        return "⚠️ 亏损状态，谨慎参与"
+    if revenue is not None and profit is not None and revenue > 10.0 and profit < -10.0:
+        return "📉 增收不增利，警惕利润陷阱"
+    if profit is not None and revenue is not None and profit > 100.0 and revenue > 20.0:
+        return "🔥 业绩爆发，可重点关注"
+    if profit is not None and revenue is not None and profit > 50.0 and revenue > 15.0:
+        return "📈 高速成长，积极关注"
+    if profit is not None and revenue is not None and profit > 20.0 and revenue > 10.0:
+        return "✅ 稳健增长，正常关注"
+    if pe is not None and roe is not None and pe > 50.0 and roe < 10.0:
+        return "💰 估值偏高，注意回调风险"
+    if (
+        inst_buy_net is not None
+        and inst_buy_count is not None
+        and inst_buy_net > 5_000_000.0
+        and inst_buy_count >= 1
+    ):
+        return "🏦 机构净买入，有资金关注"
+    if margin_chg is not None and abs(margin_chg) > 100.0:
+        return "📊 融资余额大幅波动，短线不确定"
+    return "📊 基本面中性，结合技术面决策"
+
+
+def _positive_number_factor(v: Any, *, decimals: int = 1) -> str | None:
+    f = _factor_float(v)
+    if f is None or f <= 0:
+        return None
+    return f"{f:.{decimals}f}"
+
+
+def _format_stock_factor_summary(
+    code: str,
+    cfg: dict[str, Any],
+    *,
+    dual_hot: bool | None = None,
+    root: Path | None = None,
+    state: dict[str, Any] | None = None,
+    picks_path: Path | None = None,
+) -> str | None:
+    qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
+    if not (
+        bool(qs.get("enable_financial_factors", False))
+        or bool(qs.get("enable_margin_factors", False))
+        or bool(qs.get("enable_top_inst_factors", False))
+        or bool(qs.get("enable_moneyflow_factors", True))
+        or bool(qs.get("enable_industry_moneyflow_factors", True))
+        or bool(qs.get("enable_hot_stock_factors", True))
+        or bool(qs.get("enable_hot_concept_factors", True))
+        or bool(qs.get("enable_broker_recommend_factors", True))
+    ):
+        return None
+    try:
+        from quote_tushare import (
+            ensure_sw_map_for_codes,
+            fetch_financial_factors,
+            fetch_margin_factor,
+            fetch_moneyflow_individual,
+            fetch_moneyflow_industry,
+            fetch_top_inst_factor,
+            get_broker_recommend_count,
+            hot_concept_factor_label,
+            is_hot_stock,
+        )
+    except Exception:
+        return None
+
+    parts: list[str] = []
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    simple = bool(disp.get("simplify_factor_text", True))
+    if bool(qs.get("enable_financial_factors", False)):
+        try:
+            fin = fetch_financial_factors(code, cache_only=True) or {}
+        except Exception:
+            fin = {}
+        if simple:
+            roe = _format_roe(fin.get("roe_ttm"))
+            rev = _pct_factor_cn(fin.get("revenue_yoy"))
+            prof = _format_profit_yoy(fin.get("profit_yoy"))
+        else:
+            roe = _pct_factor(fin.get("roe_ttm"))
+            rev = _pct_factor(fin.get("revenue_yoy"))
+            prof = _pct_factor(fin.get("profit_yoy"))
+        pe = fin.get("pe_ttm")
+        pb = fin.get("pb")
+        if roe:
+            parts.append(f"{'净资产收益率' if simple else 'ROE'} {roe}")
+        if rev:
+            parts.append(f"{'营收同比' if simple else '营收YoY'} {rev}")
+        if prof:
+            parts.append(f"{'净利润同比' if simple else '净利YoY'} {prof}")
+        pe_s = _positive_number_factor(pe, decimals=1)
+        if pe_s:
+            parts.append(f"{'市盈率' if simple else 'PEttm'} {pe_s}")
+        pb_s = _positive_number_factor(pb, decimals=1)
+        if pb_s:
+            parts.append(f"{'市净率' if simple else 'PB'} {pb_s}")
+    if bool(qs.get("enable_margin_factors", False)):
+        try:
+            margin = fetch_margin_factor(code, cache_only=True) or {}
+        except Exception:
+            margin = {}
+        mb = (
+            _format_margin_balance(margin.get("margin_balance"))
+            if simple
+            else _money_wan_factor(margin.get("margin_balance"))
+        )
+        mchg = None
+        if mb or not simple:
+            mchg = (
+                _margin_change_factor_cn(margin.get("margin_change_pct_5d"))
+                if simple
+                else _pct_factor(margin.get("margin_change_pct_5d"))
+            )
+        if mchg:
+            parts.append(f"{'融资余额5日变化' if simple else '融资5日'} {mchg}")
+        if mb:
+            parts.append(f"融资余额 {mb}")
+    if bool(qs.get("enable_top_inst_factors", False)):
+        try:
+            top = fetch_top_inst_factor(code, cache_only=True) or {}
+        except Exception:
+            top = {}
+        net = (
+            _money_yi_factor(top.get("inst_buy_net"))
+            if simple
+            else _money_wan_factor(top.get("inst_buy_net"))
+        )
+        cnt = top.get("inst_buy_count")
+        if net:
+            suffix = ""
+            try:
+                if cnt is not None:
+                    suffix = f"/{int(cnt)}次"
+            except (TypeError, ValueError):
+                suffix = ""
+            parts.append(f"机构净买 {net}{suffix}")
+    if bool(qs.get("enable_moneyflow_factors", True)) and bool(
+        disp.get("show_moneyflow_in_factor", True)
+    ):
+        try:
+            mf = fetch_moneyflow_individual(code, cache_only=True) or {}
+        except Exception:
+            mf = {}
+        mf5 = _flow_yi_factor(mf.get("net_main_5d_yi"), yuan=mf.get("net_main_5d"))
+        if mf5:
+            parts.append(f"主力净流 {mf5}")
+    if bool(qs.get("enable_industry_moneyflow_factors", True)) and bool(
+        disp.get("show_industry_moneyflow_in_factor", True)
+    ):
+        try:
+            sw_map = ensure_sw_map_for_codes([code])
+            sw = str(sw_map.get(str(code).strip().zfill(6)[-6:] or "") or "").strip().upper()
+            ind = fetch_moneyflow_industry(sw, cache_only=True) or {} if sw else {}
+        except Exception:
+            ind = {}
+        ind5 = _flow_yi_factor(ind.get("net_main_5d_yi"), yuan=ind.get("net_main_5d"))
+        if ind5:
+            parts.append(f"行业净流 {ind5}")
+    if bool(qs.get("enable_hot_stock_factors", True)) and bool(
+        disp.get("show_hot_stock_in_factor", True)
+    ):
+        try:
+            if is_hot_stock(code, cache_only=True):
+                parts.append("🔥热门")
+        except Exception:
+            pass
+    if bool(qs.get("enable_broker_recommend_factors", True)) and bool(
+        disp.get("show_broker_recommend_in_factor", True)
+    ):
+        try:
+            br_cnt = get_broker_recommend_count(code, cache_only=True)
+            if br_cnt > 0:
+                parts.append(f"📄券商推 {br_cnt}次")
+        except Exception:
+            pass
+    if bool(qs.get("enable_hot_concept_factors", True)) and bool(
+        disp.get("show_hot_concept_in_factor", True)
+    ):
+        try:
+            hc_lbl = hot_concept_factor_label(code, cache_only=True)
+            if hc_lbl:
+                parts.append(hc_lbl)
+        except Exception:
+            pass
+    if dual_hot is None:
+        dual_hot = stock_is_dual_hot_resonance(
+            code, cfg, root=root, state=state, picks_path=picks_path
+        )
+    if dual_hot:
+        parts.append("🔥🔥")
+    if not parts:
+        return None
+    return "      └ 【因子】" + "｜".join(parts)
+
+
+def _stock_factor_snapshot_for_comment(code: str, cfg: dict[str, Any]) -> dict[str, Any]:
+    qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
+    if not isinstance(qs, dict):
+        return {}
+    try:
+        from quote_tushare import (
+            fetch_financial_factors,
+            fetch_margin_factor,
+            fetch_top_inst_factor,
+        )
+    except Exception:
+        return {}
+
+    factors: dict[str, Any] = {}
+    if bool(qs.get("enable_financial_factors", False)):
+        try:
+            factors.update(fetch_financial_factors(code, cache_only=True) or {})
+        except Exception:
+            pass
+    if bool(qs.get("enable_margin_factors", False)):
+        try:
+            factors.update(fetch_margin_factor(code, cache_only=True) or {})
+        except Exception:
+            pass
+    if bool(qs.get("enable_top_inst_factors", False)):
+        try:
+            factors.update(fetch_top_inst_factor(code, cache_only=True) or {})
+        except Exception:
+            pass
+    return factors
+
+
+def _format_stock_factor_comment(
+    code: str,
+    cfg: dict[str, Any],
+    *,
+    dual_hot: bool | None = None,
+    root: Path | None = None,
+    state: dict[str, Any] | None = None,
+    picks_path: Path | None = None,
+) -> str | None:
+    if dual_hot is None:
+        dual_hot = stock_is_dual_hot_resonance(
+            code, cfg, root=root, state=state, picks_path=picks_path
+        )
+    if dual_hot:
+        return "      └ 【简评】" + _get_factor_comment({}, dual_hot=True)
+    factors = _stock_factor_snapshot_for_comment(code, cfg)
+    if not factors:
+        return None
+    return "      └ 【简评】" + _get_factor_comment(factors)
+
+
+def _emit_stock_factor_summary_line(
+    *,
+    code: str,
+    cfg: dict[str, Any],
+    rk: str | None,
+    bucket: str | None,
+    state: dict[str, Any] | None = None,
+    picks_path: Path | None = None,
+) -> None:
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    if not bool(disp.get("show_factor_summary", True)):
+        return
+    if str(bucket or "") not in {"持仓", "优质", "热门", "热股精选"}:
+        return
+    line = _format_stock_factor_summary(
+        code, cfg, state=state, picks_path=picks_path
+    )
+    if not line:
+        return
+    _emit_watch_line(line, event="watch_factor_summary", code=code, rk=rk)
+    if bool(disp.get("show_factor_comment", True)):
+        comment = _format_stock_factor_comment(
+            code, cfg, state=state, picks_path=picks_path
+        )
+        if comment:
+            _emit_watch_line(comment, event="watch_factor_comment", code=code, rk=rk)
+
+
+def _emit_hot_stock_list_section(cfg: dict[str, Any]) -> None:
+    """控制台【热股榜机会】：同花顺热股榜前 N，不经行业过滤（默认关闭）。"""
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    if not bool(disp.get("show_hot_stock_list", False)):
+        return
+    try:
+        top_n = max(1, int(disp.get("hot_stock_list_top_n", 10) or 10))
+    except (TypeError, ValueError):
+        top_n = 10
+    try:
+        from quote_tushare import configure_tushare_from_sources, fetch_hot_stocks_ranked
+
+        configure_tushare_from_sources(cfg.get("sources"))
+        ranked = fetch_hot_stocks_ranked(cache_only=True, top_n=top_n)
+    except Exception:
+        logging.getLogger(__name__).debug("热股榜分区", exc_info=True)
+        ranked = []
+    if not ranked:
+        return
+    _emit_main_line(
+        "\n---------- 【热股榜机会】 ----------",
+        event="poll_hot_stock_list_header",
+    )
+    ut = resolve_ut(cfg)
+    tstr = datetime.now().strftime("%H:%M:%S")
+    for code, rank in ranked:
+        mkt = _infer_market(code)
+        name = get_stock_name(code)
+        price_txt = "—"
+        chg_show = "—"
+        chg_color: float | None = None
+        try:
+            qm = fetch_quote_metrics(code, mkt, ut=str(ut))
+            px = float(qm.get("price") or 0)
+            if px > 0:
+                price_txt = f"{px:.2f}"
+            chg_color, chg_show = _quote_day_change_pct(qm)
+            if chg_color is None:
+                chg_show = "—"
+            else:
+                chg_show = f"{chg_show:+.2f}%"
+        except Exception:
+            logging.getLogger(__name__).debug(
+                "热股榜行情 %s", code, exc_info=True
+            )
+        base = (
+            f"  [{tstr}] 热股#{rank} {code} ({name}) "
+            f"现价 {price_txt} 当日 {chg_show}"
+        )
+        _emit_main_line(
+            color_line(chg_color, base) if chg_color is not None else base,
+            event="poll_hot_stock_list_row",
+            code=code,
+        )
+
+
 def _buy_filter_reason_to_plain_cn(br: str) -> str:
     """把 _strategy_buy_realtime_blocked 返回的技术串翻成短大白话。"""
     if not br:
@@ -2514,6 +3459,8 @@ def _buy_filter_reason_to_plain_cn(br: str) -> str:
         tips.append("在当天价位区间里位置不合适（怕追高或抄在半山腰）")
     if "板块" in br:
         tips.append("和板块强弱那一关没过")
+    if "基本面" in br or "净资产收益率" in br or "市盈率" in br:
+        tips.append("基本面闸门没过（净资产收益率或市盈率不达标）")
     return "；".join(tips) if tips else br[:120]
 
 
@@ -2650,6 +3597,47 @@ def _should_run_startup_daily_select(cfg: dict[str, Any], args: Any) -> bool:
     if bool(mon.get("skip_startup_daily_select", False)):
         return False
     return True
+
+
+def _daily_picks_generated_day(picks_path: Path) -> str | None:
+    """读取 daily_picks.json 的 generated_at 日期，失败返回 None。"""
+    if not picks_path.is_file():
+        return None
+    try:
+        raw = json.loads(picks_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(raw, dict):
+        return None
+    generated_at = str(raw.get("generated_at") or "").strip()
+    if not generated_at:
+        return None
+    # 兼容 2026-05-26T08:01:22 / 2026-05-26 08:01:22 / ISO 带时区。
+    m = re.match(r"^(\d{4}-\d{2}-\d{2})", generated_at)
+    return m.group(1) if m else None
+
+
+def _daily_select_done_today(
+    *,
+    config_path: Path,
+    state: dict[str, Any] | None,
+    today: str,
+) -> bool:
+    """今天是否已完成 daily_select。
+
+    这里同时看内存/持久 state、daily_picks.generated_at 与 picks_history 快照。
+    这样无论是本进程启动时刚跑完，还是用户手动提前跑过，都不会在 preopen 再跑一遍。
+    """
+    st = state or {}
+    if st.get("__daily_select_done__") == today:
+        return True
+    if st.get("__startup_daily_select_done__") == today:
+        return True
+    picks_path = config_path.parent / "daily_picks.json"
+    if _daily_picks_generated_day(picks_path) == today:
+        return True
+    hist_path = config_path.parent / "data" / "picks_history" / f"{today}.json"
+    return hist_path.is_file()
 
 
 def _build_watch_from_daily_picks(cfg: dict[str, Any], cfg_path: Path) -> tuple[list[dict[str, Any]], str]:
@@ -4699,6 +5687,153 @@ def _dip_pick_passes_display_filter(
     return True
 
 
+def _quality_stock_filters_from_cfg(cfg: dict[str, Any]) -> dict[str, Any]:
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    raw = disp.get("quality_stock_filters")
+    merged = dict(DEFAULT_QUALITY_STOCK_FILTERS)
+    if isinstance(raw, dict):
+        merged.update(raw)
+    return merged
+
+
+def _quality_stock_volume_ratio(pack: dict[str, Any]) -> float | None:
+    q = pack.get("q") or {}
+    try:
+        px = float(q.get("price") or 0.0)
+    except (TypeError, ValueError):
+        px = 0.0
+    if px > 0:
+        _fill_position_suggestion_metrics(pack, px)
+    vr = pack.get("_ps_vol_ratio")
+    if vr is None:
+        return None
+    try:
+        f = float(vr)
+        return f if math.isfinite(f) else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _pack_has_raw_buy_signal(pack: dict[str, Any], cfg: dict[str, Any]) -> bool:
+    q = pack.get("q") or {}
+    if not isinstance(q, dict):
+        return False
+    try:
+        now_price = float(q.get("price") or 0.0)
+    except (TypeError, ValueError):
+        return False
+    if now_price <= 0:
+        return False
+    kline = pack.get("kline")
+    if not isinstance(kline, dict):
+        return False
+    min_by = (cfg.get("strategy_signal") or {}).get("min_score_by_strategy")
+    raw_sig = ma_box_strategy(
+        now_price,
+        kline,
+        min_score_by_strategy=min_by if isinstance(min_by, dict) else None,
+    )
+    return bool(raw_sig and "【买入信号】" in str(raw_sig))
+
+
+def _should_display_quality_stock(
+    pack: dict[str, Any],
+    cfg: dict[str, Any],
+    *,
+    quote: dict[str, Any] | None = None,
+    is_held: bool | None = None,
+) -> bool:
+    """
+    「今日优质股」「热门板块优质股」回调过滤：涨幅/日内位置/量比（及可选买入信号）。
+    持仓 hold_shares>0 豁免；无有效现价时不过滤。
+    """
+    filt = _quality_stock_filters_from_cfg(cfg)
+    if not bool(filt.get("enabled", True)):
+        return True
+    rule = pack.get("rule") if isinstance(pack.get("rule"), dict) else {}
+    if is_held is None:
+        try:
+            is_held = int(rule.get("hold_shares") or 0) > 0
+        except (TypeError, ValueError):
+            is_held = False
+    if is_held:
+        return True
+
+    q = quote if isinstance(quote, dict) else (pack.get("q") or {})
+    if not isinstance(q, dict) or float(q.get("price") or 0.0) <= 0:
+        return True
+
+    try:
+        min_chg = float(filt.get("min_change_pct", -2.0))
+    except (TypeError, ValueError):
+        min_chg = -2.0
+    try:
+        max_chg = float(filt.get("max_change_pct", 5.0))
+    except (TypeError, ValueError):
+        max_chg = 5.0
+    chg_color, _ = _quote_day_change_pct(q)
+    if chg_color is not None:
+        if float(chg_color) < min_chg or float(chg_color) > max_chg:
+            return False
+
+    try:
+        max_pos = float(filt.get("max_intraday_position", 0.7))
+    except (TypeError, ValueError):
+        max_pos = 0.7
+    max_pos = max(0.01, min(0.99, max_pos))
+    from midday_ops import intraday_position_from_ohlc
+
+    pos_raw = q.get("intraday_position")
+    pos: float | None
+    if pos_raw is not None:
+        try:
+            pos = float(pos_raw)
+        except (TypeError, ValueError):
+            pos = intraday_position_from_ohlc(q)
+    else:
+        pos = intraday_position_from_ohlc(q)
+    if pos is not None and float(pos) >= max_pos:
+        return False
+
+    try:
+        min_vr = float(filt.get("min_volume_ratio", 1.0))
+    except (TypeError, ValueError):
+        min_vr = 1.0
+    if min_vr > 0:
+        vr = _quality_stock_volume_ratio(pack)
+        if vr is None or float(vr) < min_vr:
+            return False
+
+    if bool(filt.get("require_buy_signal", False)):
+        if not _pack_has_raw_buy_signal(pack, cfg):
+            return False
+
+    return True
+
+
+def _filter_watch_packs_for_quality_display(
+    packs: list[dict[str, Any]],
+    cfg: dict[str, Any],
+    *,
+    log_label: str,
+) -> list[dict[str, Any]]:
+    filt = _quality_stock_filters_from_cfg(cfg)
+    if not bool(filt.get("enabled", True)):
+        return list(packs)
+    log = logging.getLogger(__name__)
+    out: list[dict[str, Any]] = []
+    for x in packs:
+        if _should_display_quality_stock(x, cfg):
+            out.append(x)
+            continue
+        log.debug(
+            "[%s回调过滤] 股票 %s 不满足 quality_stock_filters，已隐藏",
+            log_label,
+            _pack_stock_code(x) or "",
+        )
+    return out
+
+
 def _strategy_sell_score_max_from_cfg(cfg: dict[str, Any]) -> float:
     qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
     scf = (
@@ -5588,6 +6723,200 @@ def _run_local_script(argv: list[str], *, event: str) -> bool:
     return False
 
 
+def _update_financial_factors_for_all_candidates(
+    cfg: dict[str, Any],
+    *,
+    config_path: Path,
+) -> dict[str, int] | None:
+    qs = cfg.get("quant_selector") if isinstance(cfg, dict) else {}
+    if not isinstance(qs, dict):
+        return None
+    if not (
+        bool(qs.get("enable_financial_factors", False))
+        or bool(qs.get("enable_margin_factors", False))
+        or bool(qs.get("enable_top_inst_factors", False))
+    ):
+        return None
+
+    codes = _collect_factor_refresh_codes(cfg, config_path=config_path)
+    if not codes:
+        return {"financial": 0, "margin": 0, "top_inst": 0}
+
+    from utils import configure_ssl_from_sources
+    from quote_tushare import (
+        configure_tushare_from_sources,
+        update_financial_factors_for_all_candidates,
+    )
+
+    configure_ssl_from_sources(cfg.get("sources"))
+    configure_tushare_from_sources(cfg.get("sources"))
+    return update_financial_factors_for_all_candidates(
+        codes,
+        include_margin=bool(qs.get("enable_margin_factors", False)),
+        include_top_inst=bool(qs.get("enable_top_inst_factors", False)),
+    )
+
+
+def _collect_factor_refresh_codes(cfg: dict[str, Any], *, config_path: Path) -> set[str]:
+    codes: set[str] = set()
+    for rule in cfg.get("watchlist") or []:
+        if not isinstance(rule, dict):
+            continue
+        c = normalize_stock_code(str(rule.get("code") or ""))
+        if c:
+            codes.add(c)
+    try:
+        codes |= _load_quality_codes(config_path.parent / "daily_picks.json")
+    except Exception:
+        pass
+    return codes
+
+
+def _update_special_factors_for_all_candidates(
+    cfg: dict[str, Any],
+    *,
+    config_path: Path,
+) -> dict[str, int] | None:
+    qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
+    if not isinstance(qs, dict):
+        return None
+    if not (
+        bool(qs.get("enable_moneyflow_factors", True))
+        or bool(qs.get("enable_industry_moneyflow_factors", True))
+        or bool(qs.get("enable_hot_stock_factors", True))
+        or bool(qs.get("enable_hot_concept_factors", True))
+        or bool(qs.get("enable_broker_recommend_factors", True))
+    ):
+        return None
+    codes = _collect_factor_refresh_codes(cfg, config_path=config_path)
+    if not codes:
+        return {
+            "stock_moneyflow": 0,
+            "industry_moneyflow": 0,
+            "hot_stocks": 0,
+            "broker_recommend": 0,
+            "concept_members": 0,
+            "hot_concept_stocks": 0,
+        }
+
+    from utils import configure_ssl_from_sources
+    from quote_tushare import (
+        configure_tushare_from_sources,
+        load_stock_to_sw_map_for_factors,
+        update_tushare_special_factors_for_candidates,
+    )
+
+    configure_ssl_from_sources(cfg.get("sources"))
+    configure_tushare_from_sources(cfg.get("sources"))
+    sw_map = load_stock_to_sw_map_for_factors(config_path.parent)
+    try:
+        concept_top_n = max(1, int(qs.get("hot_concept_top_n", 5) or 5))
+    except (TypeError, ValueError):
+        concept_top_n = 5
+    return update_tushare_special_factors_for_candidates(
+        codes,
+        code_to_sw=sw_map,
+        concept_top_n=concept_top_n,
+    )
+
+
+def _maybe_refresh_intraday_factor_cache(
+    *,
+    cfg: dict[str, Any],
+    state: dict[str, Any],
+    config_path: Path,
+    now: datetime,
+) -> None:
+    qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
+    if not isinstance(qs, dict) or not bool(qs.get("factor_intraday_refresh_enabled", True)):
+        return
+    if not is_trading_session():
+        return
+    try:
+        interval = max(60, int(qs.get("factor_refresh_interval_sec", 600) or 600))
+    except (TypeError, ValueError):
+        interval = 600
+    last = state.get("__factor_cache_intraday_last_ts__")
+    try:
+        last_ts = float(last or 0.0)
+    except (TypeError, ValueError):
+        last_ts = 0.0
+    now_ts = now.timestamp()
+    if now_ts - last_ts < interval:
+        return
+    state["__factor_cache_intraday_last_ts__"] = now_ts
+    stats = _update_financial_factors_for_all_candidates(cfg, config_path=config_path)
+    if isinstance(stats, dict):
+        _emit_main_line(
+            "[自动化] 盘中因子缓存刷新："
+            f"financial={stats.get('financial', 0)} "
+            f"margin={stats.get('margin', 0)} "
+            f"top_inst={stats.get('top_inst', 0)}"
+            f"｜间隔 {interval}s",
+            event="intraday_financial_factors_ok",
+        )
+
+
+def _maybe_refresh_intraday_hot_stock_cache(
+    *,
+    cfg: dict[str, Any],
+    state: dict[str, Any],
+    now: datetime,
+) -> None:
+    """盘中/盘后 22:30 前定时刷新同花顺热股榜（ths_hot is_new=N）。"""
+    qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
+    if not isinstance(qs, dict) or not bool(qs.get("enable_hot_stock_factors", True)):
+        return
+    if not bool(qs.get("hot_stock_intraday_refresh_enabled", True)):
+        return
+    if now.weekday() >= 5:
+        return
+    t = now.time()
+    if t < dt_time(9, 25) or t > dt_time(22, 35):
+        return
+    try:
+        interval = max(
+            1800, int(qs.get("hot_stock_refresh_interval_sec", 1800) or 1800)
+        )
+    except (TypeError, ValueError):
+        interval = 1800
+    last = state.get("__hot_stock_intraday_last_ts__")
+    try:
+        last_ts = float(last or 0.0)
+    except (TypeError, ValueError):
+        last_ts = 0.0
+    if now.timestamp() - last_ts < interval:
+        return
+    state["__hot_stock_intraday_last_ts__"] = now.timestamp()
+    try:
+        from utils import configure_ssl_from_sources
+        from quote_tushare import (
+            configure_tushare_from_sources,
+            fetch_hot_stocks,
+            read_hot_stock_cache_meta,
+            _ths_hot_preferred_is_new,
+        )
+
+        configure_ssl_from_sources(cfg.get("sources"))
+        configure_tushare_from_sources(cfg.get("sources"))
+        prefer = _ths_hot_preferred_is_new(now)
+        hot = fetch_hot_stocks(top_n=50, force_refresh=True)
+        meta = read_hot_stock_cache_meta()
+        _emit_main_line(
+            "[自动化] 盘中热股榜缓存已刷新："
+            f"{len(hot)} 只｜is_new={meta.get('is_new') or prefer}"
+            f"｜rank_time={meta.get('rank_time') or '—'}"
+            f"｜间隔 {interval}s",
+            event="intraday_hot_stock_cache_ok",
+        )
+    except Exception as exc:
+        _emit_main_line(
+            f"[自动化] 盘中热股榜刷新异常: {exc}",
+            event="intraday_hot_stock_cache_fail",
+            level=logging.WARNING,
+        )
+
+
 def _maybe_run_ops_automation(
     *,
     cfg: dict[str, Any],
@@ -5648,13 +6977,37 @@ def _maybe_run_ops_automation(
                 level=logging.WARNING,
             )
 
+    try:
+        _maybe_refresh_intraday_factor_cache(
+            cfg=cfg,
+            state=state,
+            config_path=config_path,
+            now=now,
+        )
+    except Exception as exc:
+        _emit_main_line(
+            f"[自动化] 盘中因子缓存刷新异常: {exc}",
+            event="intraday_financial_factors_fail",
+            level=logging.WARNING,
+        )
+
     # 开盘前任务（每天一次）
     if bool(oa.get("preopen_enabled", True)):
         ph, pm = _parse_hhmm(str(oa.get("preopen_cutoff_hhmm") or "09:20"), 9, 20)
         if now.time() <= dt_time(ph, pm) and state.get("__ops_preopen_done__") != today:
+            daily_select_already_done = _daily_select_done_today(
+                config_path=config_path,
+                state=state,
+                today=today,
+            )
             _emit_main_line(
-                "[自动化] 开盘前任务开始：sync_daily_klines -> compute_kline_indicators -> daily_select"
-                "（选股完成后程序内会再同步一次日 K，含新 picks）",
+                (
+                    "[自动化] 开盘前任务开始：sync_daily_klines -> compute_kline_indicators"
+                    "；今日 daily_select 已完成，本轮跳过重复选股"
+                    if daily_select_already_done
+                    else "[自动化] 开盘前任务开始：sync_daily_klines -> compute_kline_indicators -> daily_select"
+                    "（选股完成后程序内会再同步一次日 K，含新 picks）"
+                ),
                 event="ops_auto_preopen_start",
             )
             _run_local_script(
@@ -5665,10 +7018,18 @@ def _maybe_run_ops_automation(
                 [py, str(ROOT / "compute_kline_indicators.py"), "-c", str(config_path)],
                 event="preopen_compute_indicators",
             )
-            _run_local_script(
-                [py, str(ROOT / "run_alert.py"), "-c", str(config_path), "--daily-select"],
-                event="preopen_daily_select",
-            )
+            if daily_select_already_done:
+                _emit_main_line(
+                    "[自动化] preopen_daily_select 跳过：今日 daily_picks 已生成，避免重复全市场选股",
+                    event="preopen_daily_select_skipped_today",
+                )
+            else:
+                ok = _run_local_script(
+                    [py, str(ROOT / "run_alert.py"), "-c", str(config_path), "--daily-select"],
+                    event="preopen_daily_select",
+                )
+                if ok:
+                    state["__daily_select_done__"] = today
             state["__ops_preopen_done__"] = today
 
     # 收盘后任务（每天一次）
@@ -5736,6 +7097,45 @@ def _maybe_run_ops_automation(
                 _emit_main_line(
                     f"[自动化] 交割单收盘回灌异常: {exc}",
                     event="broker_sync_after_close_fail",
+                    level=logging.WARNING,
+                )
+            try:
+                ff_stats = _update_financial_factors_for_all_candidates(
+                    cfg, config_path=config_path
+                )
+                if isinstance(ff_stats, dict):
+                    _emit_main_line(
+                        "[自动化] 财务/融资/龙虎榜因子缓存已刷新："
+                        f"financial={ff_stats.get('financial', 0)} "
+                        f"margin={ff_stats.get('margin', 0)} "
+                        f"top_inst={ff_stats.get('top_inst', 0)}",
+                        event="after_close_financial_factors_ok",
+                    )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] 财务/融资/龙虎榜因子缓存刷新异常: {exc}",
+                    event="after_close_financial_factors_fail",
+                    level=logging.WARNING,
+                )
+            try:
+                sp_stats = _update_special_factors_for_all_candidates(
+                    cfg, config_path=config_path
+                )
+                if isinstance(sp_stats, dict):
+                    _emit_main_line(
+                        "[自动化] Tushare特色因子缓存已刷新："
+                        f"个股流={sp_stats.get('stock_moneyflow', 0)} "
+                        f"行业流={sp_stats.get('industry_moneyflow', 0)} "
+                        f"热股={sp_stats.get('hot_stocks', 0)} "
+                        f"券商金股={sp_stats.get('broker_recommend', 0)} "
+                        f"热门概念={sp_stats.get('hot_concept_stocks', 0)}只"
+                        f"（{sp_stats.get('concept_members', 0)}板块）",
+                        event="after_close_special_factors_ok",
+                    )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] Tushare特色因子缓存刷新异常: {exc}",
+                    event="after_close_special_factors_fail",
                     level=logging.WARNING,
                 )
             try:
@@ -6128,10 +7528,25 @@ def process_watch_pack(
             code=code,
             rk=rk,
         )
-        if quality_pick_row:
+        if buy_mail_bucket == "热股精选" and isinstance(quality_pick_row, dict):
+            _emit_hot_stock_quality_reason_lines(
+                quality_pick_row,
+                hot_rank=pack.get("_hot_stock_rank"),
+                code=code,
+                rk=rk,
+            )
+        elif quality_pick_row:
             _emit_quality_pick_reason_lines(
                 quality_pick_row, code=code, rk=rk
             )
+        _emit_stock_factor_summary_line(
+            code=code,
+            cfg=cfg,
+            rk=rk,
+            bucket=buy_mail_bucket,
+            state=state,
+            picks_path=ROOT / "daily_picks.json",
+        )
         if afternoon_metrics_row:
             _emit_afternoon_opportunity_metrics_line(
                 afternoon_metrics_row, code=code, rk=rk
@@ -6168,8 +7583,23 @@ def process_watch_pack(
         code=code,
         rk=rk,
     )
-    if quality_pick_row:
+    if buy_mail_bucket == "热股精选" and isinstance(quality_pick_row, dict):
+        _emit_hot_stock_quality_reason_lines(
+            quality_pick_row,
+            hot_rank=pack.get("_hot_stock_rank"),
+            code=code,
+            rk=rk,
+        )
+    elif quality_pick_row:
         _emit_quality_pick_reason_lines(quality_pick_row, code=code, rk=rk)
+    _emit_stock_factor_summary_line(
+        code=code,
+        cfg=cfg,
+        rk=rk,
+        bucket=buy_mail_bucket,
+        state=state,
+        picks_path=ROOT / "daily_picks.json",
+    )
     if afternoon_metrics_row:
         _emit_afternoon_opportunity_metrics_line(
             afternoon_metrics_row, code=code, rk=rk
@@ -7172,11 +8602,13 @@ def main() -> int:
 
         return scan_and_save(args.config, force=bool(args.force_scan))
 
+    daily_auto_select_done = False
     if args.daily_select or args.daily_auto:
         rc = _run_auto_daily_select(args)
         if rc != 0:
             return rc
         if args.daily_auto:
+            daily_auto_select_done = True
             _emit_cli_subcmd_line(
                 "[daily-auto] 已完成盘前自动筛选，开始进入盘中监控...",
                 event="cli_daily_auto_into_monitor",
@@ -7256,6 +8688,17 @@ def main() -> int:
     run_startup_daily = would_startup_daily and _should_run_startup_daily_select(
         cfg, args
     )
+    today_for_startup_daily = datetime.now().strftime("%Y-%m-%d")
+    startup_daily_select_already_done = False
+    if run_startup_daily:
+        startup_daily_select_already_done = _daily_select_done_today(
+            config_path=args.config,
+            state=load_state(state_path(args.config)),
+            today=today_for_startup_daily,
+        )
+        if startup_daily_select_already_done:
+            run_startup_daily = False
+    startup_daily_select_done = False
     if run_startup_daily:
         _ensure_app_logging_from_config_path(args.config)
         _emit_cli_subcmd_line(
@@ -7265,12 +8708,19 @@ def main() -> int:
         rc = _run_auto_daily_select(args)
         if rc != 0:
             return rc
+        startup_daily_select_done = True
     elif would_startup_daily:
-        _emit_cli_subcmd_line(
-            "[主流程] 按配置跳过启动盘前选股，直接进入监控"
-            "（watchlist_only / skip_startup_daily_select / --skip-daily-select）",
-            event="cli_startup_daily_select_skipped",
-        )
+        if startup_daily_select_already_done:
+            _emit_cli_subcmd_line(
+                "[主流程] 今日 daily_picks 已生成，跳过启动盘前选股，直接进入监控",
+                event="cli_startup_daily_select_skipped_today",
+            )
+        else:
+            _emit_cli_subcmd_line(
+                "[主流程] 按配置跳过启动盘前选股，直接进入监控"
+                "（watchlist_only / skip_startup_daily_select / --skip-daily-select）",
+                event="cli_startup_daily_select_skipped",
+            )
 
     from app_logging import setup_app_logging
 
@@ -7331,6 +8781,15 @@ def main() -> int:
     force_exclude_codes: set[str] = set()
     st_path = state_path(args.config)
     state = load_state(st_path)
+    today_for_daily_select = datetime.now().strftime("%Y-%m-%d")
+    if startup_daily_select_done:
+        state["__startup_daily_select_done__"] = today_for_daily_select
+        state["__daily_select_done__"] = today_for_daily_select
+    elif startup_daily_select_already_done:
+        state["__daily_select_done__"] = today_for_daily_select
+    elif daily_auto_select_done:
+        state["__daily_auto_select_done__"] = today_for_daily_select
+        state["__daily_select_done__"] = today_for_daily_select
     hydrate_runtime_watch_sets(force_include_codes, force_exclude_codes, state)
     read_cmds = (
         sys.stdin.isatty()
@@ -7440,6 +8899,16 @@ def main() -> int:
                 state=state,
                 config_path=args.config,
             )
+            try:
+                _maybe_refresh_intraday_hot_stock_cache(
+                    cfg=cfg, state=state, now=datetime.now()
+                )
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] 盘中热股榜刷新异常: {exc}",
+                    event="intraday_hot_stock_cache_fail",
+                    level=logging.WARNING,
+                )
             _maybe_poll_email_commands(
                 cfg=cfg,
                 state=state,
@@ -7926,6 +9395,7 @@ def main() -> int:
                 _afternoon_m_by_c = {}
 
             _quality_rows_by_code = _daily_picks_quality_rows_by_code(_picks_path)
+            _scored_rows_by_code = _daily_picks_scored_rows_by_code(_picks_path)
 
             quality_items = [
                 x
@@ -7936,6 +9406,9 @@ def main() -> int:
                 and (qc not in _af_new_for_sec if _af_new_for_sec else True)
             ]
             quality_items = _filter_watch_packs_by_strategy_sell_score(
+                quality_items, cfg, log_label="优质"
+            )
+            quality_items = _filter_watch_packs_for_quality_display(
                 quality_items, cfg, log_label="优质"
             )
 
@@ -7959,6 +9432,13 @@ def main() -> int:
 
             quality_items.sort(key=_quality_items_display_sort_key, reverse=True)
 
+            hot_stock_quality_items = _build_hot_stock_quality_items(
+                items,
+                picks_path=_picks_path,
+                cfg=cfg,
+                scored_rows_by_code=_scored_rows_by_code,
+            )
+
             hot_sector_quality_items = _build_hot_sector_quality_items(
                 items,
                 picks_path=_picks_path,
@@ -7969,7 +9449,12 @@ def main() -> int:
                 af_new_for_sec=_af_new_for_sec,
             )
             if bool((cfg.get("display") or {}).get("hot_sector_quality_enabled", True)):
-                _hs_cache = state.get("__hot_sw_l1_daily__") or {}
+                _rt_hs = state.get("__hot_sector_cache__")
+                _hs_cache = (
+                    _rt_hs
+                    if isinstance(_rt_hs, dict) and _rt_hs.get("codes")
+                    else (state.get("__hot_sw_l1_daily__") or {})
+                )
                 _emit_main_line(
                     f"[热门板块] 热门行业 {len(_hs_cache.get('codes') or [])} 个"
                     f"（{(_hs_cache.get('rank_mode') or '?')}）"
@@ -8032,15 +9517,33 @@ def main() -> int:
                 _rest_pool, cfg, log_label="其余"
             )
 
+            _hot_stock_quality_sec: tuple[str, list[dict[str, Any]], bool] | None = (
+                ("【热股榜精选】", hot_stock_quality_items, False)
+                if hot_stock_quality_items
+                else None
+            )
+            _hsq_order = str(
+                (cfg.get("display") or {}).get(
+                    "hot_stock_quality_section_order", "after_quality"
+                )
+                or "after_quality"
+            )
+
             sections: list[tuple[str, list[dict[str, Any]], bool]] = []
             if tagged_items:
                 sections.append(("【我的持仓】", tagged_items, False))
             if quality_items:
                 sections.append(("【今日优质股】", quality_items, False))
+            if _hot_stock_quality_sec and _hsq_order != "after_hot_sector":
+                sections.append(_hot_stock_quality_sec)
             if hot_sector_quality_items:
                 sections.append(
                     ("【热门板块优质股】", hot_sector_quality_items, False)
                 )
+            if _hot_stock_quality_sec and _hsq_order == "after_hot_sector":
+                sections.append(_hot_stock_quality_sec)
+            if bool((cfg.get("display") or {}).get("show_hot_stock_list", False)):
+                _emit_hot_stock_list_section(cfg)
             if afternoon_opp_items:
                 sections.append(("【下午机会·新增】", afternoon_opp_items, True))
             if top_picks:
@@ -8089,8 +9592,12 @@ def main() -> int:
                     return "持仓"
                 if "今日优质股" in sec:
                     return "优质"
+                if "热股榜精选" in sec:
+                    return "热股精选"
                 if "热门板块优质股" in sec:
                     return "热门"
+                if "热股榜机会" in sec:
+                    return "热股榜"
                 if "下午机会" in sec:
                     return "下午"
                 if "低吸优选" in sec:
@@ -8113,11 +9620,11 @@ def main() -> int:
                         bkt: str = _mail_bkt,
                     ) -> float:
                         _pc = _pack_stock_code(pack)
-                        _qpr = (
-                            _quality_rows_by_code.get(_pc)
-                            if bkt == "优质" and _pc
-                            else None
-                        )
+                        _qpr = None
+                        if _pc and bkt in {"优质", "热门", "热股精选"}:
+                            _qpr = _scored_rows_by_code.get(_pc) or _quality_rows_by_code.get(
+                                _pc
+                            )
                         _amr = (
                             _afternoon_m_by_c.get(_pc)
                             if bkt == "下午" and _pc
@@ -8153,11 +9660,11 @@ def main() -> int:
                 else:
                     for pack in group:
                         _pc2 = _pack_stock_code(pack)
-                        _qpr2 = (
-                            _quality_rows_by_code.get(_pc2)
-                            if _mail_bkt == "优质" and _pc2
-                            else None
-                        )
+                        _qpr2 = None
+                        if _pc2 and _mail_bkt in {"优质", "热门", "热股精选"}:
+                            _qpr2 = _scored_rows_by_code.get(
+                                _pc2
+                            ) or _quality_rows_by_code.get(_pc2)
                         _amr2 = (
                             _afternoon_m_by_c.get(_pc2)
                             if _mail_bkt == "下午" and _pc2

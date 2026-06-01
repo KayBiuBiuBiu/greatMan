@@ -1,0 +1,58 @@
+[I 2026-05-29 15:32:41,628 minium minitest#432 _miniSetUp] =========Current case: test_p0_2_no_input_ui_clean=========
+[I 2026-05-29 15:32:41,710 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_p0_2_no_input_ui_clean
+[I 2026-05-29 15:32:41,742 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 15:32:41,772 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 15:32:41,801 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 15:32:41,832 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 15:32:41,861 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 15:32:41,892 minium minitest#897 capture] capture setup.png
+[W 2026-05-29 15:32:43,927 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:32:43,931 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/setup.png not exists
+[I 2026-05-29 15:32:43,994 minium minitest#487 _miniSetUp] =========case: test_p0_2_no_input_ui_clean start=========
+[I 2026-05-29 15:32:44,028 minium minitest#788 _callTestMethod] call test method
+[I 2026-05-29 15:32:44,149 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:32:46,181 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:32:46,182 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/assertTrue-success.png not exists
+[E 2026-05-29 15:32:46,242 minium.Conn7344 connection#668 __on_message] [a779c84c-7fdb-401c-9a55-acda8e7be29f]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:32:49,594 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:32:51,599 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:32:51,602 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/assertTrue-success.png not exists
+[I 2026-05-29 15:32:51,671 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:32:53,708 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:32:53,710 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/assertTrue-success.png not exists
+[E 2026-05-29 15:32:53,775 minium.Conn7344 connection#668 __on_message] [cdd7326a-bee7-487c-b564-ceb54cf37c29]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:32:57,214 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:32:59,223 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:32:59,289 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/assertTrue-success.png not exists
+[E 2026-05-29 15:32:59,332 minium.Conn7344 connection#668 __on_message] [796c3607-496c-404a-a473-8a1e1113a519]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:33:02,413 minium.App1376 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%226cb23a706a1941210001cc0265367aad%22%2C%20%22roomCode%22%3A%20%22664758%22%7D
+[I 2026-05-29 15:33:03,377 minium.App1376 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25226cb23a706a1941210001cc0265367aad%2522%252C%2520%2522roomCode%2522%253A%2520%2522664758%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780039983371, 'webviewId': 15, 'routeEventId': '', 'renderer': 'webview'}, 1780039983375]}
+[I 2026-05-29 15:33:03,379 minium.Conn7344 connection#704 _handle_async_msg] received async msg: 84abcda1-e37e-40d9-9404-e52d5ba80519
+[W 2026-05-29 15:33:09,478 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[I 2026-05-29 15:33:09,486 minium page#716 _get_elements_by_css] try to get elements: input
+[W 2026-05-29 15:33:09,548 minium page#747 _get_elements_by_css] Could not found any element 'input' you need
+[I 2026-05-29 15:33:09,638 minium page#716 _get_elements_by_css] try to get elements: textarea
+[W 2026-05-29 15:33:09,680 minium page#747 _get_elements_by_css] Could not found any element 'textarea' you need
+[I 2026-05-29 15:33:09,711 minium minitest#897 capture] capture assertFalse-success.png
+[W 2026-05-29 15:33:11,769 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:11,771 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/assertFalse-success.png not exists
+[I 2026-05-29 15:33:11,824 minium page#716 _get_elements_by_css] try to get elements: textarea
+[W 2026-05-29 15:33:11,877 minium page#747 _get_elements_by_css] Could not found any element 'textarea' you need
+[I 2026-05-29 15:33:11,907 minium page#716 _get_elements_by_css] try to get elements: .chat-input
+[W 2026-05-29 15:33:11,950 minium page#747 _get_elements_by_css] Could not found any element '.chat-input' you need
+[I 2026-05-29 15:33:11,987 minium page#716 _get_elements_by_css] try to get elements: .mr-chat
+[W 2026-05-29 15:33:12,127 minium page#747 _get_elements_by_css] Could not found any element '.mr-chat' you need
+[I 2026-05-29 15:33:12,130 minium page#716 _get_elements_by_css] try to get elements: input
+[W 2026-05-29 15:33:12,209 minium page#747 _get_elements_by_css] Could not found any element 'input' you need
+[I 2026-05-29 15:33:12,216 minium minitest#897 capture] capture assertFalse-success.png
+[W 2026-05-29 15:33:14,332 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:14,334 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/assertFalse-success.png not exists
+[I 2026-05-29 15:33:14,409 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 15:33:14,443 minium.App1376 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 15:33:15,410 minium.App1376 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780039995406, 'webviewId': 16, 'routeEventId': '', 'renderer': 'webview'}, 1780039995407]}
+[I 2026-05-29 15:33:15,411 minium.Conn7344 connection#704 _handle_async_msg] received async msg: bae327ba-6f63-4df7-b5c7-a96955e58faa
+[I 2026-05-29 15:33:16,965 minium minitest#897 capture] capture teardown.png
+[W 2026-05-29 15:33:18,970 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:18,972 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_p0_2_no_input_ui_clean/20260529153241627003/images/teardown.png not exists
+[I 2026-05-29 15:33:19,042 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 15:33:19,075 minium basenative#63 wrapper] call BaseNative.get_start_up end 

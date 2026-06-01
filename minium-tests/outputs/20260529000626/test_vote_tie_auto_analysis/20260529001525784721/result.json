@@ -1,0 +1,173 @@
+{
+    "case_name": "test_vote_tie_auto_analysis",
+    "run_time": "20260529 00:15:25",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u5e73\u7968\u573a\u666f\u81ea\u52a8\u8ffd\u52a0\u4e13\u9879\u5206\u6790\uff08\u6a21\u7cca\u5339\u914d\u3001\u9002\u914d\u771f\u5b9e\u6587\u6848\uff09",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 337, in test_vote_tie_auto_analysis\n    page = self._ui_init_room(snap)\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 95, in _ui_init_room\n    page.enter_room(snap.get(\"roomId\"), snap.get(\"roomCode\"))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py\", line 166, in enter_room\n    self.app.navigate_to(\n    ~~~~~~~~~~~~~~~~~~~~^\n        \"/packageGames/mystery-reason/mystery-reason?config=\" + cfg\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 892, in navigate_to\n    page = self._change_route_async(\"navigateTo\", url, is_wait_url_change)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 1165, in _change_route_async\n    cmd.get_open_result(wait_timeout)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 132, in get_open_result\n    return self._open_callback.get_result()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/callback.py\", line 158, in get_result\n    return self._waiter.result()\n           ~~~~~~~~~~~~~~~~~~~^^\nminium.framework.exception.MiniCommandError: webview count limit exceed\n",
+    "start_timestamp": 1779984925.866953,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 337,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "MiniCommandError",
+    "error_value": "webview count limit exceed",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1779984925,
+            "datetime": "2026-05-29 00:15:25",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1779984929,
+            "datetime": "2026-05-29 00:15:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_001529928572.png",
+            "ts": 1779984930,
+            "datetime": "2026-05-29 00:15:30",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_001533492143.png",
+            "ts": 1779984933,
+            "datetime": "2026-05-29 00:15:33",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1779984936,
+            "datetime": "2026-05-29 00:15:36",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779984936.960791,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_vote_tie_auto_analysis(self):\n",
+            "        \"\"\"\u5e73\u7968\u573a\u666f\u81ea\u52a8\u8ffd\u52a0\u4e13\u9879\u5206\u6790\uff08\u6a21\u7cca\u5339\u914d\u3001\u9002\u914d\u771f\u5b9e\u6587\u6848\uff09\"\"\"\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        self._unwrap_cloud(self.cloud.start_game(MysteryReasonPage.game_key, room_id))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "        self._unwrap_cloud(self.cloud.force_set_phase(room_id, \"final_vote\"))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "\n",
+            "        # \u5236\u9020\u5e73\u7968\u5bf9\u5c40\n",
+            "        self._unwrap_cloud(self.cloud.batch_vote_tie(room_id))\n",
+            "        self._unwrap_cloud(self.cloud.force_next_phase(room_id))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "        self._unwrap_cloud(self.cloud.unlock_review(room_id, verify=True))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "\n",
+            "        # \u6a21\u7cca\u5339\u914d\u5e73\u7968\u76f8\u5173\u6587\u6848\uff08\u4e0d\u5361\u6b7b\u56fa\u5b9a\u6587\u5b57\uff09\n",
+            "        state = self._unwrap_cloud(self.cloud.sync_snapshot(MysteryReasonPage.game_key, room_id)).get(\"state\", {})\n",
+            "        review_text = state.get(\"reviewContent\", \"\")\n",
+            "        self.assertTrue(\n",
+            "            any(key in review_text for key in [\"\u5e73\u7968\", \"\u7968\u6570\u6301\u5e73\", \"\u7968\u6570\u76f8\u540c\", \"\u7968\u6570\u5747\u7b49\"]),\n",
+            "            f\"\u590d\u76d8\u672a\u5305\u542b\u5e73\u7968\u515c\u5e95\u5206\u6790\uff0c\u5f53\u524d\u5185\u5bb9\uff1a{review_text[:100]}\"\n",
+            "        )\n"
+        ],
+        "start": 334
+    },
+    "filename": "result.json"
+}

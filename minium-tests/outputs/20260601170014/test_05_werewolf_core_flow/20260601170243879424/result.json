@@ -1,0 +1,138 @@
+{
+    "case_name": "test_05_werewolf_core_flow",
+    "run_time": "20260601 17:02:43",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": false,
+    "failures": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 192, in test_05_werewolf_core_flow\n    host, _ = self._run_dynamic_core_flow(WerewolfPage, \"start_game\", player_count=6)\n              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 129, in _run_dynamic_core_flow\n    self.assertTrue(\n    ~~~~~~~~~~~~~~~^\n        self._wait_can_start(host, info.get(\"roomId\")),\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        f\"{count} \u4eba\u5e94\u53ef\u5f00\u59cb\",\n        ^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py\", line 60, in hook_assert\n    return src(self, *args, **kwargs)\nAssertionError: False is not true : 6 \u4eba\u5e94\u53ef\u5f00\u59cb\n",
+    "errors": "",
+    "start_timestamp": 1780304563.947228,
+    "is_failure": true,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 192,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "False is not true : 6 \u4eba\u5e94\u53ef\u5f00\u59cb",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/setup.png",
+            "ts": 1780304563,
+            "datetime": "2026-06-01 17:02:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780304571,
+            "datetime": "2026-06-01 17:02:51",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-failed",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/assertTrue-failed.png",
+            "ts": 1780304603,
+            "datetime": "2026-06-01 17:03:23",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/werewolf/werewolf",
+            "path": "images/teardown.png",
+            "ts": 1780304603,
+            "datetime": "2026-06-01 17:03:23",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": false,
+            "msg": "False is not true : 6 \u4eba\u5e94\u53ef\u5f00\u59cb",
+            "img": "assertTrue-failed",
+            "wxml": "01170323.wxml"
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780304603.627307,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_05_werewolf_core_flow(self):\n",
+            "        host, _ = self._run_dynamic_core_flow(WerewolfPage, \"start_game\", player_count=6)\n",
+            "        host.play_day_night_vote()\n"
+        ],
+        "start": 191
+    },
+    "filename": "result.json"
+}

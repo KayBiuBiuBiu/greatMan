@@ -1,0 +1,108 @@
+{
+    "case_name": "test_14_song_guess_insufficient_players",
+    "run_time": "20260601 22:02:17",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 431, in test_14_song_guess_insufficient_players\n    self._run_insufficient_then_sufficient(\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\n        SongPage, \"start_round\", \"\u731c\u6b4c\", min_players=2, insufficient=1\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 316, in _run_insufficient_then_sufficient\n    info = self._create_host_room(page_cls, host)\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 222, in _create_host_room\n    return host.create_room(cloud=self.cloud)\n           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/song_page.py\", line 44, in create_room\n    self.input_text(\"input\", nick)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/base/base_page.py\", line 337, in input_text\n    el = self.get(selector, timeout=timeout)\n  File \"/Users/haha/greatMan/minium-tests/base/base_page.py\", line 298, in get\n    return self.page.get_element(selector, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 291, in wrapper\n    return func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 369, in get_element\n    r = self.get_elements(\n        _selector,\n        max_timeout,\n        auto_fix=auto_fix\n    )\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 452, in get_elements\n    return self._get_elements_by_css(_selector, max_timeout, index=_selector.index, auto_fix=auto_fix)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 719, in _get_elements_by_css\n    els = search_elements(_selector_list)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py\", line 64, in wrapper\n    r = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 711, in search_elements\n    return self.__search_child(\n           ~~~~~~~~~~~~~~~~~~~^\n        _selectors[0:], index=index\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )  # __search_child\u56depop\u5143\u7d20\uff0c\u7b2c\u4e00\u6b21search\u5931\u8d25\u540e\u91cd\u8bd5\u4f1a\u6709\u95ee\u9898\uff0ccopy\u4e00\u4efd\n    ^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 670, in __search_child\n    els = self.__get_elements(_selector)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py\", line 90, in wrapper\n    ret = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 648, in __get_elements\n    ret = self._send(\"Page.getElements\", {\"selector\": selector.css})\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 637, in _send\n    self.connection.send(cmd)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 457, in send\n    return self._receive_response(cmd)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 501, in _receive_response\n    raise MiniTimeoutError(\n        f\"[{cmd.id}][{cmd.desc}] receive from remote timeout\"\n    )\nminium.framework.exception.MiniTimeoutError: [b66aa6b7-309b-4350-9578-2de9dd5451ad][call Page.getElements] receive from remote timeout\n",
+    "start_timestamp": 1780322538.393771,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 431,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "MiniTimeoutError",
+    "error_value": "[b66aa6b7-309b-4350-9578-2de9dd5451ad][call Page.getElements] receive from remote timeout",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/setup.png",
+            "ts": 1780322538,
+            "datetime": "2026-06-01 22:02:18",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/teardown.png",
+            "ts": 1780322592,
+            "datetime": "2026-06-01 22:03:12",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780322593.0901399,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_14_song_guess_insufficient_players(self):\n",
+            "        self._run_insufficient_then_sufficient(\n",
+            "            SongPage, \"start_round\", \"\u731c\u6b4c\", min_players=2, insufficient=1\n",
+            "        )\n"
+        ],
+        "start": 430
+    },
+    "filename": "result.json"
+}

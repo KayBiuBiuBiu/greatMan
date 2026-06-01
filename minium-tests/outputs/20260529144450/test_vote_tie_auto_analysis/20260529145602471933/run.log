@@ -1,0 +1,59 @@
+[I 2026-05-29 14:56:02,473 minium minitest#432 _miniSetUp] =========Current case: test_vote_tie_auto_analysis=========
+[I 2026-05-29 14:56:02,507 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_vote_tie_auto_analysis
+[I 2026-05-29 14:56:02,537 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 14:56:02,567 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 14:56:02,600 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 14:56:02,629 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 14:56:02,660 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 14:56:02,690 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 14:56:02,960 minium minitest#487 _miniSetUp] =========case: test_vote_tie_auto_analysis start=========
+[I 2026-05-29 14:56:02,960 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 14:56:02,994 minium.Conn4576 connection#668 __on_message] [8016aeef-e4a5-42ba-b6c9-dcdab4638508]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:06,434 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 14:56:06,520 minium minitest#897 capture] capture assertTrue-success_145606520370.png
+[E 2026-05-29 14:56:06,658 minium.Conn4576 connection#668 __on_message] [b69595e5-dc18-4246-83eb-a5c70c70a4af]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:09,851 minium minitest#897 capture] capture assertTrue-success_145609849775.png
+[E 2026-05-29 14:56:09,944 minium.Conn4576 connection#668 __on_message] [7db419c9-d30e-4463-b0d2-db59b8b1460b]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:14,003 minium.App3904 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%2242a11e2e6a1938860012a8f101598b2c%22%2C%20%22roomCode%22%3A%20%22454864%22%7D
+[I 2026-05-29 14:56:14,896 minium.App3904 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252242a11e2e6a1938860012a8f101598b2c%2522%252C%2520%2522roomCode%2522%253A%2520%2522454864%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780037774892, 'webviewId': 21, 'routeEventId': '', 'renderer': 'webview'}, 1780037774892]}
+[I 2026-05-29 14:56:14,896 minium.Conn4576 connection#704 _handle_async_msg] received async msg: 5b52c15f-8ffc-49d6-83e6-47e615ead683
+[E 2026-05-29 14:56:19,097 minium.Conn4576 connection#668 __on_message] [9ae748f4-36f5-468d-b112-712f1f9b3637]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:23,623 minium minitest#897 capture] capture assertTrue-success_145623623788.png
+[E 2026-05-29 14:56:23,708 minium.Conn4576 connection#668 __on_message] [269ea774-8e80-4154-9d82-342dfe1614cf]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:28,567 minium minitest#897 capture] capture assertEqual-success.png
+[E 2026-05-29 14:56:28,740 minium.Conn4576 connection#668 __on_message] [2bf6d8f9-f08e-44c5-b914-9fb5769665d5]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:56:33,981 minium.Conn4576 connection#668 __on_message] [a422d3df-5acd-4d63-944e-284f5ebe3eaf]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:37,297 minium minitest#897 capture] capture assertTrue-success_145637296529.png
+[E 2026-05-29 14:56:37,503 minium.Conn4576 connection#668 __on_message] [dcefe413-28ff-44d1-8888-694810097063]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:56:42,482 minium.Conn4576 connection#668 __on_message] [43b209c4-7332-4c44-b017-a2e2aad025e7]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:46,456 minium minitest#897 capture] capture assertTrue-success_145646456334.png
+[E 2026-05-29 14:56:46,589 minium.Conn4576 connection#668 __on_message] [6fe6203a-21f0-47b5-a54f-996969223ee6]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:56:51,450 minium.Conn4576 connection#668 __on_message] [5f861ef5-db32-4503-8c92-172a8ed707e7]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:56:55,165 minium minitest#897 capture] capture assertTrue-success_145655164862.png
+[E 2026-05-29 14:56:55,252 minium.Conn4576 connection#668 __on_message] [0d151432-cbaf-4cc1-b007-f6d8fe212a8e]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:57:01,082 minium.Conn4576 connection#668 __on_message] [3779acd7-6b56-41d1-8bad-3178478f6b56]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:57:04,652 minium minitest#897 capture] capture assertTrue-success_145704652023.png
+[E 2026-05-29 14:57:04,753 minium.Conn4576 connection#668 __on_message] [ba2ad87b-70df-406a-b957-e112624220b8]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:57:10,136 minium.Conn4576 connection#668 __on_message] [e826bcc6-a479-4a16-86c4-11a716064f7d]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:57:15,255 minium minitest#897 capture] capture assertEqual-success_145715254848.png
+[E 2026-05-29 14:57:15,335 minium.Conn4576 connection#668 __on_message] [434fe61f-28d8-4a4c-8a95-ded8debdc6ee]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:57:18,641 minium minitest#897 capture] capture assertTrue-success_145718641221.png
+[E 2026-05-29 14:57:18,739 minium.Conn4576 connection#668 __on_message] [a96de63e-ef62-425b-928e-3b5e1091fab2]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:57:24,655 minium.Conn4576 connection#668 __on_message] [02805035-776f-49cd-9ee7-9f37228e5316]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:57:29,429 minium.Conn4576 connection#668 __on_message] [4d097c37-ee79-485a-becf-d2085a988997]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:57:33,068 minium minitest#897 capture] capture assertTrue-success_145733068116.png
+[E 2026-05-29 14:57:33,197 minium.Conn4576 connection#668 __on_message] [cfed64f0-7369-4409-ba26-2ec30336f0f9]: wx.cloud.callFunction not exists
+[E 2026-05-29 14:57:38,391 minium.Conn4576 connection#668 __on_message] [fbcbae30-890d-4ad5-8e28-aee432c27010]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:57:44,662 minium minitest#897 capture] capture assertEqual-success_145744662027.png
+[E 2026-05-29 14:57:44,775 minium.Conn4576 connection#668 __on_message] [c8360203-264b-4257-91b1-76601fa81ef5]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:57:55,639 minium minitest#897 capture] capture assertTrue-success_145755639509.png
+[E 2026-05-29 14:57:55,776 minium.Conn4576 connection#668 __on_message] [7f8f1670-c9ab-4e52-b265-e178491033ef]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:58:02,545 minium minitest#897 capture] capture assertTrue-success_145802544442.png
+[I 2026-05-29 14:58:02,636 minium minitest#897 capture] capture assertTrue-success_145802636108.png
+[I 2026-05-29 14:58:02,769 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 14:58:02,770 minium.App3904 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 14:58:04,563 minium.App3904 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780037884551, 'webviewId': 22, 'routeEventId': '', 'renderer': 'webview'}, 1780037884552]}
+[I 2026-05-29 14:58:04,563 minium.Conn4576 connection#704 _handle_async_msg] received async msg: 1bea5ece-a3de-4b60-9684-40f17cf4f04f
+[I 2026-05-29 14:58:06,145 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 14:58:06,253 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 14:58:06,307 minium basenative#63 wrapper] call BaseNative.get_start_up end 

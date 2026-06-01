@@ -1,0 +1,75 @@
+[I 2026-06-01 15:34:15,917 minium minitest#432 _miniSetUp] =========Current case: test_two_players_dynamic_start=========
+[I 2026-06-01 15:34:15,917 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_drink_party, case info: TestDrinkParty.test_two_players_dynamic_start
+[I 2026-06-01 15:34:15,917 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 15:34:15,917 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 15:34:15,917 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 15:34:15,917 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 15:34:15,917 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 15:34:15,925 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 15:34:15,987 minium minitest#487 _miniSetUp] =========case: test_two_players_dynamic_start start=========
+[I 2026-06-01 15:34:15,987 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 15:34:15,988 minium.App3456 app#950 relaunch] ReLaunch: /packageGames/drink-party/drink-party
+[I 2026-06-01 15:34:17,072 minium.App3456 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780299257067, 'webviewId': 5, 'routeEventId': '', 'renderer': 'webview'}, 1780299257068]}
+[I 2026-06-01 15:34:17,073 minium.Conn9424 connection#704 _handle_async_msg] received async msg: 91eb32ed-4991-428a-9826-d8ca5d3ed4c5
+[I 2026-06-01 15:34:18,577 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-01 15:34:18,587 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x119205bd0>]
+[I 2026-06-01 15:34:18,897 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 15:34:18,908 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x119205bd0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1192308a0>]
+[E 2026-06-01 15:34:46,476 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_drink_party.py", line 60, in test_two_players_dynamic_start
+    info = page.create_room()
+  File "/Users/haha/greatMan/minium-tests/pages/drink_page.py", line 29, in create_room
+    self.wait_until(
+    ~~~~~~~~~~~~~~~^
+        lambda: self.data_value("roomId"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        timeout=25,
+        ^^^^^^^^^^^
+        message="drink roomId not created",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 297, in wait_until
+    raise AssertionError(f"{message}; last={last}")
+AssertionError: drink roomId not created; last=None
+[I 2026-06-01 15:34:46,478 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 15:34:46,480 minium.App3456 app#950 relaunch] ReLaunch: /packageGames/drink-party/drink-party
+[I 2026-06-01 15:34:47,553 minium.App3456 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780299287549, 'webviewId': 6, 'routeEventId': '', 'renderer': 'webview'}, 1780299287550]}
+[I 2026-06-01 15:34:47,554 minium.Conn9424 connection#704 _handle_async_msg] received async msg: 3bbc5051-7376-4971-bde9-e6b7be433103
+[I 2026-06-01 15:34:49,056 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 15:34:49,127 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 15:34:49,127 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 15:34:49,137 minium assertbase#390 _get_stack_info] <bound method TestDrinkParty.test_two_players_dynamic_start of <testcases.test_drink_party.TestDrinkParty testMethod=test_two_players_dynamic_start>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_drink_party.py", line 60, in test_two_players_dynamic_start
+    info = page.create_room()
+  File "/Users/haha/greatMan/minium-tests/pages/drink_page.py", line 29, in create_room
+    self.wait_until(
+    ~~~~~~~~~~~~~~~^
+        lambda: self.data_value("roomId"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        timeout=25,
+        ^^^^^^^^^^^
+        message="drink roomId not created",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 297, in wait_until
+    raise AssertionError(f"{message}; last={last}")
+AssertionError: drink roomId not created; last=None
+[W 2026-06-01 15:34:49,137 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601153310', 'case_output': './outputs/20260601153310/test_two_players_dynamic_start/20260601153415857649'}
+[W 2026-06-01 15:34:49,137 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 15:34:49,137 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 15:34:49,137 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x119136510>

@@ -1,0 +1,53 @@
+
+<view class="page rg-page mr-page">
+  <view class="hero">
+    <view class="hero-title">AI迷雾推理局</view>
+    <view class="hero-subtitle muted">线下亲友聚会 · AI 全自动推理剧本</view>
+  </view>
+  <view class="rg-status-banner">人齐后组长可开始互动</view>
+  <view class="rg-room-card">
+    <view class="mr-phase-title">等待开局</view>
+    <view class="muted">
+      聚会组口令：996986        
+      <text class="link"/>
+    </view>
+  </view>
+  <view class="rg-room-card rg-members-card">
+    <view class="section-title">成员 当前 4 / 4 人</view>
+    <view class="rg-member-list">
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <image class="avatar--ma-img" mode="aspectFill" src="https://636c-cloud1-d9g01no7m292bc511-d5e875d-1426212016.tcb.qcloud.la/avatars/ounVV3ZME5HjgoyHvqm6lz9Fvx0w_1779719124129.png" role="img"/>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+    </view>
+  </view>
+  <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)" role="button" aria-disabled="false">邀请朋友</button>
+</view>

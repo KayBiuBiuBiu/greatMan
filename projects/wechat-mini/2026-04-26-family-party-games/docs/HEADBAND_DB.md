@@ -139,7 +139,7 @@ headband_players
 | `createRoom` | **`create`** | 建房，返回 `roomId`、`roomCode` |
 | `joinRoom` | **`join`** | 口令或 `roomId` 进房 |
 | `getRoom` | **`syncState`** / `getView` | 拉取脱敏 `view`（成员、头上词） |
-| `startGame` | `startGame` | 发牌；可传 `wordBank`；`finished` 时可再来一局 |
+| `startGame` | `startGame` | 云端调用 `aiPartyService` 生成词库并发牌；`finished` 时可再来一局 |
 | `playAgain` | `startGame` | 同 `startGame` |
 | `leaveRoom` | （未用） | 别名 `leave`，当前仅占位 |
 | `updatePlayerWord` | （未用） | 发牌请走 `startGame` |
@@ -149,6 +149,6 @@ headband_players
 
 **部署：** 务必上传本仓库 `cloudfunctions/headbandRoomService/index.js`，并选 **云端安装依赖**（需 `wx-server-sdk`）。
 
-**词库：** `generateCharacters`（已部署，勿改）；前端开局前调用并传 `wordBank`。
+**词库：** 只使用 `aiPartyService` 生成；不再调用 `generateCharacters`，也不再传 `wordBank`。
 
 **小程序：** `pages/headband/headband` · `utils/headbandCloud.js` · 排查见 `docs/HEADBAND_排查.md`

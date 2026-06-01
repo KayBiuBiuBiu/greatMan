@@ -1,5 +1,10 @@
 const cloud = require('wx-server-sdk')
 const jp = require('./joinPlayerPatch')
+function assertTestAction(e) {
+  if (!e || !e._test) {
+    throw new Error('test action denied')
+  }
+}
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
@@ -32,16 +37,20 @@ function omitIdDeep (x) {
   }
   return x
 }
+const {
+  MAXN,
+  DECK,
+  MIN_PLAYERS,
+  isWolfRole,
+  membersOf,
+  roomSeatCap,
+  rolesForPlayerCount
+} = require('./wolfDeck')
 const R = 'werewolf_rooms'
 const S = 'werewolf_state'
-const MAXN = [6, 8, 10, 12]
 const MOCK_PREFIX = 'mock:ww:'
-const DECK = {
-  6: ['werewolf', 'werewolf', 'seer', 'witch', 'villager', 'villager'],
-  8: ['werewolf', 'werewolf', 'seer', 'witch', 'hunter', 'villager', 'villager', 'villager'],
-  10: ['werewolf', 'werewolf', 'werewolf', 'seer', 'witch', 'hunter', 'villager', 'villager', 'villager', 'villager'],
-  12: ['werewolf', 'werewolf', 'werewolf', 'werewolf', 'seer', 'witch', 'hunter', 'villager', 'villager', 'villager', 'villager', 'villager']
-}
+/** @deprecated 使用 membersOf；保留别名减少 diff */
+const participantsOf = membersOf
 const now = () => Date.now()
 async function getOpenId() {
   return cloud.getWXContext().OPENID
@@ -106,18 +115,217 @@ function nn(room, oid) {
   return m ? m.nickName : '参与者'
 }
 function getRole(room, oid) {
-  if (room && room.hostOpenId === oid) {
-    return ''
+  return (room.playerRoles || {})[oid] || ''
+}
+
+function getSheriffOpenIdManual(g) {
+  return String((g && g.sheriffOpenId) || '')
+}
+
+function transferRemainingSecondsManual(g) {
+  const end = (g && g.sheriffTransferTimeout) | 0
+  if (!end) return 0
+  return Math.max(0, Math.ceil((end - now()) / 1000))
+}
+
+/** 警长出局 → 移交阶段（手动局，15s 超时） */
+function tryStartSheriffTransferManual(ro, deadSheriffOid, continueKind) {
+  const g = ro.game
+  if (!deadSheriffOid || getSheriffOpenIdManual(g) !== deadSheriffOid) return false
+  g.sheriffTransferFrom = deadSheriffOid
+  g.sheriffTransferPending = true
+  g.sheriffTransferContinue = continueKind || ''
+  g.sheriffTransferTimeout = now() + 15000
+  g.phase = 'sheriff_transfer'
+  g.publicLog = (g.publicLog || []).concat([
+    '警长 ' +
+      nn(ro, deadSheriffOid) +
+      ' 出局，请在15秒内移交警徽（可交给存活玩家）'
+  ])
+  return true
+}
+
+async function completeSheriffTransferManual(ro, targetOid) {
+  const g = ro.game
+  if (g.phase !== 'sheriff_transfer' && !g.sheriffTransferPending) return
+  const from = String(g.sheriffTransferFrom || getSheriffOpenIdManual(g) || '')
+  g.sheriffTransferPending = false
+  g.sheriffTransferFrom = ''
+  g.sheriffTransferTimeout = 0
+  const kind = g.sheriffTransferContinue || ''
+  g.sheriffTransferContinue = ''
+
+  let tid = String(targetOid || '').trim()
+  if (tid && (tid === from || g.alive[tid] === false)) tid = ''
+  if (tid) {
+    g.sheriffOpenId = tid
+    g.publicLog = (g.publicLog || []).concat([
+      '警长将警徽移交给了 ' + nn(ro, tid)
+    ])
+  } else {
+    g.sheriffOpenId = ''
+    g.publicLog = (g.publicLog || []).concat(['警长未能移交警徽，警徽流失'])
   }
-  return (room.playerRoles || {})[oid]
+  resumeAfterSheriffTransferManual(ro, kind)
 }
-function participantsOf(room) {
-  const host = String((room && room.hostOpenId) || '')
-  return (room.members || []).filter((m) => m && m.openId && m.openId !== host)
+
+function resumeAfterSheriffTransferManual(ro, kind) {
+  const g = ro.game
+  if (checkWin(ro)) return
+
+  if (kind === 'manual_day_announce') {
+    g.phase = 'day_announce'
+    return
+  }
+  if (kind === 'manual_vote_hunter') {
+    g.phase = 'hunter'
+    return
+  }
+  if (kind === 'manual_vote_night') {
+    g.voteOpen = 0
+    g.currentVotes = {}
+    g.phase = 'night'
+    g.day = (g.day | 0) + 1
+    g.night = {
+      wvote: {},
+      wkill: null,
+      seer: null,
+      lastGuardTarget: (g.night && g.night.lastGuardTarget) || '',
+      wwitch: { saveLeft: 1, poisonLeft: 1, saveOn: null, poisonOn: null }
+    }
+    g.publicLog = (g.publicLog || []).concat(['第' + g.day + ' 夜。'])
+    return
+  }
+  if (kind === 'manual_white_wolf_night') {
+    g.voteOpen = 0
+    g.currentVotes = {}
+    g.day = (g.day | 0) + 1
+    g.phase = 'night'
+    g.night = {
+      wvote: {},
+      wkill: null,
+      seer: null,
+      lastGuardTarget: (g.night && g.night.lastGuardTarget) || '',
+      wwitch: { saveLeft: 1, poisonLeft: 1, saveOn: null, poisonOn: null }
+    }
+    g.publicLog = (g.publicLog || []).concat(['第' + g.day + ' 夜。'])
+    return
+  }
+  if (kind === 'manual_hunter_after') {
+    g.pendingHunter = null
+    g.phase = 'night'
+    g.day = (g.day | 0) + 1
+    g.night = {
+      wvote: {},
+      wkill: null,
+      seer: null,
+      lastGuardTarget: (g.night && g.night.lastGuardTarget) || '',
+      wwitch: { saveLeft: 1, poisonLeft: 1, saveOn: null, poisonOn: null }
+    }
+    g.publicLog = (g.publicLog || []).concat(['第' + g.day + ' 夜。'])
+  }
 }
-function roomSeatCap(room) {
-  return (room.maxPlayers | 0 || 6) + 1
+
+async function maybeExpireSheriffTransfer(ro) {
+  const g = ro.game || {}
+  if (g.phase !== 'sheriff_transfer' || !g.sheriffTransferPending) return false
+  if (transferRemainingSecondsManual(g) > 0) return false
+  await completeSheriffTransferManual(ro, null)
+  await saveFullRoom(ro)
+  return true
 }
+
+const DUR_SHERIFF_WITHDRAW_MS = 10000
+
+function withdrawRemainingSecondsManual(g) {
+  const end = (g && g.withdrawEndTime) | 0
+  if (!end) return 0
+  return Math.max(0, Math.ceil((end - now()) / 1000))
+}
+
+/** 手动局：报名结束后的候选人列表与下一阶段 */
+function finalizeSheriffSignupManual(ro) {
+  const g = ro.game
+  const alive = membersOf(ro).filter((m) => g.alive[m.openId] !== false)
+  alive.forEach((m) => {
+    if (!g.sheriffSignup[m.openId]) g.sheriffSignup[m.openId] = 'skip'
+  })
+  g.sheriffElectionDone = true
+  g.sheriffCandidates = alive
+    .filter((m) => g.sheriffSignup[m.openId] === 'run')
+    .map((m) => m.openId)
+  if (g.sheriffCandidates.length === 0) {
+    g.sheriffPhase = 'done'
+    g.publicLog = (g.publicLog || []).concat(['无人上警，本局无警长'])
+    return { next: 'speak' }
+  }
+  if (g.sheriffCandidates.length === 1) {
+    g.sheriffPhase = 'done'
+    g.sheriffOpenId = g.sheriffCandidates[0]
+    g.publicLog = (g.publicLog || []).concat([
+      nn(ro, g.sheriffOpenId) + ' 独自上警，当选警长'
+    ])
+    return { next: 'speak' }
+  }
+  g.publicLog = (g.publicLog || []).concat([
+    '上警 ' +
+      g.sheriffCandidates.length +
+      ' 人：' +
+      g.sheriffCandidates.map((id) => nn(ro, id)).join('、')
+  ])
+  return { next: 'withdraw' }
+}
+
+function startSheriffWithdrawManual(ro) {
+  const g = ro.game
+  g.sheriffPhase = 'withdraw'
+  g.withdrawEndTime = now() + DUR_SHERIFF_WITHDRAW_MS
+  g.phase = 'sheriff_withdraw'
+  g.publicLog = (g.publicLog || []).concat([
+    '退水窗口开启（10秒），上警玩家可选择退水'
+  ])
+}
+
+function afterWithdrawManual(ro, endWindow) {
+  const g = ro.game
+  const cands = (g.sheriffCandidates || []).slice()
+  const n = cands.length
+  if (!endWindow && n >= 2) return { stayed: true }
+  g.sheriffPhase = 'done'
+  g.withdrawEndTime = 0
+  if (n === 0) {
+    g.sheriffOpenId = ''
+    g.publicLog = (g.publicLog || []).concat(['退水结束后无人上警，本局无警长'])
+    g.phase = 'speak'
+    g.speakIndex = 0
+    return { next: 'speak' }
+  }
+  if (n === 1) {
+    g.sheriffOpenId = cands[0]
+    g.publicLog = (g.publicLog || []).concat([
+      nn(ro, cands[0]) + ' 成为唯一候选人，当选警长'
+    ])
+    g.phase = 'speak'
+    g.speakIndex = 0
+    return { next: 'speak' }
+  }
+  g.sheriffSpeakOrder = cands.slice()
+  g.sheriffSpeakIndex = 0
+  g.phase = 'sheriff_speak'
+  g.sheriffPhase = 'speak'
+  g.publicLog = (g.publicLog || []).concat(['警上发言开始'])
+  return { next: 'sheriff_speak' }
+}
+
+async function maybeExpireSheriffWithdraw(ro) {
+  const g = ro.game || {}
+  if (g.phase !== 'sheriff_withdraw' || g.sheriffPhase !== 'withdraw') return false
+  if (withdrawRemainingSecondsManual(g) > 0) return false
+  afterWithdrawManual(ro, true)
+  await saveFullRoom(ro)
+  return true
+}
+
 function buildPubFromRoom(room) {
   if (!room || !room._id) {
     return null
@@ -134,11 +342,20 @@ function buildPubFromRoom(room) {
     players: (room.members || []).map((m, i) =>
       Object.assign(jp.withProfileReadyFlag(m), {
         isHost: m.openId === room.hostOpenId,
-        isAlive:
-          m.openId === room.hostOpenId ? true : al[m.openId] !== false,
+        isAlive: al[m.openId] !== false,
+        isSheriff: String(g.sheriffOpenId || '') === m.openId,
         seat: i + 1
       })
     ),
+    sheriffOpenId: g.sheriffOpenId || '',
+    sheriffElectionDone: !!g.sheriffElectionDone,
+    sheriffCandidates: (g.sheriffCandidates || []).map((oid) => ({
+      openId: oid,
+      nickName: nn(room, oid)
+    })),
+    sheriffPhase: g.sheriffPhase || '',
+    withdrawRemainingSeconds:
+      g.phase === 'sheriff_withdraw' ? withdrawRemainingSecondsManual(g) : 0,
     publicLog: g.publicLog || [],
     lastNightReport: g.lastNightReport,
     speakIndex: g.speakIndex | 0,
@@ -148,6 +365,10 @@ function buildPubFromRoom(room) {
     gameEnd: g.endReason,
     winSide: g.winSide,
     pendingHunter: g.pendingHunter,
+    needTransfer: g.phase === 'sheriff_transfer' && !!g.sheriffTransferPending,
+    transferRemainingSeconds:
+      g.phase === 'sheriff_transfer' ? transferRemainingSecondsManual(g) : 0,
+    sheriffTransferFrom: g.sheriffTransferFrom || '',
     updatedAt: now()
   }
 }
@@ -171,13 +392,13 @@ function buildPlayerView(ro, o) {
   const g = ro.game || {}
   const al = g.alive || {}
   const wm = (ro.members || [])
-    .filter((m) => pr[m.openId] === 'werewolf' && m.openId !== o)
+    .filter((m) => isWolfRole(pr[m.openId]) && m.openId !== o)
     .map((m) => m.nickName)
   return {
     isHost: ro.hostOpenId === o,
     myOpenId: o,
-    iAmAlive: ro.hostOpenId === o ? true : al[o] !== false,
-    myRole: ro.hostOpenId === o ? '' : myR,
+    iAmAlive: al[o] !== false,
+    myRole: myR,
     roomCode: ro.roomCode,
     maxPlayers: ro.maxPlayers,
     roomStatus: ro.status,
@@ -191,16 +412,15 @@ function buildPlayerView(ro, o) {
     winSide: g.winSide,
     players: (ro.members || []).map((m, i) =>
       Object.assign(jp.withProfileReadyFlag(m), {
-        isAlive:
-          m.openId === ro.hostOpenId ? true : al[m.openId] !== false,
+        isAlive: al[m.openId] !== false,
         seat: i + 1
       })
     ),
-    wolfMates: myR === 'werewolf' ? wm : [],
+    wolfMates: isWolfRole(myR) ? wm : [],
     seer: myR === 'seer' && g.night && g.night.seer ? g.night.seer : null,
     allRoles:
       ro.hostOpenId === o
-        ? participantsOf(ro).map((m) => ({
+        ? membersOf(ro).map((m) => ({
           o: m.openId,
           n: m.nickName,
           r: pr[m.openId]
@@ -210,7 +430,8 @@ function buildPlayerView(ro, o) {
     speakOrder: g.speakOrder || [],
     voteOpen: !!g.voteOpen,
     currentVotes: g.currentVotes || {},
-    pendingHunter: g.pendingHunter
+    pendingHunter: g.pendingHunter,
+    isSheriffCandidate: (g.sheriffCandidates || []).indexOf(o) >= 0
   }
 }
 async function doSyncState(event, o) {
@@ -218,12 +439,18 @@ async function doSyncState(event, o) {
   if (!rid) {
     throw new Error('无房间')
   }
-  const ro = await getRoomById(rid)
+  let ro = await getRoomById(rid)
   if (!ro) {
     throw new Error('聚会组无效或已结束')
   }
   if (!(ro.members || []).some((m) => m.openId === o)) {
     return { ok: 1, myOpenId: o, inRoom: false }
+  }
+  if (await maybeExpireSheriffTransfer(ro)) {
+    ro = (await getRoomById(rid)) || ro
+  }
+  if (await maybeExpireSheriffWithdraw(ro)) {
+    ro = (await getRoomById(rid)) || ro
   }
   const pub = buildPubFromRoom(ro)
   const view = buildPlayerView(ro, o)
@@ -256,14 +483,11 @@ function checkWin(room) {
   const al = g.alive || {}
   let w = 0
   let good = 0
-  ;(room.members || []).forEach((m) => {
-    if (m.openId === room.hostOpenId) {
-      return
-    }
+  membersOf(room).forEach((m) => {
     if (al[m.openId] === false) {
       return
     }
-    if (pr[m.openId] === 'werewolf') {
+    if (isWolfRole(pr[m.openId])) {
       w += 1
     } else if (pr[m.openId]) {
       good += 1
@@ -321,14 +545,10 @@ async function run(event) {
       }
       code = mk6()
     }
-    let maxPlayers = parseInt(event.maxPlayers, 10) || 6
-    if (MAXN.indexOf(maxPlayers) < 0) {
-      maxPlayers = 6
-    }
     const d = {
       roomCode: code,
       hostOpenId: o,
-      maxPlayers,
+      maxPlayers: 0,
       status: 'waiting',
       members: [
         {
@@ -410,9 +630,9 @@ async function run(event) {
     if (ro.status !== 'waiting') {
       throw new Error('仅等待阶段可添加')
     }
-    const max = ro.maxPlayers | 0 || 6
+    const cap = roomSeatCap(ro)
     const ms = ro.members || []
-    if (participantsOf(ro).length >= max) {
+    if (participantsOf(ro).length >= cap) {
       throw new Error('参与者已满')
     }
     if (ms.length >= roomSeatCap(ro)) {
@@ -434,11 +654,11 @@ async function run(event) {
     if (ro.status !== 'waiting') {
       throw new Error('仅等待阶段可添加')
     }
-    const max = ro.maxPlayers | 0 || 6
+    const cap = roomSeatCap(ro)
     let next = ro.members || []
     let added = 0
     for (let i = 0; i < 12; i += 1) {
-      if (participantsOf({ members: next, hostOpenId: ro.hostOpenId }).length >= max) {
+      if (participantsOf({ members: next, hostOpenId: ro.hostOpenId }).length >= cap) {
         break
       }
       if (next.length >= roomSeatCap(ro)) {
@@ -456,25 +676,24 @@ async function run(event) {
   }
   if (action === 'start') {
     const ro = await getRoomById(event.roomId)
-    if (!ro || ro.hostOpenId !== o) {
+    if (!ro) {
+      throw new Error('房间不存在')
+    }
+    if (!event._test && ro.hostOpenId !== o) {
       throw new Error('仅组长可开始')
     }
-    const m = ro.members || []
-    const n = ro.maxPlayers || 6
-    const players = participantsOf(ro)
-    if (players.length !== n) {
-      throw new Error('参与者未满' + n + '人，暂不可开')
+    const players = membersOf(ro)
+    const n = players.length
+    if (n < MIN_PLAYERS) {
+      throw new Error('至少 ' + MIN_PLAYERS + ' 人才能开始')
     }
-    if (!DECK[n]) {
+    const roleList = rolesForPlayerCount(n)
+    if (!roleList) {
       throw new Error('人数与板子未配')
     }
-    const deck = shuf(DECK[n].slice(0, n))
+    const deck = shuf(roleList)
     const pr = {}
     const al = {}
-    if (ro.hostOpenId) {
-      pr[ro.hostOpenId] = ''
-      al[ro.hostOpenId] = false
-    }
     players.forEach((mem, i) => {
       pr[mem.openId] = deck[i]
       al[mem.openId] = true
@@ -483,6 +702,16 @@ async function run(event) {
       day: 1,
       phase: 'night',
       alive: al,
+      sheriffOpenId: '',
+      sheriffElectionDone: false,
+      sheriffSignup: {},
+      sheriffCandidates: [],
+      sheriffPhase: 'signup',
+      sheriffWithdrawn: {},
+      withdrawEndTime: 0,
+      sheriffSpeakOrder: [],
+      sheriffSpeakIndex: 0,
+      sheriffVotes: {},
       publicLog: ['第1夜。暗位选择关注对象、线索员查看、治愈者协助。完成后由主持点【结算入昼】。'],
       night: {
         wvote: {},
@@ -515,7 +744,13 @@ async function run(event) {
   }
   if (action === 'wWolf') {
     const ro = await getRoomById(event.roomId)
-    if (!ro || ro.status !== 'playing' || ro.game.phase !== 'night' || getRole(ro, o) !== 'werewolf' || ro.game.alive[o] === false) {
+    if (
+      !ro ||
+      ro.status !== 'playing' ||
+      ro.game.phase !== 'night' ||
+      !isWolfRole(getRole(ro, o)) ||
+      ro.game.alive[o] === false
+    ) {
       throw new Error('当前不可选择关注目标')
     }
     const t = String(event.targetOpenId || '')
@@ -544,7 +779,7 @@ async function run(event) {
     if (ro.game.alive[t] === false) {
       throw new Error('已暂离')
     }
-    const isW = getRole(ro, t) === 'werewolf'
+    const isW = isWolfRole(getRole(ro, t))
     ro.game.night = ro.game.night || {}
     ro.game.night.seer = { checker: o, target: t, isW, label: isW ? '倾向：暗位侧' : '倾向：村民侧' }
     await saveFullRoom(ro)
@@ -576,6 +811,75 @@ async function run(event) {
     await saveFullRoom(ro)
     return { ok: true, knife: wkill, witch: wts }
   }
+  if (action === 'wGuard') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.status !== 'playing' || ro.game.phase !== 'night' || getRole(ro, o) !== 'guard' || ro.game.alive[o] === false) {
+      throw new Error('当前不可守护')
+    }
+    const t = String(event.targetOpenId || '')
+    if (!t) {
+      throw new Error('请选择守护对象')
+    }
+    const last = String((ro.game.night && ro.game.night.lastGuardTarget) || '')
+    if (last && last === t) {
+      throw new Error('不能连续两夜守护同一人')
+    }
+    ro.game.night = { ...(ro.game.night || {}), guardTarget: t }
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'whiteWolfBoom') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.status !== 'playing' || getRole(ro, o) !== 'white_wolf' || ro.game.alive[o] === false) {
+      throw new Error('当前不可自爆')
+    }
+    const ph = ro.game.phase
+    if (ph !== 'speak' && ph !== 'vote' && ph !== 'day_announce') {
+      throw new Error('仅白天可自爆')
+    }
+    const t = String(event.targetOpenId || '')
+    if (!t || t === o) {
+      throw new Error('请选择带走对象')
+    }
+    if (ro.game.alive[t] === false) {
+      throw new Error('目标已暂离')
+    }
+    const g = ro.game
+    const sheriff = getSheriffOpenIdManual(g)
+    const sheriffDead = sheriff && (sheriff === o || sheriff === t)
+    g.alive[o] = false
+    g.alive[t] = false
+    g.publicLog = (g.publicLog || []).concat([
+      '白狼王自爆，' + nn(ro, o) + ' 与 ' + nn(ro, t) + ' 同步暂离'
+    ])
+    g.voteOpen = 0
+    g.currentVotes = {}
+    if (checkWin(ro)) {
+      await saveFullRoom(ro)
+      return { ok: true }
+    }
+    if (sheriffDead && tryStartSheriffTransferManual(ro, sheriff, 'manual_white_wolf_night')) {
+      ro.game = g
+      await saveFullRoom(ro)
+      return { ok: true }
+    }
+    g.day = (g.day | 0) + 1
+    g.phase = 'night'
+    g.night = {
+      wvote: {},
+      wkill: null,
+      seer: null,
+      lastGuardTarget: (g.night && g.night.lastGuardTarget) || '',
+      wwitch: { saveLeft: 1, poisonLeft: 1, saveOn: null, poisonOn: null }
+    }
+    g.publicLog = g.publicLog.concat(['第' + g.day + ' 夜。'])
+    ro.game = g
+    if (checkWin(ro)) {
+      /* ended */
+    }
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
   if (action === 'hostWolfSet') {
     const ro = await getRoomById(event.roomId)
     if (!ro || ro.hostOpenId !== o) {
@@ -595,14 +899,23 @@ async function run(event) {
     }
     const g = ro.game
     const pr = ro.playerRoles
+    const prevAlive = { ...(g.alive || {}) }
     const al0 = { ...(g.alive || {}) }
     const nk = g.night || {}
     const wkill = nk.wkill || aggWolfVote(nk.wvote || {})
     const wt = nk.wwitch || { saveOn: null, poisonOn: null, saveLeft: 1, poisonLeft: 1 }
+    const guardTarget = String(nk.guardTarget || '')
     const logp = []
     if (wkill) {
-      if (wt.saveOn && wt.saveOn === wkill) {
+      const saved = wt.saveOn && wt.saveOn === wkill
+      const guarded = guardTarget && guardTarget === wkill
+      if (saved && guarded) {
+        al0[wkill] = false
+        logp.push(nn(ro, wkill) + ' 同守同救，仍暂离。')
+      } else if (saved) {
         logp.push(nn(ro, wkill) + ' 已获缓解。')
+      } else if (guarded) {
+        logp.push(nn(ro, wkill) + ' 被守护。')
       } else {
         al0[wkill] = false
         logp.push('夜间关注后暂离：' + nn(ro, wkill))
@@ -619,30 +932,165 @@ async function run(event) {
       wvote: {},
       wkill: null,
       seer: null,
+      guardTarget: '',
+      lastGuardTarget: guardTarget || String(nk.lastGuardTarget || ''),
       wwitch: { saveLeft: wt.saveLeft, poisonLeft: wt.poisonLeft, saveOn: null, poisonOn: null }
     }
     g.alive = al0
     g.lastNightReport = logp
+    const deadIds = Object.keys(al0).filter(
+      (k) => prevAlive[k] !== false && al0[k] === false
+    )
+    const sheriffDead = deadIds.find((id) => getSheriffOpenIdManual(g) === id)
+    ro.game = g
+    if (checkWin(ro)) {
+      await saveFullRoom(ro)
+      return { over: ro.status === 'ended' }
+    }
+    if (sheriffDead && tryStartSheriffTransferManual(ro, sheriffDead, 'manual_day_announce')) {
+      g.publicLog = (g.publicLog || []).concat(logp, ['天亮了。'])
+      await saveFullRoom(ro)
+      return { over: false }
+    }
     g.phase = 'day_announce'
     g.publicLog = (g.publicLog || []).concat(logp, ['天亮了。'])
-    ro.game = g
-    ro.game.alive = al0
     if (checkWin(ro)) {
       /* ended */
     }
     await saveFullRoom(ro)
     return { over: ro.status === 'ended' }
   }
+  if (action === 'wSheriffSignup') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.status !== 'playing' || ro.game.phase !== 'sheriff_signup') {
+      throw new Error('当前非警长报名阶段')
+    }
+    if (ro.game.alive[o] === false) throw new Error('已暂离')
+    ro.game.sheriffWithdrawn = ro.game.sheriffWithdrawn || {}
+    if (ro.game.sheriffWithdrawn[o]) throw new Error('已退水，不能再次上警')
+    const run = !!event.run
+    ro.game.sheriffSignup = ro.game.sheriffSignup || {}
+    ro.game.sheriffSignup[o] = run ? 'run' : 'skip'
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'hostSheriffToSpeak') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.hostOpenId !== o) throw new Error('仅主持')
+    if (ro.game.phase !== 'sheriff_signup') throw new Error('当前非警长报名阶段')
+    const r = finalizeSheriffSignupManual(ro)
+    if (r.next === 'withdraw') startSheriffWithdrawManual(ro)
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'hostEndSheriffWithdraw') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.hostOpenId !== o) throw new Error('仅主持')
+    const g = ro.game
+    if (g.phase !== 'sheriff_withdraw') throw new Error('当前非退水窗口')
+    afterWithdrawManual(ro, true)
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'withdraw') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.status !== 'playing' || ro.game.phase !== 'sheriff_withdraw') {
+      throw new Error('当前非退水窗口')
+    }
+    const g = ro.game
+    if ((g.sheriffCandidates || []).indexOf(o) < 0) {
+      throw new Error('你未上警，无法退水')
+    }
+    g.sheriffCandidates = (g.sheriffCandidates || []).filter((id) => id !== o)
+    g.sheriffWithdrawn = g.sheriffWithdrawn || {}
+    g.sheriffWithdrawn[o] = true
+    g.sheriffSignup = g.sheriffSignup || {}
+    g.sheriffSignup[o] = 'withdrawn'
+    g.publicLog = (g.publicLog || []).concat([nn(ro, o) + ' 退水'])
+    afterWithdrawManual(ro, false)
+    await saveFullRoom(ro)
+    return { ok: true, candidateCount: (g.sheriffCandidates || []).length }
+  }
+  if (action === 'hostSheriffNextSpeak') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.hostOpenId !== o) throw new Error('仅主持')
+    const g = ro.game
+    g.sheriffSpeakIndex = (g.sheriffSpeakIndex | 0) + 1
+    if (g.sheriffSpeakIndex >= (g.sheriffSpeakOrder || []).length) {
+      g.phase = 'sheriff_vote'
+      g.sheriffVotes = {}
+      g.publicLog = (g.publicLog || []).concat(['警徽投票开始'])
+    } else {
+      g.publicLog = (g.publicLog || []).concat(['下一位警上发言'])
+    }
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'hostResolveSheriffVote') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.hostOpenId !== o) throw new Error('仅主持')
+    const g = ro.game
+    const sv = g.sheriffVotes || {}
+    const tally = {}
+    Object.keys(sv).forEach((v) => {
+      const t = sv[v]
+      if (t) tally[t] = (tally[t] || 0) + 1
+    })
+    let high = 0
+    let winner = null
+    let tie = false
+    Object.keys(tally).forEach((k) => {
+      if (tally[k] > high) {
+        high = tally[k]
+        winner = k
+        tie = false
+      } else if (tally[k] === high && high > 0) tie = true
+    })
+    if (tie) winner = null
+    if (winner) {
+      g.sheriffOpenId = winner
+      g.publicLog = (g.publicLog || []).concat([nn(ro, winner) + ' 当选警长'])
+    } else {
+      g.publicLog = (g.publicLog || []).concat(['警徽投票无效，无警长'])
+    }
+    g.phase = 'speak'
+    g.speakIndex = 0
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'sheriffVote') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.game.phase !== 'sheriff_vote' || ro.game.alive[o] === false) {
+      throw new Error('当前不可投警徽')
+    }
+    const t = String(event.targetOpenId || '')
+    if (!t || (ro.game.sheriffCandidates || []).indexOf(t) < 0) {
+      throw new Error('请选择上警候选人')
+    }
+    ro.game.sheriffVotes = { ...(ro.game.sheriffVotes || {}), [o]: t }
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
   if (action === 'hostDawnToSpeak') {
     const ro = await getRoomById(event.roomId)
     if (!ro || ro.hostOpenId !== o) {
       throw new Error('仅主持')
     }
+    if ((ro.game.day | 0) === 1 && !ro.game.sheriffElectionDone) {
+      ro.game.phase = 'sheriff_signup'
+      ro.game.sheriffSignup = {}
+      ro.game.sheriffPhase = 'signup'
+      ro.game.sheriffWithdrawn = {}
+      ro.game.withdrawEndTime = 0
+      ro.game.publicLog = (ro.game.publicLog || []).concat(['警长竞选：请选择是否上警'])
+      await saveFullRoom(ro)
+      return { ok: true }
+    }
     ro.game.phase = 'speak'
     ro.game.speakIndex = 0
     ro.game.voteOpen = 0
     ro.game.currentVotes = {}
-    ro.game.publicLog = (ro.game.publicLog || []).concat(['开始发言。'])
+    ro.game.publicLog = (ro.game.publicLog || []).concat(['警下发言开始'])
     await saveFullRoom(ro)
     return { ok: true }
   }
@@ -690,10 +1138,12 @@ async function run(event) {
     const pr = ro.playerRoles
     const g = ro.game
     const cv = g.currentVotes || {}
+    const sheriffOid = String(g.sheriffOpenId || '')
     const c = {}
     Object.keys(cv).forEach((k) => {
       const y = cv[k]
-      c[y] = (c[y] || 0) + 1
+      const w = sheriffOid && k === sheriffOid ? 2 : 1
+      c[y] = (c[y] || 0) + w
     })
     let high = 0
     let victim = null
@@ -706,8 +1156,24 @@ async function run(event) {
     if (victim) {
       g.alive = g.alive || {}
       g.alive[victim] = false
-      g.publicLog = (g.publicLog || []).concat(['投票离场：' + nn(ro, victim) + '。'])
-      if (pr[victim] === 'hunter') {
+      const logs = ['投票离场：' + nn(ro, victim) + '。']
+      const wasSheriff = getSheriffOpenIdManual(g) === victim
+      const isHunter = pr[victim] === 'hunter'
+      g.publicLog = (g.publicLog || []).concat(logs)
+      ro.game = g
+      if (checkWin(ro)) {
+        await saveFullRoom(ro)
+        return { over: ro.status === 'ended' }
+      }
+      if (wasSheriff) {
+        if (isHunter) g.pendingHunter = victim
+        const cont = isHunter ? 'manual_vote_hunter' : 'manual_vote_night'
+        if (tryStartSheriffTransferManual(ro, victim, cont)) {
+          await saveFullRoom(ro)
+          return { over: false }
+        }
+      }
+      if (isHunter) {
         g.pendingHunter = victim
         g.phase = 'hunter'
       } else {
@@ -743,11 +1209,53 @@ async function run(event) {
     }
     g.alive[t1] = false
     g.publicLog = (g.publicLog || []).concat(['协定者邀请 ' + nn(ro, t1) + ' 同步暂离。'])
+    if (getSheriffOpenIdManual(g) === t1) {
+      ro.game = g
+      if (checkWin(ro)) {
+        await saveFullRoom(ro)
+        return { ok: true }
+      }
+      if (tryStartSheriffTransferManual(ro, t1, 'manual_hunter_after')) {
+        g.pendingHunter = null
+        await saveFullRoom(ro)
+        return { ok: true }
+      }
+    }
     g.pendingHunter = null
     g.phase = 'night'
     g.day = (g.day | 0) + 1
     g.night = { wvote: {}, wkill: null, seer: null, wwitch: { saveLeft: 1, poisonLeft: 1, saveOn: null, poisonOn: null } }
     ro.game = g
+    if (checkWin(ro)) {
+      /* */
+    }
+    await saveFullRoom(ro)
+    return { ok: true }
+  }
+  if (action === 'transferSheriff') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.status !== 'playing' || ro.game.phase !== 'sheriff_transfer') {
+      throw new Error('当前非移交警徽阶段')
+    }
+    const g = ro.game
+    if (o !== g.sheriffTransferFrom) throw new Error('仅出局警长可移交警徽')
+    const t = String(event.targetOpenId || '')
+    if (!t || t === o) throw new Error('请选择存活玩家')
+    if (g.alive[t] === false) throw new Error('目标已暂离')
+    await completeSheriffTransferManual(ro, t)
+    if (checkWin(ro)) {
+      /* */
+    }
+    await saveFullRoom(ro)
+    return { ok: true, sheriffOpenId: g.sheriffOpenId || '' }
+  }
+  if (action === 'skipTransfer') {
+    const ro = await getRoomById(event.roomId)
+    if (!ro || ro.status !== 'playing' || ro.game.phase !== 'sheriff_transfer') {
+      throw new Error('当前非移交警徽阶段')
+    }
+    if (o !== ro.game.sheriffTransferFrom) throw new Error('仅出局警长可操作')
+    await completeSheriffTransferManual(ro, null)
     if (checkWin(ro)) {
       /* */
     }
@@ -764,5 +1272,51 @@ async function run(event) {
   if (action === 'syncState') {
     return await doSyncState(event, o)
   }
+  if (action === '__testSeedPlayers') {
+    return await doTestSeedPlayers(event)
+  }
   throw new Error('未知action ' + action)
+}
+
+async function doTestSeedPlayers(event) {
+  assertTestAction(event)
+  const ro = event.roomId
+    ? await getRoomById(event.roomId)
+    : await getRoomByCode(String(event.roomCode || '').replace(/\D/g, ''))
+  if (!ro) {
+    throw new Error('房间不存在')
+  }
+  if (ro.status !== 'waiting') {
+    throw new Error('对局已开始，无法注入测试玩家')
+  }
+  let ms = ro.members || []
+  const incoming = event.players || []
+  for (let i = 0; i < incoming.length; i += 1) {
+    const p = incoming[i] || {}
+    const oid = String(p.openId || '').trim()
+    if (!oid || ms.some((m) => m && m.openId === oid)) {
+      continue
+    }
+    if (ms.length >= roomSeatCap(ro)) {
+      break
+    }
+    ms = ms.concat([
+      Object.assign(
+        { openId: oid, joinedAt: now() },
+        jp.mergeJoinFields(p, {})
+      )
+    ])
+  }
+  await db
+    .collection(R)
+    .doc(String(ro._id))
+    .update({ data: { members: ms, updatedAt: now() } })
+  const fresh = await getRoomById(ro._id)
+  await setPub(fresh)
+  return {
+    ok: true,
+    playerCount: participantsOf(fresh).length,
+    roomId: String(ro._id),
+    roomCode: fresh.roomCode
+  }
 }

@@ -1,0 +1,226 @@
+[I 2026-06-02 00:04:05,957 minium minitest#432 _miniSetUp] =========Current case: test_16_headband_insufficient_players=========
+[W 2026-06-02 00:04:06,006 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-02 00:04:06,066 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_16_headband_insufficient_players
+[I 2026-06-02 00:04:06,114 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 00:04:06,163 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-02 00:04:06,212 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-02 00:04:06,265 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 45.56453514099121 seconds for it
+[I 2026-06-02 00:04:16,450 minium minium_object#101 _do_shell] err:
+- initialize
+
+✖ IDE may already started at port 25933, trying to connect
+
+✔ IDE server started successfully, listening on http://127.0.0.1:16978
+- preparing
+✔ close
+
+[I 2026-06-02 00:04:16,517 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-02 00:04:16,565 minium wx_minium#738 launch_dev_tool] Starting dev tool and launch MiniProgram project ...
+[I 2026-06-02 00:04:16,631 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-02 00:04:19,424 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:16978
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-02 00:04:19,424 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-02 00:04:24,479 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-02 00:04:24,645 minium.Conn5232 connection#352 _connect] connect to WebChatTools successfully
+[E 2026-06-02 00:04:44,925 minium wx_minium#848 connect_dev_tool] [1d6bf9bb-2769-4837-9e80-a3b495bc9431][call App.callWxMethod] receive from remote timeout
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 841, in connect_dev_tool
+    self._instantiate_app(not self.start_cmd or should_relaunch)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 878, in _instantiate_app
+    self._get_system_info()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 533, in _get_system_info
+    system_info = self.get_system_info()
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 909, in get_system_info
+    self._call_wx_method("getSystemInfoSync")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 501, in _receive_response
+    raise MiniTimeoutError(
+        f"[{cmd.id}][{cmd.desc}] receive from remote timeout"
+    )
+minium.framework.exception.MiniTimeoutError: [1d6bf9bb-2769-4837-9e80-a3b495bc9431][call App.callWxMethod] receive from remote timeout
+[I 2026-06-02 00:04:45,029 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-02 00:04:46,800 minium.Conn9712 connection#352 _connect] connect to WebChatTools successfully
+[E 2026-06-02 00:04:46,852 minium.Conn5232 connection#739 destroy] 断开连接
+[I 2026-06-02 00:04:47,023 minium.Conn5232 connection#377 _ws_run_forever] websocket run forever shutdown
+[W 2026-06-02 00:04:51,887 minium minitest#382 _check_debug_connection] app did not relaunch within 45.56453514099121 seconds
+[W 2026-06-02 00:04:51,893 minium minitest#449 _miniSetUp] check debug connection fail
+[I 2026-06-02 00:04:52,042 minium minitest#109 reset_minium] reset_minium
+[I 2026-06-02 00:04:52,221 minium.Conn9712 connection#704 _handle_async_msg] received async msg: 15414656-befa-47ba-ba3b-183c6a5b8258, maybe command ignore response
+[E 2026-06-02 00:04:52,418 minium.Conn9712 connection#642 _on_error] Connection to remote host was lost.
+[I 2026-06-02 00:04:52,593 minium.Conn9712 connection#377 _ws_run_forever] websocket run forever shutdown
+[I 2026-06-02 00:04:53,222 minium minitest#89 reset_native] reset_native
+[I 2026-06-02 00:04:53,331 minium basenative#59 wrapper] call IdeNative.stop_wechat
+[I 2026-06-02 00:04:53,460 minium basenative#63 wrapper] call IdeNative.stop_wechat end None
+[I 2026-06-02 00:04:53,578 minium basenative#59 wrapper] call IdeNative.release
+[I 2026-06-02 00:04:53,702 minium basenative#59 wrapper] call BaseNative.release
+[I 2026-06-02 00:04:53,830 minium basenative#250 release] Native release
+[I 2026-06-02 00:04:53,949 minium basenative#59 wrapper] call BaseNative.release_auto_authorize
+[I 2026-06-02 00:04:54,096 minium basenative#63 wrapper] call BaseNative.release_auto_authorize end None
+[I 2026-06-02 00:04:54,219 minium basenative#63 wrapper] call BaseNative.release end None
+[I 2026-06-02 00:04:54,366 minium basenative#63 wrapper] call IdeNative.release end None
+[I 2026-06-02 00:04:54,429 minium minitest#202 init_miniprogram] start init miniprogram
+[I 2026-06-02 00:04:54,486 minium basenative#59 wrapper] call IdeNative.start_wechat
+[I 2026-06-02 00:04:54,632 minium basenative#63 wrapper] call IdeNative.start_wechat end None
+[I 2026-06-02 00:04:54,709 minium wx_minium#738 launch_dev_tool] Starting dev tool and launch MiniProgram project ...
+[I 2026-06-02 00:04:54,788 minium minium_object#83 _do_shell] de shell: /Applications/wechatwebdevtools.app/Contents/MacOS/cli auto --project "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games" --auto-port 63518
+[I 2026-06-02 00:04:56,818 minium minium_object#101 _do_shell] err:
+- initialize
+
+✔ IDE server has started, listening on http://127.0.0.1:16978
+- preparing
+- Fetching AppID () permissions
+✔ Using AppID: wx73314ee6734cdfa0
+✔ auto
+
+[I 2026-06-02 00:04:56,819 minium minium_object#102 _do_shell] out:
+
+[I 2026-06-02 00:05:01,878 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-02 00:05:02,229 minium.Conn1328 connection#352 _connect] connect to WebChatTools successfully
+[E 2026-06-02 00:05:02,283 minium.Conn9712 connection#739 destroy] 断开连接
+[E 2026-06-02 00:05:02,366 minium wx_minium#848 connect_dev_tool] client close by myself
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 841, in connect_dev_tool
+    self._instantiate_app(not self.start_cmd or should_relaunch)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 878, in _instantiate_app
+    self._get_system_info()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 533, in _get_system_info
+    system_info = self.get_system_info()
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 909, in get_system_info
+    self._call_wx_method("getSystemInfoSync")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 490, in _receive_response
+    raise MiniClientOfflineError("client close by myself")
+minium.framework.exception.MiniClientOfflineError: client close by myself
+[I 2026-06-02 00:05:02,430 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-02 00:05:02,721 minium.Conn2000 connection#352 _connect] connect to WebChatTools successfully
+[E 2026-06-02 00:05:02,854 minium.Conn1328 connection#739 destroy] 断开连接
+[I 2026-06-02 00:05:02,918 minium.Conn1328 connection#377 _ws_run_forever] websocket run forever shutdown
+[W 2026-06-02 00:05:20,817 minium.Conn2000 connection#330 notify] no observer listening event App.initialized
+[I 2026-06-02 00:05:20,847 minium.Conn2000 connection#704 _handle_async_msg] received async msg: fe8a941b-139b-49bd-8787-6748ac62ce39, maybe command ignore response
+[I 2026-06-02 00:05:20,995 minium.App4800 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x1214cbe00>
+[I 2026-06-02 00:05:21,438 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x121598a50>, whether should relaunch: False
+[I 2026-06-02 00:05:21,889 minium wx_minium#688 _relaunch] end relaunch app
+[E 2026-06-02 00:05:22,396 minium wx_minium#848 connect_dev_tool] [fe8a941b-139b-49bd-8787-6748ac62ce39][call App.callWxMethod] command timeout cause by connection close: code[None] reason[None]
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 841, in connect_dev_tool
+    self._instantiate_app(not self.start_cmd or should_relaunch)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 878, in _instantiate_app
+    self._get_system_info()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 533, in _get_system_info
+    system_info = self.get_system_info()
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 909, in get_system_info
+    self._call_wx_method("getSystemInfoSync")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 498, in _receive_response
+    raise MiniTimeoutCauseByConnectionBreakError(
+        f"[{cmd.id}][{cmd.desc}] command timeout cause by {cmd.reason}"
+    )
+minium.framework.exception.MiniTimeoutCauseByConnectionBreakError: [fe8a941b-139b-49bd-8787-6748ac62ce39][call App.callWxMethod] command timeout cause by connection close: code[None] reason[None]
+[I 2026-06-02 00:05:22,412 minium wx_minium#835 connect_dev_tool] Trying to connect Dev tool ...
+[I 2026-06-02 00:05:22,582 minium.Conn4464 connection#352 _connect] connect to WebChatTools successfully
+[E 2026-06-02 00:05:22,670 minium.Conn2000 connection#739 destroy] 断开连接
+[I 2026-06-02 00:05:22,814 minium.Conn2000 connection#377 _ws_run_forever] websocket run forever shutdown
+[I 2026-06-02 00:05:23,410 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x121599810>, whether should relaunch: False
+[I 2026-06-02 00:05:23,412 minium basenative#59 wrapper] call IdeNative.send
+[W 2026-06-02 00:05:23,646 minium idenative#77 _send] handle clickCoverView error: clickCoverView failed
+[I 2026-06-02 00:05:23,828 minium basenative#63 wrapper] call IdeNative.send end False
+[I 2026-06-02 00:05:24,392 minium minitest#218 init_miniprogram] end init miniprogram
+[I 2026-06-02 00:05:24,396 minium minitest#897 capture] capture setup.png
+[I 2026-06-02 00:05:24,867 minium minitest#487 _miniSetUp] =========case: test_16_headband_insufficient_players start=========
+[I 2026-06-02 00:05:24,975 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-02 00:05:29,635 minium.Conn4464 connection#668 __on_message] [9ab51730-3c95-4334-acf6-1b3cc200999c]: wx.cloud.callFunction not exists
+[I 2026-06-02 00:05:33,205 minium.App7056 app#950 relaunch] ReLaunch: /packageGames/headband/headband
+[I 2026-06-02 00:05:34,790 minium.App7056 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/headband/headband', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780329934756, 'webviewId': 2, 'routeEventId': '2_1780329934555', 'renderer': 'webview'}, 1780329934756]}
+[I 2026-06-02 00:05:34,790 minium.Conn4464 connection#704 _handle_async_msg] received async msg: 28b1e656-fa7c-4f9e-b420-81e925be080e
+[I 2026-06-02 00:05:36,357 minium page#716 _get_elements_by_css] try to get elements: input
+[I 2026-06-02 00:05:36,368 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x1220d1400>]
+[I 2026-06-02 00:05:36,844 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:36,848 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12207c230>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12207e990>]
+[I 2026-06-02 00:05:39,038 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-02 00:05:39,102 minium.Conn4464 connection#668 __on_message] [be94e3fa-ac1a-465d-be26-66af8e9aeebc]: wx.cloud.callFunction not exists
+[I 2026-06-02 00:05:42,770 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:42,779 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12207c910>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12207c2d0>]
+[I 2026-06-02 00:05:43,842 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:43,848 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12207e990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12207f250>]
+[I 2026-06-02 00:05:44,951 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:44,955 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12207c910>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12207ddb0>]
+[I 2026-06-02 00:05:46,028 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:46,084 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12207e990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12207efd0>]
+[I 2026-06-02 00:05:46,200 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:46,312 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x122249db0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224b110>]
+[I 2026-06-02 00:05:47,547 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:47,555 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12224aa30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224b390>]
+[I 2026-06-02 00:05:48,634 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:48,704 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12224b110>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1222489b0>]
+[I 2026-06-02 00:05:49,833 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:05:49,838 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x122249db0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224aad0>]
+[E 2026-06-02 00:05:49,892 minium.Conn4464 connection#668 __on_message] [7f339db0-6c24-4299-8a68-1660f1900844]: wx.cloud.callFunction not exists
+[E 2026-06-02 00:05:52,945 minium.Conn4464 connection#668 __on_message] [75beb3ce-9d17-4434-aa02-d1282c04f57b]: wx.cloud.callFunction not exists
+[E 2026-06-02 00:05:55,287 minium.Conn4464 connection#668 __on_message] [e1e3035b-9df4-46ba-a741-3a60e6ecc8f5]: wx.cloud.callFunction not exists
+[E 2026-06-02 00:05:59,715 minium.Conn4464 connection#668 __on_message] [eedb541e-36d3-4b4a-bf0d-7b0dd3095497]: wx.cloud.callFunction not exists
+[I 2026-06-02 00:06:03,524 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:03,541 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1222484b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224ad50>]
+[I 2026-06-02 00:06:04,609 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:04,624 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x122249db0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224a350>]
+[I 2026-06-02 00:06:05,706 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:05,716 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12224b2f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224a0d0>]
+[I 2026-06-02 00:06:06,878 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:07,007 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12224b110>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12224a2b0>]
+[I 2026-06-02 00:06:07,014 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:07,067 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12224a990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1222485f0>]
+[I 2026-06-02 00:06:08,355 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:08,370 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1222484b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1222480f0>]
+[I 2026-06-02 00:06:09,438 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:09,449 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12224a990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x122248410>]
+[I 2026-06-02 00:06:10,532 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 00:06:10,540 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1222484b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x122248a50>]
+[E 2026-06-02 00:06:10,610 minium.Conn4464 connection#668 __on_message] [9af72bf6-cf49-4502-b010-a22378393edd]: wx.cloud.callFunction not exists
+[E 2026-06-02 00:06:13,768 minium.Conn4464 connection#668 __on_message] [2d10b917-0e2b-47d0-bc6c-91cd7fd04a22]: wx.cloud.callFunction not exists
+[I 2026-06-02 00:06:16,739 minium minitest#897 capture] capture assertTrue-success_000616739298.png
+[E 2026-06-02 00:06:16,904 minium.Conn4464 connection#668 __on_message] [b3a37cbb-b049-4f22-9fa1-e423ee8cec6f]: wx.cloud.callFunction not exists
+[E 2026-06-02 00:06:19,267 minium.Conn4464 connection#668 __on_message] [8f63bad0-d074-40d5-9591-9b12f2a42eec]: wx.cloud.callFunction not exists
+[E 2026-06-02 00:06:22,015 minium.Conn4464 connection#668 __on_message] [75e159e5-5213-4585-8d07-089c714768bd]: wx.cloud.callFunction not exists
+[I 2026-06-02 00:06:27,310 minium minitest#897 capture] capture assertTrue-success_000627310393.png
+[I 2026-06-02 00:06:27,370 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 00:06:27,432 minium minitest#897 capture] capture teardown.png
+[I 2026-06-02 00:06:27,833 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 00:06:27,833 minium basenative#63 wrapper] call BaseNative.get_start_up end 

@@ -1,0 +1,177 @@
+<view class="page rg-page mr-page">
+  <view class="hero">
+    <view class="hero-title">AI迷雾推理局</view>
+    <view class="hero-subtitle muted">线下亲友聚会 · AI 全自动推理剧本</view>
+  </view>
+
+  <view class="rg-room-card" wx:if="{{!roomId}}">
+    <view class="title">点选 6 位聚会组口令</view>
+    <view class="mr-code-slots">
+      <view
+        class="mr-code-slot {{joinCode.length > index ? 'filled' : ''}}"
+        wx:for="{{codeSlots}}"
+        wx:for-index="index"
+        wx:key="*this"
+      >
+        {{joinCode[index] || '·'}}
+      </view>
+    </view>
+    <view class="mr-numpad">
+      <view class="mr-numpad-key" wx:for="{{numpadKeys}}" wx:key="*this" data-key="{{item}}" bindtap="onNumpadTap">
+        {{item}}
+      </view>
+    </view>
+    <button class="btn btn-primary main-btn rg-btn-primary mr-btn-join" bindtap="onJoinTap" disabled="{{joinCode.length !== 6 || opBusy}}">
+      加入聚会组
+    </button>
+    <button class="btn btn-ghost main-btn rg-btn-ghost mr-btn-create" style="margin-top:12rpx" bindtap="onCreateRoom" disabled="{{opBusy}}">
+      创建聚会组
+    </button>
+  </view>
+
+  <block wx:if="{{roomId}}">
+    <view class="rg-status-banner" wx:if="{{statusHint}}">{{statusHint}}</view>
+
+    <view class="rg-room-card">
+      <view class="mr-phase-title">{{phaseZh}}</view>
+      <view class="mr-countdown" wx:if="{{phaseRemainingSeconds > 0 && phase !== 'waiting' && phase !== 'generate_script'}}">
+        倒计时：{{phaseRemainingSeconds}} 秒
+      </view>
+      <view class="muted" wx:if="{{pub.roomCode}}">聚会组口令：{{pub.roomCode}}
+        <text class="link" bindtap="onCopyCode"> 复制</text>
+      </view>
+      <view class="mr-ai-hint" wx:if="{{pub.publicDiscussHint && phase === 'public_discuss'}}">
+        AI 提示：{{pub.publicDiscussHint}}
+      </view>
+      <view class="mr-ai-hint" wx:if="{{pub.analyzeClueHint && phase === 'analyze_clue'}}">
+        AI 提示：{{pub.analyzeClueHint}}
+      </view>
+    </view>
+
+    <view class="rg-room-card rg-members-card">
+      <view class="section-title">成员 {{memberCountLine}}</view>
+      <view class="rg-member-list">
+        <view class="rg-member-item" wx:for="{{displayPlayers}}" wx:key="openId">
+          <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.displayName || item.roleName || item.nickName}}" />
+          <text class="rg-member-name">{{item.displayName || item.roleName || item.nickName}}</text>
+          <text class="muted" wx:if="{{item.isReady}}">已就绪</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'waiting' && isHost}}">
+      <view class="section-title">难度</view>
+      <picker mode="selector" range="{{difficultyLabels}}" value="{{difficultyIdx}}" bindchange="onDifficultyChange">
+        <view class="rg-setting-item">{{difficultyLabels[difficultyIdx]}}</view>
+      </picker>
+      <button class="btn btn-primary main-btn rg-btn-primary" bindtap="onStartGame" disabled="{{!canStart || opBusy}}">
+        开始互动
+      </button>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'generate_script'}}">
+      <view class="muted">AI 正在生成专属剧本，请稍候…</view>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'read_script'}}">
+      <button class="btn btn-primary main-btn" bindtap="onOpenScript" disabled="{{opBusy}}">查看个人剧本</button>
+      <button class="btn btn-ghost main-btn" style="margin-top:12rpx" bindtap="onMarkReady" disabled="{{opBusy}}">我已读完（就绪）</button>
+      <button class="btn btn-ghost rg-btn-ghost" wx:if="{{isHost}}" style="margin-top:12rpx" bindtap="onHostSkip" disabled="{{opBusy}}">组长跳过本阶段</button>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'public_discuss'}}">
+      <view class="muted">请面对面口头推理；本阶段无新证据派发。</view>
+      <button class="btn btn-ghost rg-btn-ghost" wx:if="{{isHost}}" bindtap="onHostSkip" disabled="{{opBusy}}">组长结束本阶段</button>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'get_evidence' || phase === 'analyze_clue'}}">
+      <view class="mr-evidence-head">
+        当前第 {{pub.evidenceRoundRecord.length || 0}} 轮证据｜已解锁全部线索
+      </view>
+      <view class="muted" wx:if="{{phase === 'analyze_clue'}}" style="margin-bottom:12rpx">请结合全部线索面对面辩论，无新证据派发。</view>
+      <view class="mr-clue-tabs">
+        <view class="mr-clue-tab {{clueTab === 'public' ? 'on' : ''}}" data-tab="public" bindtap="onClueTab">公共证据</view>
+        <view class="mr-clue-tab {{clueTab === 'private' ? 'on' : ''}}" data-tab="private" bindtap="onClueTab">我的私密证据</view>
+      </view>
+      <block wx:if="{{clueTab === 'public'}}">
+        <view class="mr-clue-card" wx:for="{{pub.publicClue}}" wx:key="id">
+          <view class="mr-clue-title">{{item.title}}</view>
+          <view class="mr-clue-body">{{item.body}}</view>
+          <view class="mr-clue-source">公共线索</view>
+          <view class="mr-clue-doubt" wx:if="{{item.doubtful}}">存疑线索</view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="mr-clue-card private" wx:for="{{myPrivateClues}}" wx:key="id">
+          <view class="mr-clue-title">{{item.title}}</view>
+          <view class="mr-clue-body">{{item.body}}</view>
+          <view class="mr-clue-source">你的私人线索</view>
+          <view class="mr-clue-doubt" wx:if="{{item.doubtful}}">存疑线索</view>
+          <view class="mr-star-btn" data-id="{{item.id}}" catchtap="onStarClue">
+            {{item.isStarred ? '★ 已收藏' : '☆ 收藏'}}
+          </view>
+        </view>
+      </block>
+      <button class="btn btn-ghost rg-btn-ghost" wx:if="{{isHost}}" bindtap="onHostSkip" disabled="{{opBusy}}">
+        {{phase === 'get_evidence' ? '组长结束证据阶段' : '组长结束本阶段'}}
+      </button>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'final_vote'}}">
+      <view class="section-title">最终投票</view>
+      <view class="muted">投票进度 {{pub.voteProgress.voted || 0}}/{{pub.voteProgress.total || 0}}</view>
+      <view class="mr-vote-row" wx:for="{{view.voteTargets}}" wx:key="id"
+        data-oid="{{item.id}}" data-name="{{item.name}}" bindtap="onVoteTap">
+        <member-avatar nick-name="{{item.name}}" />
+        <text class="rg-member-name">{{item.name}}</text>
+        <text class="mr-vote-check" wx:if="{{view.myVoteTarget === item.id}}">✓</text>
+      </view>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'wait_unlock_review'}}">
+      <view class="muted">结局已锁定。任意一人分享后即可全员查看 AI 复盘。</view>
+      <button class="btn btn-primary main-btn" open-type="share">分享解锁复盘</button>
+    </view>
+
+    <view class="rg-room-card" wx:if="{{phase === 'ai_review' || phase === 'finished'}}">
+      <view class="section-title">AI 复盘</view>
+      <view class="mr-review-box">{{view.reviewContent}}</view>
+      <button class="btn btn-primary main-btn" wx:if="{{isHost && phase === 'finished'}}" bindtap="onRestart" disabled="{{opBusy}}">重启对局</button>
+    </view>
+
+    <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)">邀请朋友</button>
+  </block>
+</view>
+
+<view class="ww-transfer-mask" wx:if="{{showScriptModal}}" catchtouchmove="noop">
+  <view class="ww-transfer-dialog">
+    <view class="ww-transfer-title">个人剧本（仅你可见）</view>
+    <scroll-view scroll-y class="mr-script-box">
+      <view class="mr-script-section" data-section="roleName">
+        <view class="mr-script-label">角色名</view>
+        <text class="mr-script-body">{{scriptDetail.roleName}}</text>
+      </view>
+      <view class="mr-script-section" data-section="profile">
+        <view class="mr-script-label">人物简介</view>
+        <text class="mr-script-body">{{scriptDetail.profile}}</text>
+      </view>
+      <view class="mr-script-section" data-section="relationships">
+        <view class="mr-script-label">人物关系</view>
+        <text class="mr-script-body">{{scriptDetail.relationships}}</text>
+      </view>
+      <view class="mr-script-section" data-section="roleScript">
+        <view class="mr-script-label">个人剧情</view>
+        <text class="mr-script-body">{{scriptDetail.roleScript}}</text>
+      </view>
+      <view class="mr-script-section" data-section="secret">
+        <view class="mr-script-label">隐藏秘密</view>
+        <text class="mr-script-body">{{scriptDetail.secret}}</text>
+      </view>
+      <view class="mr-script-section" data-section="timeline">
+        <view class="mr-script-label">时间线</view>
+        <text class="mr-script-body">{{scriptDetail.timeline}}</text>
+      </view>
+    </scroll-view>
+    <button class="btn btn-primary main-btn" bindtap="onCloseScript">关闭</button>
+  </view>
+</view>

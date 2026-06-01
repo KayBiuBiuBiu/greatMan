@@ -3,13 +3,14 @@ const {
   ensureWerewolfCloud
 } = require('../../utils/werewolfCloud')
 const { enterCloudRoomOnLoad } = require('../utils/roomJoin')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const { markRoomDbWatch } = require('../../utils/cloudRealtime')
 const {
   memberCountLine,
   refreshCloudDoc,
   runStartAction,
-  buildStartChecks
+  buildStartChecks,
+  showStartBlockTip
 } = require('../utils/roomUi')
 const {
   enableShareMenus,
@@ -40,7 +41,13 @@ const {
 const lobbyReady = require('../utils/roomLobbyReady')
 const { lobbyGuestReadyStats } = lobbyReady
 const { runHostNarrate } = require('../../utils/agentHelper')
-const { isWerewolfMockEnabled, isWerewolfEnabled, isAiButtonsEnabled } = require('../../data/feature-flags')
+const {
+  isWerewolfMockEnabled,
+  isWerewolfEnabled,
+  isAiButtonsEnabled,
+  isWerewolfAIModeEnabled
+} = require('../../data/feature-flags')
+const { werewolfAiMixin } = require('./werewolfAiMixin')
 const WOLF_OPENID_KEY = 'werewolf_my_open_id'
 const MOCK_ENABLED = isWerewolfMockEnabled()
 const {
@@ -57,9 +64,11 @@ const WOLF_SIZE_HINT = MOCK_ENABLED
   : WOLF_SIZE_HINT_BASE
 const RZH = {
   werewolf: '暗位成员',
+  white_wolf: '白狼王',
   seer: '线索员',
   witch: '治愈者',
   hunter: '协定者',
+  guard: '守卫',
   villager: '村民',
   '': '—'
 }
@@ -67,8 +76,13 @@ const PZH = {
   lobby: '大厅',
   night: '夜间',
   day_announce: '天亮了',
-  speak: '发言',
-  vote: '投票',
+  sheriff_signup: '警长竞选',
+  sheriff_withdraw: '退水',
+  sheriff_speak: '警上发言',
+  sheriff_vote: '警徽投票',
+  sheriff_transfer: '移交警徽',
+  speak: '警下发言',
+  vote: '放逐投票',
   hunter: '协定者',
   end: '结束',
   '': '—'
@@ -121,7 +135,15 @@ Page({
     pickNeedConfirm: false,
     agentHostOn: false,
     agentSpeakLine: '',
-    agentBusy: false
+    agentBusy: false,
+    showAiModeOption: isWerewolfAIModeEnabled(),
+    aiHostLobby: true,
+    aiModeOn: false,
+    aiPhaseTitle: '',
+    aiCountdownPct: 100,
+    aiView: {},
+    aiActionBusy: false,
+    aiAliveTargets: []
   },
   _shareCtx() {
     return {
@@ -139,7 +161,7 @@ Page({
     tryRedeemShareFromQuery(q || {})
     this._justOpened = true
     const title = decodeURIComponent(q.title || '秘密身份推理（聚会版）')
-    const nick0 = (wx.getStorageSync('werewolf_nick') || '').toString()
+    const nick0 = (wx.getStorageSync('werewolf_nick') || '').toString() || getFallbackNickName()
     let config = {}
     try {
       if (q.config) {
@@ -189,11 +211,13 @@ Page({
   onUnload() {
     onRoomLeft(this)
     stopInRoomPoll(this)
+    this.stopAiPoll && this.stopAiPoll()
     this.stopWatch()
   },
   onHide() {
     onPageHideUnlock(this)
     stopInRoomPoll(this)
+    this.stopAiPoll && this.stopAiPoll()
   },
   onShow() {
     enableShareMenus()
@@ -258,12 +282,22 @@ Page({
       seer: '👇 点成员查看身份线索',
       poison: '👇 点成员后按确认',
       vote: '👇 点成员后确认投票',
-      hunter: '👇 点成员后确认'
+      hunter: '👇 点成员后确认',
+      guard: '👇 点成员后确认守护',
+      whiteWolf: '👇 自爆：点成员后确认带走',
+      sheriffVote: '👇 点候选人后确认警徽'
     }
     return m[mode] || '👇 点成员选择'
   },
   _pickNeedConfirm(mode) {
-    return mode === 'poison' || mode === 'vote' || mode === 'hunter'
+    return (
+      mode === 'poison' ||
+      mode === 'vote' ||
+      mode === 'hunter' ||
+      mode === 'guard' ||
+      mode === 'whiteWolf' ||
+      mode === 'sheriffVote'
+    )
   },
   _patchPickMembers(patch) {
     const mode = patch.pickMode != null ? patch.pickMode : this.data.pickMode
@@ -317,7 +351,12 @@ Page({
       patch.rzh = v.isHost ? '主持' : (v.myRole ? roleZh(v.myRole) : '')
     }
     if (Object.keys(patch).length) {
-      this.setData(patch, () => this.syncDisplayText())
+      this.setData(patch, () => {
+        this.syncDisplayText()
+        if (patch.pub && patch.pub.aiMode) {
+          this.startAiPoll && this.startAiPoll()
+        }
+      })
     } else {
       this.loadView()
     }
@@ -368,7 +407,7 @@ Page({
     )
   },
   onNickIn(e) {
-    const nick = (e.detail.value || '').trim().slice(0, 12) || '参与者'
+    const nick = (e.detail.value || '').trim().slice(0, 12) || getFallbackNickName()
     this.setData({ nick })
   },
   onCodeIn(e) {
@@ -391,10 +430,8 @@ Page({
     this.setData({ opBusy: true })
     this.saveNick()
     wx.showLoading({ title: '创建中' })
-    const maxPlayers = SIZES[this.data.maxIndex | 0] || 6
-    saveStoredSize(maxPlayers)
     callWerewolfService(
-      withJoinProfile({ action: 'create', maxPlayers }),
+      withJoinProfile({ action: 'create' }),
       {
         onOk: (res) => {
           wx.hideLoading()
@@ -433,7 +470,7 @@ Page({
       withJoinProfile({
         action: 'join',
         roomCode: c,
-        nickName: this.data.nick || '参与者'
+        nickName: this.data.nick || getFallbackNickName()
       }),
       {
         onOk: (res) => {
@@ -559,16 +596,17 @@ Page({
   },
   doStart() {
     const pub = this.data.pub || {}
-    const hostOid = pub.hostOpenId || ''
-    const players = (pub.players || []).filter((p) => p.openId !== hostOid)
+    const players = pub.players || []
     const n = players.length
-    const need = (pub.maxPlayers | 0) || SIZES[this.data.maxIndex | 0] || 6
+    const hostOid = pub.hostOpenId || ''
+    const need = 0
     const v = this.data.view || {}
-    const ctx = { playerCount: n, needPlayers: need }
+    const ctx = { playerCount: n, needPlayers: 0 }
     const checks = buildStartChecks({
       isHost: v.isHost,
       playerCount: n,
-      needPlayers: need,
+      minPlayers: 6,
+      needPlayers: 0,
       kind: 'werewolf',
       ctx,
       players: pub.players || [],
@@ -576,6 +614,19 @@ Page({
       startVerb: '开始互动'
     })
     this.setData({ opBusy: true })
+    const useAi =
+      this.data.aiHostLobby && isWerewolfAIModeEnabled()
+    if (useAi) {
+      for (let i = 0; i < checks.length; i++) {
+        if (checks[i] && checks[i].fail) {
+          showStartBlockTip(checks[i])
+          this.setData({ opBusy: false })
+          return
+        }
+      }
+      this.doStartAI()
+      return
+    }
     runStartAction({
       kind: 'werewolf',
       ctx,
@@ -633,6 +684,9 @@ Page({
               )
             })
             this.syncDisplayText()
+            if (d.aiMode && this.startAiPoll) {
+              this.startAiPoll()
+            }
           }
         },
         onError: (e) => {
@@ -658,7 +712,8 @@ Page({
       avatarUrl: m.avatarUrl || '',
       profileReady: !!m.profileReady,
       isAlive: m.isAlive !== false,
-      isHost: !!(p.hostOpenId && m.openId === p.hostOpenId)
+      isHost: !!(p.hostOpenId && m.openId === p.hostOpenId),
+      isSheriff: !!m.isSheriff
     }))
     const phase = p.status === 'waiting' ? 'waiting' : p.currentPhase || 'lobby'
     const patch = {
@@ -678,9 +733,9 @@ Page({
       })),
       playerList: pl
     }
-    const needN = (p.maxPlayers | 0) || SIZES[this.data.maxIndex | 0] || 6
+    const needN = 0
     const hostOid = p.hostOpenId || ''
-    const participants = pl.filter((m) => m.openId !== hostOid)
+    const memberCount = pl.length
     patchLobbyUi(patch, {
       state: p,
       view: v,
@@ -690,28 +745,18 @@ Page({
       minPlayers: 6,
       isHost: v.isHost,
       myOpenId: v.myOpenId || '',
-      hostOpenId: hostOid
+      hostOpenId: hostOid,
+      hostWaiting: '⏳ 参与者到齐后点「开始互动」发牌',
+      guestWaiting: '👥 等待组长开始互动'
     }, this)
-    if (phase === 'waiting' || phase === 'lobby' || !phase) {
-      patch.memberCountLine = memberCountLine(participants.length, needN)
-      patch.playerProgressPct = computeProgressPct(participants.length, needN)
-      patch.canStart =
-        !!v.isHost &&
-        participants.length >= needN &&
-        lobbyGuestReadyStats(pl, hostOid, this, v.myOpenId || '').allReady
-      patch.statusBannerWarn = participants.length < needN
-      patch.statusHint = buildLobbyStatusHint(!!v.isHost, phase, participants.length, {
-        minPlayers: 6,
-        maxPlayers: needN,
-        hostWaiting: '⏳ 参与者到齐后点「开始互动」发牌',
-        guestWaiting: '👥 等待组长开始互动'
-      })
-    }
     if (this.data.pickMode) {
       patch.pickMode = this.data.pickMode
       patch.pickSelOid = this.data.pickSelOid
       patch.pickHint = this.data.pickHint
       this._patchPickMembers(patch)
+    }
+    if (this._patchSheriffTransferUi) {
+      this._patchSheriffTransferUi(patch, p, v)
     }
     this.setData(patch)
     if (p.status === 'playing' && v.isHost && phase && phase !== 'lobby' && phase !== 'waiting') {
@@ -777,8 +822,17 @@ Page({
   },
   buildPickOptions(mode) {
     const pub = this.data.pub || {}
-    const hostOid = String(pub.hostOpenId || '').trim()
     const selfOid = this._myOpenId()
+    if (mode === 'sheriffVote') {
+      const cands = (pub.sheriffCandidates || []).map((c) =>
+        typeof c === 'string'
+          ? { openId: c, nickName: ((pub.players || []).find((p) => p.openId === c) || {}).nickName || '候选人' }
+          : c
+      )
+      return cands
+        .filter((p) => p && p.openId && p.openId !== selfOid)
+        .map((p) => ({ openId: p.openId, nickName: p.nickName || '候选人' }))
+    }
     const pl =
       (this.data.displayPlayers && this.data.displayPlayers.length && this.data.displayPlayers) ||
       this.data.playerList ||
@@ -788,9 +842,6 @@ Page({
     return pl
       .filter((p) => {
         if (!p || !p.openId) {
-          return false
-        }
-        if (hostOid && p.openId === hostOid) {
           return false
         }
         if (p.isAlive === false) {
@@ -954,7 +1005,111 @@ Page({
           }
         }
       )
+      return
     }
+    if (mode === 'guard') {
+      callWerewolfService(
+        { action: 'wGuard', roomId: rid, targetOpenId: oid },
+        {
+          onOk: () => {
+            this.onPickCancel()
+            wx.showToast({ title: '已守护', icon: 'success' })
+            this.loadView()
+          }
+        }
+      )
+      return
+    }
+    if (mode === 'sheriffVote') {
+      callWerewolfService(
+        { action: 'sheriffVote', roomId: rid, targetOpenId: oid },
+        {
+          onOk: () => {
+            this.onPickCancel()
+            wx.showToast({ title: '已投警徽', icon: 'success' })
+            this.loadView()
+          }
+        }
+      )
+      return
+    }
+    if (mode === 'whiteWolf') {
+      callWerewolfService(
+        { action: 'whiteWolfBoom', roomId: rid, targetOpenId: oid },
+        {
+          onOk: () => {
+            this.onPickCancel()
+            this.loadView()
+          }
+        }
+      )
+    }
+  },
+  _applyGetView(v) {
+    if (!v || !v.roomCode) {
+      this.setData({
+        view: v,
+        rzh: v && v.isHost ? '主持' : (v && v.myRole ? roleZh(v.myRole) : '')
+      })
+      this.syncDisplayText()
+      return
+    }
+    const myR = v.myRole
+    const next = {
+      view: v,
+      rzh: v.isHost ? '主持' : (myR ? roleZh(myR) : ''),
+      pzh: phZh(
+        (this.data.pub && this.data.pub.currentPhase) || v.phase || 'lobby'
+      )
+    }
+    const pl = (v.players || []).map((m) => ({
+      openId: m.openId,
+      nickName: m.nickName != null ? m.nickName : m.nick,
+      isAlive: m.isAlive,
+      seat: m.seat
+    }))
+    const prevPub = this.data.pub || {}
+    const curPh =
+      v.phase == null || v.phase === ''
+        ? prevPub.currentPhase || 'lobby'
+        : v.phase
+    const im = SIZES.indexOf(v.maxPlayers)
+    const maxP = v.maxPlayers != null ? v.maxPlayers : prevPub.maxPlayers
+    next.pub = Object.assign({}, prevPub, {
+      roomCode: v.roomCode || prevPub.roomCode,
+      status: v.roomStatus != null ? v.roomStatus : prevPub.status,
+      maxPlayers: maxP,
+      currentPhase: curPh,
+      day: v.day != null ? v.day | 0 : prevPub.day | 0,
+      publicLog: v.publicLog || prevPub.publicLog || [],
+      lastNightReport:
+        v.lastNightReport != null ? v.lastNightReport : prevPub.lastNightReport,
+      gameEnd: v.gameEnd != null ? v.gameEnd : prevPub.gameEnd,
+      winSide: v.winSide != null ? v.winSide : prevPub.winSide,
+      players: pl.length ? pl : prevPub.players || [],
+      speakIndex: v.speakIndex != null ? v.speakIndex | 0 : prevPub.speakIndex | 0,
+      speakOrder: v.speakOrder || prevPub.speakOrder || [],
+      voteOpen: v.voteOpen != null ? !!v.voteOpen : !!prevPub.voteOpen,
+      currentVotes: v.currentVotes || prevPub.currentVotes || {},
+      pendingHunter:
+        v.pendingHunter != null ? v.pendingHunter : prevPub.pendingHunter
+    })
+    next.roomCode = v.roomCode || this.data.roomCode
+    if (im >= 0) {
+      next.maxIndex = im
+    }
+    next.pzh = phZh(curPh || 'lobby')
+    const pn = (next.pub.players && next.pub.players.length) || 0
+    const needN = (maxP | 0) > 0 ? (maxP | 0) : 0
+    next.memberCountLine =
+      needN > 0
+        ? memberCountLine(pn, needN)
+        : memberCountLine(pn, 0, '至少 6 人可开始')
+    this.setData(next)
+    this.syncDisplayText()
+  },
+  applyTestSyncSnapshot(v) {
+    this._applyGetView(v || {})
   },
   loadView() {
     const { roomId } = this.data
@@ -966,65 +1121,7 @@ Page({
       {
         silent: true,
         onOk: (res) => {
-          const v = res.result || {}
-          if (!v || !v.roomCode) {
-            this.setData({
-              view: v,
-              rzh: v && v.isHost ? '主持' : (v && v.myRole ? roleZh(v.myRole) : '')
-            })
-            this.syncDisplayText()
-            return
-          }
-          const myR = v.myRole
-          const next = {
-            view: v,
-            rzh: v.isHost ? '主持' : (myR ? roleZh(myR) : ''),
-            pzh: phZh(
-              (this.data.pub && this.data.pub.currentPhase) || v.phase || 'lobby'
-            )
-          }
-          const pl = (v.players || []).map((m) => ({
-            openId: m.openId,
-            nickName: m.nickName != null ? m.nickName : m.nick,
-            isAlive: m.isAlive,
-            seat: m.seat
-          }))
-          const prevPub = this.data.pub || {}
-          const curPh =
-            v.phase == null || v.phase === ''
-              ? prevPub.currentPhase || 'lobby'
-              : v.phase
-          const im = SIZES.indexOf(v.maxPlayers)
-          const maxP = v.maxPlayers != null ? v.maxPlayers : prevPub.maxPlayers
-          next.pub = Object.assign({}, prevPub, {
-            roomCode: v.roomCode || prevPub.roomCode,
-            status: v.roomStatus != null ? v.roomStatus : prevPub.status,
-            maxPlayers: maxP,
-            currentPhase: curPh,
-            day: v.day != null ? v.day | 0 : prevPub.day | 0,
-            publicLog: v.publicLog || prevPub.publicLog || [],
-            lastNightReport:
-              v.lastNightReport != null ? v.lastNightReport : prevPub.lastNightReport,
-            gameEnd: v.gameEnd != null ? v.gameEnd : prevPub.gameEnd,
-            winSide: v.winSide != null ? v.winSide : prevPub.winSide,
-            players: pl.length ? pl : prevPub.players || [],
-            speakIndex: v.speakIndex != null ? v.speakIndex | 0 : prevPub.speakIndex | 0,
-            speakOrder: v.speakOrder || prevPub.speakOrder || [],
-            voteOpen: v.voteOpen != null ? !!v.voteOpen : !!prevPub.voteOpen,
-            currentVotes: v.currentVotes || prevPub.currentVotes || {},
-            pendingHunter:
-              v.pendingHunter != null ? v.pendingHunter : prevPub.pendingHunter
-          })
-          next.roomCode = v.roomCode || this.data.roomCode
-          if (im >= 0) {
-            next.maxIndex = im
-          }
-          next.pzh = phZh(curPh || 'lobby')
-          const pn = (next.pub.players && next.pub.players.length) || 0
-          const needN = (maxP | 0) || SIZES[next.maxIndex | 0] || 6
-          next.memberCountLine = memberCountLine(pn, needN)
-          this.setData(next)
-          this.syncDisplayText()
+          this._applyGetView(res.result || {})
         },
         onError: () => {}
       }
@@ -1065,6 +1162,55 @@ Page({
       { onOk: () => this.loadView() }
     )
   },
+  onSheriffRun() {
+    callWerewolfService(
+      { action: 'wSheriffSignup', roomId: this.data.roomId, run: true },
+      { onOk: () => this.loadView() }
+    )
+  },
+  onSheriffSkip() {
+    callWerewolfService(
+      { action: 'wSheriffSignup', roomId: this.data.roomId, run: false },
+      { onOk: () => this.loadView() }
+    )
+  },
+  hostSheriffToSpeak() {
+    callWerewolfService(
+      { action: 'hostSheriffToSpeak', roomId: this.data.roomId },
+      { onOk: () => this.loadView() }
+    )
+  },
+  onSheriffWithdraw() {
+    if (this.onAiSheriffWithdraw) {
+      this.onAiSheriffWithdraw()
+      return
+    }
+    wx.showModal({
+      title: '确认退水',
+      content: '退水后放弃竞选警长，且本局不可再次上警。',
+      success: (res) => {
+        if (res.confirm && this._doSheriffWithdraw) this._doSheriffWithdraw()
+      }
+    })
+  },
+  hostEndSheriffWithdraw() {
+    callWerewolfService(
+      { action: 'hostEndSheriffWithdraw', roomId: this.data.roomId },
+      { onOk: () => this.loadView() }
+    )
+  },
+  hostSheriffNext() {
+    callWerewolfService(
+      { action: 'hostSheriffNextSpeak', roomId: this.data.roomId },
+      { onOk: () => this.loadView() }
+    )
+  },
+  hostResolveSheriffVote() {
+    callWerewolfService(
+      { action: 'hostResolveSheriffVote', roomId: this.data.roomId },
+      { onOk: () => this.loadView() }
+    )
+  },
   hostResolveVote() {
     callWerewolfService(
       { action: 'hostResolveVote', roomId: this.data.roomId },
@@ -1096,4 +1242,12 @@ Page({
       buildPrompt: () => '秘密身份推理聚会战报海报。' + end + '。'
     })
   },
+  onAiHostLobbySwitch(e) {
+    this.setData({ aiHostLobby: !!(e.detail && e.detail.value) })
+  },
+  ...(function () {
+    const m = Object.assign({}, werewolfAiMixin)
+    delete m.data
+    return m
+  })()
 })

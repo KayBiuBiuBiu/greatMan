@@ -1,0 +1,193 @@
+{
+    "case_name": "test_evidence_private_public_isolate",
+    "run_time": "20260529 00:08:40",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u516c\u5171\u8bc1\u636e\u5168\u5458\u540c\u6b65\u3001\u79c1\u4eba\u8bc1\u636e\u4ec5\u672c\u673a\u53ef\u89c1\u3001\u65e0\u6cc4\u9732",
+    "success": false,
+    "failures": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 307, in test_evidence_private_public_isolate\n    self.assertTrue(len(state.get(\"publicClue\", [])) > 0)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py\", line 60, in hook_assert\n    return src(self, *args, **kwargs)\nAssertionError: False is not true\n",
+    "errors": "",
+    "start_timestamp": 1779984520.1631901,
+    "is_failure": true,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 307,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "False is not true",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1779984520,
+            "datetime": "2026-05-29 00:08:40",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1779984523,
+            "datetime": "2026-05-29 00:08:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000843763534.png",
+            "ts": 1779984523,
+            "datetime": "2026-05-29 00:08:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000847886151.png",
+            "ts": 1779984527,
+            "datetime": "2026-05-29 00:08:47",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertNotIn-success.png",
+            "ts": 1779984571,
+            "datetime": "2026-05-29 00:09:31",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-failed",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-failed.png",
+            "ts": 1779984571,
+            "datetime": "2026-05-29 00:09:31",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1779984571,
+            "datetime": "2026-05-29 00:09:31",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": false,
+            "msg": "False is not true",
+            "img": "assertTrue-failed",
+            "wxml": "29000931.wxml"
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779984571.957643,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_evidence_private_public_isolate(self):\n",
+            "        \"\"\"\u516c\u5171\u8bc1\u636e\u5168\u5458\u540c\u6b65\u3001\u79c1\u4eba\u8bc1\u636e\u4ec5\u672c\u673a\u53ef\u89c1\u3001\u65e0\u6cc4\u9732\"\"\"\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        self._unwrap_cloud(self.cloud.start_game(MysteryReasonPage.game_key, room_id))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "        self._unwrap_cloud(self.cloud.force_set_phase(room_id, \"get_evidence\"))\n",
+            "        self._unwrap_cloud(self.cloud.trigger_all_evidence(room_id))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "\n",
+            "        state = self._unwrap_cloud(self.cloud.sync_snapshot(MysteryReasonPage.game_key, room_id)).get(\"state\", {})\n",
+            "        self.assertNotIn(\"privateClue\", state)\n",
+            "        self.assertTrue(len(state.get(\"publicClue\", [])) > 0)\n"
+        ],
+        "start": 295
+    },
+    "filename": "result.json"
+}

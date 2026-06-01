@@ -1,0 +1,1756 @@
+{
+    "case_name": "test_08_mystery_reason_core_flow",
+    "run_time": "20260601 22:05:37",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u522b\u540d\uff1atest_core_script_generate_and_display\uff08\u5b8c\u6574\u6d41\u7a0b\uff09",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 492, in test_08_mystery_reason_core_flow\n    return self.test_core_script_generate_and_display()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 302, in test_core_script_generate_and_display\n    page.open_script_modal_with_detail(host_info)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py\", line 155, in open_script_modal_with_detail\n    self.try_call_page_method(\"applyTestScriptDetail\", detail or {})\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/base/base_page.py\", line 383, in try_call_page_method\n    return fn(method_name, *args)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py\", line 291, in wrapper\n    return func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py\", line 148, in wrapper\n    result = func(*args, **kwargs)\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 383, in call_method\n    return self._send(\"Page.callMethod\", {\"method\": method, \"args\": args})\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py\", line 637, in _send\n    self.connection.send(cmd)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 457, in send\n    return self._receive_response(cmd)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py\", line 483, in _receive_response\n    raise response\nminium.framework.exception.MiniCommandError: page.applyTestScriptDetail not exists\n",
+    "start_timestamp": 1780322738.193745,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 492,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "MiniCommandError",
+    "error_value": "page.applyTestScriptDetail not exists",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780322738,
+            "datetime": "2026-06-01 22:05:38",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780322738,
+            "datetime": "2026-06-01 22:05:38",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_220543046207.png",
+            "ts": 1780322743,
+            "datetime": "2026-06-01 22:05:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_220543118453.png",
+            "ts": 1780322743,
+            "datetime": "2026-06-01 22:05:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success_220546625686.png",
+            "ts": 1780322746,
+            "datetime": "2026-06-01 22:05:46",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_220602323047.png",
+            "ts": 1780322762,
+            "datetime": "2026-06-01 22:06:02",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertEqual-success.png",
+            "ts": 1780322770,
+            "datetime": "2026-06-01 22:06:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220610870822.png",
+            "ts": 1780322771,
+            "datetime": "2026-06-01 22:06:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220611104444.png",
+            "ts": 1780322771,
+            "datetime": "2026-06-01 22:06:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220611493032.png",
+            "ts": 1780322771,
+            "datetime": "2026-06-01 22:06:11",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220611902123.png",
+            "ts": 1780322772,
+            "datetime": "2026-06-01 22:06:12",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220612077326.png",
+            "ts": 1780322772,
+            "datetime": "2026-06-01 22:06:12",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220612129290.png",
+            "ts": 1780322772,
+            "datetime": "2026-06-01 22:06:12",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220612617806.png",
+            "ts": 1780322772,
+            "datetime": "2026-06-01 22:06:12",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220612888031.png",
+            "ts": 1780322773,
+            "datetime": "2026-06-01 22:06:13",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220613518287.png",
+            "ts": 1780322774,
+            "datetime": "2026-06-01 22:06:14",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220614908377.png",
+            "ts": 1780322776,
+            "datetime": "2026-06-01 22:06:16",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220616113128.png",
+            "ts": 1780322776,
+            "datetime": "2026-06-01 22:06:16",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220616443538.png",
+            "ts": 1780322776,
+            "datetime": "2026-06-01 22:06:16",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success.png",
+            "ts": 1780322776,
+            "datetime": "2026-06-01 22:06:16",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220616880650.png",
+            "ts": 1780322776,
+            "datetime": "2026-06-01 22:06:16",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220616977208.png",
+            "ts": 1780322777,
+            "datetime": "2026-06-01 22:06:17",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220617283235.png",
+            "ts": 1780322777,
+            "datetime": "2026-06-01 22:06:17",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220617375651.png",
+            "ts": 1780322777,
+            "datetime": "2026-06-01 22:06:17",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220617519972.png",
+            "ts": 1780322778,
+            "datetime": "2026-06-01 22:06:18",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220618095433.png",
+            "ts": 1780322778,
+            "datetime": "2026-06-01 22:06:18",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220618192661.png",
+            "ts": 1780322778,
+            "datetime": "2026-06-01 22:06:18",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success.png",
+            "ts": 1780322779,
+            "datetime": "2026-06-01 22:06:19",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success_220619242738.png",
+            "ts": 1780322779,
+            "datetime": "2026-06-01 22:06:19",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success_220619534328.png",
+            "ts": 1780322779,
+            "datetime": "2026-06-01 22:06:19",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220619634579.png",
+            "ts": 1780322779,
+            "datetime": "2026-06-01 22:06:19",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220619974038.png",
+            "ts": 1780322780,
+            "datetime": "2026-06-01 22:06:20",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220620232377.png",
+            "ts": 1780322780,
+            "datetime": "2026-06-01 22:06:20",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220620345034.png",
+            "ts": 1780322780,
+            "datetime": "2026-06-01 22:06:20",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220620594501.png",
+            "ts": 1780322780,
+            "datetime": "2026-06-01 22:06:20",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220620696063.png",
+            "ts": 1780322780,
+            "datetime": "2026-06-01 22:06:20",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220620945198.png",
+            "ts": 1780322781,
+            "datetime": "2026-06-01 22:06:21",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220621039836.png",
+            "ts": 1780322781,
+            "datetime": "2026-06-01 22:06:21",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220621193132.png",
+            "ts": 1780322781,
+            "datetime": "2026-06-01 22:06:21",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220623676845.png",
+            "ts": 1780322784,
+            "datetime": "2026-06-01 22:06:24",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220624142775.png",
+            "ts": 1780322784,
+            "datetime": "2026-06-01 22:06:24",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220624483901.png",
+            "ts": 1780322784,
+            "datetime": "2026-06-01 22:06:24",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220626901844.png",
+            "ts": 1780322787,
+            "datetime": "2026-06-01 22:06:27",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220627271865.png",
+            "ts": 1780322787,
+            "datetime": "2026-06-01 22:06:27",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220627568739.png",
+            "ts": 1780322787,
+            "datetime": "2026-06-01 22:06:27",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220627681726.png",
+            "ts": 1780322787,
+            "datetime": "2026-06-01 22:06:27",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertNotIn-success_220627849329.png",
+            "ts": 1780322788,
+            "datetime": "2026-06-01 22:06:28",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success_220628207830.png",
+            "ts": 1780322788,
+            "datetime": "2026-06-01 22:06:28",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success_220628521291.png",
+            "ts": 1780322788,
+            "datetime": "2026-06-01 22:06:28",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success_220628618976.png",
+            "ts": 1780322789,
+            "datetime": "2026-06-01 22:06:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220629015226.png",
+            "ts": 1780322789,
+            "datetime": "2026-06-01 22:06:29",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220629436242.png",
+            "ts": 1780322790,
+            "datetime": "2026-06-01 22:06:30",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_220630194074.png",
+            "ts": 1780322790,
+            "datetime": "2026-06-01 22:06:30",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/headband/headband",
+            "path": "images/assertTrue-success_220630298495.png",
+            "ts": 1780322790,
+            "datetime": "2026-06-01 22:06:30",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/headband/headband",
+            "path": "images/assertTrue-success_220630732839.png",
+            "ts": 1780322791,
+            "datetime": "2026-06-01 22:06:31",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/headband/headband",
+            "path": "images/assertTrue-success_220631521343.png",
+            "ts": 1780322791,
+            "datetime": "2026-06-01 22:06:31",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/headband/headband",
+            "path": "images/assertTrue-success_220631831872.png",
+            "ts": 1780322791,
+            "datetime": "2026-06-01 22:06:31",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/headband/headband",
+            "path": "images/assertTrue-success_220632000362.png",
+            "ts": 1780322792,
+            "datetime": "2026-06-01 22:06:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/headband/headband",
+            "path": "images/assertTrue-success_220632202060.png",
+            "ts": 1780322792,
+            "datetime": "2026-06-01 22:06:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220632315346.png",
+            "ts": 1780322792,
+            "datetime": "2026-06-01 22:06:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220632873941.png",
+            "ts": 1780322792,
+            "datetime": "2026-06-01 22:06:32",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220632975884.png",
+            "ts": 1780322793,
+            "datetime": "2026-06-01 22:06:33",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220633433991.png",
+            "ts": 1780322793,
+            "datetime": "2026-06-01 22:06:33",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220638916718.png",
+            "ts": 1780322799,
+            "datetime": "2026-06-01 22:06:39",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220639005880.png",
+            "ts": 1780322799,
+            "datetime": "2026-06-01 22:06:39",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220639336533.png",
+            "ts": 1780322799,
+            "datetime": "2026-06-01 22:06:39",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220639501685.png",
+            "ts": 1780322800,
+            "datetime": "2026-06-01 22:06:40",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220640122378.png",
+            "ts": 1780322800,
+            "datetime": "2026-06-01 22:06:40",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220640269541.png",
+            "ts": 1780322800,
+            "datetime": "2026-06-01 22:06:40",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220640577728.png",
+            "ts": 1780322800,
+            "datetime": "2026-06-01 22:06:40",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220640822378.png",
+            "ts": 1780322800,
+            "datetime": "2026-06-01 22:06:40",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220640985427.png",
+            "ts": 1780322801,
+            "datetime": "2026-06-01 22:06:41",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220641215456.png",
+            "ts": 1780322801,
+            "datetime": "2026-06-01 22:06:41",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220641929713.png",
+            "ts": 1780322802,
+            "datetime": "2026-06-01 22:06:42",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220642269236.png",
+            "ts": 1780322802,
+            "datetime": "2026-06-01 22:06:42",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220642356298.png",
+            "ts": 1780322802,
+            "datetime": "2026-06-01 22:06:42",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220642599927.png",
+            "ts": 1780322802,
+            "datetime": "2026-06-01 22:06:42",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220642982184.png",
+            "ts": 1780322803,
+            "datetime": "2026-06-01 22:06:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220643596399.png",
+            "ts": 1780322803,
+            "datetime": "2026-06-01 22:06:43",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220643690169.png",
+            "ts": 1780322804,
+            "datetime": "2026-06-01 22:06:44",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success_220644109614.png",
+            "ts": 1780322804,
+            "datetime": "2026-06-01 22:06:44",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220644200607.png",
+            "ts": 1780322804,
+            "datetime": "2026-06-01 22:06:44",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220644519583.png",
+            "ts": 1780322804,
+            "datetime": "2026-06-01 22:06:44",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220644612156.png",
+            "ts": 1780322805,
+            "datetime": "2026-06-01 22:06:45",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220645019277.png",
+            "ts": 1780322805,
+            "datetime": "2026-06-01 22:06:45",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220645706475.png",
+            "ts": 1780322805,
+            "datetime": "2026-06-01 22:06:45",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220645804419.png",
+            "ts": 1780322806,
+            "datetime": "2026-06-01 22:06:46",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220646290814.png",
+            "ts": 1780322806,
+            "datetime": "2026-06-01 22:06:46",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotIn-success_220646377709.png",
+            "ts": 1780322806,
+            "datetime": "2026-06-01 22:06:46",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220646810128.png",
+            "ts": 1780322806,
+            "datetime": "2026-06-01 22:06:46",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220646985342.png",
+            "ts": 1780322807,
+            "datetime": "2026-06-01 22:06:47",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220647399555.png",
+            "ts": 1780322807,
+            "datetime": "2026-06-01 22:06:47",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertEqual-success_220647844388.png",
+            "ts": 1780322807,
+            "datetime": "2026-06-01 22:06:47",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success.png",
+            "ts": 1780322808,
+            "datetime": "2026-06-01 22:06:48",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220648194569.png",
+            "ts": 1780322808,
+            "datetime": "2026-06-01 22:06:48",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220648296328.png",
+            "ts": 1780322808,
+            "datetime": "2026-06-01 22:06:48",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220648742951.png",
+            "ts": 1780322809,
+            "datetime": "2026-06-01 22:06:49",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220649423181.png",
+            "ts": 1780322809,
+            "datetime": "2026-06-01 22:06:49",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220649914548.png",
+            "ts": 1780322810,
+            "datetime": "2026-06-01 22:06:50",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220650072593.png",
+            "ts": 1780322810,
+            "datetime": "2026-06-01 22:06:50",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220650163845.png",
+            "ts": 1780322810,
+            "datetime": "2026-06-01 22:06:50",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220650482751.png",
+            "ts": 1780322810,
+            "datetime": "2026-06-01 22:06:50",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220650577581.png",
+            "ts": 1780322810,
+            "datetime": "2026-06-01 22:06:50",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220650846829.png",
+            "ts": 1780322811,
+            "datetime": "2026-06-01 22:06:51",
+            "use_region": false
+        },
+        {
+            "name": "assertNotEqual-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertNotEqual-success_220651539105.png",
+            "ts": 1780322811,
+            "datetime": "2026-06-01 22:06:51",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220656632126.png",
+            "ts": 1780322816,
+            "datetime": "2026-06-01 22:06:56",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220656977511.png",
+            "ts": 1780322817,
+            "datetime": "2026-06-01 22:06:57",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertIn-success_220657129186.png",
+            "ts": 1780322817,
+            "datetime": "2026-06-01 22:06:57",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertIn-success_220657326876.png",
+            "ts": 1780322817,
+            "datetime": "2026-06-01 22:06:57",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1780322821,
+            "datetime": "2026-06-01 22:07:01",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780322821.3986619,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_08_mystery_reason_core_flow(self):\n",
+            "        \"\"\"\u522b\u540d\uff1atest_core_script_generate_and_display\uff08\u5b8c\u6574\u6d41\u7a0b\uff09\"\"\"\n",
+            "        return self.test_core_script_generate_and_display()\n"
+        ],
+        "start": 490
+    },
+    "filename": "result.json"
+}

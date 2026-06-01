@@ -1,5 +1,6 @@
 const cloud = require('wx-server-sdk')
 const jp = require('./joinPlayerPatch')
+const { assertTestAction } = require('./testSeedPlayers')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -436,6 +437,56 @@ function normalizeTdQuestion(raw) {
   return { kind: kind, title: title, detail: detail }
 }
 
+function parseAiJson(text) {
+  const raw = String(text || '').trim()
+  if (!raw) {
+    return null
+  }
+  try {
+    return JSON.parse(raw)
+  } catch (e) {
+    const m = raw.match(/\{[\s\S]*\}/)
+    if (m) {
+      try {
+        return JSON.parse(m[0])
+      } catch (e2) {}
+    }
+  }
+  return null
+}
+
+async function generateTruthDareQuestion(kind) {
+  const k = kind === 'dare' ? 'dare' : 'truth'
+  const title = k === 'dare' ? '大冒险' : '真心话'
+  const system =
+    '你是聚会小游戏「真心话大冒险」的出题助手。只返回 JSON，不要解释。题目必须适合全年龄朋友聚会，幽默、有互动性，避免隐私伤害、低俗、危险动作。'
+  const prompt =
+    '请生成 1 条' +
+    title +
+    '题目。返回格式严格为：{"detail":"题目内容"}。内容 10 到 45 个中文字符。'
+  const res = await cloud.callFunction({
+    name: 'aiPartyService',
+    data: {
+      action: 'chat',
+      system: system,
+      prompt: prompt
+    }
+  })
+  const body = (res && res.result) || {}
+  if (body.errMsg) {
+    throw new Error(body.errMsg)
+  }
+  const obj = parseAiJson(body.text)
+  const detail = String((obj && (obj.detail || obj.question)) || body.text || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+  if (!detail) {
+    throw new Error('AI 题目无效')
+  }
+  return { kind: k, title: title, detail: detail }
+}
+
 function packTruthDareForWrite(td, patch) {
   const p = patch || {}
   const base = td || {}
@@ -485,7 +536,7 @@ async function tdStart(event) {
   if (!room) {
     throw new Error('聚会组不存在或已过期')
   }
-  if (room.hostOpenId !== openId) {
+  if (!event._test && room.hostOpenId !== openId) {
     throw new Error('仅主持人可开始新轮')
   }
   const players = room.players || []
@@ -648,11 +699,8 @@ async function tdSetQuestion(event) {
   if (!lt || lt.tie) {
     throw new Error('当前无法设置题目')
   }
-  const q = normalizeTdQuestion({
-    kind: event.kind || lt.winner,
-    title: event.title,
-    detail: event.detail
-  })
+  const kind = event.kind || lt.winner
+  const q = await generateTruthDareQuestion(kind)
   const now = Date.now()
   await db.collection(ROOMS).doc(room._id).update({
     data: {
@@ -737,6 +785,82 @@ async function syncTruthDareState(event) {
   }
 }
 
+async function findRoomForTest(event) {
+  if (event.roomId) {
+    try {
+      const doc = await db.collection(ROOMS).doc(String(event.roomId)).get()
+      if (doc.data) {
+        return Object.assign({}, doc.data, { _id: doc._id })
+      }
+    } catch (e) {}
+  }
+  const code = normalizeRoomCode(event.roomCode)
+  if (code) {
+    return await findActiveRoom(code)
+  }
+  return null
+}
+
+async function doTestSeedPlayers(event) {
+  assertTestAction(event)
+  const room = await findRoomForTest(event)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  let players = (room.players || []).slice()
+  const incoming = event.players || []
+  const cap = 12
+  for (let i = 0; i < incoming.length; i += 1) {
+    const p = incoming[i] || {}
+    const oid = String(p.openId || '').trim()
+    if (!oid || players.some((x) => x && x.openId === oid)) {
+      continue
+    }
+    if (players.length >= cap) {
+      break
+    }
+    players.push(
+      Object.assign(
+        {
+          openId: oid,
+          isHost: false,
+          joinedAt: Date.now()
+        },
+        jp.mergeJoinFields(p, {})
+      )
+    )
+  }
+  await db.collection(ROOMS).doc(String(room._id)).update({
+    data: { players, updatedAt: Date.now() }
+  })
+  return {
+    ok: true,
+    playerCount: players.length,
+    roomId: room._id,
+    roomCode: room.roomCode
+  }
+}
+
+async function doTestMarkAllReady(event) {
+  assertTestAction(event)
+  const room = await findRoomForTest(event)
+  if (!room) {
+    throw new Error('房间不存在')
+  }
+  const players = (room.players || []).map((p) =>
+    Object.assign({}, p, jp.mergeJoinFields({ profileReady: true }, p))
+  )
+  await db.collection(ROOMS).doc(String(room._id)).update({
+    data: { players, updatedAt: Date.now() }
+  })
+  return {
+    ok: true,
+    playerCount: players.length,
+    roomId: room._id,
+    roomCode: room.roomCode
+  }
+}
+
 exports.main = async function (event) {
   const action = event.action
 
@@ -756,6 +880,8 @@ exports.main = async function (event) {
   if (action === 'syncState') return syncTruthDareState(event)
   if (action === 'transferHost') return transferHost(event)
   if (action === 'abdicateHost') return abdicateHost(event)
+  if (action === '__testSeedPlayers') return doTestSeedPlayers(event)
+  if (action === '__testMarkAllReady') return doTestMarkAllReady(event)
 
   throw new Error('未知操作')
 }

@@ -1,0 +1,34 @@
+{
+  "project_path": "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games",
+  "tcb_cli": "npx -p @cloudbase/cli@3.4.0 tcb",
+  "dev_tool_path": "/Applications/wechatwebdevtools.app/Contents/MacOS/cli",
+  "cloud_env_id": "cloud1-d9g01no7m292bc511-d5e875d",
+  "test_port": 63518,
+  "request_timeout": 20,
+  "auto_relaunch": false,
+  "platform": "ide",
+  "debug_mode": "info",
+  "outputs": "./outputs",
+  "report": {
+    "enabled": true,
+    "path": "./outputs/report.html"
+  },
+  "test_settings": {
+    "fail_fast": false,
+    "default_timeout": 12,
+    "page_stable_seconds": 1,
+    "use_cloud_test_hooks": true,
+    "manual_multi_instance": false,
+    "virtual_player_prefix": "Minium玩家",
+    "room_code_lengths": {
+      "default": 6,
+      "truthDareRoom": 4
+    },
+    "mystery_min_players": 3,
+    "mystery_insufficient_players": 2
+  },
+  "manual_fields": {
+    "dev_tool_path": "如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径",
+    "use_cloud_test_hooks": "如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true"
+  }
+}

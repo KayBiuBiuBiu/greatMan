@@ -1,6 +1,6 @@
 const { callDontdoit } = require('../../utils/dontdoitCloud')
 const { enterCloudRoomOnLoad, joinRoomWithUi } = require('../utils/roomJoin')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const { memberCountLine, buildStartChecks, runStartAction } = require('../utils/roomUi')
 const { mergeLocalProfileIntoPlayers, patchLobbyUi } = require('../utils/roomMemberUi')
 const {
@@ -28,7 +28,7 @@ const lobbyReady = require('../utils/roomLobbyReady')
 const { overlayLobbyProfileReady } = lobbyReady
 
 const DDI_OPENID_KEY = 'ddi_my_open_id'
-const DDI_BUILD_ID = 'dontdoit-repo-v1'
+const DDI_BUILD_ID = 'dontdoit-repo-v2'
 const DIFFICULTY_VALUES = ['easy', 'medium', 'hard']
 const DIFFICULTY_LABELS = ['简单', '中等', '困难']
 function idxOf(arr, val, fallback) {
@@ -98,6 +98,7 @@ Page({
     playerProgressPct: 0,
     difficultyLabels: DIFFICULTY_LABELS,
     difficultyIdx: 0,
+    myAction: '',
     aiUnlock: { level: 0, canGen: false, canAssist: false, canRecap: false, nextHint: '' },
     showAiShareModal: false,
     showUserInfoModal: false,
@@ -109,7 +110,7 @@ Page({
     enableShareMenus()
     tryRedeemShareFromQuery(query || {})
     this.setData({
-      nick: (wx.getStorageSync('ddi_nick') || '').toString() || '参与者'
+      nick: (wx.getStorageSync('ddi_nick') || '').toString() || getFallbackNickName()
     })
     const cfg = this._parseCfg(query)
     if (cfg.roomId) {
@@ -299,8 +300,8 @@ Page({
       patch.displayPlayers = enrichDdiPlayers(pl, myOpenId, v.hostOpenId, 'waiting', v)
     } else if (playing) {
       patch.statusHint =
-        '🎮 进行中：诱导别人犯规，别做自己的禁止动作（存活 ' + alive + ' 人）'
-      patch.memberCountLine = '存活 ' + alive + ' / ' + n + ' 人'
+        '🎮 进行中：诱导别人犯规，别做自己的禁止动作（当前 ' + alive + ' 人存活）'
+      patch.memberCountLine = '当前 ' + alive + ' 人'
       patch.playerProgressPct = n > 0 ? Math.round((alive / n) * 100) : 0
       patch.displayPlayers = enrichDdiPlayers(v.players, myOpenId, v.hostOpenId, 'playing', v)
     } else {
@@ -361,6 +362,11 @@ Page({
     this.setData({ difficultyIdx: i }, () => this._syncConfigToCloud())
   },
 
+  onMyActionInput(e) {
+    const action = (e && e.detail && e.detail.value) || ''
+    this.setData({ myAction: action })
+  },
+
   onCopyRoomCode() {
     copyRoomCodeToClipboard(this.data.view.roomCode || this.data.roomCode)
   },
@@ -370,7 +376,7 @@ Page({
       wx.showToast({ title: '需开通云开发', icon: 'none' })
       return
     }
-    const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const n = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('ddi_nick', n)
     this.setData({ opBusy: true })
     callDontdoit(withJoinProfile({ action: 'create', nickName: n }), {
@@ -403,7 +409,7 @@ Page({
       wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
-    const n = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const n = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('ddi_nick', n)
     this.setData({ opBusy: true })
     joinRoomWithUi(
@@ -468,6 +474,13 @@ Page({
     const rematch = !!(opts && opts.rematch)
     const v = this.data.view || {}
     const n = (v.players && v.players.length) || 0
+
+    // 验证玩家是否输入了禁止动作
+    if (!rematch && !this.data.myAction.trim()) {
+      wx.showToast({ title: '请先输入你的禁止动作', icon: 'none' })
+      return
+    }
+
     const checks = buildStartChecks({
       isHost: this.data.isHost,
       playerCount: n,
@@ -492,17 +505,16 @@ Page({
           ctx: { playerCount: n },
           localChecks: [],
           callService: callDontdoit,
-          payload: { action: 'startGame', roomId: this.data.roomId },
-          loadingTitle: rematch ? '正在开局…' : '正在发牌…',
+          payload: {
+            action: 'startGame',
+            roomId: this.data.roomId,
+            playerAction: rematch ? '' : this.data.myAction.trim()
+          },
+          loadingTitle: rematch ? '正在开局…' : '正在随机分配动作…',
           onSuccess: (res) => {
             const r = (res && res.result) || {}
             wx.showToast({
-              title:
-                r.wordSource === 'fallback'
-                  ? '已用内置动作开局'
-                  : rematch
-                    ? '新一局开始'
-                    : '挑战开始',
+              title: rematch ? '新一局开始' : '动作分配完成',
               icon: 'success'
             })
             this._refreshView()

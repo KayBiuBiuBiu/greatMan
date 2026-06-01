@@ -1,0 +1,99 @@
+{
+    "case_name": "test_15_drink_party_insufficient_players",
+    "run_time": "20260601 20:59:38",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 421, in test_15_drink_party_insufficient_players\n    self._run_insufficient_then_sufficient(\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\n        DrinkPage, \"start_round\", \"\u8da3\u5473\u62bd\u7b7e\", min_players=2, insufficient=1\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 328, in _run_insufficient_then_sufficient\n    seed_more = self._join_players(\n        page_cls,\n    ...<3 lines>...\n        room_id=info.get(\"roomId\"),\n    )\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 89, in _join_players\n    raise AssertionError(\n        f\"seed_players({game_key}) failed: {err} roomId={room_id} code={room_code}\"\n    )\nAssertionError: seed_players(drinkParty) failed: \u5bf9\u5c40\u8fdb\u884c\u4e2d\uff0c\u65e0\u6cd5\u6ce8\u5165\u6d4b\u8bd5\u73a9\u5bb6 roomId=6cb23a706a1d824100b089b917ed9238 code=863124\n",
+    "start_timestamp": 1780318780.772326,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 421,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "seed_players(drinkParty) failed: \u5bf9\u5c40\u8fdb\u884c\u4e2d\uff0c\u65e0\u6cd5\u6ce8\u5165\u6d4b\u8bd5\u73a9\u5bb6 roomId=6cb23a706a1d824100b089b917ed9238 code=863124",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780318807.295458,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_15_drink_party_insufficient_players(self):\n",
+            "        self._run_insufficient_then_sufficient(\n",
+            "            DrinkPage, \"start_round\", \"\u8da3\u5473\u62bd\u7b7e\", min_players=2, insufficient=1\n",
+            "        )\n"
+        ],
+        "start": 420
+    },
+    "filename": "result.json"
+}

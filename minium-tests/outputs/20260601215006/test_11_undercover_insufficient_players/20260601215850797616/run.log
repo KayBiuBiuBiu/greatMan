@@ -1,0 +1,155 @@
+[I 2026-06-01 21:58:50,798 minium minitest#432 _miniSetUp] =========Current case: test_11_undercover_insufficient_players=========
+[I 2026-06-01 21:58:50,847 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_11_undercover_insufficient_players
+[I 2026-06-01 21:58:50,901 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 21:58:50,956 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 21:58:51,012 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 21:58:51,067 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 21:58:51,123 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 21:58:51,172 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 21:58:51,486 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3d254de6-6be8-4e5a-bea5-4d66455f13de, maybe command ignore response
+[I 2026-06-01 21:58:51,905 minium minitest#487 _miniSetUp] =========case: test_11_undercover_insufficient_players start=========
+[I 2026-06-01 21:58:51,930 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 9b7ed3ff-2c66-4854-bd02-b3e603977410, maybe command ignore response
+[I 2026-06-01 21:58:51,959 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-01 21:58:52,070 minium.App2704 app#950 relaunch] ReLaunch: /packageGames/undercover/undercover
+[I 2026-06-01 21:58:53,248 minium.Conn9088 connection#704 _handle_async_msg] received async msg: c9a04275-9574-4b19-a46f-7b81459b9157, maybe command ignore response
+[E 2026-06-01 21:58:53,854 minium.Conn9088 connection#668 __on_message] [2f2fb6c0-3cfd-4923-8c52-bf47470480d9]: page destroyed
+[I 2026-06-01 21:58:53,857 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 2f2fb6c0-3cfd-4923-8c52-bf47470480d9, maybe command ignore response
+[I 2026-06-01 21:58:54,024 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 251534b4-ea4b-4196-8167-d8f4f37a8269, maybe command ignore response
+[I 2026-06-01 21:58:54,245 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 47308ce8-6995-4dda-b2fc-85677ff55ee0, maybe command ignore response
+[I 2026-06-01 21:58:54,598 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0d883e55-a435-40c8-a220-a101b4b5b13c, maybe command ignore response
+[I 2026-06-01 21:58:54,833 minium.Conn9088 connection#704 _handle_async_msg] received async msg: cc5094f1-b1ed-40ee-a119-800f23bdec34, maybe command ignore response
+[I 2026-06-01 21:58:54,905 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 908f9814-5bbe-4021-8e6c-3343c04f17ac, maybe command ignore response
+[I 2026-06-01 21:58:54,968 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 865adfb6-5d0c-4542-9aa3-6190076318ef
+[I 2026-06-01 21:58:54,968 minium.App2704 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780322334371, 'webviewId': 16, 'routeEventId': '16_1780322333600', 'renderer': 'webview'}, 1780322334371]}
+[I 2026-06-01 21:58:55,035 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 34a7cd04-2ac3-4c14-87b6-f7f0996fcc93, maybe command ignore response
+[I 2026-06-01 21:58:55,721 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ae994352-90ed-46bf-aa04-b8d2c25692ac, maybe command ignore response
+[E 2026-06-01 21:58:56,366 minium.Conn9088 connection#668 __on_message] [4dad4add-9f73-4e7e-82d2-62b419632318]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:58:56,367 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 4dad4add-9f73-4e7e-82d2-62b419632318, maybe command ignore response
+[I 2026-06-01 21:58:56,431 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ed41a19f-b8f2-463e-8cca-e9b1330bda22, maybe command ignore response
+[I 2026-06-01 21:58:56,540 minium page#716 _get_elements_by_css] try to get elements: input
+[E 2026-06-01 21:58:56,543 minium.Conn9088 connection#668 __on_message] [3157ad6f-9da4-4193-8075-feff1b6a7113]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:58:57,323 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3157ad6f-9da4-4193-8075-feff1b6a7113, maybe command ignore response
+[I 2026-06-01 21:58:57,580 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.FormElement object at 0x1213039d0>]
+[I 2026-06-01 21:58:57,905 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 21:58:58,140 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x12138ea30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x12138f250>]
+[I 2026-06-01 21:58:59,354 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 24d7e41a-7fe2-4218-909b-5d761170215a, maybe command ignore response
+[I 2026-06-01 21:59:00,152 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 3e773e72-9fae-49c8-a6c7-b3dddd8c8fc2, maybe command ignore response
+[E 2026-06-01 21:59:00,203 minium.Conn9088 connection#668 __on_message] [a047508a-7cef-4adb-a5ab-6021ab4ff515]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:00,256 minium.Conn9088 connection#704 _handle_async_msg] received async msg: a047508a-7cef-4adb-a5ab-6021ab4ff515, maybe command ignore response
+[I 2026-06-01 21:59:01,571 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-06-01 21:59:02,761 minium.App2704 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/play/play', 'query': {'title': '%25E7%259C%259F%25E5%25BF%2583%25E8%25AF%259D%25E5%25A4%25A7%25E5%2586%2592%25E9%2599%25A9', 'config': '%257B%2522roomCode%2522%253A%25226099%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1780322341702, 'webviewId': 17, 'routeEventId': '17_1780322339875', 'renderer': 'webview'}, 1780322341703]}
+[I 2026-06-01 21:59:02,762 minium.Conn9088 connection#704 _handle_async_msg] received async msg: b379cc67-ea53-447b-be50-022e2b6c4cc0, maybe command ignore response
+[E 2026-06-01 21:59:03,784 minium.Conn9088 connection#668 __on_message] [b03feb6f-7737-457f-bea1-99db1a264740]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:03,786 minium.Conn9088 connection#704 _handle_async_msg] received async msg: b03feb6f-7737-457f-bea1-99db1a264740, maybe command ignore response
+[E 2026-06-01 21:59:03,887 minium.Conn9088 connection#668 __on_message] [a94c56c8-58f1-40d7-a4ba-3186a90c7725]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:06,556 minium.Conn9088 connection#704 _handle_async_msg] received async msg: b47c245a-265c-48d4-991e-8ad97f38ceb1, maybe command ignore response
+[I 2026-06-01 21:59:06,696 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 0c13129a-08d7-4855-944e-cc6b3b21f24e, maybe command ignore response
+[I 2026-06-01 21:59:08,076 minium.Conn9088 connection#704 _handle_async_msg] received async msg: ee7b7a08-11f1-4e15-a86e-6b14d0ab46ee, maybe command ignore response
+[I 2026-06-01 21:59:08,081 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 8917cb76-bc7e-4a95-aa6b-3357ac1dcc45, maybe command ignore response
+[I 2026-06-01 21:59:08,220 minium.Conn9088 connection#704 _handle_async_msg] received async msg: dcb6e273-0d8a-4e83-bf40-2cc4de917c18, maybe command ignore response
+[E 2026-06-01 21:59:09,081 minium.Conn9088 connection#668 __on_message] [651eec94-474b-4944-9480-c1bb2df56707]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:09,213 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 57f152ad-5b28-4b6c-9be6-0c31a5f684f1, maybe command ignore response
+[E 2026-06-01 21:59:09,477 minium.Conn9088 connection#668 __on_message] [7a29e284-e854-4f66-94cc-0767e20e87e4]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:09,531 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 7a29e284-e854-4f66-94cc-0767e20e87e4, maybe command ignore response
+[I 2026-06-01 21:59:10,618 minium.Conn9088 connection#704 _handle_async_msg] received async msg: f9536ffe-bd20-4c6c-b771-6ed8ce539903, maybe command ignore response
+[I 2026-06-01 21:59:10,669 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 19f082d9-9a51-4868-974e-f5cc64fd2103, maybe command ignore response
+[I 2026-06-01 21:59:10,753 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 85704b5d-40aa-408e-b372-f3cb14af191e, maybe command ignore response
+[E 2026-06-01 21:59:10,918 minium.Conn9088 connection#668 __on_message] [4aec6107-32a9-4988-942f-080f7b60e820]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:11,069 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 4aec6107-32a9-4988-942f-080f7b60e820, maybe command ignore response
+[E 2026-06-01 21:59:12,538 minium.Conn9088 connection#668 __on_message] [bc73049f-5d1e-40c5-8cac-6dc9d9b3da47]: page.applyTestSyncSnapshot not exists
+[E 2026-06-01 21:59:13,253 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 416, in test_11_undercover_insufficient_players
+    self._run_insufficient_then_sufficient(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        UndercoverPage, "start_game", "谁是卧底", min_players=3, insufficient=2
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 324, in _run_insufficient_then_sufficient
+    self._refresh_host(host, info.get("roomId"))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 197, in _refresh_host
+    host.refresh_lobby(cloud=self.cloud, room_id=rid)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/undercover_page.py", line 84, in refresh_lobby
+    self.try_call_page_method("applyTestSyncSnapshot", snap)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 383, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 383, in call_method
+    return self._send("Page.callMethod", {"method": method, "args": args})
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.MiniCommandError: page.applyTestSyncSnapshot not exists
+[E 2026-06-01 21:59:13,254 minium.Conn9088 connection#668 __on_message] [6304a02b-16e5-4973-ad8a-f730c51c1ea0]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:13,413 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 21:59:13,553 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 6304a02b-16e5-4973-ad8a-f730c51c1ea0, maybe command ignore response
+[I 2026-06-01 21:59:13,768 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 21:59:14,860 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 380cca90-c59a-4292-9a3f-744b29a868ec, maybe command ignore response
+[E 2026-06-01 21:59:14,879 minium.Conn9088 connection#668 __on_message] [39f8913f-f552-48aa-8790-f67f0d371ada]: wx.cloud.callFunction not exists
+[I 2026-06-01 21:59:15,122 minium.Conn9088 connection#704 _handle_async_msg] received async msg: 39f8913f-f552-48aa-8790-f67f0d371ada, maybe command ignore response
+[I 2026-06-01 21:59:15,961 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 21:59:16,061 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 21:59:16,213 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_11_undercover_insufficient_players of <testcases.test_all_games.TestAllGames testMethod=test_11_undercover_insufficient_players>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 416, in test_11_undercover_insufficient_players
+    self._run_insufficient_then_sufficient(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        UndercoverPage, "start_game", "谁是卧底", min_players=3, insufficient=2
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 324, in _run_insufficient_then_sufficient
+    self._refresh_host(host, info.get("roomId"))
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 197, in _refresh_host
+    host.refresh_lobby(cloud=self.cloud, room_id=rid)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/undercover_page.py", line 84, in refresh_lobby
+    self.try_call_page_method("applyTestSyncSnapshot", snap)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 383, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 383, in call_method
+    return self._send("Page.callMethod", {"method": method, "args": args})
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/page/page.py", line 637, in _send
+    self.connection.send(cmd)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 483, in _receive_response
+    raise response
+minium.framework.exception.MiniCommandError: page.applyTestSyncSnapshot not exists
+[W 2026-06-01 21:59:16,305 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601215006', 'case_output': './outputs/20260601215006/test_11_undercover_insufficient_players/20260601215850797616'}
+[W 2026-06-01 21:59:16,481 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 21:59:16,592 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 21:59:16,728 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x120e2eba0>

@@ -1,0 +1,97 @@
+[I 2026-06-01 18:39:16,640 minium minitest#432 _miniSetUp] =========Current case: test_06_truth_dare_core_flow=========
+[I 2026-06-01 18:39:16,670 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_06_truth_dare_core_flow
+[I 2026-06-01 18:39:16,700 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 18:39:16,734 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 18:39:16,765 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 18:39:16,792 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 18:39:16,822 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 18:39:16,853 minium minitest#897 capture] capture setup.png
+[W 2026-06-01 18:39:18,885 minium.App1632 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 18:39:18,949 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601183529/test_06_truth_dare_core_flow/20260601183916638470/images/setup.png not exists
+[I 2026-06-01 18:39:18,981 minium minitest#487 _miniSetUp] =========case: test_06_truth_dare_core_flow start=========
+[I 2026-06-01 18:39:19,015 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 18:39:19,062 minium.Conn0240 connection#668 __on_message] [95bc2157-0c6e-426e-a28b-63c1572a378a]: wx.cloud.callFunction not exists
+[I 2026-06-01 18:39:23,192 minium.App1632 app#891 navigate_to] NavigateTo: /packageGames/play/play?title=%E7%9C%9F%E5%BF%83%E8%AF%9D%E5%A4%A7%E5%86%92%E9%99%A9&config=%7B%22roomCode%22%3A%227206%22%7D
+[E 2026-06-01 18:39:33,221 minium.Conn0240 connection#668 __on_message] [8474f948-5f4a-4428-882d-998ace5769a4]: timeout
+[I 2026-06-01 18:39:33,296 minium.Conn0240 connection#704 _handle_async_msg] received async msg: 8474f948-5f4a-4428-882d-998ace5769a4
+[W 2026-06-01 18:39:33,336 minium.App1632 app#1172 _change_route_async] 可能因频繁调用navigateTo导致timeout
+[W 2026-06-01 18:39:48,199 minium.App1632 app#1180 _change_route_async] recall navigateTo
+[I 2026-06-01 18:39:53,775 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-01 18:39:55,793 minium.App1632 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 18:39:55,874 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601183529/test_06_truth_dare_core_flow/20260601183916638470/images/assertTrue-success.png not exists
+[E 2026-06-01 18:39:55,911 minium.Conn0240 connection#668 __on_message] [191d1145-c07c-4876-b21a-498f8dd2f95b]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:39:58,245 minium.Conn0240 connection#668 __on_message] [62ca6ccd-0f63-4db8-9947-4dc8f6f1ab51]: timeout
+[I 2026-06-01 18:39:58,246 minium.Conn0240 connection#704 _handle_async_msg] received async msg: 62ca6ccd-0f63-4db8-9947-4dc8f6f1ab51
+[E 2026-06-01 18:39:59,263 minium.Conn0240 connection#668 __on_message] [0f0d173a-6a92-47bf-9040-7ff986da6cee]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:40:03,437 minium.Conn0240 connection#668 __on_message] [e276ab8c-3e1f-4004-995f-952cefce2cc7]: wx.cloud.callFunction not exists
+[I 2026-06-01 18:40:07,457 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 18:40:07,529 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103965450>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103965bd0>]
+[I 2026-06-01 18:40:08,630 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 18:40:08,645 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103893cf0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103965770>]
+[I 2026-06-01 18:40:09,739 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 18:40:09,751 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103965450>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1039658b0>]
+[I 2026-06-01 18:40:10,813 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 18:40:10,824 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1039656d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1039653b0>]
+[I 2026-06-01 18:40:10,904 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 18:40:10,993 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103965270>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103964f50>]
+[E 2026-06-01 18:40:14,317 minium.Conn0240 connection#668 __on_message] [688abed0-435c-4dbd-add6-3a8c82bf63c0]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:40:19,942 minium.Conn0240 connection#668 __on_message] [e86ebc17-af67-41fc-9027-b009b0e4f723]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:40:25,218 minium.Conn0240 connection#668 __on_message] [bf37065a-264a-4bfc-906b-ee10d5a27a4c]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:40:30,075 minium.Conn0240 connection#668 __on_message] [21600e34-f39a-4000-90e4-fb8c4505d83b]: wx.cloud.callFunction not exists
+[E 2026-06-01 18:40:35,355 minium assertbase#62 hook_assert] False is not true : 4 人应可开始本轮
+[I 2026-06-01 18:40:35,356 minium minitest#897 capture] capture assertTrue-failed.png
+[W 2026-06-01 18:40:37,405 minium.App1632 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 18:40:37,407 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601183529/test_06_truth_dare_core_flow/20260601183916638470/images/assertTrue-failed.png not exists
+[I 2026-06-01 18:40:37,465 minium page#716 _get_elements_by_css] try to get elements: page
+[I 2026-06-01 18:40:37,499 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x1039cd1d0>]
+[E 2026-06-01 18:40:37,573 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 306, in test_06_truth_dare_core_flow
+    self.assertTrue(
+    ~~~~~~~~~~~~~~~^
+        self._ensure_can_start(page, min_players=4, seed_result=seed),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "4 人应可开始本轮",
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 744, in assertTrue
+    raise self.failureException(msg)
+AssertionError: False is not true : 4 人应可开始本轮
+[I 2026-06-01 18:40:37,603 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 18:40:37,631 minium minitest#897 capture] capture teardown.png
+[W 2026-06-01 18:40:39,662 minium.App1632 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 18:40:39,692 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601183529/test_06_truth_dare_core_flow/20260601183916638470/images/teardown.png not exists
+[I 2026-06-01 18:40:39,720 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 18:40:39,752 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 18:40:39,783 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_06_truth_dare_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_06_truth_dare_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 306, in test_06_truth_dare_core_flow
+    self.assertTrue(
+    ~~~~~~~~~~~~~~~^
+        self._ensure_can_start(page, min_players=4, seed_result=seed),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "4 人应可开始本轮",
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: False is not true : 4 人应可开始本轮
+[W 2026-06-01 18:40:39,814 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601183529', 'case_output': './outputs/20260601183529/test_06_truth_dare_core_flow/20260601183916638470'}
+[W 2026-06-01 18:40:39,848 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 18:40:39,881 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 18:40:39,909 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x103772e40>

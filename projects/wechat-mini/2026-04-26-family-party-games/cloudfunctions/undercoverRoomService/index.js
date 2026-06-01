@@ -11,35 +11,28 @@ const _ = db.command
 const UC_R = 'uc_rooms'
 const UC_P = 'uc_players'
 const UC_S = 'uc_state'
+const MAX_ROOM_PLAYERS = 12
 
-const PAIRS = [
-  ['饺子', '包子'],
-  ['牛奶', '豆浆'],
-  ['苹果', '梨'],
-  ['口红', '唇膏'],
-  ['手机', '平板'],
-  ['咖啡', '奶茶'],
-  ['老师', '教练'],
-  ['火锅', '麻辣烫'],
-  ['电影', '电视剧'],
-  ['公交车', '地铁'],
-  ['书包', '行李箱'],
-  ['羽毛球', '网球'],
-  ['太阳', '月亮'],
-  ['雨伞', '雨衣'],
-  ['冰箱', '空调'],
-  ['面包', '蛋糕'],
-  ['西瓜', '哈密瓜'],
-  ['猫', '狗'],
-  ['飞机', '高铁'],
-  ['医生', '护士']
-]
 const AGENT_AUTH = 'family-party-agent-v1'
 let _currentEvent = null
 const t = () => Date.now()
 
 function agentOk() {
   return !!(_currentEvent && _currentEvent._agentAuth === AGENT_AUTH)
+}
+
+function assertTestAction(event) {
+  if (!event || event._test !== true) {
+    throw new Error('测试接口未授权')
+  }
+}
+
+function roomJoinCap(room) {
+  const fixed = room && (room.maxPlayers | 0)
+  if (fixed > 0) {
+    return Math.min(fixed, MAX_ROOM_PLAYERS)
+  }
+  return MAX_ROOM_PLAYERS
 }
 
 async function oid() {
@@ -119,6 +112,60 @@ function nn(pl, o) {
   return f ? f.nickName : '参与者'
 }
 
+function parseJsonObject(text) {
+  const raw = String(text || '').trim()
+  if (!raw) {
+    return null
+  }
+  try {
+    return JSON.parse(raw)
+  } catch (e) {
+    const m = raw.match(/\{[\s\S]*\}/)
+    if (m) {
+      try {
+        return JSON.parse(m[0])
+      } catch (e2) {}
+    }
+  }
+  return null
+}
+
+function pickText(obj, keys) {
+  for (let i = 0; i < keys.length; i += 1) {
+    const v = obj && obj[keys[i]]
+    if (v != null && String(v).trim()) {
+      return String(v).trim().slice(0, 12)
+    }
+  }
+  return ''
+}
+
+async function fetchAiPair() {
+  const system =
+    '你是聚会小游戏「谁是卧底」的出题助手。只返回 JSON，不要解释。词对必须适合全年龄线下聚会，两个词相似但可区分，避免敏感、低俗、重复。'
+  const prompt =
+    '请生成 1 组谁是卧底词对，难度中等。返回格式严格为：{"civilianWord":"平民词","undercoverWord":"卧底词"}。每个词 2 到 6 个中文字符。'
+  const res = await cloud.callFunction({
+    name: 'aiPartyService',
+    data: {
+      action: 'chat',
+      system: system,
+      prompt: prompt
+    }
+  })
+  const body = (res && res.result) || {}
+  if (body.errMsg) {
+    throw new Error(body.errMsg)
+  }
+  const obj = parseJsonObject(body.text)
+  const civ = pickText(obj, ['civilianWord', 'civilian', 'word1'])
+  const uc = pickText(obj, ['undercoverWord', 'undercover', 'word2'])
+  if (!civ || !uc || civ === uc) {
+    throw new Error('AI 词对无效')
+  }
+  return [civ, uc]
+}
+
 async function resetRoomForRematch(rid) {
   const pl = await gPlayers(rid)
   for (const p of pl) {
@@ -140,11 +187,12 @@ async function resetRoomForRematch(rid) {
 
 async function dealUndercoverRound(rid, room, pl, opts) {
   const o = opts || {}
-  let p0 = null
-  if (room.pendingPair && room.pendingPair.length === 2) {
-    p0 = [String(room.pendingPair[0]), String(room.pendingPair[1])]
+  let p0
+  if (o._test) {
+    // 测试模式：使用本地数据，避免 AI 超时
+    p0 = ['香蕉', '黄瓜']
   } else {
-    p0 = PAIRS[((Math.random() * PAIRS.length) | 0) % PAIRS.length]
+    p0 = await fetchAiPair()
   }
   const wCiv = p0[0]
   const wUc = p0[1]
@@ -311,7 +359,7 @@ async function run(e) {
     const room = {
       roomCode: code,
       hostOpenId: o,
-      maxPlayers: 6,
+      maxPlayers: 0,
       status: 'waiting',
       currentRound: 0,
       currentPhase: 'waiting',
@@ -364,8 +412,8 @@ async function run(e) {
       throw new Error('已开始，无法进房')
     }
     const pl0 = await gPlayers(r0._id)
-    const max = r0.maxPlayers | 0 || 6
-    if (pl0.length >= max) {
+    const cap = roomJoinCap(r0)
+    if (pl0.length >= cap) {
       throw new Error('满员')
     }
     const existUc = pl0.find((p) => p.openId === o)
@@ -480,17 +528,11 @@ async function run(e) {
     if (pl.length < 3) {
       throw new Error('至少3人')
     }
-    if (
-      !isRematch &&
-      pl.length !== (room.maxPlayers | 0) &&
-      (room.maxPlayers | 0) > 0
-    ) {
-      throw new Error('人未满' + (room.maxPlayers | 0) + '，暂不可开')
-    }
     return await dealUndercoverRound(rid, room, pl, {
       rematch: isRematch,
       appendLog: isRematch,
-      logLine: isRematch ? '新一轮开始，大家查看词语。' : '发词完成，大家查看词语。'
+      logLine: isRematch ? '新一轮开始，大家查看词语。' : '发词完成，大家查看词语。',
+      _test: e._test
     })
   }
   if (a === 'ackWord') {
@@ -780,7 +822,78 @@ async function run(e) {
   if (a === 'syncState') {
     return await doSyncState(e.roomId, o)
   }
+  if (a === '__testSeedPlayers') {
+    return await doTestSeedPlayers(e)
+  }
+  if (a === '__testSyncSnapshot') {
+    return await doTestSyncSnapshot(e)
+  }
   throw new Error('未知' + a)
+}
+
+async function doTestSyncSnapshot(e) {
+  assertTestAction(e)
+  const r0 = e.roomId ? await gRoom(e.roomId) : await gRoomByCode(e.roomCode)
+  if (!r0) {
+    throw new Error('房间不存在')
+  }
+  const pl = await gPlayers(r0._id)
+  const host = pl.find((p) => p.isHost) || pl[0]
+  const hostOid = host ? host.openId : ''
+  const view = await gView(r0._id, hostOid)
+  return {
+    ok: true,
+    state: gPub(r0, pl),
+    view,
+    roomId: String(r0._id),
+    roomCode: r0.roomCode
+  }
+}
+
+async function doTestSeedPlayers(e) {
+  assertTestAction(e)
+  const r0 = e.roomId ? await gRoom(e.roomId) : await gRoomByCode(e.roomCode)
+  if (!r0) {
+    throw new Error('房间不存在')
+  }
+  if (r0.status !== 'waiting') {
+    throw new Error('对局已开始，无法注入测试玩家')
+  }
+  let pl0 = await gPlayers(r0._id)
+  const incoming = e.players || []
+  for (let i = 0; i < incoming.length; i += 1) {
+    const p = incoming[i] || {}
+    const oid = String(p.openId || '').trim()
+    if (!oid || pl0.some((x) => x.openId === oid)) {
+      continue
+    }
+    if (pl0.length >= roomJoinCap(r0)) {
+      break
+    }
+    const seat = pl0.length
+    await db.collection(UC_P).add({
+      data: Object.assign(
+        {
+          roomId: r0._id,
+          openId: oid,
+          isHost: false,
+          seat,
+          role: '',
+          word: '',
+          isAlive: true,
+          wordAck: false,
+          currentVote: null,
+          joinedAt: t()
+        },
+        jp.mergeJoinFields(p, {})
+      )
+    })
+    pl0 = await gPlayers(r0._id)
+  }
+  const r = await gRoom(r0._id)
+  const pl2 = await gPlayers(r0._id)
+  await setState(r, pl2)
+  return { ok: true, playerCount: pl2.length, roomId: String(r0._id), roomCode: r.roomCode }
 }
 
 async function doSyncState(rid, o) {

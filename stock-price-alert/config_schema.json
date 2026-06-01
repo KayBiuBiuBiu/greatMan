@@ -107,6 +107,99 @@
           "maximum": 32,
           "description": "选股评分+回测并发线程数；Baostock/AkShare 回退路径会自动串行化，Tushare 下可拉高"
         },
+        "enable_financial_factors": {
+          "type": "boolean",
+          "description": "选股 get_real_score 是否读取财务基本面缓存加分"
+        },
+        "enable_margin_factors": {
+          "type": "boolean",
+          "description": "选股 get_real_score 是否读取融资融券缓存加分"
+        },
+        "enable_top_inst_factors": {
+          "type": "boolean",
+          "description": "选股 get_real_score 是否读取龙虎榜机构缓存加分"
+        },
+        "enable_moneyflow_factors": {
+          "type": "boolean",
+          "description": "选股是否使用个股主力资金流（近5日）缓存加分"
+        },
+        "enable_industry_moneyflow_factors": {
+          "type": "boolean",
+          "description": "选股是否使用申万一级行业资金流（近5日）缓存加分"
+        },
+        "enable_hot_stock_factors": {
+          "type": "boolean",
+          "description": "选股是否对同花顺热股榜标的加分"
+        },
+        "enable_hot_concept_factors": {
+          "type": "boolean",
+          "description": "选股是否对当日热门概念板块成分股加分（ths_index 涨幅前 N + dc_member）"
+        },
+        "hot_concept_top_n": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "maximum": 20,
+          "description": "收盘后刷新热门概念板块数量（ths_index 按 pct_change 降序），默认 5"
+        },
+        "enable_broker_recommend_factors": {
+          "type": "boolean",
+          "description": "选股是否对券商金股推荐次数加分"
+        },
+        "factor_intraday_refresh_enabled": {
+          "type": "boolean",
+          "description": "交易时段内是否按间隔刷新财务/融资/龙虎榜因子缓存（范围：watchlist + daily_picks）"
+        },
+        "factor_refresh_interval_sec": {
+          "type": "integer",
+          "minimum": 60,
+          "description": "盘中因子缓存刷新间隔秒数，默认 600（10 分钟）"
+        },
+        "hot_stock_intraday_refresh_enabled": {
+          "type": "boolean",
+          "description": "交易时段内是否定时刷新同花顺热股榜（ths_hot is_new=N）"
+        },
+        "hot_stock_refresh_interval_sec": {
+          "type": "integer",
+          "minimum": 1800,
+          "description": "热股榜盘中刷新间隔秒数，默认 1800（30 分钟）"
+        },
+        "factor_weights": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "get_real_score 主因子权重与新增缓存因子加分阈值；新增因子缺失时静默跳过",
+          "properties": {
+            "trend": { "type": ["integer", "number"], "minimum": 0 },
+            "box_position": { "type": ["integer", "number"], "minimum": 0 },
+            "volatility": { "type": ["integer", "number"], "minimum": 0 },
+            "volume_ratio": { "type": ["integer", "number"], "minimum": 0 },
+            "roe_min": { "type": ["integer", "number"] },
+            "revenue_yoy_min": { "type": ["integer", "number"] },
+            "margin_change_pct_threshold": { "type": ["integer", "number"] },
+            "inst_buy_net_threshold": { "type": ["integer", "number"] },
+            "moneyflow_individual_threshold1": { "type": ["integer", "number"] },
+            "moneyflow_individual_threshold2": { "type": ["integer", "number"] },
+            "moneyflow_individual_bonus1": { "type": ["integer", "number"] },
+            "moneyflow_individual_bonus2": { "type": ["integer", "number"] },
+            "moneyflow_industry_threshold1": { "type": ["integer", "number"] },
+            "moneyflow_industry_threshold2": { "type": ["integer", "number"] },
+            "moneyflow_industry_bonus1": { "type": ["integer", "number"] },
+            "moneyflow_industry_bonus2": { "type": ["integer", "number"] },
+            "hot_stock_bonus": { "type": ["integer", "number"] },
+            "hot_stock_extra_bonus": {
+              "type": ["integer", "number"],
+              "description": "热股榜且所属申万一级为热门板块时的额外加分（仍受 max_bonus 约束）"
+            },
+            "hot_concept_bonus": {
+              "type": ["integer", "number"],
+              "description": "属于当日热门概念板块成分股时的加分（仍受 max_bonus 约束）"
+            },
+            "broker_recommend_bonus1": { "type": ["integer", "number"] },
+            "broker_recommend_bonus2": { "type": ["integer", "number"] },
+            "broker_recommend_count1": { "type": ["integer", "number"] },
+            "broker_recommend_count2": { "type": ["integer", "number"] },
+            "max_bonus": { "type": ["integer", "number"], "minimum": 0, "maximum": 5 }
+          }
+        },
         "use_sqlite_cache": {
           "type": "boolean",
           "description": "Tushare 日 K：优先读 kline_store SQLite（与 sync 写入的前复权口径一致），不足或过时再 pro_bar"
@@ -212,6 +305,18 @@
         "use_intraday_position_filter": { "type": "boolean" },
         "min_intraday_position": { "type": ["integer", "number"] },
         "max_intraday_position": { "type": ["integer", "number"] },
+        "require_basic_quality": {
+          "type": "boolean",
+          "description": "买入信号是否要求基本面缓存达标（只读缓存，不实时请求 Tushare）"
+        },
+        "basic_quality_roe_min": {
+          "type": ["integer", "number"],
+          "description": "买入信号基本面闸门：最低净资产收益率，例如 0.10 表示 10%"
+        },
+        "basic_quality_pe_max": {
+          "type": ["integer", "number"],
+          "description": "买入信号基本面闸门：最高市盈率"
+        },
         "sector_buy_cross_check": {
           "type": "object",
           "additionalProperties": true,
@@ -260,6 +365,111 @@
         "enabled": { "type": "boolean" },
         "max_change_pct": { "type": ["integer", "number"] },
         "max_intraday_position": { "type": ["integer", "number"], "minimum": 0, "maximum": 1 }
+      }
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "控制台展示：热门板块优质股分区、今日/热门板块优质股回调过滤等",
+      "properties": {
+        "hot_sector_quality_enabled": { "type": "boolean" },
+        "hot_sector_lookback_days": { "type": ["integer", "number"], "minimum": 1 },
+        "hot_sector_top_fraction": {
+          "type": ["integer", "number"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "hot_sector_max_stocks": { "type": ["integer", "number"], "minimum": 1 },
+        "hot_sector_index_benchmark_ts_code": { "type": "string" },
+        "hot_sector_use_realtime": {
+          "type": "boolean",
+          "description": "true 时用 Tushare rt_sw_k 按盘中涨跌幅刷新热门申万一级；失败则降级日K超额/绝对涨幅"
+        },
+        "hot_sector_realtime_refresh_sec": {
+          "type": ["integer", "number"],
+          "minimum": 15,
+          "description": "实时热门板块缓存 TTL（秒），避免每轮轮询请求 31 个行业"
+        },
+        "show_factor_summary": {
+          "type": "boolean",
+          "description": "终端在我的持仓、今日优质股、热门板块优质股分区展示财务/融资/龙虎榜因子缓存摘要"
+        },
+        "show_factor_comment": {
+          "type": "boolean",
+          "description": "终端在因子摘要下方展示通俗简评"
+        },
+        "simplify_factor_text": {
+          "type": "boolean",
+          "description": "因子摘要使用通俗中文、亿元单位和异常值清洗；false 时保留专业短标签格式"
+        },
+        "show_moneyflow_in_factor": {
+          "type": "boolean",
+          "description": "因子行展示个股近5日主力净流入（亿元）"
+        },
+        "show_industry_moneyflow_in_factor": {
+          "type": "boolean",
+          "description": "因子行展示所属申万行业近5日主力净流入（亿元）"
+        },
+        "show_hot_stock_in_factor": {
+          "type": "boolean",
+          "description": "因子行展示同花顺热股榜标记"
+        },
+        "show_hot_concept_in_factor": {
+          "type": "boolean",
+          "description": "因子行展示热门概念标记（🔥概念 / 🚀概念）"
+        },
+        "show_hot_stock_list": {
+          "type": "boolean",
+          "description": "控制台展示【热股榜机会】分区（同花顺热股榜前 N，不经行业过滤）；默认 false"
+        },
+        "hot_stock_list_top_n": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "maximum": 50,
+          "description": "【热股榜机会】展示条数，默认 10"
+        },
+        "show_hot_stock_quality": {
+          "type": "boolean",
+          "description": "控制台展示【热股榜精选】：热股榜 ∩ daily_picks 有形态 score，按 score 降序"
+        },
+        "hot_stock_display_count": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "maximum": 30,
+          "description": "【热股榜精选】最多展示只数，默认 10"
+        },
+        "hot_stock_top_n": {
+          "type": ["integer", "number"],
+          "minimum": 1,
+          "maximum": 100,
+          "description": "匹配热股榜缓存的前 N 名（默认 50）"
+        },
+        "hot_stock_quality_section_order": {
+          "type": "string",
+          "enum": ["after_quality", "after_hot_sector"],
+          "description": "【热股榜精选】分区位置：今日优质股之后（默认）或热门板块优质股之后"
+        },
+        "show_broker_recommend_in_factor": {
+          "type": "boolean",
+          "description": "因子行展示券商金股推荐次数"
+        },
+        "quality_stock_filters": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "「今日优质股」「热门板块优质股」回调过滤：非持仓按涨幅/日内位置/量比（及可选买入信号）隐藏；hold_shares>0 豁免",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "min_change_pct": { "type": ["integer", "number"] },
+            "max_change_pct": { "type": ["integer", "number"] },
+            "max_intraday_position": {
+              "type": ["integer", "number"],
+              "minimum": 0,
+              "maximum": 1
+            },
+            "min_volume_ratio": { "type": ["integer", "number"], "minimum": 0 },
+            "require_buy_signal": { "type": "boolean" }
+          }
+        }
       }
     },
     "capital": {
@@ -1059,7 +1269,7 @@
         "tushare": {
           "type": "object",
           "additionalProperties": true,
-          "description": "Tushare：指数 index_daily+rt_idx_k；个股 pro_bar(qfq)/daily+rt_k；申万 sw_daily（回退 sw_index_daily）+rt_sw_idx_k",
+          "description": "Tushare：指数 index_daily+rt_idx_k；个股 pro_bar(qfq)/daily+rt_k；申万 sw_daily（回退 sw_index_daily）+rt_sw_k",
           "properties": {
             "enabled": { "type": "boolean" },
             "token": { "type": "string" },
@@ -1076,6 +1286,22 @@
               "maximum": 200,
               "description": "pro_bar(adj=qfq) 触发的 adj_factor 独立限流（默认 180；官方 200/分钟；0=不限制）"
             },
+            "sw_daily_max_per_minute": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 500,
+              "description": "申万行业日线 sw_daily 独立限流（默认 50；0=不限制）"
+            },
+            "sw_daily_bulk_enabled": {
+              "type": "boolean",
+              "description": "是否使用不带 ts_code 的 sw_daily 批量拉取。部分账号该模式会被限制为 1次/小时，默认关闭"
+            },
+            "sw_daily_bulk_max_bars": {
+              "type": "integer",
+              "minimum": 40,
+              "maximum": 240,
+              "description": "sw_daily 批量拉取时保留的最近交易日根数（默认 120）；用于适配低频账号一次请求后拆分多个申万行业"
+            },
             "sh_index_free_fallback": {
               "type": "boolean",
               "description": "已废弃：上证仅走 Tushare"
@@ -1090,7 +1316,7 @@
             },
             "sw_enabled": {
               "type": "boolean",
-              "description": "申万行业指数 K 线（sw_daily，回退 sw_index_daily；合并 rt_sw_idx_k）"
+              "description": "申万行业指数 K 线（sw_daily，回退 sw_index_daily；合并 rt_sw_k）"
             },
             "stock_basic_cache_path": {
               "type": "string",
@@ -1100,9 +1326,13 @@
               "type": "string",
               "description": "股票→申万一级指数 ts_code 映射 JSON"
             },
+            "financial_cache_db_path": {
+              "type": "string",
+              "description": "财务/融资/龙虎榜因子 SQLite 缓存路径，表 stock_financial_cache"
+            },
             "pro_dataapi_base": {
               "type": "string",
-              "description": "Tushare Pro DataApi 基址（无尾斜杠），实际请求为 {base}/{api_name}。默认可解析域名 https://api.tushare.pro/dataapi；亦可设环境变量 TUSHARE_PRO_DATAAPI_BASE 覆盖"
+              "description": "Tushare Pro API 基址（无尾斜杠）。默认 https://api.tushare.pro；兼容 https://api.tushare.pro/dataapi 与旧 waditu 作为 fallback。亦可设环境变量 TUSHARE_PRO_DATAAPI_BASE 覆盖"
             },
             "pro_dataapi_fallbacks": {
               "type": "array",

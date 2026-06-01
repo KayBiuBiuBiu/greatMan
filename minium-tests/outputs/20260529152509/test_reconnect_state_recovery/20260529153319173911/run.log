@@ -1,0 +1,51 @@
+[I 2026-05-29 15:33:19,175 minium minitest#432 _miniSetUp] =========Current case: test_reconnect_state_recovery=========
+[I 2026-05-29 15:33:19,226 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_reconnect_state_recovery
+[I 2026-05-29 15:33:19,256 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 15:33:19,285 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 15:33:19,315 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 15:33:19,354 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 15:33:19,383 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 15:33:19,416 minium minitest#897 capture] capture setup.png
+[W 2026-05-29 15:33:21,451 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:21,454 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_reconnect_state_recovery/20260529153319173911/images/setup.png not exists
+[I 2026-05-29 15:33:21,531 minium minitest#487 _miniSetUp] =========case: test_reconnect_state_recovery start=========
+[I 2026-05-29 15:33:21,572 minium minitest#788 _callTestMethod] call test method
+[I 2026-05-29 15:33:21,606 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:33:23,635 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:23,637 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_reconnect_state_recovery/20260529153319173911/images/assertTrue-success.png not exists
+[E 2026-05-29 15:33:23,780 minium.Conn7344 connection#668 __on_message] [34796667-e974-4e89-a638-2c749b462e6e]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:33:27,091 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:33:29,094 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:29,174 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_reconnect_state_recovery/20260529153319173911/images/assertTrue-success.png not exists
+[I 2026-05-29 15:33:29,217 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:33:31,279 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:31,280 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_reconnect_state_recovery/20260529153319173911/images/assertTrue-success.png not exists
+[E 2026-05-29 15:33:31,356 minium.Conn7344 connection#668 __on_message] [ba6b1ad8-e52d-4153-a45c-44b183abb973]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:33:34,666 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:33:36,673 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:36,720 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_reconnect_state_recovery/20260529153319173911/images/assertTrue-success.png not exists
+[E 2026-05-29 15:33:36,761 minium.Conn7344 connection#668 __on_message] [06f834f3-ccff-4c14-bb61-18c9a4d67152]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:33:39,841 minium.App1376 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%226cb23a706a1941460001d2803c9cbe1c%22%2C%20%22roomCode%22%3A%20%22710556%22%7D
+[I 2026-05-29 15:33:40,774 minium.App1376 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%25226cb23a706a1941460001d2803c9cbe1c%2522%252C%2520%2522roomCode%2522%253A%2520%2522710556%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780040020767, 'webviewId': 17, 'routeEventId': '', 'renderer': 'webview'}, 1780040020769]}
+[I 2026-05-29 15:33:40,777 minium.Conn7344 connection#704 _handle_async_msg] received async msg: c62374be-57b5-4cd8-8f28-ee803274008a
+[W 2026-05-29 15:33:46,889 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[E 2026-05-29 15:33:46,908 minium.Conn7344 connection#668 __on_message] [ed632c6d-5657-4e74-bd6e-4c0f6875faac]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:33:50,338 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-05-29 15:33:52,341 minium.App1376 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-29 15:33:52,343 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260529152509/test_reconnect_state_recovery/20260529153319173911/images/assertTrue-success.png not exists
+[E 2026-05-29 15:33:52,418 minium.Conn7344 connection#668 __on_message] [ee68e78e-c2ab-4dcd-ab1d-0a2e8e2bc479]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:33:57,649 minium.Conn7344 connection#668 __on_message] [58adca7c-2e09-49e2-a6d7-5e5011e37b14]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:34:01,019 minium.Conn7344 connection#668 __on_message] [b35793d5-9024-46a1-b48d-c2f8566b885e]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:34:05,298 minium.Conn7344 connection#668 __on_message] [811f34ec-9da8-4057-a50e-02a0669b8ab3]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:34:09,276 minium.Conn7344 connection#668 __on_message] [aa9ed62d-cf7c-41c9-895a-b654cf0a5462]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:34:13,184 minium.Conn7344 connection#668 __on_message] [609033a8-5de6-4dc6-865c-f990a264cd38]: wx.cloud.callFunction not exists
+[E 2026-05-29 15:34:18,121 minium.Conn7344 connection#668 __on_message] [0422c97f-8d4f-46b5-9df0-ea2f7ec753c6]: wx.cloud.callFunction not exists
+[I 2026-05-29 15:34:21,291 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-05-29 15:34:23,010 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 15:34:23,091 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 15:34:23,129 minium.App1376 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 15:34:24,555 minium.App1376 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780040064548, 'webviewId': 18, 'routeEventId': '', 'renderer': 'webview'}, 1780040064549]}
+[I 2026-05-29 15:34:24,556 minium.Conn7344 connection#704 _handle_async_msg] received async msg: 697d913a-03ac-4930-b248-8b0a138d5a8d
+[I 2026-05-29 15:34:26,108 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 15:34:26,181 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 15:34:26,216 minium basenative#63 wrapper] call BaseNative.get_start_up end 

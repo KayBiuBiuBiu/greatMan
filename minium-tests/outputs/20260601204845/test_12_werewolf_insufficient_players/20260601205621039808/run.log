@@ -1,0 +1,36 @@
+[I 2026-06-01 20:56:21,040 minium minitest#432 _miniSetUp] =========Current case: test_12_werewolf_insufficient_players=========
+[I 2026-06-01 20:56:21,077 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_12_werewolf_insufficient_players
+[I 2026-06-01 20:56:21,114 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 20:56:21,152 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 20:56:21,192 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 20:56:21,229 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 20:56:21,270 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 20:56:21,306 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 20:56:21,680 minium minitest#487 _miniSetUp] =========case: test_12_werewolf_insufficient_players start=========
+[I 2026-06-01 20:56:21,681 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 20:56:21,729 minium.Conn2224 connection#668 __on_message] [11fa9af6-a0e9-4e51-85d7-a61ca2fbecb5]: wx.cloud.callFunction not exists
+[I 2026-06-01 20:56:25,931 minium.App0240 app#950 relaunch] ReLaunch: /packageGames/werewolf/werewolf?config=%7B%22roomId%22%3A%20%2210f00cf26a1d8179013099263c115b90%22%2C%20%22roomCode%22%3A%20%22455544%22%7D
+[I 2026-06-01 20:56:27,197 minium.App0240 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/werewolf/werewolf', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252210f00cf26a1d8179013099263c115b90%2522%252C%2520%2522roomCode%2522%253A%2520%2522455544%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780318587192, 'webviewId': 12, 'routeEventId': '12_1780318586461', 'renderer': 'webview'}, 1780318587193]}
+[I 2026-06-01 20:56:27,198 minium.Conn2224 connection#704 _handle_async_msg] received async msg: 3b16d5cc-b036-467a-a39d-38a7a0508172
+[I 2026-06-01 20:56:29,850 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 20:56:29,932 minium.Conn2224 connection#668 __on_message] [26ddbb24-9119-4c94-b0a9-2892b37cd9ac]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:56:35,049 minium.Conn2224 connection#668 __on_message] [4b390160-0f6f-43de-8623-9dd23bc430dc]: wx.cloud.callFunction not exists
+[I 2026-06-01 20:56:38,996 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 20:56:39,022 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1032ef750>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ee530>]
+[E 2026-06-01 20:56:41,264 minium.Conn2224 connection#668 __on_message] [6f64a8c4-2528-40f9-9415-54e0c35214c0]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:56:44,616 minium.Conn2224 connection#668 __on_message] [168435ab-13da-4af6-8997-fb3a811ce502]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:56:47,155 minium.Conn2224 connection#668 __on_message] [0f215167-eb4f-40a6-be43-e1e8d68832f9]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:56:52,297 minium.Conn2224 connection#668 __on_message] [aebb76cf-fcab-4f11-adc6-2b06926bfe57]: wx.cloud.callFunction not exists
+[I 2026-06-01 20:56:56,300 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 20:56:56,447 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1032ec7d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032ef930>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032efbb0>]
+[E 2026-06-01 20:56:58,715 minium.Conn2224 connection#668 __on_message] [e01e5635-a271-461b-a0bb-bf0a2d8822ea]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:57:02,200 minium.Conn2224 connection#668 __on_message] [1fd5a60d-6b31-4f90-b567-07b6d8450b2c]: wx.cloud.callFunction not exists
+[I 2026-06-01 20:57:05,408 minium minitest#897 capture] capture assertTrue-success_205705407948.png
+[E 2026-06-01 20:57:05,499 minium.Conn2224 connection#668 __on_message] [62b0b9dc-a702-4bde-8d1b-acb32db6efa3]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:57:08,289 minium.Conn2224 connection#668 __on_message] [6136b256-827a-4f92-b676-56d4a2fff6fa]: wx.cloud.callFunction not exists
+[E 2026-06-01 20:57:11,195 minium.Conn2224 connection#668 __on_message] [8e1325eb-5048-44fc-b7be-630c05bf2cab]: wx.cloud.callFunction not exists
+[I 2026-06-01 20:57:16,820 minium minitest#897 capture] capture assertTrue-success_205716820373.png
+[I 2026-06-01 20:57:16,892 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 20:57:16,941 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 20:57:17,083 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 20:57:17,084 minium basenative#63 wrapper] call BaseNative.get_start_up end 

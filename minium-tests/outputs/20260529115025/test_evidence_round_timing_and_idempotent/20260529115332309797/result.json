@@ -1,0 +1,217 @@
+{
+    "case_name": "test_evidence_round_timing_and_idempotent",
+    "run_time": "20260529 11:53:32",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": null,
+    "success": false,
+    "failures": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 270, in test_evidence_round_timing_and_idempotent\n    self.assertTrue(self._is_cloud_success(res), f\"\u8f6e{rnd}: {res}\")\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py\", line 60, in hook_assert\n    return src(self, *args, **kwargs)\nAssertionError: False is not true : \u8f6e1: {'errMsg': '\u5f53\u524d\u9636\u6bb5\u65e0\u6cd5\u5237\u65b0\u8bc1\u636e'}\n",
+    "errors": "",
+    "start_timestamp": 1780026812.369157,
+    "is_failure": true,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 270,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "False is not true : \u8f6e1: {'errMsg': '\u5f53\u524d\u9636\u6bb5\u65e0\u6cd5\u5237\u65b0\u8bc1\u636e'}",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1780026812,
+            "datetime": "2026-05-29 11:53:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780026815,
+            "datetime": "2026-05-29 11:53:35",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_115335562721.png",
+            "ts": 1780026815,
+            "datetime": "2026-05-29 11:53:35",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_115338847971.png",
+            "ts": 1780026818,
+            "datetime": "2026-05-29 11:53:38",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_115350450444.png",
+            "ts": 1780026830,
+            "datetime": "2026-05-29 11:53:50",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertEqual-success.png",
+            "ts": 1780026835,
+            "datetime": "2026-05-29 11:53:55",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-failed",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-failed.png",
+            "ts": 1780026849,
+            "datetime": "2026-05-29 11:54:09",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1780026851,
+            "datetime": "2026-05-29 11:54:11",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": false,
+            "msg": "False is not true : \u8f6e1: {'errMsg': '\u5f53\u524d\u9636\u6bb5\u65e0\u6cd5\u5237\u65b0\u8bc1\u636e'}",
+            "img": "assertTrue-failed",
+            "wxml": "29115409.wxml"
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780026851.767425,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_evidence_round_timing_and_idempotent(self):\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        self._start_and_reach_read_script(page, room_id)\n",
+            "\n",
+            "        self._unwrap_cloud(self.cloud.force_set_phase(room_id, \"get_evidence\"))\n",
+            "        snap = self._sync_room_snapshot(page, room_id)\n",
+            "        st = self._state(snap)\n",
+            "        if len(st.get(\"evidenceRoundRecord\") or []) >= 3:\n",
+            "            round_record = st.get(\"evidenceRoundRecord\") or []\n",
+            "        else:\n",
+            "            for rnd in (1, 2, 3):\n",
+            "                res = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, rnd))\n",
+            "                self.assertTrue(self._is_cloud_success(res), f\"\u8f6e{rnd}: {res}\")\n",
+            "            r1_repeat = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, 1))\n",
+            "            self.assertTrue(self._is_cloud_success(r1_repeat))\n",
+            "            snap = self._sync_room_snapshot(page, room_id)\n",
+            "            st = self._state(snap)\n",
+            "            round_record = st.get(\"evidenceRoundRecord\") or []\n",
+            "\n",
+            "        self.assertListEqual(sorted(round_record), [1, 2, 3])\n",
+            "        self.assertTrue(len(st.get(\"publicClue\") or []) > 0, \"\u516c\u5171\u8bc1\u636e\u4e3a\u7a7a\")\n"
+        ],
+        "start": 257
+    },
+    "filename": "result.json"
+}

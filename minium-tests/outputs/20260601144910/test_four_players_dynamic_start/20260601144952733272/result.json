@@ -1,0 +1,159 @@
+{
+    "case_name": "test_four_players_dynamic_start",
+    "run_time": "20260601 14:49:52",
+    "test_type": "TestUndercoverDynamicPlayers",
+    "case_doc": "4 \u4eba\u8fdb\u7ec4\u5373\u53ef 4 \u4eba\u5c40\uff0c\u65e0\u9700\u51d1\u6ee1 6 \u4eba\u3002",
+    "success": false,
+    "failures": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_undercover.py\", line 94, in test_four_players_dynamic_start\n    self._assert_can_start(page, 4)\n    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_undercover.py\", line 74, in _assert_can_start\n    self.assertTrue(page.wait_until_start_enabled(), \"\u7ec4\u957f\u5e94\u53ef\u5f00\u59cb\u4e92\u52a8\")\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py\", line 60, in hook_assert\n    return src(self, *args, **kwargs)\nAssertionError: False is not true : \u7ec4\u957f\u5e94\u53ef\u5f00\u59cb\u4e92\u52a8\n",
+    "errors": "",
+    "start_timestamp": 1780296592.834789,
+    "is_failure": true,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_undercover",
+    "package": "testcases",
+    "failed_line_num": 94,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "False is not true : \u7ec4\u957f\u5e94\u53ef\u5f00\u59cb\u4e92\u52a8",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780296592,
+            "datetime": "2026-06-01 14:49:52",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/pages/index/index",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780296606,
+            "datetime": "2026-06-01 14:50:06",
+            "use_region": false
+        },
+        {
+            "name": "assertGreaterEqual-success",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/assertGreaterEqual-success.png",
+            "ts": 1780296615,
+            "datetime": "2026-06-01 14:50:15",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-failed",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/assertTrue-failed.png",
+            "ts": 1780296635,
+            "datetime": "2026-06-01 14:50:35",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/undercover/undercover",
+            "path": "images/teardown.png",
+            "ts": 1780296638,
+            "datetime": "2026-06-01 14:50:38",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertGreaterEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertGreaterEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": false,
+            "msg": "False is not true : \u7ec4\u957f\u5e94\u53ef\u5f00\u59cb\u4e92\u52a8",
+            "img": "assertTrue-failed",
+            "wxml": "01145035.wxml"
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780296638.2589371,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_four_players_dynamic_start(self):\n",
+            "        \"\"\"4 \u4eba\u8fdb\u7ec4\u5373\u53ef 4 \u4eba\u5c40\uff0c\u65e0\u9700\u51d1\u6ee1 6 \u4eba\u3002\"\"\"\n",
+            "        page = UndercoverPage(self)\n",
+            "        info = self._create_room(page)\n",
+            "        self._seed(info[\"roomId\"], info[\"roomCode\"], 3)\n",
+            "        self._refresh(page)\n",
+            "        self._assert_can_start(page, 4)\n",
+            "        page.start_game()\n",
+            "        page.wait_in_word_phase(timeout=30)\n"
+        ],
+        "start": 88
+    },
+    "filename": "result.json"
+}

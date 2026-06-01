@@ -1,0 +1,192 @@
+{
+    "case_name": "test_evidence_round_timing_and_idempotent",
+    "run_time": "20260529 00:09:31",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u4e25\u683c\u6821\u9a8c\u4e09\u8f6e\u8bc1\u636e\u65f6\u5e8f\u3001\u5e42\u7b49\u3001\u81ea\u52a8\u8865\u5168\n\u4fee\u590d\uff1aKeyError\u3001publicClue\u4e3a\u7a7a\u95ee\u9898",
+    "success": false,
+    "failures": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 282, in test_evidence_round_timing_and_idempotent\n    self.assertTrue(self._is_cloud_success(r1) and self._is_cloud_success(r2) and self._is_cloud_success(r3))\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py\", line 60, in hook_assert\n    return src(self, *args, **kwargs)\nAssertionError: False is not true\n",
+    "errors": "",
+    "start_timestamp": 1779984572.0380008,
+    "is_failure": true,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 282,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "False is not true",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1779984572,
+            "datetime": "2026-05-29 00:09:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1779984575,
+            "datetime": "2026-05-29 00:09:35",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000935444976.png",
+            "ts": 1779984575,
+            "datetime": "2026-05-29 00:09:35",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_000939023936.png",
+            "ts": 1779984579,
+            "datetime": "2026-05-29 00:09:39",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-failed",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-failed.png",
+            "ts": 1779984615,
+            "datetime": "2026-05-29 00:10:15",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1779984615,
+            "datetime": "2026-05-29 00:10:15",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": false,
+            "msg": "False is not true",
+            "img": "assertTrue-failed",
+            "wxml": "29001015.wxml"
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779984615.289566,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_evidence_round_timing_and_idempotent(self):\n",
+            "        \"\"\"\n",
+            "        \u4e25\u683c\u6821\u9a8c\u4e09\u8f6e\u8bc1\u636e\u65f6\u5e8f\u3001\u5e42\u7b49\u3001\u81ea\u52a8\u8865\u5168\n",
+            "        \u4fee\u590d\uff1aKeyError\u3001publicClue\u4e3a\u7a7a\u95ee\u9898\n",
+            "        \"\"\"\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        self._unwrap_cloud(self.cloud.start_game(MysteryReasonPage.game_key, room_id))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "        self._unwrap_cloud(self.cloud.force_set_phase(room_id, \"get_evidence\"))\n",
+            "        self._sync_room_snapshot(page, room_id)\n",
+            "\n",
+            "        # \u9010\u8f6e\u89e6\u53d1\u8bc1\u636e\n",
+            "        r1 = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, 1))\n",
+            "        r2 = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, 2))\n",
+            "        r3 = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, 3))\n",
+            "        self.assertTrue(self._is_cloud_success(r1) and self._is_cloud_success(r2) and self._is_cloud_success(r3))\n",
+            "\n",
+            "        # \u5e42\u7b49\u91cd\u590d\u89e6\u53d1\n",
+            "        r1_repeat = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, 1))\n",
+            "        self.assertTrue(self._is_cloud_success(r1_repeat))\n",
+            "\n",
+            "        # \u6821\u9a8c\u8f6e\u6b21\u5b8c\u6574\u3001\u8bc1\u636e\u975e\u7a7a\n",
+            "        state = self._unwrap_cloud(self.cloud.sync_snapshot(MysteryReasonPage.game_key, room_id)).get(\"state\", {})\n",
+            "        round_record = state.get(\"evidenceRoundRecord\", [])\n",
+            "        self.assertListEqual(sorted(round_record), [1,2,3])\n",
+            "        self.assertTrue(len(state.get(\"publicClue\", [])) > 0, \"\u516c\u5171\u8bc1\u636e\u4e3a\u7a7a\")\n"
+        ],
+        "start": 266
+    },
+    "filename": "result.json"
+}

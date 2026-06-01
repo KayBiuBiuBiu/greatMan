@@ -1,0 +1,139 @@
+{
+    "case_name": "test_15_drink_party_insufficient_players",
+    "run_time": "20260601 21:41:22",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 436, in test_15_drink_party_insufficient_players\n    self._run_insufficient_then_sufficient(\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\n        DrinkPage, \"start_round\", \"\u8da3\u5473\u62bd\u7b7e\", min_players=2, insufficient=1\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 366, in _run_insufficient_then_sufficient\n    self._cloud_start(host, start_method, info)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 263, in _cloud_start\n    fn(cloud=self.cloud, room_id=rid, room_code=rcode)\n    ~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/pages/drink_page.py\", line 110, in start_round\n    return self.cloud_start(\n           ~~~~~~~~~~~~~~~~^\n        cloud, \"start_round\", room_id=room_id, room_code=room_code\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/haha/greatMan/minium-tests/base/base_page.py\", line 192, in cloud_start\n    raise AssertionError(\"cloud start failed: \" + err)\nAssertionError: cloud start failed: \u8bf7\u5148\u70b9\u300c\u4e0b\u4e00\u8f6e\u300d\u518d\u5f00\u59cb\n",
+    "start_timestamp": 1780321283.6533902,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 436,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "cloud start failed: \u8bf7\u5148\u70b9\u300c\u4e0b\u4e00\u8f6e\u300d\u518d\u5f00\u59cb",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/setup.png",
+            "ts": 1780321283,
+            "datetime": "2026-06-01 21:41:23",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780321292,
+            "datetime": "2026-06-01 21:41:32",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/assertTrue-success_214201433294.png",
+            "ts": 1780321321,
+            "datetime": "2026-06-01 21:42:01",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/teardown.png",
+            "ts": 1780321332,
+            "datetime": "2026-06-01 21:42:12",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780321332.206358,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_15_drink_party_insufficient_players(self):\n",
+            "        self._run_insufficient_then_sufficient(\n",
+            "            DrinkPage, \"start_round\", \"\u8da3\u5473\u62bd\u7b7e\", min_players=2, insufficient=1\n",
+            "        )\n"
+        ],
+        "start": 435
+    },
+    "filename": "result.json"
+}

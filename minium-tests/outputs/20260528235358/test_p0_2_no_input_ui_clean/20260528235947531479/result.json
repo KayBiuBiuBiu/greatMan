@@ -1,0 +1,188 @@
+{
+    "case_name": "test_p0_2_no_input_ui_clean",
+    "run_time": "20260528 23:59:47",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "P0\u5408\u89c4\uff1a\u5168\u5c40\u96f6\u6253\u5b57\u6821\u9a8c\n\u9875\u9762\u65e0 input / textarea / \u804a\u5929\u8f93\u5165\u6846 / \u6587\u5b57\u63d0\u4ea4\u5165\u53e3",
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1779983987.776784,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1779983987,
+            "datetime": "2026-05-28 23:59:47",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success.png",
+            "ts": 1779983991,
+            "datetime": "2026-05-28 23:59:51",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1779983991,
+            "datetime": "2026-05-28 23:59:51",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success_000007332167.png",
+            "ts": 1779984007,
+            "datetime": "2026-05-29 00:00:07",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success_000022508312.png",
+            "ts": 1779984022,
+            "datetime": "2026-05-29 00:00:22",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success_000022726277.png",
+            "ts": 1779984022,
+            "datetime": "2026-05-29 00:00:22",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1779984022,
+            "datetime": "2026-05-29 00:00:22",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779984023.0056589,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_p0_2_no_input_ui_clean(self):\n",
+            "        \"\"\"\n",
+            "        P0\u5408\u89c4\uff1a\u5168\u5c40\u96f6\u6253\u5b57\u6821\u9a8c\n",
+            "        \u9875\u9762\u65e0 input / textarea / \u804a\u5929\u8f93\u5165\u6846 / \u6587\u5b57\u63d0\u4ea4\u5165\u53e3\n",
+            "        \"\"\"\n",
+            "        _, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        # \u6821\u9a8c\u9875\u9762\u5b8c\u5168\u4e0d\u5b58\u5728\u6587\u5b57\u8f93\u5165\u7ec4\u4ef6\n",
+            "        self.assertFalse(page.has_input_component())\n",
+            "        self.assertFalse(page.has_chat_component())\n"
+        ],
+        "start": 122
+    },
+    "filename": "result.json"
+}

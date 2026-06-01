@@ -1,44 +1,26 @@
-let configEnv
-try {
-  const cfg = require('../cloud-env.js')
-  configEnv = (cfg && cfg.envId) || ''
-} catch (e) {
-  configEnv = ''
-}
+const { ensureCloudInit, getCallFunctionConfig } = require('./cloudInit')
+const { toCloudError } = require('./cloudCallFail')
+
+const CALL_TIMEOUT_MS = 30000
 
 function ensure () {
-  if (!wx.cloud) {
-    return false
-  }
-  const app = getApp && getApp()
-  if (app && app.globalData && app.globalData.cloudInited) {
-    return true
-  }
-  const o = { traceUser: true }
-  if (configEnv) {
-    o.env = configEnv
-  } else if (wx.cloud.DYNAMIC_CURRENT_ENV != null) {
-    o.env = wx.cloud.DYNAMIC_CURRENT_ENV
-  }
-  wx.cloud.init(o)
-  if (app && app.globalData) {
-    app.globalData.cloudInited = true
-  }
-  return true
+  return ensureCloudInit()
 }
 
 function callMusic (data, opts) {
   const { onOk, onError, silent } = opts || {}
-  if (!wx.cloud) {
-    onError && onError()
-    return
-  }
-  if (!ensure()) {
-    onError && onError()
+  if (!wx.cloud || !ensure()) {
+    const err = new Error('请先开通云开发')
+    if (!silent) {
+      wx.showToast({ title: err.message, icon: 'none' })
+    }
+    onError && onError(err)
     return
   }
   wx.cloud.callFunction({
     name: 'musicRoomService',
+    config: getCallFunctionConfig(),
+    timeout: CALL_TIMEOUT_MS,
     data,
     success: (res) => {
       const r = (res && res.result) || {}
@@ -52,10 +34,11 @@ function callMusic (data, opts) {
       onOk && onOk(res)
     },
     fail: (err) => {
+      const friendly = toCloudError(err)
       if (!silent) {
-        wx.showToast({ title: '请部署云函数 musicRoomService', icon: 'none' })
+        wx.showToast({ title: friendly.message, icon: 'none', duration: 4000 })
       }
-      onError && onError(err)
+      onError && onError(friendly)
     }
   })
 }

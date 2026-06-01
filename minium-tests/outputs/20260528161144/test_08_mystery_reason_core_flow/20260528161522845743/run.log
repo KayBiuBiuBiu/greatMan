@@ -1,0 +1,549 @@
+[I 2026-05-28 16:15:22,859 minium minitest#432 _miniSetUp] =========Current case: test_08_mystery_reason_core_flow=========
+[I 2026-05-28 16:15:22,859 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReason.test_08_mystery_reason_core_flow
+[I 2026-05-28 16:15:22,859 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-28 16:15:22,859 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-28 16:15:22,859 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-28 16:15:22,860 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-28 16:15:22,860 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-28 16:15:22,865 minium.App0880 app#950 relaunch] ReLaunch: /pages/index/index
+[I 2026-05-28 16:15:28,735 minium.App0880 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'pages/index/index', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1779956128724, 'webviewId': 2, 'routeEventId': '', 'renderer': 'webview'}, 1779956128724]}
+[I 2026-05-28 16:15:28,737 minium.Conn9632 connection#704 _handle_async_msg] received async msg: 7e6f894a-9a63-4d94-a1c5-e9a8e8fe6084
+[I 2026-05-28 16:15:28,788 minium minitest#897 capture] capture setup.png
+[I 2026-05-28 16:15:28,882 minium minitest#487 _miniSetUp] =========case: test_08_mystery_reason_core_flow start=========
+[I 2026-05-28 16:15:28,885 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-28 16:15:28,887 minium.Conn9632 connection#668 __on_message] [fda6ac7c-8581-47a1-98e3-8d784c08fa01]: wx.cloud.callFunction not exists
+[I 2026-05-28 16:15:33,413 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-05-28 16:15:33,496 minium.Conn9632 connection#668 __on_message] [253d1d72-1302-4aa5-92a8-80f377cbb8db]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:15:36,799 minium.Conn9632 connection#668 __on_message] [e9185ce2-3356-4b4b-a76d-f205d9e30a40]: wx.cloud.callFunction not exists
+[I 2026-05-28 16:15:40,072 minium.App0880 app#891 navigate_to] NavigateTo: /packageGames/mystery-reason/mystery-reason
+[W 2026-05-28 16:15:40,804 minium.Conn9632 connection#330 notify] no observer listening event App.exceptionThrown
+[I 2026-05-28 16:15:40,986 minium.App0880 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'navigateTo', 'timeStamp': 1779956140976, 'webviewId': 4, 'routeEventId': '4_1779956140730', 'renderer': 'webview'}, 1779956140977]}
+[I 2026-05-28 16:15:40,987 minium.Conn9632 connection#704 _handle_async_msg] received async msg: 92887275-c988-446e-afcb-f748603e1f2f
+[E 2026-05-28 16:15:41,998 minium.Conn9632 connection#668 __on_message] [ce33d795-d514-41ee-b354-87646b37fed5]: page.applyTestRoomBootstrap not exists
+[I 2026-05-28 16:15:45,023 minium minitest#897 capture] capture assertGreaterEqual-success.png
+[E 2026-05-28 16:15:45,070 minium.Conn9632 connection#668 __on_message] [591b30dd-563c-41c2-8f32-a5d7355684b9]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:15:51,324 minium.Conn9632 connection#668 __on_message] [7eed5a3d-e577-432a-bc7f-d9d64f76e2b6]: wx.cloud.callFunction not exists
+[E 2026-05-28 16:15:54,625 minium.Conn9632 connection#668 __on_message] [9347680f-1024-46c0-9abd-9bece2a46171]: page.applyTestRoomBootstrap not exists
+[I 2026-05-28 16:15:56,638 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:56,651 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:15:57,156 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:57,165 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:15:57,667 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:57,676 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:15:58,180 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:58,184 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:15:58,685 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:58,692 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:15:59,202 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:59,208 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:15:59,709 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:15:59,716 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:00,220 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:00,226 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:00,730 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:00,743 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:01,248 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:01,260 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:01,764 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:01,771 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:02,273 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:02,277 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:02,782 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:02,785 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:03,290 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:03,293 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:03,798 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:03,802 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:04,304 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:04,308 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:04,812 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:04,820 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:05,327 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:05,334 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:05,839 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:05,845 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:06,347 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:06,354 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:06,858 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:06,865 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:07,369 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:07,376 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:07,881 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:07,888 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:08,388 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:08,394 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:08,902 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:08,908 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:09,413 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:09,423 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:09,928 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:09,940 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:10,445 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:10,452 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:10,957 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:10,965 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:11,471 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:11,477 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:11,980 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:11,987 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:12,490 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:12,497 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:13,003 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:13,010 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:13,511 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:13,522 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:14,023 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:14,029 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:14,535 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:14,541 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:15,043 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:15,050 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:15,552 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:15,561 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:16,067 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:16,079 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:16,582 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:16,590 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:17,095 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:17,102 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:17,606 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:17,612 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:18,113 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:18,120 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:18,626 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:18,632 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:19,138 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:19,145 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:19,648 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:19,654 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:20,158 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:20,165 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:20,671 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:20,686 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:21,188 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:21,195 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:21,700 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:21,706 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:22,212 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:22,220 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:22,723 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:22,729 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:23,229 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:23,237 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:23,742 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:23,757 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:24,263 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:24,270 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:24,772 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:24,775 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:25,276 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:25,284 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:25,789 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:25,801 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:26,305 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:26,312 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:26,816 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:26,827 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:27,327 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:27,334 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:27,838 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:27,851 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:28,359 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:28,365 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:28,868 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:28,873 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:29,378 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:29,383 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:29,894 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:29,906 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:30,412 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:30,423 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:30,927 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:30,934 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:31,439 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:31,448 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:31,948 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:31,959 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:32,465 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:32,476 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:32,984 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:32,995 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:33,496 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:33,502 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:34,009 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:34,016 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:34,526 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:34,533 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:35,038 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:35,045 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:35,550 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:35,557 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:36,063 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:36,070 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:36,575 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:36,582 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:37,087 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:37,094 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:37,598 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:37,606 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:38,107 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:38,115 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:38,619 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:38,626 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:39,130 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:39,136 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:39,642 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:39,649 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:40,155 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:40,162 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:40,667 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:40,675 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:41,180 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:41,186 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:41,689 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:41,695 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:42,197 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:42,204 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:42,717 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:42,724 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:43,231 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:43,237 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:43,742 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:43,750 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:44,255 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:44,261 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:44,768 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:44,775 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:45,276 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:45,281 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:45,791 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:45,798 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:46,303 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:46,310 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:46,813 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:46,821 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:47,326 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:47,333 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:47,837 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:47,849 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:48,350 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:48,356 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:48,859 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:48,865 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:49,368 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:49,376 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:49,881 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:49,888 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:50,389 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:50,430 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:50,936 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:50,942 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:51,446 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:51,453 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:51,955 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:51,965 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:52,470 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:52,478 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:52,981 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:52,988 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:53,494 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:53,498 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:53,999 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:54,005 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:54,511 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:54,518 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:55,021 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:55,029 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:55,533 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:55,545 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:56,050 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:56,056 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:56,559 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:56,566 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:57,071 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:57,077 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:57,579 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:57,590 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:58,096 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:58,107 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:58,612 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:58,618 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:59,125 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:59,132 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:16:59,633 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:16:59,647 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:00,151 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:00,158 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:00,659 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:00,667 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:01,172 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:01,179 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:01,679 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:01,685 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:02,190 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:02,199 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:02,709 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:02,716 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:03,221 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:03,228 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:03,734 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:03,740 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:04,241 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:04,249 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:04,754 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:04,767 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:05,275 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:05,278 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:05,781 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:05,786 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:06,286 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:06,293 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:06,801 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:06,806 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:07,311 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:07,319 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:07,821 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:07,828 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:08,330 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:08,338 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:08,843 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:08,858 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:09,363 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:09,372 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:09,881 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:09,889 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:10,394 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:10,403 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:10,909 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:10,914 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:11,416 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:11,422 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:11,927 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:11,934 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:12,439 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:12,446 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:12,946 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:12,958 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:13,463 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:13,470 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:13,974 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:13,982 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:14,484 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:14,487 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:14,989 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:14,994 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:15,498 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:15,501 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:16,006 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:16,010 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:16,512 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:16,521 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:17,026 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:17,032 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:17,537 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:17,544 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:18,047 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:18,053 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:18,559 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:18,566 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:19,070 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:19,079 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:19,580 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:19,585 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:20,087 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:20,096 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:20,601 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:20,616 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:21,118 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:21,129 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:21,633 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:21,644 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:22,146 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:22,153 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:22,655 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:22,663 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:23,166 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:23,173 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:23,678 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:23,685 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:24,189 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:24,199 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:24,705 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:24,711 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:25,213 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:25,225 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:25,729 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:25,737 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:26,246 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:26,253 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:26,759 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:26,765 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:27,270 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:27,274 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:27,781 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:27,785 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:28,290 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:28,296 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:28,802 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:28,808 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:29,311 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:29,318 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:29,821 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:29,828 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:30,332 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:30,340 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:30,845 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:30,855 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:31,359 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:31,365 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:31,870 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:31,876 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:32,377 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:32,383 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:32,889 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:32,894 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:33,400 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:33,407 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:33,912 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:33,921 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:34,425 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:34,434 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:34,941 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:34,949 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:35,459 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:35,465 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:35,971 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:35,977 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:36,483 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:36,490 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:36,992 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:37,000 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:37,503 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:37,509 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:38,017 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:38,023 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:38,527 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:38,538 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:39,041 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:39,049 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:39,559 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:39,564 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:40,066 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:40,073 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:40,575 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:40,581 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:41,086 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:41,093 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:41,599 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:41,606 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:42,110 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:42,116 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:42,627 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:42,631 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:43,133 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:43,140 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:43,644 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:43,651 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:44,158 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:44,169 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:44,675 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:44,681 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:45,185 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:45,192 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:45,698 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:45,708 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:46,213 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:46,219 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:46,724 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:46,730 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:47,236 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:47,250 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:47,758 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:47,771 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:48,276 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:48,281 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:48,783 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:48,794 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:49,295 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:49,307 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:49,807 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:49,815 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:50,325 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:50,332 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:50,833 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:50,840 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:51,345 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:51,351 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:51,857 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:51,862 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:52,368 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:52,375 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:52,879 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:52,890 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:53,401 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:53,406 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:53,912 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:53,919 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:54,422 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:54,429 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:54,934 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:54,940 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:55,446 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:55,452 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:55,954 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:55,962 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[I 2026-05-28 16:17:56,463 minium page#716 _get_elements_by_css] try to get elements: view
+[W 2026-05-28 16:17:56,469 minium page#747 _get_elements_by_css] Could not found any element 'view' you need
+[E 2026-05-28 16:17:56,975 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_08_mystery_reason_core_flow
+    self._run_core_flow(self.min_players)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 103, in _run_core_flow
+    host.play_core_flow(self.cloud, room_id)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 219, in play_core_flow
+    self.wait_phase_text("读本", timeout=120)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 214, in wait_phase_text
+    self.wait_for_text(text, selector="view", timeout=timeout)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 284, in wait_for_text
+    raise AssertionError(f"Text not found: {text}; last_error={last_error}")
+AssertionError: Text not found: 读本; last_error=element[view] not found
+[I 2026-05-28 16:17:56,978 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-28 16:17:56,979 minium minitest#897 capture] capture teardown.png
+[I 2026-05-28 16:17:57,027 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-28 16:17:57,027 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-05-28 16:17:57,029 minium assertbase#390 _get_stack_info] <bound method TestMysteryReason.test_08_mystery_reason_core_flow of <testcases.test_mystery_reason.TestMysteryReason testMethod=test_08_mystery_reason_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 108, in test_08_mystery_reason_core_flow
+    self._run_core_flow(self.min_players)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py", line 103, in _run_core_flow
+    host.play_core_flow(self.cloud, room_id)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 219, in play_core_flow
+    self.wait_phase_text("读本", timeout=120)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/mystery_reason_page.py", line 214, in wait_phase_text
+    self.wait_for_text(text, selector="view", timeout=timeout)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 284, in wait_for_text
+    raise AssertionError(f"Text not found: {text}; last_error={last_error}")
+AssertionError: Text not found: 读本; last_error=element[view] not found
+[W 2026-05-28 16:17:57,030 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': True, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 60, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 29483, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': False, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260528161144', 'case_output': './outputs/20260528161144/test_08_mystery_reason_core_flow/20260528161522845743'}
+[W 2026-05-28 16:17:57,031 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-28 16:17:57,031 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-28 16:17:57,031 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1086caa50>

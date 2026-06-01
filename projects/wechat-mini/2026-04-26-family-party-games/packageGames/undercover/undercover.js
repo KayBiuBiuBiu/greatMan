@@ -1,6 +1,6 @@
 const { callUndercoverService, ensureUndercoverCloud } = require('../../utils/undercoverRoomCloud')
 const { enterCloudRoomOnLoad } = require('../utils/roomJoin')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const { markRoomDbWatch } = require('../../utils/cloudRealtime')
 const {
   memberCountLine,
@@ -38,7 +38,7 @@ const { buildShareCardPageUrl } = require('../../utils/shareCard')
 const { patchLobbyUi } = require('../utils/roomMemberUi')
 const { overlayLobbyProfileReady } = require('../utils/roomLobbyReady')
 const { stepIndex, vibrateBoundary } = require('../../utils/listStepper')
-const UC_SIZE_HINT = '人数 4～12，需凑满开局'
+const UC_SIZE_HINT = '进多少人就多少人开局，至少 3 人可开始'
 const { onRoomEntered, onRoomLeft } = require('../utils/partyAiRoomHooks')
 const {
   storeMyOpenId,
@@ -50,12 +50,12 @@ const {
 const lobbyReady = require('../utils/roomLobbyReady')
 const UC_OPENID_KEY = 'uc_my_open_id'
 const SIZ = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-const WORD_SOURCE_OPTIONS = ['系统词库', 'AI 词对']
-const WORD_SOURCE_VALUES = ['system', 'ai']
+const WORD_SOURCE_OPTIONS = ['AI 词对']
+const WORD_SOURCE_VALUES = ['ai']
 
 function ucSettingsDisplay(data) {
   const d = data || {}
-  const ws = d.wordSource || 'system'
+  const ws = d.wordSource || 'ai'
   let wordSourceIdx = WORD_SOURCE_VALUES.indexOf(ws)
   if (wordSourceIdx < 0) {
     wordSourceIdx = 0
@@ -127,7 +127,7 @@ Page({
     statusHint: '',
     statusBannerWarn: false,
     canStart: false,
-    wordSource: 'system',
+    wordSource: 'ai',
     wordSourceOptions: WORD_SOURCE_OPTIONS,
     wordSourceIdx: 0,
     wordSourceLabel: WORD_SOURCE_OPTIONS[0],
@@ -154,7 +154,7 @@ Page({
     this._justOpened = true
     const cfg = this.parseCfg(query)
     this.setData({
-      nick: (wx.getStorageSync('uc_nick') || '').toString() || '参与者',
+      nick: (wx.getStorageSync('uc_nick') || '').toString() || getFallbackNickName(),
       playMode: 'v2'
     })
     if (cfg.mode === 'v2' && cfg.roomId) {
@@ -309,11 +309,12 @@ Page({
       maxPlayers: mp || prevSt.maxPlayers,
       roomCode: v.roomCode || prevSt.roomCode,
       roomId: this.data.roomId,
+      hostOpenId: prevSt.hostOpenId || v.hostOpenId || '',
       voteProgress: v.voteProgress || prevSt.voteProgress || { cast: 0, need: 0 }
     }
     path.logText = (path.state.publicLog || []).join('\n')
     const idx = si >= 0 ? si : this.data.sizeIndex | 0
-    const needN = (path.state.maxPlayers | 0) || SIZ[idx] || 6
+    const needN = 0
     patchLobbyUi(path, {
       state: path.state,
       view: v,
@@ -321,7 +322,8 @@ Page({
       phase: path.state.currentPhase,
       maxPlayers: needN,
       minPlayers: 3,
-      isHost: v.isHost
+      isHost: v.isHost,
+      hostOpenId: path.state.hostOpenId || ''
     }, this)
     patchUcMemberDisplay(path, path.state.currentPhase, players, this, v.myOpenId || '')
     this.setData(path)
@@ -390,7 +392,7 @@ Page({
     const si = mp > 0 ? SIZ.indexOf(mp) : -1
     const cph = d.currentPhase || ''
     const flags = this._phaseFlags(cph)
-    const needN = (mp | 0) || SIZ[si >= 0 ? si : this.data.sizeIndex | 0] || 6
+    const needN = 0
     const view = this.data.view || {}
     const patch = {
       state: d,
@@ -414,14 +416,11 @@ Page({
   },
   onWordSourceChange(e) {
     const i = parseInt((e.detail && e.detail.value) || 0, 10) || 0
-    const src = WORD_SOURCE_VALUES[i] || 'system'
+    const src = WORD_SOURCE_VALUES[i] || 'ai'
     const patch = {
       wordSource: src,
       wordSourceIdx: i,
       wordSourceLabel: WORD_SOURCE_OPTIONS[i] || WORD_SOURCE_OPTIONS[0]
-    }
-    if (src === 'system') {
-      patch.aiPreviewPair = null
     }
     this.setData(patch)
   },
@@ -467,7 +466,7 @@ Page({
     )
   },
   onNick(e) {
-    this.setData({ nick: (e.detail.value || '').trim().slice(0, 12) || '参与者' })
+    this.setData({ nick: (e.detail.value || '').trim().slice(0, 12) || getFallbackNickName() })
   },
   saveNick() {
     if (this.data.nick) {
@@ -488,7 +487,7 @@ Page({
     callUndercoverService(
       withJoinProfile({
         action: 'create',
-        nickName: this.data.nick || '参与者'
+        nickName: this.data.nick || getFallbackNickName()
       }),
       {
         onOk: (res) => {
@@ -529,7 +528,7 @@ Page({
       withJoinProfile({
         action: 'join',
         roomCode: c,
-        nickName: this.data.nick || '参与者'
+        nickName: this.data.nick || getFallbackNickName()
       }),
       {
         onOk: (res) => {
@@ -750,14 +749,13 @@ Page({
   doStart() {
     const st = this.data.state || {}
     const n = (st.publicPlayers && st.publicPlayers.length) || 0
-    const need = (st.maxPlayers | 0) || SIZ[this.data.sizeIndex | 0] || 6
     const v = this.data.view || {}
-    const ctx = { playerCount: n, needPlayers: need }
+    const ctx = { playerCount: n, needPlayers: 0 }
     const checks = buildStartChecks({
       isHost: v.isHost,
       playerCount: n,
       minPlayers: 3,
-      needPlayers: need,
+      needPlayers: 0,
       kind: 'undercover',
       ctx,
       players: st.publicPlayers || [],
@@ -765,14 +763,6 @@ Page({
       startVerb: '开始互动'
     })
     const page = this
-    const useAi = this.data.wordSource === 'ai'
-    if (useAi) {
-      const pair = this.data.aiPreviewPair
-      if (!pair || !pair.civilianWord || !pair.undercoverWord) {
-        wx.showToast({ title: '请先生成 AI 词对', icon: 'none' })
-        return
-      }
-    }
     this.setData({ opBusy: true })
     const finish = () => {
       page.setData({ opBusy: false })
@@ -784,36 +774,13 @@ Page({
         localChecks: checks,
         callService: callUndercoverService,
         payload: { action: 'startGame', roomId: page.data.roomId },
-        loadingTitle: '开始互动',
+        loadingTitle: 'AI 生成词对',
         onSuccess: () => {
           page.setData({ aiPreviewPair: null })
           page.loadView()
         },
         onFinally: finish
       })
-    }
-    if (useAi) {
-      const pair = this.data.aiPreviewPair
-      runStartAction({
-        kind: 'undercover',
-        ctx,
-        localChecks: [],
-        callService: callUndercoverService,
-        payload: {
-          action: 'setCustomPair',
-          roomId: page.data.roomId,
-          civilianWord: pair.civilianWord,
-          undercoverWord: pair.undercoverWord
-        },
-        loadingTitle: '准备词对',
-        onSuccess: runGameStart,
-        onFinally: (ok) => {
-          if (!ok) {
-            finish()
-          }
-        }
-      })
-      return
     }
     runGameStart()
   },
@@ -907,6 +874,26 @@ Page({
         }
       }
     )
+  },
+
+  /** Minium：注入云测快照（成员/可开始状态） */
+  applyTestSyncSnapshot(payload) {
+    const p = payload || {}
+    const st = p.state || {}
+    const v = p.view || {}
+    if (p.roomId) {
+      this.setData({
+        roomId: String(p.roomId),
+        roomCode: String(p.roomCode || st.roomCode || ''),
+        joinCode: String(p.roomCode || st.roomCode || '')
+      })
+    }
+    if (st && st.publicPlayers) {
+      this._applyWatchState(st)
+    }
+    if (v && Object.keys(v).length) {
+      this._patchFromView(v)
+    }
   },
   unwatch() {
     if (this._w) {

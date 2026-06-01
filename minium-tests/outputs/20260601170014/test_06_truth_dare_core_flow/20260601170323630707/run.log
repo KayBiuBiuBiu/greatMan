@@ -1,0 +1,89 @@
+[I 2026-06-01 17:03:23,631 minium minitest#432 _miniSetUp] =========Current case: test_06_truth_dare_core_flow=========
+[I 2026-06-01 17:03:23,632 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_06_truth_dare_core_flow
+[I 2026-06-01 17:03:23,632 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 17:03:23,632 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 17:03:23,632 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 17:03:23,632 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 17:03:23,632 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 17:03:23,632 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 17:03:23,692 minium minitest#487 _miniSetUp] =========case: test_06_truth_dare_core_flow start=========
+[I 2026-06-01 17:03:23,692 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 17:03:23,694 minium.Conn4848 connection#668 __on_message] [fac990ad-9f75-4ad4-be60-c710e3a56639]: wx.cloud.callFunction not exists
+[I 2026-06-01 17:03:28,387 minium.App2256 app#891 navigate_to] NavigateTo: /packageGames/play/play?title=%E7%9C%9F%E5%BF%83%E8%AF%9D%E5%A4%A7%E5%86%92%E9%99%A9&config=%7B%22roomCode%22%3A%227013%22%7D
+[I 2026-06-01 17:03:29,364 minium.App2256 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/play/play', 'query': {'title': '%25E7%259C%259F%25E5%25BF%2583%25E8%25AF%259D%25E5%25A4%25A7%25E5%2586%2592%25E9%2599%25A9', 'config': '%257B%2522roomCode%2522%253A%25227013%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1780304609358, 'webviewId': 9, 'routeEventId': '9_1780304608658', 'renderer': 'webview'}, 1780304609358]}
+[I 2026-06-01 17:03:29,365 minium.Conn4848 connection#704 _handle_async_msg] received async msg: 21fa4d4a-2bed-4daa-8580-12930902caeb
+[I 2026-06-01 17:03:34,412 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-01 17:03:34,493 minium.Conn4848 connection#668 __on_message] [af803479-53b8-4060-a2d7-8357749b7abf]: wx.cloud.callFunction not exists
+[E 2026-06-01 17:03:37,989 minium.Conn4848 connection#668 __on_message] [39f39d18-a8fc-4daa-b95b-f8417e801c8b]: wx.cloud.callFunction not exists
+[E 2026-06-01 17:03:41,263 minium.Conn4848 connection#668 __on_message] [653e73bf-f34b-4184-9596-05b9ee8f942d]: wx.cloud.callFunction not exists
+[E 2026-06-01 17:03:44,542 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 202, in test_06_truth_dare_core_flow
+    page.refresh_lobby(cloud=self.cloud)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 68, in refresh_lobby
+    cloud.sync_truth_dare_page(self, code)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 182, in sync_truth_dare_page
+    page_obj.try_call_page_method(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        "_applyRoomPlayers",
+        ^^^^^^^^^^^^^^^^^^^^
+        data["room"],
+        ^^^^^^^^^^^^^
+        data.get("myOpenId") or "",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 349, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+TypeError: Page.call_method() takes from 2 to 3 positional arguments but 4 were given
+[I 2026-06-01 17:03:44,548 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 17:03:44,552 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 17:03:44,623 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 17:03:44,623 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-01 17:03:44,625 minium assertbase#390 _get_stack_info] <bound method TestAllGames.test_06_truth_dare_core_flow of <testcases.test_all_games.TestAllGames testMethod=test_06_truth_dare_core_flow>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_all_games.py", line 202, in test_06_truth_dare_core_flow
+    page.refresh_lobby(cloud=self.cloud)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/pages/truth_page.py", line 68, in refresh_lobby
+    cloud.sync_truth_dare_page(self, code)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/haha/greatMan/minium-tests/utils/cloud_helper.py", line 182, in sync_truth_dare_page
+    page_obj.try_call_page_method(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        "_applyRoomPlayers",
+        ^^^^^^^^^^^^^^^^^^^^
+        data["room"],
+        ^^^^^^^^^^^^^
+        data.get("myOpenId") or "",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/haha/greatMan/minium-tests/base/base_page.py", line 349, in try_call_page_method
+    return fn(method_name, *args)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 291, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+TypeError: Page.call_method() takes from 2 to 3 positional arguments but 4 were given
+[W 2026-06-01 17:03:44,626 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 63518, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260601170014', 'case_output': './outputs/20260601170014/test_06_truth_dare_core_flow/20260601170323630707'}
+[W 2026-06-01 17:03:44,626 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-01 17:03:44,626 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-01 17:03:44,626 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1031ca7b0>

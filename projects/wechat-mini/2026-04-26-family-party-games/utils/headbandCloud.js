@@ -1,6 +1,6 @@
 const { ensureCloudInit, getCallFunctionConfig } = require('./cloudInit')
 
-/** startGame 会在云端调 generateCharacters，需较长超时 */
+/** startGame 会在云端调 aiPartyService 出题，需较长超时 */
 const CALL_TIMEOUT_MS = 90000
 
 function formatFail(err) {

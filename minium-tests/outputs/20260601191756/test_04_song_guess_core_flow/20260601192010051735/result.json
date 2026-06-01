@@ -1,0 +1,123 @@
+{
+    "case_name": "test_04_song_guess_core_flow",
+    "run_time": "20260601 19:20:10",
+    "test_type": "TestAllGames",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 373, in test_04_song_guess_core_flow\n    host, _ = self._run_dynamic_core_flow(SongPage, \"start_round\", player_count=3)\n              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 275, in _run_dynamic_core_flow\n    seed = self._join_players(\n        page_cls, room_code, added, room_id=info.get(\"roomId\")\n    )\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_all_games.py\", line 89, in _join_players\n    raise AssertionError(\n        f\"seed_players({game_key}) failed: {err} roomId={room_id} code={room_code}\"\n    )\nAssertionError: seed_players(songGuess) failed: setState is not defined roomId=10f00cf26a1d6aee0129b2ac2c962868 code=620919\n",
+    "start_timestamp": 1780312810.5018508,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_all_games",
+    "package": "testcases",
+    "failed_line_num": 373,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "seed_players(songGuess) failed: setState is not defined roomId=10f00cf26a1d6aee0129b2ac2c962868 code=620919",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780312810,
+            "datetime": "2026-06-01 19:20:10",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780312815,
+            "datetime": "2026-06-01 19:20:15",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/song-guess/song-guess",
+            "path": "images/teardown.png",
+            "ts": 1780312818,
+            "datetime": "2026-06-01 19:20:18",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780312818.942805,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_04_song_guess_core_flow(self):\n",
+            "        host, _ = self._run_dynamic_core_flow(SongPage, \"start_round\", player_count=3)\n",
+            "        host.buzz_and_score()\n"
+        ],
+        "start": 372
+    },
+    "filename": "result.json"
+}

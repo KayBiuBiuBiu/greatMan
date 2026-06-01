@@ -1,0 +1,274 @@
+{
+    "case_name": "test_evidence_round_timing_and_idempotent",
+    "run_time": "20260529 14:27:20",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": null,
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780036040.858429,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1780036040,
+            "datetime": "2026-05-29 14:27:20",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780036044,
+            "datetime": "2026-05-29 14:27:24",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_142724226729.png",
+            "ts": 1780036044,
+            "datetime": "2026-05-29 14:27:24",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_142728039531.png",
+            "ts": 1780036048,
+            "datetime": "2026-05-29 14:27:28",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_142740063133.png",
+            "ts": 1780036060,
+            "datetime": "2026-05-29 14:27:40",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertEqual-success.png",
+            "ts": 1780036065,
+            "datetime": "2026-05-29 14:27:45",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_142753106105.png",
+            "ts": 1780036073,
+            "datetime": "2026-05-29 14:27:53",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_142803382103.png",
+            "ts": 1780036083,
+            "datetime": "2026-05-29 14:28:03",
+            "use_region": false
+        },
+        {
+            "name": "assertEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertEqual-success_142814072227.png",
+            "ts": 1780036094,
+            "datetime": "2026-05-29 14:28:14",
+            "use_region": false
+        },
+        {
+            "name": "assertListEqual-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertListEqual-success.png",
+            "ts": 1780036098,
+            "datetime": "2026-05-29 14:28:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success_142818986619.png",
+            "ts": 1780036099,
+            "datetime": "2026-05-29 14:28:19",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1780036101,
+            "datetime": "2026-05-29 14:28:21",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertListEqual",
+            "ret": true,
+            "msg": null,
+            "img": "assertListEqual-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780036101.751822,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_evidence_round_timing_and_idempotent(self):\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        page = self._ui_init_room(snap)\n",
+            "        self._start_and_reach_read_script(page, room_id)\n",
+            "        self._go_to_phase(page, room_id, \"get_evidence\")\n",
+            "        snap = self._sync_room_snapshot(page, room_id)\n",
+            "        st = self._state(snap)\n",
+            "        round_record = st.get(\"evidenceRoundRecord\") or []\n",
+            "\n",
+            "        if len(round_record) < 3:\n",
+            "            for rnd in (1, 2, 3):\n",
+            "                res = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, rnd))\n",
+            "                self.assertTrue(self._is_cloud_success(res), f\"\u8f6e{rnd}: {res}\")\n",
+            "            r1_repeat = self._unwrap_cloud(self.cloud.trigger_evidence(room_id, 1))\n",
+            "            self.assertTrue(self._is_cloud_success(r1_repeat))\n",
+            "            snap = self._sync_room_snapshot(page, room_id)\n",
+            "            st = self._state(snap)\n",
+            "            round_record = st.get(\"evidenceRoundRecord\") or []\n",
+            "\n",
+            "        self.assertListEqual(sorted(round_record), [1, 2, 3])\n",
+            "        self.assertTrue(len(st.get(\"publicClue\") or []) > 0, \"\u516c\u5171\u8bc1\u636e\u4e3a\u7a7a\")\n"
+        ],
+        "start": 333
+    },
+    "filename": "result.json"
+}

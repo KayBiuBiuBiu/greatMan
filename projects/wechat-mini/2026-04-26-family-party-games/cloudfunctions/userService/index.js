@@ -13,30 +13,6 @@ const USERS = 'users'
 const MAX_NICK = 32
 let usersCollectionReady = false
 
-async function ensureUsersCollection() {
-  if (usersCollectionReady) {
-    return
-  }
-  try {
-    await db.createCollection(USERS)
-    usersCollectionReady = true
-    console.log('[userService] created collection', USERS)
-  } catch (e) {
-    const msg = ((e && e.message) || String(e) || '').toLowerCase()
-    if (
-      msg.indexOf('exist') >= 0 ||
-      msg.indexOf('already') >= 0 ||
-      msg.indexOf('已存在') >= 0 ||
-      msg.indexOf('resourceexist') >= 0
-    ) {
-      usersCollectionReady = true
-      return
-    }
-    console.warn('[userService] ensureUsersCollection', e)
-  }
-}
-let usersCollectionReady = false
-
 function isCollectionAlreadyExistsErr(e) {
   const msg = ((e && e.message) || String(e) || '').toLowerCase()
   return (

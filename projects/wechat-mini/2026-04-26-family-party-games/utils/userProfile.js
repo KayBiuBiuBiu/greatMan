@@ -4,7 +4,7 @@
 const userHelper = require('./userHelper')
 
 const STORAGE_KEY = userHelper.STORAGE_KEY
-const DEFAULT_NICK = '匿名'
+const DEFAULT_NICK = '游客'
 const DEFAULT_AVATAR = ''
 
 function readCache() {
@@ -51,7 +51,7 @@ function withJoinProfile(data) {
 
 function displayNick(profile) {
   const n = String((profile && profile.nickName) || '').trim()
-  return n || DEFAULT_NICK
+  return n || userHelper.getFallbackNickName()
 }
 
 function displayAvatar(profile) {
@@ -69,6 +69,7 @@ module.exports = {
   uploadAvatarFile,
   saveNickName,
   getJoinPayload,
+  getFallbackNickName: userHelper.getFallbackNickName,
   withJoinProfile,
   displayNick,
   displayAvatar,

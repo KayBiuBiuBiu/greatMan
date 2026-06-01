@@ -1,0 +1,37 @@
+{
+  "description": "家庭聚会助手 Minium 核心流程回归套件（包含不要做挑战）",
+  "pkg_list": [
+    {
+      "pkg": "testcases.test_all_games",
+      "case_list": [
+        "test_01_drink_party_core_flow",
+        "test_02_undercover_core_flow",
+        "test_03_draw_guess_core_flow",
+        "test_04_song_guess_core_flow",
+        "test_05_werewolf_core_flow",
+        "test_06_truth_dare_core_flow",
+        "test_07_headband_core_flow",
+        "test_11_undercover_insufficient_players",
+        "test_12_werewolf_insufficient_players",
+        "test_13_draw_guess_insufficient_players",
+        "test_14_song_guess_insufficient_players",
+        "test_15_drink_party_insufficient_players",
+        "test_16_headband_insufficient_players"
+      ]
+    },
+    {
+      "pkg": "testcases.test_mystery_reason",
+      "case_list": [
+        "test_08_mystery_reason_core_flow",
+        "test_17_mystery_reason_insufficient_players"
+      ]
+    },
+    {
+      "pkg": "testcases.test_dontdoit_party",
+      "case_list": [
+        "test_09_dontdoit_core_flow",
+        "test_18_dontdoit_insufficient_players"
+      ]
+    }
+  ]
+}

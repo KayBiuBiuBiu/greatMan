@@ -151,7 +151,11 @@ def test_resolve_hot_sw_l1_absolute_fallback_when_no_benchmark(tmp_path: Path) -
     )
     cfg = {
         "kline_store": {"enabled": True, "db_path": "data/daily_klines.db"},
-        "display": {"hot_sector_quality_enabled": True, "hot_sector_lookback_days": 5},
+        "display": {
+            "hot_sector_quality_enabled": True,
+            "hot_sector_lookback_days": 5,
+            "hot_sector_use_realtime": False,
+        },
     }
     state: dict = {}
     hot = _resolve_hot_sw_l1_set(cfg, root=tmp_path, state=state, picks_path=picks)
@@ -185,7 +189,11 @@ def test_resolve_hot_sw_l1_ignores_stale_empty_cache(tmp_path: Path) -> None:
     )
     cfg = {
         "kline_store": {"enabled": True, "db_path": "data/daily_klines.db"},
-        "display": {"hot_sector_quality_enabled": True, "hot_sector_lookback_days": 5},
+        "display": {
+            "hot_sector_quality_enabled": True,
+            "hot_sector_lookback_days": 5,
+            "hot_sector_use_realtime": False,
+        },
     }
     state: dict = {
         "__hot_sw_l1_daily__": {

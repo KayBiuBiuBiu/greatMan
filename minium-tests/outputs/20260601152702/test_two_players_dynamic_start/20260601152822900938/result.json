@@ -1,0 +1,112 @@
+{
+    "case_name": "test_two_players_dynamic_start",
+    "run_time": "20260601 15:28:22",
+    "test_type": "TestDrinkParty",
+    "case_doc": null,
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_drink_party.py\", line 52, in test_two_players_dynamic_start\n    info = page.create_room()\n  File \"/Users/haha/greatMan/minium-tests/pages/drink_page.py\", line 15, in create_room\n    self.wait_until(lambda: self.data_value(\"roomId\"), timeout=15, message=\"drink roomId not created\")\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/haha/greatMan/minium-tests/base/base_page.py\", line 297, in wait_until\n    raise AssertionError(f\"{message}; last={last}\")\nAssertionError: drink roomId not created; last=None\n",
+    "start_timestamp": 1780298902.9667761,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_drink_party",
+    "package": "testcases",
+    "failed_line_num": 52,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "drink roomId not created; last=None",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/setup.png",
+            "ts": 1780298902,
+            "datetime": "2026-06-01 15:28:22",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/drink-party/drink-party",
+            "path": "images/teardown.png",
+            "ts": 1780298922,
+            "datetime": "2026-06-01 15:28:42",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780298922.676474,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_two_players_dynamic_start(self):\n",
+            "        page = DrinkPage(self)\n",
+            "        info = page.create_room()\n",
+            "        self._seed(info[\"roomId\"], info[\"roomCode\"], self.min_players - 1)\n",
+            "        self._refresh(page)\n",
+            "        page.wait_member_count_at_least(self.min_players)\n",
+            "        page.start_round()\n",
+            "        page.assert_no_error_toast_or_modal()\n"
+        ],
+        "start": 50
+    },
+    "filename": "result.json"
+}

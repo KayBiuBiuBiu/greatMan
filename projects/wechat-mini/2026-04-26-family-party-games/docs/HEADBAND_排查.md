@@ -9,7 +9,7 @@
 1. 微信开发者工具 → **云开发** → 环境选 `cloud1-d9g01no7m292bc511-d5e875d`（与 `cloud-env.js` 一致）
 2. 展开 `cloudfunctions/headbandRoomService` → 右键 **上传并部署：云端安装依赖**（不要选「仅上传代码」）
 3. 若报错 `Cannot find module 'wx-server-sdk'`：说明依赖未装上，务必用 **云端安装依赖** 重传；本地可在该目录执行 `npm install --registry https://registry.npmjs.org/` 生成 `package-lock.json` 后再传
-4. 确认 **`generateCharacters`** 在同一环境也已部署
+4. 确认 **`aiPartyService`** 在同一环境已部署，且 AI / 混元配置可用
 4. 小程序 **编译** 后重试
 
 ---
@@ -24,7 +24,7 @@
 |----|------------|
 | cloud-env.js envId | 环境 ID 已配置 |
 | headbandRoomService | 云函数已部署且能读 `headband_rooms` / `headband_players` |
-| generateCharacters | 词库云函数可用 |
+| aiPartyService | AI 词库服务可用 |
 
 有 ❌ 时，把弹窗内容原样发给 Cursor。
 
@@ -56,7 +56,7 @@
 【现象】Toast 原文：___  或  一直 loading / 进了卧底页面 等
 【诊断弹窗】（粘贴）
 【Console [hb cloud]】（粘贴）
-【是否已部署】headbandRoomService 是/否  generateCharacters 是/否
+【是否已部署】headbandRoomService 是/否  aiPartyService 是/否
 ```
 
 ---
@@ -67,10 +67,10 @@
 |------|----------|------|
 | 请部署云函数 headbandRoomService | 未上传或未选对云环境 | 上传并部署 + 核对 envId |
 | Cannot find module 'wx-server-sdk' | 上传时未安装依赖 | **上传并部署：云端安装依赖**（见上） |
-| Cannot find module '@cloudbase/node-sdk/ai' | `generateCharacters` 或 SDK 版本问题 | 已内置词库兜底；请用 `wx-server-sdk@2.6.3` 重部署 `headbandRoomService` |
+| AI 词库生成失败 | `aiPartyService` 未部署或 AI 配置不可用 | 部署 `aiPartyService`，确认 AI / 混元能力或 `HUNYUAN_API_KEY` 可用 |
 | 聚会组不存在 | 口令是别的游戏房间的 | 在贴头猜词页建房，用该页口令 |
 | 首页输入 6 位进了卧底 | 该口令不是贴头房间 | 在贴头猜词内建房再分享 |
-| 词库生成失败 | generateCharacters 未部署或返回 code≠0 | 部署词库云函数；看诊断第三项 |
+| 词库生成失败 | `aiPartyService` 不可用或返回空文本 | 部署 `aiPartyService`；看诊断第三项 |
 | 生成口令失败 | roomCode 冲突或集合权限 | 查 headband_rooms 是否 ADMINONLY；重试建房 |
 | 同步无成员 | 未 join 成功 | 分享链接进房；看 `[hb cloud] syncState` |
 

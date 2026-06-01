@@ -1,0 +1,65 @@
+[I 2026-06-01 19:37:35,922 minium minitest#432 _miniSetUp] =========Current case: test_15_drink_party_insufficient_players=========
+[I 2026-06-01 19:37:35,961 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_15_drink_party_insufficient_players
+[I 2026-06-01 19:37:35,995 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 19:37:36,028 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 19:37:36,062 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 19:37:36,097 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 19:37:36,131 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 19:37:36,167 minium minitest#897 capture] capture setup.png
+[I 2026-06-01 19:37:36,410 minium minitest#487 _miniSetUp] =========case: test_15_drink_party_insufficient_players start=========
+[I 2026-06-01 19:37:36,411 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 19:37:36,450 minium.Conn5856 connection#668 __on_message] [339df73d-e015-4458-9dcd-cc693f933328]: wx.cloud.callFunction not exists
+[I 2026-06-01 19:37:39,375 minium.App6176 app#891 navigate_to] NavigateTo: /packageGames/drink-party/drink-party?roomId=93eed62b6a1d6f030049fb0d58db8b98&roomCode=813672
+[I 2026-06-01 19:37:40,346 minium.App6176 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/drink-party/drink-party', 'query': {'roomId': '93eed62b6a1d6f030049fb0d58db8b98', 'roomCode': '813672'}, 'openType': 'navigateTo', 'timeStamp': 1780313860341, 'webviewId': 17, 'routeEventId': '17_1780313859724', 'renderer': 'webview'}, 1780313860342]}
+[I 2026-06-01 19:37:40,347 minium.Conn5856 connection#704 _handle_async_msg] received async msg: a382cc2b-80f4-4e04-978d-e6408cbb7c39
+[I 2026-06-01 19:37:42,433 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-06-01 19:37:43,721 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:43,732 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1065272f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1065dc5f0>]
+[I 2026-06-01 19:37:44,815 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:44,825 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1065ddd10>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1065dfe30>]
+[I 2026-06-01 19:37:45,924 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:45,928 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106527070>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1067551d0>]
+[I 2026-06-01 19:37:47,013 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:47,027 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067551d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754cd0>]
+[I 2026-06-01 19:37:47,160 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:47,168 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106755270>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754a50>]
+[I 2026-06-01 19:37:48,280 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:48,286 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1065dd3b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1067551d0>]
+[I 2026-06-01 19:37:49,376 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:49,382 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067547d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754050>]
+[I 2026-06-01 19:37:50,497 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:37:50,505 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106754730>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754870>]
+[E 2026-06-01 19:37:50,572 minium.Conn5856 connection#668 __on_message] [2d5cbe4b-fdb1-4aa3-a914-f3401ea7b224]: wx.cloud.callFunction not exists
+[I 2026-06-01 19:37:53,863 minium page#716 _get_elements_by_css] try to get elements: .rg-btn-primary
+[I 2026-06-01 19:37:53,868 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106755810>]
+[E 2026-06-01 19:37:56,124 minium.Conn5856 connection#668 __on_message] [952b68dc-3c7d-40af-9b5c-982b4e813a6d]: wx.cloud.callFunction not exists
+[E 2026-06-01 19:37:58,747 minium.Conn5856 connection#668 __on_message] [4857a37d-a903-4d61-b24f-5e28cdc9a13d]: wx.cloud.callFunction not exists
+[I 2026-06-01 19:38:05,188 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:05,197 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067553b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754190>]
+[I 2026-06-01 19:38:06,272 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:06,345 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106526f30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106755630>]
+[I 2026-06-01 19:38:07,540 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:07,550 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067553b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754f50>]
+[I 2026-06-01 19:38:08,663 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:08,671 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x106755270>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106755450>]
+[I 2026-06-01 19:38:08,854 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:08,861 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067540f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754730>]
+[I 2026-06-01 19:38:09,992 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:10,036 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067554f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1067549b0>]
+[I 2026-06-01 19:38:11,091 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:11,096 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067540f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754870>]
+[I 2026-06-01 19:38:12,179 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-01 19:38:12,184 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067554f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106754550>]
+[E 2026-06-01 19:38:12,249 minium.Conn5856 connection#668 __on_message] [55469271-c197-4f99-9f5c-3df1e682d85c]: wx.cloud.callFunction not exists
+[E 2026-06-01 19:38:15,785 minium.Conn5856 connection#668 __on_message] [6f858779-e5d0-4999-a2ee-37a204532835]: wx.cloud.callFunction not exists
+[I 2026-06-01 19:38:19,095 minium minitest#897 capture] capture assertTrue-success_193819095235.png
+[E 2026-06-01 19:38:19,168 minium.Conn5856 connection#668 __on_message] [013330b6-7acb-4455-bd55-38052c9e76a6]: wx.cloud.callFunction not exists
+[E 2026-06-01 19:38:22,381 minium.Conn5856 connection#668 __on_message] [014b5998-641b-4d67-8e19-00d98ffd7138]: wx.cloud.callFunction not exists
+[E 2026-06-01 19:38:27,270 minium.Conn5856 connection#668 __on_message] [610cf069-83f2-4607-9730-296973d39409]: wx.cloud.callFunction not exists
+[E 2026-06-01 19:38:30,525 minium.Conn5856 connection#668 __on_message] [100369d5-531b-4eff-9c04-d9e5d1359971]: page.loadView not exists
+[E 2026-06-01 19:38:30,529 minium.Conn5856 connection#668 __on_message] [d3eac146-8d71-4f0c-b5d7-b00694823ca5]: page._refreshView not exists
+[I 2026-06-01 19:38:32,197 minium minitest#897 capture] capture assertTrue-success_193832196827.png
+[I 2026-06-01 19:38:32,273 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 19:38:32,314 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 19:38:32,448 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 19:38:32,449 minium basenative#63 wrapper] call BaseNative.get_start_up end 

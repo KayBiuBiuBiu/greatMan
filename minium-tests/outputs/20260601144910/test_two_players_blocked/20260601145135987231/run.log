@@ -1,0 +1,30 @@
+[I 2026-06-01 14:51:35,988 minium minitest#432 _miniSetUp] =========Current case: test_two_players_blocked=========
+[I 2026-06-01 14:51:35,989 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_undercover, case info: TestUndercoverDynamicPlayers.test_two_players_blocked
+[I 2026-06-01 14:51:35,989 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-01 14:51:35,989 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-01 14:51:35,989 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-01 14:51:35,989 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-01 14:51:35,989 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-01 14:51:35,990 minium minitest#897 capture] capture setup.png
+[W 2026-06-01 14:51:37,996 minium.App6016 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 14:51:37,997 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601144910/test_two_players_blocked/20260601145135987231/images/setup.png not exists
+[I 2026-06-01 14:51:37,997 minium minitest#487 _miniSetUp] =========case: test_two_players_blocked start=========
+[I 2026-06-01 14:51:37,998 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-01 14:51:38,009 minium.Conn6864 connection#668 __on_message] [7ac13b99-1dc0-4742-89aa-e26a4ecf9c45]: wx.cloud.callFunction not exists
+[I 2026-06-01 14:51:41,415 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-01 14:51:43,421 minium.App6016 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-01 14:51:43,422 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260601144910/test_two_players_blocked/20260601145135987231/images/assertTrue-success.png not exists
+[I 2026-06-01 14:51:43,423 minium.App6016 app#891 navigate_to] NavigateTo: /packageGames/undercover/undercover?config=%7B%22mode%22%3A%20%22v2%22%2C%20%22roomId%22%3A%20%226cb23a706a1d2bfd00a629117fce4d4a%22%2C%20%22roomCode%22%3A%20%22650042%22%7D
+[I 2026-06-01 14:51:45,324 minium.App6016 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {'config': '%257B%2522mode%2522%253A%2520%2522v2%2522%252C%2520%2522roomId%2522%253A%2520%25226cb23a706a1d2bfd00a629117fce4d4a%2522%252C%2520%2522roomCode%2522%253A%2520%2522650042%2522%257D'}, 'openType': 'navigateTo', 'timeStamp': 1780296705307, 'webviewId': 7, 'routeEventId': '7_1780296703661', 'renderer': 'webview'}, 1780296705308]}
+[I 2026-06-01 14:51:45,325 minium.Conn6864 connection#704 _handle_async_msg] received async msg: 4e4f49f7-73e9-44f1-abea-58745127027d
+[I 2026-06-01 14:51:45,350 minium.Conn6864 connection#704 _handle_async_msg] received async msg: 785bd37b-79a8-4326-a8ab-a296d0a27ac1, maybe command ignore response
+[E 2026-06-01 14:51:47,341 minium.Conn6864 connection#668 __on_message] [52571318-d85c-47f7-8f34-dd3dd54e2509]: wx.cloud.callFunction not exists
+[I 2026-06-01 14:51:51,892 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-06-01 14:51:51,994 minium minitest#897 capture] capture assertFalse-success.png
+[I 2026-06-01 14:51:52,055 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-01 14:51:52,055 minium.App6016 app#950 relaunch] ReLaunch: /packageGames/undercover/undercover
+[I 2026-06-01 14:51:53,008 minium.App6016 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/undercover/undercover', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780296712997, 'webviewId': 8, 'routeEventId': '', 'renderer': 'webview'}, 1780296712998]}
+[I 2026-06-01 14:51:53,013 minium.Conn6864 connection#704 _handle_async_msg] received async msg: 2805b0bd-daaa-4b0a-af59-3e82ebf60a32
+[I 2026-06-01 14:51:54,519 minium minitest#897 capture] capture teardown.png
+[I 2026-06-01 14:51:54,587 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-01 14:51:54,588 minium basenative#63 wrapper] call BaseNative.get_start_up end 

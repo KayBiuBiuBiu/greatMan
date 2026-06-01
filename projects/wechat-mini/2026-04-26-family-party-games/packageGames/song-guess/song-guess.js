@@ -1,5 +1,5 @@
 const { callMusic, ensure } = require('../../utils/musicRoomCloud')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const {
   memberCountLine,
   refreshCloudDoc,
@@ -41,7 +41,7 @@ const ROUND_STEP_HINT = '可选 5 / 10 / 15 题'
 const ROUNDS = [5, 10, 15]
 
 function defaultNick () {
-  return (wx.getStorageSync('music_nick') || '参与者').toString()
+  return (wx.getStorageSync('music_nick') || getFallbackNickName()).toString()
 }
 
 Page({
@@ -92,7 +92,7 @@ Page({
       : ''
     const nick0 = (q && q.nick) ? decodeURIComponent(String(q.nick)) : defaultNick()
     this.setData({
-      nick: nick0.slice(0, 12) || '参与者',
+      nick: nick0.slice(0, 12) || getFallbackNickName(),
       roomId,
       roomCode: roomCode || '',
       joinCode: roomCode ? String(roomCode).replace(/\D/g, '').slice(0, 6) : ''
@@ -303,7 +303,7 @@ Page({
     if (!ensure()) {
       return
     }
-    const nick = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const nick = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('music_nick', nick)
     wx.showLoading({ title: '创建中' })
     callMusic(
@@ -352,7 +352,7 @@ Page({
       wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
-    const nick = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const nick = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('music_nick', nick)
     joinRoomWithUi(
       callMusic,
@@ -420,7 +420,7 @@ Page({
       localChecks: checks,
       callService: callMusic,
       payload: { action: 'startGame', roomId: this.data.roomId },
-      loadingTitle: '开始互动',
+      loadingTitle: 'AI 生成歌单',
       onSuccess: () => {
         this._refreshRoomState()
       }

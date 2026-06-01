@@ -1,0 +1,163 @@
+{
+    "case_name": "test_vote_tie_auto_analysis",
+    "run_time": "20260528 23:47:43",
+    "test_type": "TestMysteryReasonFullClosedLoop",
+    "case_doc": "\u5e73\u7968\u573a\u666f\u81ea\u52a8\u8ffd\u52a0\u4e13\u9879\u5206\u6790",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/minium-tests/testcases/test_mystery_reason.py\", line 295, in test_vote_tie_auto_analysis\n    self.assertIn(\"\u5e73\u7968\", state[\"state\"][\"reviewContent\"])\n                          ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\nKeyError: 'reviewContent'\n",
+    "start_timestamp": 1779983263.42698,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_mystery_reason",
+    "package": "testcases",
+    "failed_line_num": 295,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "KeyError",
+    "error_value": "reviewContent",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/setup.png",
+            "ts": 1779983263,
+            "datetime": "2026-05-28 23:47:43",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success.png",
+            "ts": 1779983267,
+            "datetime": "2026-05-28 23:47:47",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertTrue-success.png",
+            "ts": 1779983267,
+            "datetime": "2026-05-28 23:47:47",
+            "use_region": false
+        },
+        {
+            "name": "assertFalse-success",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/assertFalse-success_234751004991.png",
+            "ts": 1779983271,
+            "datetime": "2026-05-28 23:47:51",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/mystery-reason/mystery-reason",
+            "path": "images/teardown.png",
+            "ts": 1779983305,
+            "datetime": "2026-05-28 23:48:25",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertFalse",
+            "ret": true,
+            "msg": null,
+            "img": "assertFalse-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1779983305.091775,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_vote_tie_auto_analysis(self):\n",
+            "        \"\"\"\u5e73\u7968\u573a\u666f\u81ea\u52a8\u8ffd\u52a0\u4e13\u9879\u5206\u6790\"\"\"\n",
+            "        room_id, _, snap = self._tcb_create_full_room(3)\n",
+            "        self._unwrap_cloud(self.cloud.start_game(MysteryReasonPage.game_key, room_id))\n",
+            "        self._unwrap_cloud(self.cloud.force_set_phase(room_id, \"final_vote\"))\n",
+            "\n",
+            "        # \u5236\u9020\u5e73\u7968\n",
+            "        self._unwrap_cloud(self.cloud.batch_vote_tie(room_id))\n",
+            "        self._unwrap_cloud(self.cloud.force_next_phase(room_id))\n",
+            "        self._unwrap_cloud(self.cloud.unlock_review(room_id, verify=True))\n",
+            "\n",
+            "        state = self._unwrap_cloud(self.cloud.sync_snapshot(MysteryReasonPage.game_key, room_id))\n",
+            "        self.assertIn(\"\u5e73\u7968\", state[\"state\"][\"reviewContent\"])\n"
+        ],
+        "start": 283
+    },
+    "filename": "result.json"
+}

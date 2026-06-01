@@ -79,6 +79,302 @@
   margin-top: var(--space-sm);
 }
 
+.ww-ai-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ww-ai-host-card {
+  margin-top: var(--space-sm);
+}
+
+.ww-ai-phase-title {
+  font-size: var(--font-card-title-size);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  margin-bottom: var(--space-sm);
+  color: var(--color-brand);
+}
+
+.ww-ai-countdown-bar {
+  height: 12rpx;
+  background: var(--color-bg-muted);
+  border-radius: 999rpx;
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.ww-ai-countdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  transition: width 0.3s ease;
+}
+
+.ww-ai-panel {
+  margin-top: var(--space-md);
+}
+
+.ww-ai-panel-title {
+  font-size: var(--font-body-size);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-sm);
+}
+
+.ww-ai-target-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ww-ai-target {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+}
+
+.ww-ai-target-name {
+  flex: 1;
+  font-size: var(--font-body-size);
+}
+
+.ww-ai-act-btn {
+  min-width: 88rpx !important;
+  padding: 0 16rpx !important;
+}
+
+.ww-sheriff-badge {
+  font-size: 28rpx;
+  margin-left: 6rpx;
+}
+
+.ww-transfer-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  box-sizing: border-box;
+}
+
+.ww-transfer-dialog {
+  width: 100%;
+  max-width: 640rpx;
+  max-height: 80vh;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.ww-transfer-title {
+  font-size: var(--font-card-title-size);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+.ww-transfer-timer {
+  text-align: center;
+  margin-top: var(--space-sm);
+  color: #7c3aed;
+  font-size: var(--font-body-size);
+}
+
+.ww-transfer-hint {
+  text-align: center;
+  margin: var(--space-sm) 0 var(--space-md);
+  font-size: var(--font-caption-size);
+}
+
+.ww-transfer-list {
+  flex: 1;
+  max-height: 50vh;
+}
+
+.ww-transfer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.ww-transfer-name {
+  flex: 1;
+  font-size: var(--font-body-size);
+}
+
+.ww-transfer-arrow {
+  font-size: 36rpx;
+  color: var(--color-text-muted);
+}
+
+.ww-transfer-skip {
+  margin-top: var(--space-md);
+  width: 100%;
+}
+
+.ww-withdraw-panel .ww-withdraw-hint {
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-caption-size);
+}
+
+.ww-withdraw-btn {
+  border-color: #0ea5e9 !important;
+  color: #0369a1 !important;
+}
+
+.ww-withdraw-cands {
+  margin-top: var(--space-sm);
+  text-align: center;
+  font-size: var(--font-caption-size);
+}
+
+.ww-ai-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ww-ai-host-card {
+  margin-top: var(--space-sm);
+}
+
+.ww-ai-phase-title {
+  font-size: var(--font-card-title-size);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  margin-bottom: var(--space-sm);
+}
+
+.ww-ai-countdown-bar {
+  height: 12rpx;
+  background: var(--color-bg-muted);
+  border-radius: 999rpx;
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.ww-ai-countdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  transition: width 0.3s ease;
+}
+
+.ww-ai-panel {
+  margin-top: var(--space-md);
+}
+
+.ww-ai-panel-title {
+  font-size: var(--font-body-size);
+  margin-bottom: var(--space-sm);
+}
+
+.ww-ai-target-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ww-ai-target {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+}
+
+.ww-ai-target-name {
+  flex: 1;
+  font-size: var(--font-body-size);
+}
+
+.ww-ai-act-btn {
+  min-width: 120rpx !important;
+  margin: 0 !important;
+}
+
+.ww-ai-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ww-ai-host-card {
+  border: 2rpx solid rgba(124, 58, 237, 0.35);
+}
+
+.ww-ai-phase-title {
+  font-size: var(--font-card-title-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-brand);
+  text-align: center;
+  margin-bottom: var(--space-sm);
+}
+
+.ww-ai-countdown-bar {
+  height: 12rpx;
+  background: var(--color-bg-muted);
+  border-radius: 999rpx;
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.ww-ai-countdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #7c3aed);
+  transition: width 0.3s ease;
+}
+
+.ww-ai-panel {
+  margin-top: var(--space-md);
+}
+
+.ww-ai-panel-title {
+  font-size: var(--font-body-size);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-sm);
+}
+
+.ww-ai-target-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ww-ai-target {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+}
+
+.ww-ai-target-name {
+  flex: 1;
+  font-size: var(--font-body-size);
+}
+
+.ww-ai-act-btn {
+  min-width: 100rpx !important;
+  margin: 0 !important;
+}
+
 .ww-phase-card .btn,
 .ww-phase-card button.btn {
   display: flex;

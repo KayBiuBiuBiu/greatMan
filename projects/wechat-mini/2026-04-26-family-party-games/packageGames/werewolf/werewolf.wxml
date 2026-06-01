@@ -7,21 +7,7 @@
   <view class="rg-room-card">
     <view class="rg-lobby-label">昵称</view>
     <input class="rg-lobby-inp" value="{{nick}}" bindinput="onNickIn" bindblur="saveNick" placeholder="输入昵称" />
-    <view class="rg-setting-item" style="margin-top: var(--space-md)">
-      <text class="rg-label">本环节人数</text>
-      <view class="rg-stepper-board">
-        <view
-          class="stepper-btn {{maxIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
-          bindtap="onDecrease"
-        >-</view>
-        <text class="stepper-value">{{maxList[maxIndex]}}</text>
-        <view
-          class="stepper-btn {{maxIndex >= maxList.length - 1 ? 'stepper-btn-disabled' : ''}}"
-          bindtap="onIncrease"
-        >+</view>
-      </view>
-    </view>
-    <view class="rg-stepper-hint">{{wolfSizeHint}}</view>
+    <view class="rg-stepper-hint">进多少人就多少人开局，至少 6 人可开始</view>
     <button class="btn btn-primary main-btn" bindtap="doCreate" disabled="{{opBusy}}">创建聚会组</button>
     <view class="rg-lobby-label" style="margin-top: var(--space-md)">已有口令</view>
     <input class="rg-lobby-inp" value="{{joinCode}}" bindinput="onCodeIn" type="number" maxlength="6" placeholder="6 位数字" />
@@ -63,7 +49,7 @@
         <text class="rg-members-count muted">{{memberCountLine}}</text>
       </view>
       <view class="rg-pick-banner" wx:if="{{pickMode && pickHint}}">{{pickHint}}</view>
-      <view class="rg-progress-wrap" wx:if="{{inWaiting && pub.maxPlayers}}">
+      <view class="rg-progress-wrap" wx:if="{{inWaiting && playerProgressPct > 0}}">
         <view class="rg-progress-bar">
           <view class="rg-progress-fill" style="width: {{playerProgressPct}}%;"></view>
         </view>
@@ -83,6 +69,7 @@
             <view class="rg-member-name-row">
               <text class="rg-member-name">{{p.nickName}}</text>
               <text class="rg-host-badge" wx:if="{{p.isHost}}">👑</text>
+              <text class="ww-sheriff-badge" wx:if="{{p.isSheriff}}">🎖</text>
               <view class="rg-ready-dot {{p.ready ? 'on' : ''}}"></view>
             </view>
             <text class="rg-ready-label">{{p.pickSelectable ? '可点选' : p.readyLabel}}</text>
@@ -112,22 +99,12 @@
   </view>
 
   <block wx:if="{{pub && pub.status === 'waiting' && view && view.isHost}}">
-    <view class="rg-settings-card">
-      <view class="rg-setting-item">
-        <text class="rg-label">本环节人数</text>
-        <view class="rg-stepper-board">
-          <view
-            class="stepper-btn {{maxIndex <= 0 ? 'stepper-btn-disabled' : ''}}"
-            bindtap="onDecrease"
-          >-</view>
-          <text class="stepper-value">{{maxList[maxIndex]}}</text>
-          <view
-            class="stepper-btn {{maxIndex >= maxList.length - 1 ? 'stepper-btn-disabled' : ''}}"
-            bindtap="onIncrease"
-          >+</view>
-        </view>
+    <view class="rg-settings-card" wx:if="{{showAiModeOption}}">
+      <view class="rg-setting-item ww-ai-switch-row">
+        <text class="rg-label">AI 全自动主持</text>
+        <switch checked="{{aiHostLobby}}" bindchange="onAiHostLobbySwitch" color="#7c3aed" />
       </view>
-      <view class="rg-stepper-hint">{{wolfSizeHint}}</view>
+      <view class="rg-stepper-hint muted">开启后无需组长点流程，按倒计时自动推进</view>
     </view>
     <view class="rg-mock-tools" wx:if="{{showMockPlayerTools && inWaiting}}">
       <view class="rg-label">测试：缺人时可加模拟玩家（仅占位，需组长推进流程）</view>
@@ -140,20 +117,183 @@
       class="rg-btn-primary main-btn rg-start-btn {{canStart ? '' : 'rg-start-muted'}}"
       bindtap="doStart"
       disabled="{{opBusy}}"
-    >开始互动</button>
+    >{{aiHostLobby && showAiModeOption ? '开始 AI 主持' : '开始互动'}}</button>
   </block>
 
   <view class="rg-room-card rg-guest-wait" wx:if="{{pub && pub.status === 'waiting' && view && !view.isHost}}">
     <view class="text-body muted">👥 等待组长开始互动，可先邀请更多朋友进组</view>
     <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)">邀请朋友</button>
   </view>
-    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.status === 'playing'}}">
-      <view class="priv" wx:if="{{pub.currentPhase !== 'end' && view && view.isHost}}">
-        <view>你本机：主持（无身份）</view>
+    <!-- AI 主持模式 -->
+    <view class="rg-room-card ww-ai-host-card" wx:if="{{aiModeOn && pub && pub.status === 'playing'}}">
+      <view class="ww-ai-phase-title">{{aiPhaseTitle}}</view>
+      <view class="ww-ai-countdown-bar">
+        <view class="ww-ai-countdown-fill" style="width: {{aiCountdownPct}}%;"></view>
       </view>
-      <view class="priv" wx:elif="{{pub.currentPhase !== 'end' && view && !view.isHost}}">
-        <view>你本机：{{rzh || '发牌中'}}</view>
-        <view wx:if="{{view && view.myRole === 'werewolf' && wolfMatesLine}}" style="margin-top: 8rpx">同组暗位：{{wolfMatesLine}}</view>
+      <view class="priv" wx:if="{{aiView.myRole}}">
+        <view>你本机：{{rzh}}</view>
+        <view wx:if="{{aiView.wolfMatesLine}}" class="muted">同组暗位：{{aiView.wolfMatesLine}}</view>
+      </view>
+      <view class="priv" wx:elif="{{view.isHost}}">
+        <view class="muted">你本机：旁观（AI 主持中）</view>
+      </view>
+
+      <!-- 警长竞选 -->
+      <view wx:if="{{pub.currentPhase === 'sheriff_signup' && aiView.actionHint === 'sheriff_signup'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">是否上警竞选警长？</view>
+        <button class="btn btn-primary main-btn" bindtap="onAiSheriffRun">上警（参与警上发言）</button>
+        <button class="btn btn-ghost main-btn" bindtap="onAiSheriffSkip" style="margin-top: 12rpx">不上警</button>
+      </view>
+      <view wx:if="{{pub.currentPhase === 'sheriff_withdraw' && aiView.actionHint === 'sheriff_withdraw'}}" class="ww-ai-panel ww-withdraw-panel">
+        <view class="ww-ai-panel-title">退水倒计时：{{pub.withdrawRemainingSeconds || 0}} 秒</view>
+        <view class="muted ww-withdraw-hint">你已上警，可选择退水放弃竞选（不可反悔）</view>
+        <button class="btn btn-ghost main-btn ww-withdraw-btn" bindtap="onAiSheriffWithdraw">退水</button>
+        <view class="ww-withdraw-cands muted" wx:if="{{pub.sheriffCandidates && pub.sheriffCandidates.length}}">
+          当前上警：{{pub.sheriffCandidateCount || pub.sheriffCandidates.length}} 人
+        </view>
+      </view>
+      <view wx:if="{{pub.currentPhase === 'sheriff_withdraw' && aiView.actionHint !== 'sheriff_withdraw'}}" class="ww-ai-panel muted">
+        <view class="ww-ai-panel-title">正在等待上警玩家退水</view>
+        <view class="muted">退水倒计时：{{pub.withdrawRemainingSeconds || 0}} 秒</view>
+      </view>
+      <view wx:if="{{pub.currentPhase === 'sheriff_speak' && aiView.actionHint === 'finish_sheriff_speak'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">轮到你警上发言</view>
+        <button class="btn btn-primary main-btn" bindtap="onAiFinishSheriffSpeak">结束警上发言</button>
+      </view>
+      <view wx:if="{{pub.currentPhase === 'sheriff_speak' && aiView.actionHint !== 'finish_sheriff_speak'}}" class="ww-ai-panel muted">
+        <view class="ww-ai-panel-title">警上发言：{{aiView.currentSpeakerNick || pub.currentSpeakerNick}}</view>
+      </view>
+      <view wx:if="{{pub.currentPhase === 'sheriff_vote' && aiView.actionHint === 'sheriff_vote'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">警徽投票（选警长）</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{pub.sheriffCandidates}}" wx:key="openId">
+            <member-avatar nick-name="{{item.nickName}}" />
+            <text class="ww-ai-target-name">{{item.nickName}}</text>
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiSheriffVote">🎖</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 天亮了 -->
+      <view wx:if="{{pub.currentPhase === 'day_announce'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">昨夜结果</view>
+        <view class="muted" wx:if="{{pub.lastNightDeaths && pub.lastNightDeaths.length}}">
+          <text wx:for="{{pub.lastNightDeaths}}" wx:key="*this">已暂离 </text>
+        </view>
+        <view class="muted" wx:else>平安夜，无人暂离</view>
+      </view>
+
+      <!-- 狼人 -->
+      <view wx:if="{{pub.currentPhase === 'night' && pub.currentNightStep === 'wolf' && aiView.actionHint === 'wolf_kill'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">暗位行动 · 选择关注对象</view>
+        <view class="muted">已投票 {{pub.wolfVoteCount || 0}} / {{pub.wolfTotal || 0}}</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" letter="{{item.nickName[0]}}" />
+            <text class="ww-ai-target-name">{{item.nickName}}</text>
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiWolfKill">🔪</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 预言家 -->
+      <view wx:if="{{pub.currentPhase === 'night' && pub.currentNightStep === 'seer' && aiView.actionHint === 'seer_check'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">线索员 · 查验身份</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+            <text class="ww-ai-target-name">{{item.nickName}}</text>
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiSeerCheck">🔍</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 女巫 救 -->
+      <view wx:if="{{pub.currentPhase === 'night' && pub.currentNightStep === 'witch' && pub.witchPhaseStep === 1 && aiView.actionHint === 'witch_save'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">治愈者 · {{aiView.nightKillTargetNick}} 被关注，是否缓解？</view>
+        <button class="btn btn-primary main-btn" data-save="1" bindtap="onAiWitchSave">使用解药</button>
+        <button class="btn btn-ghost main-btn" data-save="0" bindtap="onAiWitchSave" style="margin-top: 12rpx">不用</button>
+      </view>
+      <!-- 女巫 毒 -->
+      <view wx:if="{{pub.currentPhase === 'night' && pub.currentNightStep === 'witch' && pub.witchPhaseStep === 2 && aiView.actionHint === 'witch_poison'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">治愈者 · 备用提醒（可选）</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiWitchPoison">☠️</button>
+          </view>
+        </view>
+        <button class="btn btn-ghost main-btn" bindtap="onAiWitchSkipPoison" style="margin-top: 12rpx">本夜不毒</button>
+      </view>
+
+      <!-- 守卫 -->
+      <view wx:if="{{pub.currentPhase === 'night' && pub.currentNightStep === 'guard' && aiView.actionHint === 'guard_guard'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">守卫 · 选择守护对象</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiGuard">🛡️</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 发言 -->
+      <view wx:if="{{pub.currentPhase === 'speak'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title" wx:if="{{aiView.isCurrentSpeaker}}">轮到你发言（线下发言，说完点结束）</view>
+        <view class="ww-ai-panel-title muted" wx:else>请听 {{aiView.currentSpeakerNick}} 发言</view>
+        <button wx:if="{{aiView.isCurrentSpeaker}}" class="btn btn-primary main-btn" bindtap="onAiFinishSpeak">结束发言</button>
+      </view>
+
+      <!-- 投票 -->
+      <view wx:if="{{pub.currentPhase === 'sheriff_transfer' && sheriffWaitingTransfer}}" class="ww-ai-panel muted">
+        <view class="ww-ai-panel-title">警长正在选择移交对象…</view>
+        <view class="muted">剩余 {{sheriffTransferSeconds}} 秒</view>
+      </view>
+
+      <view wx:if="{{pub.currentPhase === 'vote' && aiView.actionHint === 'vote'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">投票离场</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiVote">🗳️</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 白狼王自爆 -->
+      <view wx:if="{{aiView.actionHint === 'white_wolf_boom' && !aiView.whiteWolfBoomStep}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">白狼王 · 白天自爆</view>
+        <button class="btn btn-primary main-btn" bindtap="onAiWhiteWolfBoomStart">自爆并选择带走对象</button>
+      </view>
+      <view wx:if="{{aiView.actionHint === 'white_wolf_boom_kill'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">请选择带走对象</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiWhiteWolfBoomKill">带走</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 猎人 -->
+      <view wx:if="{{pub.currentPhase === 'hunter' && aiView.actionHint === 'hunter_shoot'}}" class="ww-ai-panel">
+        <view class="ww-ai-panel-title">协定者 · 是否带走一人？</view>
+        <view class="ww-ai-target-grid">
+          <view class="ww-ai-target" wx:for="{{aiAliveTargets}}" wx:key="openId">
+            <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+            <button class="btn btn-small ww-ai-act-btn" data-oid="{{item.openId}}" catchtap="onAiHunterShoot">带走</button>
+          </view>
+        </view>
+        <button class="btn btn-ghost main-btn" bindtap="onAiHunterDecline" style="margin-top: 12rpx">不开枪</button>
+      </view>
+
+      <view class="log-box" wx:if="{{publicLogText}}">{{publicLogText}}</view>
+    </view>
+
+    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.status === 'playing' && !aiModeOn}}">
+      <view class="priv" wx:if="{{pub.currentPhase !== 'end' && view && view.myRole}}">
+        <view>你本机：{{rzh || '发牌中'}}<text wx:if="{{view.isHost}}"> · 组长</text></view>
+        <view wx:if="{{wolfMatesLine}}" style="margin-top: 8rpx">同组暗位：{{wolfMatesLine}}</view>
         <view wx:if="{{seerLine}}" style="margin-top: 8rpx">本夜线索：{{seerLine}}</view>
       </view>
       <view style="margin-top: 8rpx" wx:if="{{view && view.isHost && allRolesList && allRolesList.length}}">
@@ -164,19 +304,19 @@
       <view class="log-box" style="max-height: 180rpx" wx:if="{{lastNightText}}">昨夜：{{lastNightText}}</view>
     </view>
 
-    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.currentPhase === 'night' && pub.status === 'playing' && view && view.myRole === 'werewolf' && view.iAmAlive}}">
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'night' && pub.status === 'playing' && view && (view.myRole === 'werewolf' || view.myRole === 'white_wolf') && view.iAmAlive}}">
       <view class="title">夜间·暗位</view>
       <button class="btn btn-primary rg-btn-ghost" bindtap="onShowPick" data-mode="wolf">在成员列表中选择关注对象</button>
       <view class="muted ww-pick-tip" wx:if="{{pickMode === 'wolf'}}">已在上方成员区高亮，点选一名参与者</view>
       <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'wolf'}}" bindtap="onPickCancel">取消选择</button>
     </view>
-    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.currentPhase === 'night' && view && view.myRole === 'seer' && view.iAmAlive}}">
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'night' && view && view.myRole === 'seer' && view.iAmAlive}}">
       <view class="title">夜间·线索员</view>
       <button class="btn btn-ghost rg-btn-ghost" bindtap="onShowPick" data-mode="seer">在成员列表中查看线索</button>
       <view class="muted ww-pick-tip" wx:if="{{pickMode === 'seer'}}">点上方成员即可查看</view>
       <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'seer'}}" bindtap="onPickCancel">取消</button>
     </view>
-    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.currentPhase === 'night' && view && view.myRole === 'witch' && view.iAmAlive}}">
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'night' && view && view.myRole === 'witch' && view.iAmAlive}}">
       <view class="title">夜间·治愈者</view>
       <view class="muted" wx:if="{{view && view.night && view.night.wkill}}">夜间关注对象已同步</view>
       <button class="btn btn-ghost rg-btn-ghost" style="margin-top: 12rpx" bindtap="wWitchSave" wx:if="{{view && view.night && view.night.wwitch && view.night.wwitch.saveLeft}}">为关注对象缓解</button>
@@ -184,19 +324,50 @@
       <view class="muted ww-pick-tip" wx:if="{{pickMode === 'poison'}}">点成员后按上方「确认」</view>
       <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'poison'}}" bindtap="onPickCancel">取消</button>
     </view>
-    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.currentPhase === 'vote' && pub.voteOpen && view && view.iAmAlive && !view.isHost}}">
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'night' && view && view.myRole === 'guard' && view.iAmAlive}}">
+      <view class="title">夜间·守卫</view>
+      <button class="btn btn-ghost rg-btn-ghost" bindtap="onShowPick" data-mode="guard">选择守护对象（不可连守同一人）</button>
+      <view class="muted ww-pick-tip" wx:if="{{pickMode === 'guard'}}">点成员后确认</view>
+      <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'guard'}}" bindtap="onPickCancel">取消</button>
+    </view>
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'sheriff_signup' && view && view.iAmAlive}}">
+      <view class="title">警长竞选</view>
+      <button class="btn btn-primary rg-btn-ghost" bindtap="onSheriffRun">上警</button>
+      <button class="btn btn-ghost rg-btn-ghost" style="margin-top: 12rpx" bindtap="onSheriffSkip">不上警</button>
+    </view>
+    <view class="rg-room-card ww-phase-card ww-withdraw-panel" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'sheriff_withdraw' && view && view.iAmAlive && view.isSheriffCandidate}}">
+      <view class="title">退水（{{pub.withdrawRemainingSeconds || 0}} 秒）</view>
+      <view class="muted ww-withdraw-hint">你已上警，可退水放弃竞选</view>
+      <button class="btn btn-ghost rg-btn-ghost ww-withdraw-btn" bindtap="onSheriffWithdraw">退水</button>
+    </view>
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'sheriff_withdraw' && (!view.isSheriffCandidate || !view.iAmAlive)}}">
+      <view class="text-body muted">正在等待上警玩家退水（{{pub.withdrawRemainingSeconds || 0}} 秒）</view>
+    </view>
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'sheriff_vote' && view && view.iAmAlive}}">
+      <view class="title">警徽投票</view>
+      <button class="btn btn-primary rg-btn-ghost" bindtap="onShowPick" data-mode="sheriffVote" wx:if="{{pickMode !== 'sheriffVote'}}">投票选警长</button>
+      <view class="muted ww-pick-tip" wx:if="{{pickMode === 'sheriffVote'}}">点候选人后确认</view>
+      <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'sheriffVote'}}" bindtap="onPickCancel">取消</button>
+    </view>
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && view && view.myRole === 'white_wolf' && view.iAmAlive && (pub.currentPhase === 'speak' || pub.currentPhase === 'vote' || pub.currentPhase === 'day_announce' || pub.currentPhase === 'sheriff_speak' || pub.currentPhase === 'sheriff_vote')}}">
+      <view class="title">白狼王 · 白天自爆</view>
+      <button class="btn btn-primary rg-btn-ghost" bindtap="onShowPick" data-mode="whiteWolf" wx:if="{{pickMode !== 'whiteWolf'}}">自爆并带走一人</button>
+      <view class="muted ww-pick-tip" wx:if="{{pickMode === 'whiteWolf'}}">点成员后确认（你与对方同步暂离，直接入夜）</view>
+      <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'whiteWolf'}}" bindtap="onPickCancel">取消</button>
+    </view>
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'vote' && pub.voteOpen && view && view.iAmAlive}}">
       <view class="title">投票</view>
       <button class="btn btn-primary rg-btn-ghost" bindtap="onShowPick" data-mode="vote" wx:if="{{pickMode !== 'vote'}}">在成员列表中投票</button>
       <view class="muted ww-pick-tip" wx:if="{{pickMode === 'vote'}}">点成员后按上方「确认投票」</view>
       <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'vote'}}" bindtap="onPickCancel">取消</button>
     </view>
-    <view class="rg-room-card ww-phase-card" wx:if="{{pub && pub.currentPhase === 'hunter' && pub.pendingHunter && view && view.myOpenId === pub.pendingHunter && view.myRole === 'hunter'}}">
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && pub && pub.currentPhase === 'hunter' && pub.pendingHunter && view && view.myOpenId === pub.pendingHunter && view.myRole === 'hunter'}}">
       <view class="title">协定者</view>
       <button class="btn btn-primary rg-btn-ghost" bindtap="onShowPick" data-mode="hunter" wx:if="{{pickMode !== 'hunter'}}">在成员列表中选择</button>
       <view class="muted ww-pick-tip" wx:if="{{pickMode === 'hunter'}}">点成员后按上方「确认」</view>
       <button class="btn btn-ghost rg-btn-ghost ww-pick-cancel" wx:if="{{pickMode === 'hunter'}}" bindtap="onPickCancel">取消</button>
     </view>
-    <view class="rg-room-card ww-phase-card" wx:if="{{view && view.isHost && pub && pub.status === 'playing' && pub.currentPhase !== 'hunter' && pub.currentPhase !== 'end'}}">
+    <view class="rg-room-card ww-phase-card" wx:if="{{!aiModeOn && view && view.isHost && pub && pub.status === 'playing' && pub.currentPhase !== 'hunter' && pub.currentPhase !== 'end'}}">
       <view class="title">主持</view>
       <view class="ww-agent-row" wx:if="{{aiButtonsEnabled}}">
         <button class="btn btn-ghost btn-small" bindtap="onToggleAgentHost" disabled="{{agentBusy}}">{{agentHostOn ? 'AI 副主持：开' : 'AI 副主持：关'}}</button>
@@ -208,7 +379,19 @@
         <button class="btn btn-small btn-primary" bindtap="hostResolveNight">结夜 / 天亮了</button>
       </view>
       <view class="host-btns" wx:if="{{pub.currentPhase === 'day_announce'}}">
-        <button class="btn btn-small btn-ghost" bindtap="hostDawn">进发言</button>
+        <button class="btn btn-small btn-ghost" bindtap="hostDawn">进警长环节 / 发言</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub.currentPhase === 'sheriff_signup'}}">
+        <button class="btn btn-small btn-primary" bindtap="hostSheriffToSpeak">结束报名 · 开退水</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub.currentPhase === 'sheriff_withdraw'}}">
+        <button class="btn btn-small btn-primary" bindtap="hostEndSheriffWithdraw">结束退水</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub.currentPhase === 'sheriff_speak'}}">
+        <button class="btn btn-small btn-ghost" bindtap="hostSheriffNext">下一位警上 / 开警投</button>
+      </view>
+      <view class="host-btns" wx:if="{{pub.currentPhase === 'sheriff_vote'}}">
+        <button class="btn btn-small btn-primary" bindtap="hostResolveSheriffVote">公布警长</button>
       </view>
       <view class="host-btns" wx:if="{{pub.currentPhase === 'speak'}}">
         <button class="btn btn-small btn-ghost" bindtap="hostNext">下一位发言</button>
@@ -218,6 +401,40 @@
         <button class="btn btn-small btn-primary" bindtap="hostResolveVote">计票</button>
       </view>
     </view>
+</view>
+
+<!-- 警长移交警徽（出局警长本机弹窗；AI / 手动通用） -->
+<view
+  class="ww-transfer-mask"
+  wx:if="{{showSheriffTransferModal}}"
+  catchtouchmove="noop"
+>
+  <view class="ww-transfer-dialog">
+    <view class="ww-transfer-title">请移交警徽</view>
+    <view class="ww-transfer-timer">剩余 {{sheriffTransferSeconds}} 秒</view>
+    <view class="ww-transfer-hint muted">点选一名存活玩家，确认后移交 🎖</view>
+    <scroll-view scroll-y class="ww-transfer-list">
+      <view
+        class="ww-transfer-row"
+        wx:for="{{sheriffTransferTargets}}"
+        wx:key="openId"
+        data-oid="{{item.openId}}"
+        bindtap="onSheriffTransferPick"
+      >
+        <member-avatar avatar-url="{{item.avatarUrl}}" nick-name="{{item.nickName}}" />
+        <text class="ww-transfer-name">{{item.nickName}}</text>
+        <text class="ww-transfer-arrow">›</text>
+      </view>
+    </scroll-view>
+    <button class="btn btn-ghost ww-transfer-skip" bindtap="onSheriffSkipTransfer">不移交（警徽流失）</button>
+  </view>
+</view>
+
+<view
+  class="rg-room-card ww-phase-card"
+  wx:if="{{!aiModeOn && pub && pub.currentPhase === 'sheriff_transfer' && sheriffWaitingTransfer}}"
+>
+  <view class="text-body muted">🎖 警长正在选择移交对象…（{{sheriffTransferSeconds}} 秒）</view>
 </view>
 
 <user-info-modal

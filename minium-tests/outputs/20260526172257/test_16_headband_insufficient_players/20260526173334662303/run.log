@@ -1,0 +1,74 @@
+[I 2026-05-26 17:33:34,663 minium minitest#432 _miniSetUp] =========Current case: test_16_headband_insufficient_players=========
+[W 2026-05-26 17:33:34,664 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-05-26 17:33:34,664 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_16_headband_insufficient_players
+[I 2026-05-26 17:33:34,664 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-26 17:33:34,664 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-26 17:33:34,664 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-26 17:33:34,664 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-26 17:33:34,664 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-26 17:33:34,665 minium.App4656 app#950 relaunch] ReLaunch: /pages/index/index
+[E 2026-05-26 17:33:44,680 minium.Conn0624 connection#668 __on_message] [56dab74f-73c6-4843-b59c-05e447e9b62c]: timeout
+[I 2026-05-26 17:33:44,694 minium.Conn0624 connection#704 _handle_async_msg] received async msg: 56dab74f-73c6-4843-b59c-05e447e9b62c
+[W 2026-05-26 17:33:44,695 minium.App4656 app#1172 _change_route_async] 可能因频繁调用reLaunch导致timeout
+[I 2026-05-26 17:33:59,710 minium minitest#897 capture] capture teardown.png
+[W 2026-05-26 17:34:01,717 minium.App4656 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-05-26 17:34:01,717 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260526172257/test_16_headband_insufficient_players/20260526173334662303/images/teardown.png not exists
+[E 2026-05-26 17:34:01,724 minium assertbase#390 _get_stack_info] <bound method MiniTest._miniSetUp of <testcases.test_all_games.TestAllGames testMethod=test_16_headband_insufficient_players>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 1165, in _change_route_async
+    cmd.get_open_result(wait_timeout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 132, in get_open_result
+    return self._open_callback.get_result()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/callback.py", line 158, in get_result
+    return self._waiter.result()
+           ~~~~~~~~~~~~~~~~~~~^^
+minium.framework.exception.MiniCommandError: timeout
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 475, in get_result
+    return fut.result(timeout)
+           ~~~~~~~~~~^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/concurrent/futures/_base.py", line 458, in result
+    raise TimeoutError()
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 118, in run
+    self._miniSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 478, in _miniSetUp
+    self.mini.app.go_home()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 1073, in go_home
+    page = self.relaunch(main_page_path.path, main_page_path.query)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 90, in wrapper
+    ret = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 951, in relaunch
+    page = self._change_route_async("reLaunch", url, is_wait_url_change)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 1173, in _change_route_async
+    if cmd.get_route_result(wait_route_done_time):
+       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 163, in get_route_result
+    raise wt
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 148, in get_route_result
+    if get_result(self._route_changed, timeout):
+       ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 479, in get_result
+    raise WaitTimeoutError() from ext
+minium.utils.utils.WaitTimeoutError
+[W 2026-05-26 17:34:01,727 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': True, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 60, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 36320, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'cloud_env_id': 'cloud1-d9g01no7m292bc511', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': False, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260526172257', 'case_output': './outputs/20260526172257/test_16_headband_insufficient_players/20260526173334662303'}
+[W 2026-05-26 17:34:01,728 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-05-26 17:34:01,728 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-05-26 17:34:01,728 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x103936a50>

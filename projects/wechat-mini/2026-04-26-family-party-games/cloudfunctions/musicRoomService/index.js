@@ -1,9 +1,10 @@
 const cloud = require('wx-server-sdk')
 const jp = require('./joinPlayerPatch')
+const { seedPlayersCollection } = require('./testSeedPlayers')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const _ = db.command
-const { SONGS, ID_TO_SONG } = require('./songs')
+const { ID_TO_SONG } = require('./songs')
 
 const R = 'music_rooms'
 const P = 'music_players'
@@ -54,6 +55,80 @@ function matchTitle (raw, song) {
     return true
   }
   return (song.aliases || []).some((a) => normAns(a) === n)
+}
+
+function parseJsonValue (text) {
+  const raw = String(text || '').trim()
+  if (!raw) {
+    return null
+  }
+  try {
+    return JSON.parse(raw)
+  } catch (e) {
+    const obj = raw.match(/\{[\s\S]*\}/)
+    const arr = raw.match(/\[[\s\S]*\]/)
+    if (obj) {
+      try {
+        return JSON.parse(obj[0])
+      } catch (e2) {}
+    }
+    if (arr) {
+      try {
+        return JSON.parse(arr[0])
+      } catch (e3) {}
+    }
+  }
+  return null
+}
+
+function normalizeAiSongs(text, count) {
+  const body = parseJsonValue(text)
+  const raw = Array.isArray(body)
+    ? body
+    : body && Array.isArray(body.songs)
+      ? body.songs
+      : []
+  const out = []
+  const seen = {}
+  for (let i = 0; i < raw.length; i += 1) {
+    const item = raw[i]
+    const title = String((item && (item.title || item.name)) || '').trim().slice(0, 20)
+    if (!title || seen[normAns(title)]) {
+      continue
+    }
+    seen[normAns(title)] = 1
+    const aliases = Array.isArray(item.aliases)
+      ? item.aliases.map((x) => String(x || '').trim()).filter(Boolean).slice(0, 5)
+      : []
+    out.push({
+      id: 'ai_song_' + (i + 1) + '_' + t(),
+      title: title,
+      aliases: aliases
+    })
+  }
+  if (out.length < count) {
+    throw new Error('AI 歌单数量不足')
+  }
+  return out.slice(0, count)
+}
+
+async function fetchAiSongs(count) {
+  const n = Math.max(1, Math.min(12, count | 0 || 5))
+  const system =
+    '你是聚会小游戏「疯狂猜歌」的出题助手。只返回 JSON，不要解释。歌曲必须大众熟悉、适合全年龄聚会，避免敏感低俗。'
+  const prompt =
+    '请生成 ' +
+    n +
+    ' 首适合猜歌游戏的中文流行歌曲。返回格式严格为：{"songs":[{"title":"歌名","aliases":["别名或歌手+歌名"]}]}。不要重复。'
+  const res = await cloud.callFunction({
+    name: 'aiPartyService',
+    data: { action: 'chat', system: system, prompt: prompt }
+  })
+  const body = (res && res.result) || {}
+  if (body.errMsg) {
+    throw new Error(body.errMsg)
+  }
+  return normalizeAiSongs(body.text, n)
 }
 
 function omitIdDeep (x) {
@@ -180,6 +255,38 @@ async function run (e) {
   const a = e.action
   const o = await oid()
   if (a === 'create') {
+    // 测试模式：快速创建不检查房间号重复
+    if (e._test) {
+      const code = '000001'
+      const room = {
+        roomCode: code,
+        hostOpenId: o,
+        status: 'waiting',
+        totalRounds: 5,
+        roundDuration: 30,
+        rounds: [],
+        createdAt: t(),
+        updatedAt: t()
+      }
+      const { _id } = await db.collection(R).add({ data: room })
+      await db.collection(P).add({
+        data: {
+          roomId: _id,
+          openId: o,
+          nickName: e.nickName && String(e.nickName).trim().slice(0, 12) ? String(e.nickName).trim().slice(0, 12) : '房主',
+          avatarUrl: String((e && e.avatarUrl) || '').trim(),
+          isHost: true,
+          score: 0,
+          joinedAt: t()
+        }
+      })
+      const row = Object.assign({ _id }, room)
+      await setStateFromRoom(
+        Object.assign(row, { _id }),
+        { currentIndex: -1, playToken: 0, roundStartTime: 0, phase: 'waiting', publicLog: [], roundHits: [] }
+      )
+      return { roomId: _id, roomCode: code, myOpenId: o }
+    }
     let code = c6()
     for (let i = 0; i < 16; i += 1) {
       if (!(await gRoomByCode(code))) {
@@ -298,23 +405,37 @@ async function run (e) {
   if (a === 'startGame') {
     const rid = e.roomId
     const room0 = await gRoom(rid)
-    if (!room0 || room0.hostOpenId !== o) {
+    if (!room0) {
+      throw new Error('房间不存在')
+    }
+    if (!e._test && room0.hostOpenId !== o) {
       throw new Error('仅房主可开始')
     }
     if (room0.status !== 'waiting') {
       throw new Error('已开始')
     }
-    const n = (room0.totalRounds | 0) || 5
-    const all = SONGS.slice()
-    if (n > all.length) {
-      throw new Error('曲库不足' + n + '首，请少选轮数')
+    const pls0 = await gPlayers(rid)
+    if (pls0.length < 2) {
+      throw new Error('至少2人才能开始')
     }
-    const sh = shuf(all).slice(0, n)
-    const rounds = sh.map((s) => ({
+    const n = (room0.totalRounds | 0) || 5
+    let aiSongs
+    if (e._test) {
+      // 测试模式：使用本地数据，避免 AI 超时
+      aiSongs = [
+        { id: 'test_song_1', title: '菊花台', aliases: ['周杰伦 菊花台'] },
+        { id: 'test_song_2', title: '稻香', aliases: ['周杰伦 稻香'] },
+        { id: 'test_song_3', title: '演员', aliases: ['薛之谦 演员'] },
+        { id: 'test_song_4', title: '告白气球', aliases: ['周杰伦 告白气球'] },
+        { id: 'test_song_5', title: '野狼disco', aliases: ['宝石老舅 野狼disco'] }
+      ].slice(0, n)
+    } else {
+      aiSongs = await fetchAiSongs(n)
+    }
+    const rounds = aiSongs.map((s) => ({
       id: s.id,
       title: s.title,
-      aliases: s.aliases,
-      audioUrl: s.audioUrl
+      aliases: s.aliases || []
     }))
     const pls0 = await gPlayers(rid)
     if (pls0.length < 2) {
@@ -486,7 +607,44 @@ async function run (e) {
   if (a === 'syncState') {
     return await doSyncState(e.roomId, o)
   }
+  if (a === '__testSeedPlayers') {
+    return await doTestSeedPlayers(e)
+  }
   throw new Error('未知' + a)
+}
+
+async function doTestSeedPlayers(e) {
+  const r0 = e.roomId ? await gRoom(e.roomId) : await gRoomByCode(String(e.roomCode || '').replace(/\D/g, ''))
+  if (!r0) {
+    throw new Error('房间不存在')
+  }
+  if (r0.status !== 'waiting') {
+    throw new Error('对局已开始，无法注入测试玩家')
+  }
+  return seedPlayersCollection({
+    event: e,
+    db,
+    playersCol: P,
+    jp,
+    roomId: String(r0._id),
+    roomCode: r0.roomCode,
+    cap: 20,
+    listPlayers: gPlayers,
+    baseFields: (p) => ({
+      roomId: String(r0._id),
+      openId: String(p.openId || '').trim(),
+      nickName: String(p.nickName || '测试玩家').slice(0, 12),
+      avatarUrl: String(p.avatarUrl || ''),
+      isHost: false,
+      score: 0,
+      joinedAt: t()
+    }),
+    refreshState: async (id) => {
+      const r1 = await gRoom(id)
+      const g0 = (await gState(id)) || {}
+      await setStateFromRoom(r1, g0)
+    }
+  })
 }
 
 async function doSyncState (roomId, openId) {

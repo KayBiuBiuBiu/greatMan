@@ -48,6 +48,11 @@ const gameGroups = [
         title: '趣味抽签',
         status: '同场同步+云',
         summary: '至少 2 人；随机一人响铃、喝 1～10 口，同屏同步。'
+      },
+      {
+        title: 'AI迷雾推理局',
+        status: '同场同步+云',
+        summary: '至少 3 人；AI 生成剧本，线下口头推理，本机看剧本与私密证据。'
       }
     ]
   },

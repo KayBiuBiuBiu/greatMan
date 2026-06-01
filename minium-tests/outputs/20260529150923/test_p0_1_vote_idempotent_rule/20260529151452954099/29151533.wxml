@@ -1,0 +1,65 @@
+
+<view class="page rg-page mr-page">
+  <view class="hero">
+    <view class="hero-title">AI迷雾推理局</view>
+    <view class="hero-subtitle muted">线下亲友聚会 · AI 全自动推理剧本</view>
+  </view>
+  <view class="rg-status-banner">投票</view>
+  <view class="rg-room-card">
+    <view class="mr-phase-title">投票</view>
+    <view class="muted">
+      聚会组口令：778057        
+      <text class="link"/>
+    </view>
+  </view>
+  <view class="rg-room-card rg-members-card">
+    <view class="section-title">成员 3/3</view>
+    <view class="rg-member-list">
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+      <view class="rg-member-item">
+        <member-avatar is="components/member-avatar/member-avatar">
+          <view class="avatar--ma-wrap avatar--ma-md">
+            <view class="avatar--ma-letter">M</view>
+          </view>
+        </member-avatar>
+        <text class="rg-member-name"/>
+      </view>
+    </view>
+  </view>
+  <view class="rg-room-card">
+    <view class="section-title">最终投票</view>
+    <view class="muted">投票进度 0/3</view>
+    <view class="mr-vote-row" data-name="Minium玩家1" data-oid="minium_test_mysteryReason_1">
+      <member-avatar is="components/member-avatar/member-avatar">
+        <view class="avatar--ma-wrap avatar--ma-md">
+          <view class="avatar--ma-letter">M</view>
+        </view>
+      </member-avatar>
+      <text class="rg-member-name"/>
+    </view>
+    <view class="mr-vote-row" data-name="Minium玩家2" data-oid="minium_test_mysteryReason_2">
+      <member-avatar is="components/member-avatar/member-avatar">
+        <view class="avatar--ma-wrap avatar--ma-md">
+          <view class="avatar--ma-letter">M</view>
+        </view>
+      </member-avatar>
+      <text class="rg-member-name"/>
+    </view>
+  </view>
+  <button class="btn-wechat-invite" open-type="share" style="margin-top: var(--space-md)" role="button" aria-disabled="false">邀请朋友</button>
+</view>

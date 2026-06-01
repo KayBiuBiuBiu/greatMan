@@ -1,0 +1,31 @@
+[I 2026-05-29 14:24:48,048 minium minitest#432 _miniSetUp] =========Current case: test_core_player_threshold=========
+[I 2026-05-29 14:24:48,081 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_core_player_threshold
+[I 2026-05-29 14:24:48,116 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 14:24:48,148 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 14:24:48,179 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 14:24:48,209 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 14:24:48,239 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 14:24:48,270 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 14:25:07,971 minium minitest#487 _miniSetUp] =========case: test_core_player_threshold start=========
+[I 2026-05-29 14:25:07,972 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 14:25:08,044 minium.Conn8944 connection#668 __on_message] [34dd495a-9229-44e5-8cfe-9e80d506cb13]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:25:12,015 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 14:25:17,776 minium minitest#897 capture] capture assertTrue-success_142517776127.png
+[E 2026-05-29 14:25:17,911 minium.Conn8944 connection#668 __on_message] [daa868b6-e797-403e-a02a-3a6d1f84ba82]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:25:22,912 minium minitest#897 capture] capture assertTrue-success_142522912115.png
+[E 2026-05-29 14:25:23,759 minium.Conn8944 connection#668 __on_message] [70005cea-befc-4c01-b833-40ca7613932a]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:25:26,940 minium.App2976 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22565216416a193147000661b6552c984f%22%2C%20%22roomCode%22%3A%20%22604822%22%7D
+[I 2026-05-29 14:25:28,124 minium.App2976 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522565216416a193147000661b6552c984f%2522%252C%2520%2522roomCode%2522%253A%2520%2522604822%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780035928083, 'webviewId': 2, 'routeEventId': '2_1780035928012', 'renderer': 'webview'}, 1780035928085]}
+[I 2026-05-29 14:25:28,125 minium.Conn8944 connection#704 _handle_async_msg] received async msg: 55793271-b7c6-4198-b009-35de6a1bc1f5
+[I 2026-05-29 14:25:32,363 minium minitest#897 capture] capture assertFalse-success.png
+[E 2026-05-29 14:25:32,423 minium.Conn8944 connection#668 __on_message] [d3c1b744-444c-4142-b9c0-eefda74c9810]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:25:36,644 minium minitest#897 capture] capture assertTrue-success_142536644464.png
+[E 2026-05-29 14:25:36,748 minium.Conn8944 connection#668 __on_message] [9639ed29-4358-4ebd-a970-569b8febbb67]: wx.cloud.callFunction not exists
+[I 2026-05-29 14:25:41,606 minium minitest#897 capture] capture assertTrue-success_142541604737.png
+[I 2026-05-29 14:25:41,717 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 14:25:41,833 minium.App2976 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 14:25:42,737 minium.App2976 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780035942735, 'webviewId': 4, 'routeEventId': '', 'renderer': 'webview'}, 1780035942736]}
+[I 2026-05-29 14:25:42,738 minium.Conn8944 connection#704 _handle_async_msg] received async msg: 7a6f8426-6355-4099-a82a-29463392e3ca
+[I 2026-05-29 14:25:44,304 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 14:25:44,399 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 14:25:44,434 minium basenative#63 wrapper] call BaseNative.get_start_up end 

@@ -1,6 +1,6 @@
 const { isDrawGuessEnabled } = require('../../data/feature-flags')
 const { callDraw, ensure } = require('../../utils/drawRoomCloud')
-const { withJoinProfile } = require('../../utils/userProfile')
+const { withJoinProfile, getFallbackNickName } = require('../../utils/userProfile')
 const { joinRoomWithUi, enterCloudRoomOnLoad } = require('../utils/roomJoin')
 const {
   memberCountLine,
@@ -11,14 +11,14 @@ const {
 const { patchLobbyUi } = require('../utils/roomMemberUi')
 const { stepIndex, vibrateBoundary } = require('../../utils/listStepper')
 const AI_DIFF_LABELS = ['简单', '中等', '困难']
-const WORD_SOURCE_OPTIONS = ['系统词库', 'AI 题目']
-const WORD_SOURCE_VALUES = ['system', 'ai']
+const WORD_SOURCE_OPTIONS = ['AI 题目']
+const WORD_SOURCE_VALUES = ['ai']
 
 function settingsDisplayFromPage(data) {
   const d = data || {}
   const roundIdx = d.roundIdx | 0
   const catIdx = d.catIdx | 0
-  const ws = d.wordSource || 'system'
+  const ws = d.wordSource || 'ai'
   let wordSourceIdx = WORD_SOURCE_VALUES.indexOf(ws)
   if (wordSourceIdx < 0) {
     wordSourceIdx = 0
@@ -99,7 +99,7 @@ const CAT_ARR = (CW_CATS && CW_CATS.length)
   : [{ id: 'all', name: '随机（全部分类）' }]
 
 function defNick () {
-  return (wx.getStorageSync('draw_nick') || '参与者').toString()
+  return (wx.getStorageSync('draw_nick') || getFallbackNickName()).toString()
 }
 
 Page({
@@ -139,7 +139,7 @@ Page({
     playerProgressPct: 0,
     inWaiting: false,
     canStart: false,
-    wordSource: 'system',
+    wordSource: 'ai',
     aiDiffIdx: 1,
     aiDiffLabels: AI_DIFF_LABELS,
     aiBusy: false,
@@ -526,7 +526,7 @@ Page({
     const ridx = ROUNDS.indexOf(6)
     const roundIdx = ridx >= 0 ? ridx : 0
     this.setData(
-      Object.assign({ roundIdx }, settingsDisplayFromPage({ roundIdx, catIdx: 0, wordSource: 'system' }))
+      Object.assign({ roundIdx }, settingsDisplayFromPage({ roundIdx, catIdx: 0, wordSource: 'ai' }))
     )
     const roomId = (q && q.roomId) ? String(q.roomId) : ''
     const code = (q && q.roomCode) ? decodeURIComponent(String(q.roomCode)) : ''
@@ -680,6 +680,9 @@ Page({
       }
     })
   },
+  applyTestSyncSnapshot(v) {
+    this._patchViewFromSync(v || {})
+  },
   _refreshRoomState () {
     const id = this.data.roomId
     if (this.data.isDrawingMode && this._touching) {
@@ -761,14 +764,11 @@ Page({
   },
   onWordSourceChange (e) {
     const i = Number((e.detail && e.detail.value) | 0) || 0
-    const wordSource = WORD_SOURCE_VALUES[i] || 'system'
+    const wordSource = WORD_SOURCE_VALUES[i] || 'ai'
     const patch = {
       wordSourceIdx: i,
       wordSource,
       wordSourceLabel: WORD_SOURCE_OPTIONS[i] || WORD_SOURCE_OPTIONS[0]
-    }
-    if (wordSource === 'system') {
-      patch.aiPendingWord = ''
     }
     this.setData(patch)
   },
@@ -799,7 +799,7 @@ Page({
     if (!ensure()) {
       return
     }
-    const nick = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const nick = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('draw_nick', nick)
     wx.showLoading({ title: '…' })
     callDraw(
@@ -840,7 +840,7 @@ Page({
       wx.showToast({ title: TOAST_ROOM_CODE_6, icon: 'none' })
       return
     }
-    const nick = (this.data.nick || '参与者').trim().slice(0, 12) || '参与者'
+    const nick = (this.data.nick || getFallbackNickName()).trim().slice(0, 12) || getFallbackNickName()
     wx.setStorageSync('draw_nick', nick)
     joinRoomWithUi(
       callDraw,
@@ -924,8 +924,8 @@ Page({
         page.setData(
           page._applySettingsDisplay({
             wordSource: 'ai',
-            wordSourceIdx: 1,
-            wordSourceLabel: WORD_SOURCE_OPTIONS[1],
+            wordSourceIdx: 0,
+            wordSourceLabel: WORD_SOURCE_OPTIONS[0],
             aiPendingWord: w
           })
         )
@@ -949,11 +949,6 @@ Page({
       startVerb: '开始互动'
     })
     const page = this
-    const useAi = this.data.wordSource === 'ai'
-    if (useAi && !(this.data.aiPendingWord || '').trim()) {
-      wx.showToast({ title: '请先生成 AI 题目', icon: 'none' })
-      return
-    }
     const runGameStart = () => {
       runStartAction({
         kind: 'draw',
@@ -961,7 +956,7 @@ Page({
         localChecks: checks,
         callService: callDraw,
         payload: { action: 'startGame', roomId: page.data.roomId },
-        loadingTitle: '开始互动',
+        loadingTitle: 'AI 正在出题',
         onSuccess: () => {
           page.setData({ aiPendingWord: '' })
           page._roomSig = ''
@@ -970,24 +965,6 @@ Page({
           page._refreshRoomState()
         }
       })
-    }
-    if (useAi) {
-      const w = (this.data.aiPendingWord || '').trim()
-      runStartAction({
-        kind: 'draw',
-        ctx,
-        localChecks: [],
-        callService: callDraw,
-        payload: { action: 'setPendingWord', roomId: page.data.roomId, word: w },
-        loadingTitle: '准备题目',
-        onSuccess: runGameStart,
-        onFinally: (ok) => {
-          if (!ok) {
-            return
-          }
-        }
-      })
-      return
     }
     runGameStart()
   },

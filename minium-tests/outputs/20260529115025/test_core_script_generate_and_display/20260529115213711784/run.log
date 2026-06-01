@@ -1,0 +1,44 @@
+[I 2026-05-29 11:52:13,712 minium minitest#432 _miniSetUp] =========Current case: test_core_script_generate_and_display=========
+[I 2026-05-29 11:52:13,713 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_mystery_reason, case info: TestMysteryReasonFullClosedLoop.test_core_script_generate_and_display
+[I 2026-05-29 11:52:13,713 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-05-29 11:52:13,713 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-05-29 11:52:13,713 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-05-29 11:52:13,713 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-05-29 11:52:13,713 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-05-29 11:52:13,713 minium minitest#897 capture] capture setup.png
+[I 2026-05-29 11:52:13,767 minium minitest#487 _miniSetUp] =========case: test_core_script_generate_and_display start=========
+[I 2026-05-29 11:52:13,768 minium minitest#788 _callTestMethod] call test method
+[E 2026-05-29 11:52:13,770 minium.Conn2464 connection#668 __on_message] [ef03b117-8384-4aaa-bf91-a53c9a1086ea]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:52:17,544 minium minitest#897 capture] capture assertTrue-success.png
+[I 2026-05-29 11:52:17,624 minium minitest#897 capture] capture assertTrue-success_115217624100.png
+[E 2026-05-29 11:52:17,681 minium.Conn2464 connection#668 __on_message] [0d4efdb5-3422-48f8-a2a5-48a1cbe97e7d]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:52:21,203 minium minitest#897 capture] capture assertTrue-success_115221203330.png
+[E 2026-05-29 11:52:21,273 minium.Conn2464 connection#668 __on_message] [ea3a695a-78c7-491b-b826-75801c814fc5]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:52:24,538 minium.App5360 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason?config=%7B%22roomId%22%3A%20%22038a06c16a190d710002c76533576ffc%22%2C%20%22roomCode%22%3A%20%22879052%22%7D
+[I 2026-05-29 11:52:25,620 minium.App5360 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {'config': '%257B%2522roomId%2522%253A%2520%2522038a06c16a190d710002c76533576ffc%2522%252C%2520%2522roomCode%2522%253A%2520%2522879052%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780026745616, 'webviewId': 5, 'routeEventId': '', 'renderer': 'webview'}, 1780026745616]}
+[I 2026-05-29 11:52:25,621 minium.Conn2464 connection#704 _handle_async_msg] received async msg: a50c98ae-ed07-4963-bd82-a4ee81b48a70
+[E 2026-05-29 11:52:29,740 minium.Conn2464 connection#668 __on_message] [1e158045-28e3-4d45-ac60-443dc3059422]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:52:33,060 minium minitest#897 capture] capture assertTrue-success_115233059870.png
+[E 2026-05-29 11:52:33,128 minium.Conn2464 connection#668 __on_message] [3f73a3db-b4c8-482f-8ba8-83e97883ad92]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:52:38,104 minium minitest#897 capture] capture assertEqual-success.png
+[I 2026-05-29 11:52:38,211 minium minitest#897 capture] capture assertTrue-success_115238211029.png
+[I 2026-05-29 11:52:38,286 minium minitest#897 capture] capture assertTrue-success_115238286644.png
+[E 2026-05-29 11:52:38,378 minium.Conn2464 connection#668 __on_message] [7d2d9bbf-b2a2-425a-96a8-53ed999d281c]: wx.cloud.callFunction not exists
+[I 2026-05-29 11:52:41,386 minium minitest#897 capture] capture assertTrue-success_115241385713.png
+[I 2026-05-29 11:52:41,486 minium minitest#897 capture] capture assertTrue-success_115241486763.png
+[I 2026-05-29 11:52:41,556 minium minitest#897 capture] capture assertIn-success.png
+[I 2026-05-29 11:52:41,625 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-29 11:52:41,629 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1067cb620>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1068996d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106899310>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1068fc8a0>]
+[I 2026-05-29 11:52:41,635 minium minitest#897 capture] capture assertTrue-success_115241635429.png
+[I 2026-05-29 11:52:41,694 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-29 11:52:41,698 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1068fcd60>, <minium.miniprogram.base_driver.element.BaseElement object at 0x106ae0cb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10683bf00>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10683b020>]
+[I 2026-05-29 11:52:44,810 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-05-29 11:52:44,813 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x10684af50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10684a850>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10685a4e0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10685a030>, <minium.miniprogram.base_driver.element.BaseElement object at 0x10687f770>]
+[I 2026-05-29 11:52:46,898 minium minitest#897 capture] capture assertTrue-success_115246897807.png
+[I 2026-05-29 11:52:46,979 minium minitest#796 _callTestMethod] end test method
+[I 2026-05-29 11:52:46,980 minium.App5360 app#950 relaunch] ReLaunch: /packageGames/mystery-reason/mystery-reason
+[I 2026-05-29 11:52:48,026 minium.App5360 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/mystery-reason/mystery-reason', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780026768021, 'webviewId': 6, 'routeEventId': '', 'renderer': 'webview'}, 1780026768022]}
+[I 2026-05-29 11:52:48,027 minium.Conn2464 connection#704 _handle_async_msg] received async msg: 498654b5-0f1c-4173-a086-102943bb31ec
+[I 2026-05-29 11:52:49,540 minium minitest#897 capture] capture teardown.png
+[I 2026-05-29 11:52:49,606 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-05-29 11:52:49,606 minium basenative#63 wrapper] call BaseNative.get_start_up end 

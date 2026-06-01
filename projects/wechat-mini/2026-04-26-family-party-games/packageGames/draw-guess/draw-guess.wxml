@@ -135,7 +135,7 @@
       </view>
       <view class="rg-stepper-hint">{{roundStepHint}}</view>
       <view class="rg-setting-item">
-        <text class="rg-label">题目来源</text>
+        <text class="rg-label">出题方式</text>
         <picker
           mode="selector"
           range="{{wordSourceOptions}}"
@@ -163,7 +163,7 @@
       <view class="rg-ai-locked" wx:elif="{{aiButtonsEnabled}}">
         <button class="btn-ai ai-locked" bindtap="onAiUnlockTap">🔒 AI 出题</button>
       </view>
-      <view class="rg-settings-tip">仅生成预览，点「开始互动」后使用</view>
+      <view class="rg-settings-tip">每轮题目由云端 AI 自动生成；预览仅供提前查看</view>
     </view>
 
     <button
