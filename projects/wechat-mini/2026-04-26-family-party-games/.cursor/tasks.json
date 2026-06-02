@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "tasks": [
+    {
+      "label": "🎮 运行 Minium 测试",
+      "type": "shell",
+      "command": "bash",
+      "args": ["run_test_local.sh"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "🧪 运行单元测试",
+      "type": "shell",
+      "command": "node",
+      "args": ["tests/test-gesture-quick.js"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "group": {
+        "kind": "test"
+      }
+    },
+    {
+      "label": "📋 查看测试说明",
+      "type": "shell",
+      "command": "cat",
+      "args": ["LOCAL_TEST_GUIDE.md"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}
