@@ -37,6 +37,16 @@ const PRESETS = {
       return 'config=' + encodeURIComponent(JSON.stringify(cfg))
     }
   },
+  gesture: {
+    page: '/packageGames/gesture/gesture',
+    defaultTitle: '家庭聚会助手 - 你比划我猜',
+    codeLen: 6,
+    roomTitle: (code) => '一起来玩你比划我猜！口令 ' + code,
+    buildQuery: (ctx) => {
+      const cfg = { roomId: ctx.roomId, roomCode: ctx.code }
+      return 'config=' + encodeURIComponent(JSON.stringify(cfg))
+    }
+  },
   drink: {
     page: '/packageGames/drink-party/drink-party',
     defaultTitle: '家庭聚会助手 - 趣味抽签',

@@ -1,0 +1,163 @@
+<view class="gesture-page">
+  <!-- 大厅：创建/加入房间 -->
+  <block wx:if="{{!roomId}}">
+    <view class="gesture-lobby">
+      <view class="gesture-title">你比划我猜</view>
+      <view class="gesture-subtitle">一人表演，多人猜词</view>
+
+      <view class="gesture-section">
+        <view class="gesture-label">昵称</view>
+        <input class="gesture-input" placeholder="输入你的昵称" value="{{nickInput}}" bindinput="onNickInput" />
+      </view>
+
+      <view class="gesture-action">
+        <button class="gesture-btn-primary" bindtap="doCreate">创建聚会组</button>
+      </view>
+
+      <view class="gesture-divider">或</view>
+
+      <view class="gesture-section">
+        <view class="gesture-label">房间码</view>
+        <input class="gesture-input" placeholder="输入 6 位房间码" value="{{joinCode}}" bindinput="onCodeInput" maxlength="6" />
+      </view>
+
+      <view class="gesture-action">
+        <button class="gesture-btn-secondary" bindtap="doJoin">加入聚会组</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 进房：等待/游戏/结束 -->
+  <block wx:else>
+    <view class="gesture-ingame">
+      <!-- 顶部信息 -->
+      <view class="gesture-header">
+        <view class="gesture-code">口令：{{roomCode}}</view>
+        <button class="gesture-share-btn" open-type="share">邀请朋友</button>
+      </view>
+
+      <!-- 等待阶段 -->
+      <block wx:if="{{phase === 'waiting'}}">
+        <view class="gesture-section">
+          <view class="gesture-member-count">{{memberCountLine}}</view>
+          <view class="gesture-member-list">
+            <view wx:for="{{displayPlayers}}" class="gesture-member-item">
+              <image class="gesture-avatar" src="{{item.avatarUrl}}" />
+              <view class="gesture-member-info">
+                <view class="gesture-member-name">{{item.nickName}}</view>
+                <view class="gesture-member-score">{{item.score}} 分</view>
+              </view>
+              <view class="gesture-host-badge" wx:if="{{item.isHost}}">房主</view>
+            </view>
+          </view>
+        </view>
+
+        <block wx:if="{{isHost}}">
+          <view class="gesture-config">
+            <view class="gesture-config-item">
+              <text>总轮数</text>
+              <picker value="{{roundIdx}}" range="{{totalRoundsOptions}}" bindchange="onRoundsChange">
+                <view class="gesture-picker-value">{{totalRounds}} 轮</view>
+              </picker>
+            </view>
+            <view class="gesture-config-item">
+              <text>每轮时长</text>
+              <picker value="{{durationIdx}}" range="{{durationOptions}}" bindchange="onDurationChange">
+                <view class="gesture-picker-value">{{roundDuration}} 秒</view>
+              </picker>
+            </view>
+          </view>
+
+          <view class="gesture-action">
+            <button class="gesture-btn-primary" bindtap="doStart" disabled="{{!canStart || opBusy}}">开始游戏</button>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="gesture-waiting-hint">等待房主开始游戏...</view>
+        </block>
+      </block>
+
+      <!-- 表演阶段 - 表演者视角 -->
+      <block wx:if="{{phase === 'performing' && isMePerformer}}">
+        <view class="gesture-performer">
+          <view class="gesture-countdown">{{timeLeft}}</view>
+          <view class="gesture-performer-word">{{performerWord}}</view>
+          <view class="gesture-performer-hint">只能用肢体和表情，不能说话！</view>
+          <view class="gesture-action">
+            <button class="gesture-btn-skip" bindtap="doSkipWord" disabled="{{opBusy}}">跳过词语</button>
+          </view>
+        </view>
+      </block>
+
+      <!-- 表演阶段 - 猜词者视角 -->
+      <block wx:if="{{phase === 'performing' && !isMePerformer}}">
+        <view class="gesture-guesser">
+          <view class="gesture-countdown">{{timeLeft}}</view>
+          <view class="gesture-performing-hint">表演者正在表演…</view>
+          <view class="gesture-guess-form">
+            <input class="gesture-guess-input" placeholder="输入你的答案" value="{{guessInput}}" bindinput="onGuessInput" />
+            <button class="gesture-btn-submit" bindtap="doSubmitGuess" disabled="{{!guessInput.trim() || opBusy}}">提交答案</button>
+          </view>
+        </view>
+      </block>
+
+      <!-- 揭示阶段 -->
+      <block wx:if="{{phase === 'revealed'}}">
+        <view class="gesture-revealed">
+          <view class="gesture-answer-label">本轮答案</view>
+          <view class="gesture-answer-text">{{revealedWord}}</view>
+          <view class="gesture-hits-label" wx:if="{{roundHits.length > 0}}">猜中的玩家</view>
+          <view class="gesture-hits-list">
+            <view wx:for="{{roundHits}}" class="gesture-hit-item">
+              <text class="gesture-hit-name">{{item.nickName}}</text>
+              <text class="gesture-hit-points">+{{item.points}} 分</text>
+            </view>
+            <view wx:if="{{roundHits.length === 0}}" class="gesture-no-hits">暂无人猜中</view>
+          </view>
+          <view class="gesture-action" wx:if="{{isHost}}">
+            <button class="gesture-btn-primary" bindtap="doNextRound" disabled="{{opBusy}}">下一轮</button>
+          </view>
+        </view>
+      </block>
+
+      <!-- 游戏结束 -->
+      <block wx:if="{{status === 'finished'}}">
+        <view class="gesture-finished">
+          <view class="gesture-finished-title">游戏结束</view>
+          <view class="gesture-final-ranking">
+            <view wx:for="{{publicPlayers}}" class="gesture-ranking-item">
+              <view class="gesture-ranking-pos">{{index + 1}}</view>
+              <view class="gesture-ranking-name">{{item.nickName}}</view>
+              <view class="gesture-ranking-score">{{item.score}} 分</view>
+            </view>
+          </view>
+          <view class="gesture-action" wx:if="{{isHost}}">
+            <button class="gesture-btn-primary" bindtap="doReplay">再来一局</button>
+          </view>
+        </view>
+      </block>
+
+      <!-- 侧边栏：实时排行 + 公屏消息 -->
+      <view class="gesture-sidebar">
+        <view class="gesture-ranking">
+          <view class="gesture-ranking-title">实时排行</view>
+          <view wx:for="{{publicPlayers}}" class="gesture-ranking-mini">
+            <text>{{item.nickName}} {{item.score}} 分</text>
+          </view>
+        </view>
+
+        <view class="gesture-log">
+          <view class="gesture-log-title">游戏记录</view>
+          <scroll-view class="gesture-log-scroll" scroll-y>
+            <view wx:for="{{publicLog}}" class="gesture-log-item">{{item}}</view>
+          </scroll-view>
+        </view>
+
+        <view class="gesture-info">
+          <view>第 {{currentRound}} / {{totalRounds}} 轮</view>
+          <view>我的分数：{{myScore}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

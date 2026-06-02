@@ -62,6 +62,11 @@ const gameGroups = [
     description: '手机快速传递，参与者只看几秒题目后表演、描述或作答。',
     games: [
       {
+        title: '你比划我猜',
+        status: '已实现',
+        summary: '6 位口令同房；一人表演肢体动作，多人抢答猜词。'
+      },
+      {
         title: '你画我猜轮流传词版',
         status: '同场同步+本地',
         summary: '首页为数字口令同场画布（至少 2 人）；本表为线下传词计分。'

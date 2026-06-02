@@ -16,6 +16,7 @@ const { callDrink } = require('../../utils/drinkRoomCloud')
 const { callHeadband } = require('../../utils/headbandCloud')
 const { callDontdoit } = require('../../utils/dontdoitCloud')
 const { callMysteryReason } = require('../../utils/mysteryReasonCloud')
+const { callGesture } = require('../../utils/gestureRoomCloud')
 const {
   enableShareMenus,
   handleShareAppMessage,
@@ -38,6 +39,7 @@ const {
 
 const meta = {
   趣味抽签: ['🎫', '同场同步', 'drinkParty', '趣味抽签', '至少 2 人；随机响铃、喝 1～10 口。'],
+  你比划我猜: ['🎭', '同场同步', 'gesture', '你比划我猜', '6 位口令；一人表演肢体，多人猜词。'],
   贴头猜词: ['🎯', '同场同步', 'headband', '贴头猜词', '6 位口令；自己词卡保密，猜对自己获胜。'],
   不要做挑战: ['🚫', '同场同步', 'dontdoit', '不要做挑战', '6 位口令；禁止动作保密，坚持到最后。'],
   AI迷雾推理局: ['🌫️', '同场同步', 'mysteryReason', 'AI迷雾推理', '至少 3 人；AI 剧本，线下口头推理，本机看剧本。'],
@@ -356,6 +358,12 @@ Page({
       })
       return
     }
+    if (screen === 'gesture') {
+      wx.navigateTo({
+        url: '/pages/setup/setup?title=' + encodeURIComponent(title) + '&screen=gesture'
+      })
+      return
+    }
     if (screen === 'dontdoit') {
       wx.navigateTo({
         url: '/pages/setup/setup?title=' + encodeURIComponent(title) + '&screen=dontdoit'
@@ -458,6 +466,57 @@ Page({
         title: '贴头猜词未就绪',
         content:
           '云函数 headbandRoomService 未部署或未选对环境。\n\n请在开发者工具：cloudfunctions/headbandRoomService → 上传并部署（云端安装依赖）。',
+        showCancel: false
+      })
+      return
+    }
+    if (/组不存在|找不到|房间不存在|无效|不存在|已结束/.test(msg)) {
+      this.joinGestureByCode(digits, true)
+      return
+    }
+    wx.hideLoading()
+    wx.showToast({ title: msg || '进组失败', icon: 'none' })
+  },
+
+  joinGestureByCode(digits, fromChain) {
+    if (!fromChain) {
+      wx.showLoading({ title: '加入中' })
+    }
+    callGesture(
+      withJoinProfile({ action: 'join', roomCode: digits }),
+      {
+        silent: true,
+        onOk: (res) => {
+          wx.hideLoading()
+          const r = (res && res.result) || {}
+          if (r.errMsg) {
+            this.handleGestureJoinError(digits, { message: r.errMsg })
+            return
+          }
+          if (!r.roomId) {
+            this.joinDontdoitByCode(digits, true)
+            return
+          }
+          const cfg = { roomId: r.roomId, roomCode: digits }
+          wx.navigateTo({
+            url: '/packageGames/gesture/gesture?config=' + encodeURIComponent(JSON.stringify(cfg))
+          })
+        },
+        onError: (e) => {
+          this.handleGestureJoinError(digits, e)
+        }
+      }
+    )
+  },
+
+  handleGestureJoinError(digits, e) {
+    const msg = (e && e.message) || ''
+    if (/FUNCTION_NOT_FOUND|未部署|502001|gestureRoomService/i.test(msg)) {
+      wx.hideLoading()
+      wx.showModal({
+        title: '你比划我猜未就绪',
+        content:
+          '云函数 gestureRoomService 未部署或未选对环境。\n\n请在开发者工具：cloudfunctions/gestureRoomService → 上传并部署（云端安装依赖）。',
         showCancel: false
       })
       return

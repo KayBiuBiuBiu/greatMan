@@ -9,6 +9,7 @@ const { callDrink } = require('../../utils/drinkRoomCloud')
 const { callHeadband } = require('../../utils/headbandCloud')
 const { callDontdoit } = require('../../utils/dontdoitCloud')
 const { callMysteryReason } = require('../../utils/mysteryReasonCloud')
+const { callGesture } = require('../../utils/gestureRoomCloud')
 
 const {
   SIZES: WOLF_SIZES,
@@ -74,6 +75,7 @@ Page({
                 screen === 'drawGuess' ||
                 screen === 'drinkParty' ||
                 screen === 'headband' ||
+                screen === 'gesture' ||
                 screen === 'dontdoit'
               ? 6
               : 4,
@@ -193,6 +195,14 @@ Page({
       })
       return
     }
+    if (this.data.screen === 'gesture') {
+      wx.showModal({
+        title: '你比划我猜需多机同场',
+        content: '请创建聚会组并把 6 位数字口令发给每人；至少 2 人可开始。一人表演肢体动作，其他人抢答猜词。',
+        showCancel: false
+      })
+      return
+    }
     if (this.data.screen === 'dontdoit') {
       wx.showModal({
         title: '不要做挑战需多机同场',
@@ -259,6 +269,10 @@ Page({
     }
     if (this.data.screen === 'headband') {
       this.createHeadbandRoom()
+      return
+    }
+    if (this.data.screen === 'gesture') {
+      this.createGestureRoom()
       return
     }
     if (this.data.screen === 'dontdoit') {
@@ -691,6 +705,59 @@ Page({
     const c = Object.assign({}, cfg || {})
     const u =
       '/packageGames/headband/headband?config=' + encodeURIComponent(JSON.stringify(c))
+    wx.navigateTo({
+      url: u,
+      fail: (e) => {
+        wx.showToast({ title: (e && e.errMsg) || '进房失败', icon: 'none' })
+      }
+    })
+  },
+
+  createGestureRoom () {
+    if (!wx.cloud) {
+      wx.showToast({ title: '请先开通云开发', icon: 'none' })
+      return
+    }
+    wx.showLoading({ title: '建房' })
+    callGesture(
+      withJoinProfile({ action: 'create' }),
+      {
+        onOk: (res) => {
+          wx.hideLoading()
+          const r = (res && res.result) || {}
+          if (!r.roomId) {
+            wx.showToast({ title: '未返回组号，请检查 gestureRoomService 是否已部署', icon: 'none' })
+            return
+          }
+          const code = (r.roomCode || '').toString()
+          const cfg = { roomId: String(r.roomId), roomCode: code }
+          wx.showModal({
+            title: '聚会组口令：' + (code || '—'),
+            content: '把 6 位数字口令给同桌；至少 2 人可开始。一人表演肢体动作，其他人抢答猜词。',
+            confirmText: '进入',
+            showCancel: false,
+            success: (m) => {
+              if (m.confirm) {
+                this.goGesture(cfg)
+              }
+            }
+          })
+        },
+        onError: () => {
+          wx.hideLoading()
+        }
+      }
+    )
+  },
+
+  goGesture (cfg) {
+    if (!((cfg && cfg.roomId) || '')) {
+      wx.showToast({ title: '组号无效', icon: 'none' })
+      return
+    }
+    const c = Object.assign({}, cfg || {})
+    const u =
+      '/packageGames/gesture/gesture?config=' + encodeURIComponent(JSON.stringify(c))
     wx.navigateTo({
       url: u,
       fail: (e) => {

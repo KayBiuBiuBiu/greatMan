@@ -1,0 +1,476 @@
+.gesture-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 大厅样式 */
+.gesture-lobby {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  margin-top: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.gesture-title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.gesture-subtitle {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.gesture-section {
+  margin-bottom: 20px;
+}
+
+.gesture-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.gesture-input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.gesture-action {
+  margin: 20px 0;
+}
+
+.gesture-btn-primary,
+.gesture-btn-secondary,
+.gesture-btn-submit,
+.gesture-btn-skip {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.gesture-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.gesture-btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.gesture-btn-skip {
+  background: #ff9500;
+  color: white;
+}
+
+.gesture-btn-submit {
+  background: #4caf50;
+  color: white;
+}
+
+.gesture-divider {
+  text-align: center;
+  color: #999;
+  margin: 25px 0;
+  font-size: 14px;
+}
+
+/* 游戏内页面 */
+.gesture-ingame {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gesture-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.gesture-code {
+  font-size: 16px;
+}
+
+.gesture-share-btn {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.gesture-member-count {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.gesture-member-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.gesture-member-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.gesture-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.gesture-member-info {
+  flex: 1;
+}
+
+.gesture-member-name {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+
+.gesture-member-score {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.gesture-host-badge {
+  background: #ff9500;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.gesture-config {
+  padding: 16px;
+  background: #f9f9f9;
+}
+
+.gesture-config-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.gesture-picker-value {
+  color: #667eea;
+  font-weight: bold;
+}
+
+.gesture-waiting-hint {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-size: 14px;
+}
+
+/* 表演阶段 */
+.gesture-performer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+}
+
+.gesture-countdown {
+  font-size: 72px;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 20px;
+  min-width: 100px;
+  text-align: center;
+}
+
+.gesture-performer-word {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+  margin: 20px 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.gesture-performer-hint {
+  font-size: 14px;
+  color: #ff9500;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.gesture-guesser {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.gesture-performing-hint {
+  font-size: 18px;
+  color: #999;
+  margin-bottom: 30px;
+}
+
+.gesture-guess-form {
+  width: 100%;
+  max-width: 300px;
+}
+
+.gesture-guess-input {
+  width: 100%;
+  height: 44px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* 揭示阶段 */
+.gesture-revealed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #4caf5015 0%, #2196f315 100%);
+}
+
+.gesture-answer-label {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.gesture-answer-text {
+  font-size: 48px;
+  font-weight: bold;
+  color: #4caf50;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.gesture-hits-label {
+  font-size: 14px;
+  color: #999;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.gesture-hits-list {
+  width: 100%;
+  max-width: 300px;
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.gesture-hit-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.gesture-hit-name {
+  color: #333;
+}
+
+.gesture-hit-points {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.gesture-no-hits {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+}
+
+/* 游戏结束 */
+.gesture-finished {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.gesture-finished-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.gesture-final-ranking {
+  width: 100%;
+  max-width: 300px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 30px;
+}
+
+.gesture-ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.gesture-ranking-item:last-child {
+  border-bottom: none;
+}
+
+.gesture-ranking-pos {
+  width: 30px;
+  text-align: center;
+  font-weight: bold;
+  color: #667eea;
+  font-size: 16px;
+}
+
+.gesture-ranking-name {
+  flex: 1;
+  margin-left: 12px;
+  color: #333;
+}
+
+.gesture-ranking-score {
+  color: #667eea;
+  font-weight: bold;
+}
+
+/* 侧边栏 */
+.gesture-sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 120px;
+  height: 100vh;
+  background: white;
+  border-left: 1px solid #f0f0f0;
+  padding: 60px 8px 20px;
+  font-size: 12px;
+  overflow-y: auto;
+  display: none;
+}
+
+.gesture-ranking {
+  margin-bottom: 20px;
+}
+
+.gesture-ranking-title,
+.gesture-log-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.gesture-ranking-mini {
+  padding: 4px 0;
+  color: #666;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.gesture-log {
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.gesture-log-scroll {
+  height: 200px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.gesture-log-item {
+  padding: 4px 0;
+  color: #666;
+  line-height: 1.3;
+}
+
+.gesture-info {
+  padding: 12px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  color: #333;
+}
+
+.gesture-info view {
+  padding: 4px 0;
+}
+
+/* 响应式 */
+@media (min-width: 700px) {
+  .gesture-ingame {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .gesture-sidebar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gesture-performer,
+  .gesture-guesser,
+  .gesture-revealed,
+  .gesture-finished {
+    flex: 1;
+  }
+}
+
+button:disabled {
+  opacity: 0.5;
+}
