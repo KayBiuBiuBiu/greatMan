@@ -14,18 +14,17 @@
 
 import time
 import unittest
-from minium import WebDriver, By, WECHAT_LOCAL, WECHAT_REMOTE
+from minium import Minium, MiniTest
 
 
-class GestureGuessMiniumTest(unittest.TestCase):
+class GestureGuessMiniumTest(MiniTest):
     """你比划我猜 Minium 自动化测试"""
 
     @classmethod
     def setUpClass(cls):
-        """初始化 Minium WebDriver"""
-        # 使用本地微信开发者工具
-        cls.driver = WebDriver(WECHAT_LOCAL)
-        cls.driver.set_page_load_timeout(30)
+        """初始化 Minium 驱动"""
+        # 连接到微信开发者工具本地调试器
+        pass
 
         # 测试数据
         cls.test_data = {
