@@ -1,0 +1,142 @@
+{
+    "case_name": "test_06_game_interface",
+    "run_time": "20260602 13:00:38",
+    "test_type": "GestureGuessTest",
+    "case_doc": "TC-06: \u9a8c\u8bc1\u6e38\u620f\u754c\u9762",
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780376438.797011,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final",
+    "package": "__main__",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780376438,
+            "datetime": "2026-06-02 13:00:38",
+            "use_region": false
+        },
+        {
+            "name": "assertGreater-success",
+            "url": "/pages/index/index",
+            "path": "images/assertGreater-success.png",
+            "ts": 1780376439,
+            "datetime": "2026-06-02 13:00:39",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/pages/index/index",
+            "path": "images/teardown.png",
+            "ts": 1780376444,
+            "datetime": "2026-06-02 13:00:44",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertGreater",
+            "ret": true,
+            "msg": null,
+            "img": "assertGreater-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780376444.013162,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_06_game_interface(self):\n",
+            "        \"\"\"TC-06: \u9a8c\u8bc1\u6e38\u620f\u754c\u9762\"\"\"\n",
+            "        self.log_step(\"06\", \"\u9a8c\u8bc1\u6e38\u620f\u754c\u9762\", \"START\")\n",
+            "\n",
+            "        try:\n",
+            "            # \u7b49\u5f85\u754c\u9762\u52a0\u8f7d\n",
+            "            time.sleep(1)\n",
+            "\n",
+            "            # \u67e5\u627e\u6309\u94ae\n",
+            "            buttons = self.page.get_elements('button')\n",
+            "            self.assertGreater(len(buttons), 0, \"\u5e94\u6709\u6309\u94ae\u5143\u7d20\")\n",
+            "\n",
+            "            button_texts = []\n",
+            "            for btn in buttons:\n",
+            "                try:\n",
+            "                    button_texts.append(btn.inner_text())\n",
+            "                except:\n",
+            "                    pass\n",
+            "\n",
+            "            self.log_step(\"06\", \"\u6e38\u620f\u754c\u9762\", \"PASS\", f\"\u6309\u94ae\u6570: {len(buttons)}\")\n",
+            "\n",
+            "        except Exception as e:\n",
+            "            self.log_step(\"06\", \"\u6e38\u620f\u754c\u9762\", \"FAIL\", str(e))\n",
+            "            raise\n"
+        ],
+        "start": 252
+    },
+    "filename": "result.json"
+}

@@ -1,0 +1,41 @@
+[I 2026-06-02 13:00:44,014 minium minitest#432 _miniSetUp] =========Current case: test_07_performance=========
+[I 2026-06-02 13:00:44,014 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_07_performance
+[I 2026-06-02 13:00:44,014 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 13:00:44,014 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-02 13:00:44,014 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-02 13:00:44,015 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 100.20681595802307 seconds for it
+[I 2026-06-02 13:00:46,326 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 13:00:46,326 minium wx_minium#576 _relaunch] other thread relaunching app
+[E 2026-06-02 13:01:43,964 minium wx_minium#606 _relaunch] [f2f2610d-f25f-4f5e-ac9b-db6aa139c074][call App.callWxMethod] receive from remote timeout
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 604, in _relaunch
+    self._inject()
+    ~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 359, in _inject
+    self.app.call_wx_method("getSetting")
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 757, in call_wx_method
+    return self._call_wx_method(method=method, args=args, plugin_appid=plugin_appid)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 501, in _receive_response
+    raise MiniTimeoutError(
+        f"[{cmd.id}][{cmd.desc}] receive from remote timeout"
+    )
+minium.framework.exception.MiniTimeoutError: [f2f2610d-f25f-4f5e-ac9b-db6aa139c074][call App.callWxMethod] receive from remote timeout
+[I 2026-06-02 13:01:43,968 minium wx_minium#608 _relaunch] end instantiate app, cost: 60.103888750076294
+[W 2026-06-02 13:01:43,969 minium wx_minium#1152 wait_app_relaunch] app is relaunch complete
+[I 2026-06-02 13:01:43,970 minium minitest#897 capture] capture setup.png
+[I 2026-06-02 13:01:44,093 minium minitest#487 _miniSetUp] =========case: test_07_performance start=========
+[I 2026-06-02 13:01:44,093 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 13:01:44,598 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 13:01:44,601 minium minitest#897 capture] capture teardown.png
+[I 2026-06-02 13:01:45,560 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 13:01:45,560 minium basenative#63 wrapper] call BaseNative.get_start_up end 

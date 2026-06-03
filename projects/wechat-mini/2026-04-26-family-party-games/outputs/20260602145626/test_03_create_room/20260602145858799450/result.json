@@ -1,0 +1,109 @@
+{
+    "case_name": "test_03_create_room",
+    "run_time": "20260602 14:58:58",
+    "test_type": "GestureGuessTest",
+    "case_doc": "TC-03: \u4e91\u7aef\u5efa\u623f\uff08\u4ec5\u9a8c\u8bc1\u8fd4\u56de\u5b57\u6bb5\uff09",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py\", line 246, in test_03_create_room\n    room_id, room_code = self._cloud_create_room()\n                         ~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py\", line 142, in _cloud_create_room\n    raise RuntimeError(f\"cloud create failed: {r}\")\nRuntimeError: cloud create failed: {'errorCode': 1, 'errorMessage': \"Error: Cannot find module '../roomService/joinPlayerPatch'\\nRequire stack:\\n- /var/user/index.js\\n- /data/scf/frame/node18/userFunction.js\\n- /data/scf/frame/node18/runtime.js\", 'requestId': '82df60f5-fa09-485f-b52a-e34e07eeabce', 'statusCode': 443}\n",
+    "start_timestamp": 1780383538.860542,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final",
+    "package": "__main__",
+    "failed_line_num": 246,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "RuntimeError",
+    "error_value": "cloud create failed: {'errorCode': 1, 'errorMessage': \"Error: Cannot find module '../roomService/joinPlayerPatch'\\nRequire stack:\\n- /var/user/index.js\\n- /data/scf/frame/node18/userFunction.js\\n- /data/scf/frame/node18/runtime.js\", 'requestId': '82df60f5-fa09-485f-b52a-e34e07eeabce', 'statusCode': 443}",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780383538,
+            "datetime": "2026-06-02 14:58:58",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/pages/index/index",
+            "path": "images/teardown.png",
+            "ts": 1780383546,
+            "datetime": "2026-06-02 14:59:06",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780383546.401942,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_03_create_room(self):\n",
+            "        \"\"\"TC-03: \u4e91\u7aef\u5efa\u623f\uff08\u4ec5\u9a8c\u8bc1\u8fd4\u56de\u5b57\u6bb5\uff09\"\"\"\n",
+            "        self.log_step(\"03\", \"\u4e91\u7aef\u5efa\u623f\", \"START\")\n",
+            "        room_id, room_code = self._cloud_create_room()\n",
+            "        self.log_step(\"03\", \"\u4e91\u7aef\u5efa\u623f\", \"PASS\", f\"{room_code} / {room_id}\")\n"
+        ],
+        "start": 243
+    },
+    "filename": "result.json"
+}

@@ -1,0 +1,55 @@
+[I 2026-06-02 15:00:44,316 minium minitest#432 _miniSetUp] =========Current case: test_06_game_interface=========
+[I 2026-06-02 15:00:44,317 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_06_game_interface
+[I 2026-06-02 15:00:44,317 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 15:00:44,317 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[W 2026-06-02 15:00:44,317 minium minitest#379 _check_debug_connection] app is relaunching, wait for it
+[W 2026-06-02 15:00:44,317 minium wx_minium#1145 wait_app_relaunch] app is relaunching, wait 123.85633206367493 seconds for it
+[I 2026-06-02 15:00:46,754 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 15:00:46,755 minium wx_minium#576 _relaunch] other thread relaunching app
+[E 2026-06-02 15:02:14,328 minium wx_minium#606 _relaunch] [253cee89-a8cc-4c90-81a7-37ce1850e353][call App.callWxMethod] receive from remote timeout
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 604, in _relaunch
+    self._inject()
+    ~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/wx_minium.py", line 359, in _inject
+    self.app.call_wx_method("getSetting")
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 757, in call_wx_method
+    return self._call_wx_method(method=method, args=args, plugin_appid=plugin_appid)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_object.py", line 162, in _call_wx_method
+    return self.connection.send("App.callWxMethod", params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 457, in send
+    return self._receive_response(cmd)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/connection.py", line 501, in _receive_response
+    raise MiniTimeoutError(
+        f"[{cmd.id}][{cmd.desc}] receive from remote timeout"
+    )
+minium.framework.exception.MiniTimeoutError: [253cee89-a8cc-4c90-81a7-37ce1850e353][call App.callWxMethod] receive from remote timeout
+[I 2026-06-02 15:02:14,335 minium wx_minium#608 _relaunch] end instantiate app, cost: 90.09907388687134
+[W 2026-06-02 15:02:14,336 minium wx_minium#1152 wait_app_relaunch] app is relaunch complete
+[I 2026-06-02 15:02:14,363 minium minitest#897 capture] capture setup.png
+[I 2026-06-02 15:02:19,537 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 15:02:19,537 minium wx_minium#579 _relaunch] start instantiate app 6267760640
+[I 2026-06-02 15:02:19,566 minium.App2816 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x10530d1d0>
+[I 2026-06-02 15:02:19,608 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x1053f1090>, whether should relaunch: False
+[I 2026-06-02 15:02:19,929 minium wx_minium#608 _relaunch] end instantiate app, cost: 0.3918750286102295
+[W 2026-06-02 15:03:44,367 minium.App2816 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 15:03:44,370 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602145626/test_06_game_interface/20260602150044315311/images/setup.png not exists
+[I 2026-06-02 15:03:44,370 minium minitest#487 _miniSetUp] =========case: test_06_game_interface start=========
+[I 2026-06-02 15:03:44,370 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 15:03:45,375 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 15:03:45,411 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7570>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7750>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a74d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7930>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a77f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7890>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a6f30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a79d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7a70>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7b10>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7bb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7c50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7cf0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7d90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7e30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7ed0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054a7f70>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8050>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e80f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8190>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8230>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e82d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8370>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8410>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e84b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8550>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e85f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8690>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e8730>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1054e87d0>]
+[I 2026-06-02 15:03:45,424 minium minitest#897 capture] capture assertGreater-success.png
+[W 2026-06-02 15:05:15,430 minium.App6384 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 15:05:15,431 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602145626/test_06_game_interface/20260602150044315311/images/assertGreater-success.png not exists
+[I 2026-06-02 15:05:15,537 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 15:05:15,538 minium minitest#897 capture] capture teardown.png
+[W 2026-06-02 15:05:17,541 minium.App6384 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 15:05:17,541 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602145626/test_06_game_interface/20260602150044315311/images/teardown.png not exists
+[I 2026-06-02 15:05:17,541 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 15:05:17,542 minium basenative#63 wrapper] call BaseNative.get_start_up end 

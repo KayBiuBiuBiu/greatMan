@@ -1,7 +1,7 @@
 /**
  * AI 主持模式：轮询、操作、文案（混入 werewolf Page）
  */
-const { callWerewolfAIService } = require('../../utils/werewolfAICloud')
+const { callWerewolfAIService } = require('./werewolfAICloud')
 const { isWerewolfAIModeEnabled } = require('../../data/feature-flags')
 
 const RZH = {

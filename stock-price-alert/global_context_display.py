@@ -39,7 +39,7 @@ SW_CODE_TO_NAME = {
     "801120.SI": "电气设备",
     "801130.SI": "电子",
     "801140.SI": "汽车",
-    "801150.SI": "房地产",
+    "801150.SI": "纺织服饰",  # 泰慕士 001234
     "801160.SI": "建筑装饰",
     "801170.SI": "建筑材料",
     "801180.SI": "基础化工",
@@ -198,23 +198,25 @@ def get_stock_global_context(
     if not sector:
         sector = get_sector_for_stock(code)
 
-    # 查找板块配置
-    sector_info = None
-    if sector:
-        sector_info = SECTOR_CONTEXT.get(sector)
-
-    if not sector_info:
-        return None
-
     result = {
         "code": code,
         "name": name,
-        "sector": sector,
+        "sector": sector or "未知",
         "us_info": None,
         "commodity_info": None,
         "verdict": None,
         "display_line": "",
     }
+
+    # 查找板块配置
+    sector_info = None
+    if sector:
+        sector_info = SECTOR_CONTEXT.get(sector)
+
+    # 即使没有板块配置，也要显示"美股无对标"而不是返回 None
+    if not sector_info:
+        result["display_line"] = _format_display_line(None, None, None)
+        return result
 
     # 获取美股信息
     us_info = _fetch_us_context(sector_info)
@@ -339,7 +341,7 @@ def _format_display_line(
     commodity_info: dict[str, Any] | None,
     verdict: dict[str, Any] | None,
 ) -> str:
-    """格式化为一行展示。"""
+    """格式化为一行展示。若无任何对标数据则返回空字符串。"""
     parts = []
 
     if us_info:
@@ -347,8 +349,6 @@ def _format_display_line(
         arrow = us_info["direction"]
         pct = us_info["avg_pct"]
         parts.append(f"🌍 美股{desc}{arrow}{pct:+.2f}%")
-    else:
-        parts.append("🌍 美股无对标")
 
     if commodity_info:
         arrow = commodity_info["direction"]

@@ -1,5 +1,8 @@
 # stock-price-alert｜个人量化监控（多策略 + 选股 + 风控 + 回测）
 
+> **AI / Coding Plan 速览**：[docs/CODING_PLAN.md](./docs/CODING_PLAN.md)（架构、真相来源、模块地图、常见坑）。  
+> **日常运维命令**：[周常时间安排与命令.md](./周常时间安排与命令.md)
+
 ## 开箱步骤
 
 ```bash
@@ -121,5 +124,7 @@ python3 -m pytest tests/
 | `data_health.py` | 按主机 HTTP 失败计数与退避（可选） |
 | `app_logging.py` | 可选 JSONL 轮转日志 |
 | `tests/`、`requirements-dev.txt` | pytest 集成测试（P2-1） |
+| `docs/CODING_PLAN.md` | AI/Coding Plan 一页式架构与改代码指南 |
+| `周常时间安排与命令.md` | 日常运维与券商交割单命令 |
 
 本工具 **不构成投资建议**，投资有风险。

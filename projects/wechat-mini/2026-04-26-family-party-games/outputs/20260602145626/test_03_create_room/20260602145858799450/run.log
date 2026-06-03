@@ -1,0 +1,48 @@
+[I 2026-06-02 14:58:58,800 minium minitest#432 _miniSetUp] =========Current case: test_03_create_room=========
+[W 2026-06-02 14:58:58,800 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-02 14:58:58,800 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_03_create_room
+[I 2026-06-02 14:58:58,800 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 14:58:58,800 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-02 14:58:58,801 minium minitest#897 capture] capture setup.png
+[I 2026-06-02 14:58:58,860 minium minitest#487 _miniSetUp] =========case: test_03_create_room start=========
+[I 2026-06-02 14:58:58,860 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 14:59:01,354 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 14:59:01,354 minium wx_minium#579 _relaunch] start instantiate app 6267760640
+[I 2026-06-02 14:59:01,364 minium.App5056 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x10530da90>
+[I 2026-06-02 14:59:01,393 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x10530d950>, whether should relaunch: False
+[I 2026-06-02 14:59:01,723 minium wx_minium#608 _relaunch] end instantiate app, cost: 0.36867284774780273
+[E 2026-06-02 14:59:06,259 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py", line 246, in test_03_create_room
+    room_id, room_code = self._cloud_create_room()
+                         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py", line 142, in _cloud_create_room
+    raise RuntimeError(f"cloud create failed: {r}")
+RuntimeError: cloud create failed: {'errorCode': 1, 'errorMessage': "Error: Cannot find module '../roomService/joinPlayerPatch'\nRequire stack:\n- /var/user/index.js\n- /data/scf/frame/node18/userFunction.js\n- /data/scf/frame/node18/runtime.js", 'requestId': '82df60f5-fa09-485f-b52a-e34e07eeabce', 'statusCode': 443}
+[I 2026-06-02 14:59:06,260 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 14:59:06,263 minium minitest#897 capture] capture teardown.png
+[I 2026-06-02 14:59:06,400 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 14:59:06,401 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-02 14:59:06,402 minium assertbase#390 _get_stack_info] <bound method GestureGuessTest.test_03_create_room of <__main__.GestureGuessTest testMethod=test_03_create_room>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py", line 246, in test_03_create_room
+    room_id, room_code = self._cloud_create_room()
+                         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py", line 142, in _cloud_create_room
+    raise RuntimeError(f"cloud create failed: {r}")
+RuntimeError: cloud create failed: {'errorCode': 1, 'errorMessage': "Error: Cannot find module '../roomService/joinPlayerPatch'\nRequire stack:\n- /var/user/index.js\n- /data/scf/frame/node18/userFunction.js\n- /data/scf/frame/node18/runtime.js", 'requestId': '82df60f5-fa09-485f-b52a-e34e07eeabce', 'statusCode': 443}
+[W 2026-06-02 14:59:06,402 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': False, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 90, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 20034, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260602145626', 'case_output': './outputs/20260602145626/test_03_create_room/20260602145858799450'}
+[W 2026-06-02 14:59:06,402 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-02 14:59:06,402 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-02 14:59:06,402 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x105398980>

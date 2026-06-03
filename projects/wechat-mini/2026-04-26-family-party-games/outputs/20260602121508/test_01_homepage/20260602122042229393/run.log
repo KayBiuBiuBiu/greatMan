@@ -1,0 +1,49 @@
+[I 2026-06-02 12:20:42,230 minium minitest#432 _miniSetUp] =========Current case: test_01_homepage=========
+[W 2026-06-02 12:20:42,230 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-02 12:20:42,230 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_01_homepage
+[I 2026-06-02 12:20:42,230 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 12:20:42,230 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-02 12:20:42,236 minium minitest#897 capture] capture setup.png
+[I 2026-06-02 12:20:42,317 minium minitest#487 _miniSetUp] =========case: test_01_homepage start=========
+[I 2026-06-02 12:20:42,317 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 12:20:43,327 minium page#716 _get_elements_by_css] try to get elements: text
+[I 2026-06-02 12:20:45,919 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 12:20:45,920 minium wx_minium#579 _relaunch] start instantiate app 6353907712
+[E 2026-06-02 12:20:45,921 minium.Conn6928 connection#668 __on_message] [3f5eb12c-c7ac-4e7c-93cf-0628ba104552]: page destroyed
+[I 2026-06-02 12:20:45,927 minium page#716 _get_elements_by_css] try to get elements: text
+[I 2026-06-02 12:20:45,929 minium.App1040 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x1031034d0>
+[I 2026-06-02 12:20:45,934 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x1032094f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1031d6cb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1031d4cd0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1031d56d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032447d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244cd0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244c30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244eb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244d70>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244e10>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244b90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244f50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103244ff0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103245090>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103245130>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1032451d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103245270>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103245310>]
+[I 2026-06-02 12:20:45,964 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x103250050>, whether should relaunch: False
+[E 2026-06-02 12:20:45,992 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py", line 110, in test_01_homepage
+    self.fail("游戏卡片未找到")
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 732, in fail
+    raise self.failureException(msg)
+AssertionError: 游戏卡片未找到
+[I 2026-06-02 12:20:45,993 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 12:20:45,994 minium minitest#897 capture] capture teardown.png
+[I 2026-06-02 12:20:46,073 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 12:20:46,073 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-02 12:20:46,076 minium assertbase#390 _get_stack_info] <bound method GestureGuessTest.test_01_homepage of <__main__.GestureGuessTest testMethod=test_01_homepage>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py", line 110, in test_01_homepage
+    self.fail("游戏卡片未找到")
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 游戏卡片未找到
+[W 2026-06-02 12:20:46,076 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': False, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 60, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 20034, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260602121508', 'case_output': './outputs/20260602121508/test_01_homepage/20260602122042229393'}
+[W 2026-06-02 12:20:46,076 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-02 12:20:46,076 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-02 12:20:46,076 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x103188830>

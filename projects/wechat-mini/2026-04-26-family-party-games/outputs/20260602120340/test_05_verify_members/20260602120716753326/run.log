@@ -1,0 +1,48 @@
+[I 2026-06-02 12:07:16,756 minium minitest#432 _miniSetUp] =========Current case: test_05_verify_members=========
+[W 2026-06-02 12:07:16,756 minium minitest#434 _miniSetUp] 第1次重试
+[I 2026-06-02 12:07:16,756 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_05_verify_members
+[I 2026-06-02 12:07:16,756 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 12:07:16,756 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-02 12:07:16,756 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-02 12:07:16,756 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-02 12:07:16,756 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-02 12:07:16,758 minium.App0272 app#950 relaunch] ReLaunch: /pages/index/index
+[I 2026-06-02 12:07:19,989 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 12:07:19,989 minium wx_minium#579 _relaunch] start instantiate app 6270267392
+[I 2026-06-02 12:07:20,003 minium.App0272 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x10512b890>
+[I 2026-06-02 12:07:20,047 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x10512b610>, whether should relaunch: False
+[I 2026-06-02 12:07:20,336 minium wx_minium#608 _relaunch] end instantiate app, cost: 0.3465540409088135
+[W 2026-06-02 12:07:36,759 minium.App0272 app#1167 _change_route_async] 等待wx.reLaunch回调失败
+[I 2026-06-02 12:07:36,768 minium minitest#897 capture] capture teardown.png
+[E 2026-06-02 12:07:36,841 minium assertbase#390 _get_stack_info] <bound method MiniTest._miniSetUp of <__main__.GestureGuessTest testMethod=test_05_verify_members>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 118, in run
+    self._miniSetUp()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 478, in _miniSetUp
+    self.mini.app.go_home()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 1073, in go_home
+    page = self.relaunch(main_page_path.path, main_page_path.query)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/minium_log.py", line 148, in wrapper
+    result = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/utils/utils.py", line 90, in wrapper
+    ret = func(*args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 951, in relaunch
+    page = self._change_route_async("reLaunch", url, is_wait_url_change)
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 1165, in _change_route_async
+    cmd.get_open_result(wait_timeout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/miniprogram/base_driver/app.py", line 133, in get_open_result
+    raise MiniTimeoutError(
+        f"[{self._open_id}][{self.open_type}] receive from remote timeout"
+    )
+minium.framework.exception.MiniTimeoutError: [f0d0c95a-f0c5-43f3-b721-2d156e0bc8b9][reLaunch] receive from remote timeout
+[W 2026-06-02 12:07:36,842 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': True, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 20034, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260602120340', 'case_output': './outputs/20260602120340/test_05_verify_members/20260602120716753326'}
+[W 2026-06-02 12:07:36,842 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-02 12:07:36,842 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-02 12:07:36,842 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x1051b4050>

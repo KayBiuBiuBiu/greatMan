@@ -1,0 +1,20 @@
+[I 2026-06-02 15:28:54,443 minium minitest#432 _miniSetUp] =========Current case: test_07_performance=========
+[I 2026-06-02 15:28:54,443 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_07_performance
+[I 2026-06-02 15:28:54,443 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 15:28:54,443 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-02 15:28:54,444 minium minitest#897 capture] capture setup.png
+[W 2026-06-02 15:28:56,445 minium.App0576 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 15:28:56,445 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602151108/test_07_performance/20260602152854429080/images/setup.png not exists
+[I 2026-06-02 15:28:56,445 minium minitest#487 _miniSetUp] =========case: test_07_performance start=========
+[I 2026-06-02 15:28:56,445 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 15:28:56,953 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 15:28:56,955 minium minitest#897 capture] capture teardown.png
+[I 2026-06-02 15:28:58,108 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 15:28:58,108 minium wx_minium#579 _relaunch] start instantiate app 6271594496
+[I 2026-06-02 15:28:58,122 minium.App0576 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x1062d7890>
+[I 2026-06-02 15:28:58,158 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x1062d7610>, whether should relaunch: False
+[I 2026-06-02 15:28:58,487 minium wx_minium#608 _relaunch] end instantiate app, cost: 0.3783259391784668
+[W 2026-06-02 15:28:58,964 minium.App0576 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 15:28:58,964 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602151108/test_07_performance/20260602152854429080/images/teardown.png not exists
+[I 2026-06-02 15:28:58,964 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 15:28:58,964 minium basenative#63 wrapper] call BaseNative.get_start_up end 

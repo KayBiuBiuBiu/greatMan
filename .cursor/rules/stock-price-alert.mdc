@@ -1,0 +1,23 @@
+---
+description: stock-price-alert 量化监控：改代码前先读 CODING_PLAN
+globs: stock-price-alert/**
+alwaysApply: false
+---
+
+# stock-price-alert
+
+改本目录代码前，先读 **`stock-price-alert/docs/CODING_PLAN.md`**（架构、真相来源、模块地图、已知坑）。
+
+## 快速约束
+
+- **持仓真相**：`config.json` → `watchlist` + `data/position_ledger.db`；截图对齐用 `scripts/fix_watchlist_weighted_hold.py`，勿用 `hold` 覆盖已有仓（会加权合并）。
+- **主入口**：`run_alert.py`；选股：`quant_core/selector.py`；Tushare：`quote_tushare.py`；东财/BK：`quote_eastmoney.py` / `sector_em.py`。
+- **选股性能**：全市场扫描前先 `sync_daily_klines.py`；Tushare `adj_factor` 约 200 次/分钟，进度每 200 只才打印。
+- **日常运维**：见 `stock-price-alert/周常时间安排与命令.md`。
+- **勿提交**：token、`mail_config.json`、真实 `broker_xls/` 交割单。
+
+## 测试
+
+```bash
+cd stock-price-alert && python3 -m pytest tests/ -q
+```

@@ -75,6 +75,7 @@ def main() -> int:
     rough_trading = is_weekday if tday is None else tday
 
     cmd = f"cd {root} && .venv/bin/python3 run_alert.py -c config.json"
+    param_opt_cmd = f"cd {root} && .venv/bin/python3 param_optimization_analysis.py -c config.json --quick-test"
 
     lines: list[str] = []
     lines.append("=== 此刻指引（约 8 点开机、尽量挂到 18 点以后；法定节假日以交易所为准）===\n")
@@ -83,6 +84,8 @@ def main() -> int:
     if not is_weekday:
         lines.append("今天周末：日更自动化一般不跑；不炒股可不开进程。\n")
         lines.append("【唯一常驻命令】（若仍想看盘 / 挂机）\n  " + cmd + "\n")
+        lines.append("【闲着没事可干的？】参数优化分析（快速，5分钟）\n  " + param_opt_cmd + "\n")
+        lines.append("  → 分析历史picks表现，找最优的 RSI/成交量/价格 参数组合\n")
         return print("\n".join(lines)) or 0
 
     if tday is False:
@@ -107,6 +110,9 @@ def main() -> int:
     lines.append("【现在该干嘛】")
     if not rough_trading:
         lines.append("- 今天若休市：无需盘前流水线；进程可不开或仅自用看盘。")
+        lines.append("\n【闲着没事】不妨做做参数优化分析：")
+        lines.append("  " + param_opt_cmd)
+        lines.append("  → 找最优的买入信号参数，可能提升 2-5% 胜率")
         print("\n".join(lines))
         return 0
 
@@ -142,6 +148,12 @@ def main() -> int:
             lines.append("- 周五：若开了周训练，收盘后还会自动跑 ML 训练（看 config）。")
 
     lines.append("\n不确定是否交易日：以交易所日历为准；需要可把休市日写进 config 供本脚本粗判。")
+
+    # 增加参数优化提示
+    if rough_trading and after_eq(hm, after_close):
+        lines.append("\n【如果想优化交易参数】收盘后有时间可跑：")
+        lines.append("  " + param_opt_cmd)
+        lines.append("  → 5分钟快速分析历史picks，找最优参数组合（预期改善 2-5% 胜率）")
     print("\n".join(lines))
     return 0
 

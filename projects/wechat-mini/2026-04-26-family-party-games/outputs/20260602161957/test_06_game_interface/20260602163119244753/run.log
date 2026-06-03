@@ -1,0 +1,27 @@
+[I 2026-06-02 16:31:19,254 minium minitest#432 _miniSetUp] =========Current case: test_06_game_interface=========
+[I 2026-06-02 16:31:19,255 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_06_game_interface
+[I 2026-06-02 16:31:19,255 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 16:31:19,255 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-02 16:31:19,260 minium minitest#897 capture] capture setup.png
+[W 2026-06-02 16:31:21,262 minium.App9808 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 16:31:21,262 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602161957/test_06_game_interface/20260602163119244753/images/setup.png not exists
+[I 2026-06-02 16:31:21,262 minium minitest#487 _miniSetUp] =========case: test_06_game_interface start=========
+[I 2026-06-02 16:31:21,262 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 16:31:22,273 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 16:31:23,064 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 16:31:23,065 minium wx_minium#579 _relaunch] start instantiate app 6316912640
+[E 2026-06-02 16:31:23,065 minium.Conn3008 connection#668 __on_message] [b226acf5-a064-48f0-853d-6707d152f8a4]: page destroyed
+[I 2026-06-02 16:31:23,075 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-02 16:31:23,077 minium.App9808 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x10488ed50>
+[I 2026-06-02 16:31:23,082 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x10496a170>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049c8690>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049ca670>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049c8730>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049ca8f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049ca850>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049caad0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049ca990>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049caa30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049ca7b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cab70>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cac10>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cacb0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cad50>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cadf0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cae90>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049caf30>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cafd0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb070>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb110>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb1b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb250>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb2f0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb390>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb430>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb4d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb570>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb610>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb6b0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x1049cb750>]
+[I 2026-06-02 16:31:23,083 minium minitest#897 capture] capture assertGreater-success.png
+[I 2026-06-02 16:31:23,121 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x104974b90>, whether should relaunch: False
+[I 2026-06-02 16:31:23,447 minium wx_minium#608 _relaunch] end instantiate app, cost: 0.38131093978881836
+[W 2026-06-02 16:31:25,094 minium.App9808 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 16:31:25,094 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602161957/test_06_game_interface/20260602163119244753/images/assertGreater-success.png not exists
+[I 2026-06-02 16:31:25,260 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 16:31:25,261 minium minitest#897 capture] capture teardown.png
+[W 2026-06-02 16:32:55,268 minium.App1440 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 16:32:55,269 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602161957/test_06_game_interface/20260602163119244753/images/teardown.png not exists
+[I 2026-06-02 16:32:55,269 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 16:32:55,270 minium basenative#63 wrapper] call BaseNative.get_start_up end 

@@ -1,0 +1,23 @@
+[I 2026-06-02 16:24:56,452 minium minitest#432 _miniSetUp] =========Current case: test_02_click_game=========
+[I 2026-06-02 16:24:56,452 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final, case info: GestureGuessTest.test_02_click_game
+[I 2026-06-02 16:24:56,453 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-02 16:24:56,453 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-02 16:24:56,453 minium minitest#897 capture] capture setup.png
+[W 2026-06-02 16:24:58,453 minium.App0448 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 16:24:58,454 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602161957/test_02_click_game/20260602162456451743/images/setup.png not exists
+[I 2026-06-02 16:24:58,454 minium minitest#487 _miniSetUp] =========case: test_02_click_game start=========
+[I 2026-06-02 16:24:58,454 minium minitest#788 _callTestMethod] call test method
+[I 2026-06-02 16:25:00,019 minium wx_minium#571 _app_initialized_callback] receive App.initialized
+[I 2026-06-02 16:25:00,019 minium wx_minium#579 _relaunch] start instantiate app 6316912640
+[I 2026-06-02 16:25:00,027 minium.App0448 app#545 release] release app <minium.miniprogram.base_driver.app.App object at 0x10488efd0>
+[I 2026-06-02 16:25:00,055 minium wx_minium#893 _instantiate_app] new app instanst <minium.miniprogram.base_driver.app.App object at 0x10488f250>, whether should relaunch: False
+[I 2026-06-02 16:25:00,378 minium wx_minium#608 _relaunch] end instantiate app, cost: 0.35923194885253906
+[I 2026-06-02 16:25:01,614 minium.App1088 app#950 relaunch] ReLaunch: /packageGames/gesture/gesture?config=%7B%22roomId%22%3A%20%2293eed62b6a1e935d005f17c22f98149b%22%2C%20%22roomCode%22%3A%20%22638220%22%7D
+[I 2026-06-02 16:25:02,530 minium.App1088 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/gesture/gesture', 'query': {'config': '%257B%2522roomId%2522%253A%2520%252293eed62b6a1e935d005f17c22f98149b%2522%252C%2520%2522roomCode%2522%253A%2520%2522638220%2522%257D'}, 'openType': 'reLaunch', 'timeStamp': 1780388702527, 'webviewId': 6, 'routeEventId': '6_1780388702290', 'renderer': 'webview'}, 1780388702528]}
+[I 2026-06-02 16:25:02,531 minium.Conn3008 connection#704 _handle_async_msg] received async msg: 32deb767-c01f-4500-8463-e5204a6f9706
+[I 2026-06-02 16:25:05,533 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-02 16:25:05,534 minium minitest#897 capture] capture teardown.png
+[W 2026-06-02 16:26:35,538 minium.App1088 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-02 16:26:35,538 minium minitest#929 capture] /Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/outputs/20260602161957/test_02_click_game/20260602162456451743/images/teardown.png not exists
+[I 2026-06-02 16:26:35,539 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-02 16:26:35,539 minium basenative#63 wrapper] call BaseNative.get_start_up end 

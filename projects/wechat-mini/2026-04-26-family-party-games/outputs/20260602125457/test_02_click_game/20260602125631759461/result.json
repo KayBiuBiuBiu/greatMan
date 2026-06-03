@@ -1,0 +1,117 @@
+{
+    "case_name": "test_02_click_game",
+    "run_time": "20260602 12:56:31",
+    "test_type": "GestureGuessTest",
+    "case_doc": "TC-02: \u70b9\u51fb\u6e38\u620f\u5361\u7247",
+    "success": false,
+    "failures": "",
+    "errors": "Traceback (most recent call last):\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 43, in testPartExecutor\n    yield\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py\", line 125, in run\n    self._callTestMethod(testMethod)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py\", line 789, in _callTestMethod\n    method()\n    ~~~~~~^^\n  File \"/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games/tests/test_gesture_final.py\", line 186, in test_02_click_game\n    self.fail(\"\u65e0\u6cd5\u70b9\u51fb\u6e38\u620f\u5361\u7247\")\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: \u65e0\u6cd5\u70b9\u51fb\u6e38\u620f\u5361\u7247\n",
+    "start_timestamp": 1780376191.822128,
+    "is_failure": false,
+    "is_error": true,
+    "module": ".Users.haha.greatMan.projects.wechat-mini.2026-04-26-family-party-games.tests.test_gesture_final",
+    "package": "__main__",
+    "failed_line_num": 186,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "AssertionError",
+    "error_value": "\u65e0\u6cd5\u70b9\u51fb\u6e38\u620f\u5361\u7247",
+    "error_extra_info": "",
+    "error_stages": [
+        "testMethod"
+    ],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/pages/index/index",
+            "path": "images/setup.png",
+            "ts": 1780376191,
+            "datetime": "2026-06-02 12:56:31",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/pages/index/index",
+            "path": "images/teardown.png",
+            "ts": 1780376195,
+            "datetime": "2026-06-02 12:56:35",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780376195.3582132,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_02_click_game(self):\n",
+            "        \"\"\"TC-02: \u70b9\u51fb\u6e38\u620f\u5361\u7247\"\"\"\n",
+            "        self.log_step(\"02\", \"\u70b9\u51fb\u300c\u4f60\u6bd4\u5212\u6211\u731c\u300d\u5361\u7247\", \"START\")\n",
+            "\n",
+            "        try:\n",
+            "            if self._tap_gesture_card():\n",
+            "                self.log_step(\"02\", \"\u70b9\u51fb\u6e38\u620f\u5361\u7247\", \"PASS\", \"\u5df2\u8fdb\u5165 setup \u9875\u9762\")\n",
+            "                return\n",
+            "            self.fail(\"\u65e0\u6cd5\u70b9\u51fb\u6e38\u620f\u5361\u7247\")\n",
+            "\n",
+            "        except Exception as e:\n",
+            "            self.log_step(\"02\", \"\u70b9\u51fb\u5361\u7247\", \"FAIL\", str(e))\n",
+            "            raise\n"
+        ],
+        "start": 178
+    },
+    "filename": "result.json"
+}

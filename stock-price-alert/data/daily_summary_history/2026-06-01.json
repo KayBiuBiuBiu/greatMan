@@ -6,10 +6,10 @@
     {
       "code": "001234",
       "name": "泰慕士",
-      "hold_shares": 900,
+      "hold_shares": 500,
       "cost_price": 28.2878,
-      "close_price": 23.94,
-      "unrealized_profit": -3913.0,
+      "close_price": 24.94,
+      "unrealized_profit": -1673.89,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -28,8 +28,8 @@
       "name": "嘉环科技",
       "hold_shares": 1000,
       "cost_price": 19.8032,
-      "close_price": 16.92,
-      "unrealized_profit": -2883.2,
+      "close_price": 16.89,
+      "unrealized_profit": -2913.2,
       "tags": "持仓",
       "source": "broker_xls"
     }
@@ -1842,17 +1842,17 @@
     "sells": [],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": 0.0,
-    "unrealized_profit": 0.0,
-    "net_profit": 0.0,
+    "realized_profit": -1205.18,
+    "unrealized_profit": 2209.11,
+    "net_profit": 1003.93,
     "unrealized_positions": [
       {
         "code": "001234",
         "name": "泰慕士",
-        "hold_shares": 900,
+        "hold_shares": 500,
         "cost_price": 28.2878,
-        "close_price": 23.94,
-        "float_pnl_est": -3913.0,
+        "close_price": 24.94,
+        "float_pnl_est": -1673.89,
         "source": "broker_xls"
       },
       {
@@ -1869,8 +1869,8 @@
         "name": "嘉环科技",
         "hold_shares": 1000,
         "cost_price": 19.8032,
-        "close_price": 16.92,
-        "float_pnl_est": -2883.2,
+        "close_price": 16.89,
+        "float_pnl_est": -2913.2,
         "source": "broker_xls"
       }
     ],
@@ -1880,19 +1880,40 @@
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
     ],
     "source": "broker_xls",
-    "broker_synced_at": "2026-06-01T15:10:14",
-    "broker_source_file": "交割单_20260601_075535.xls",
+    "broker_synced_at": "2026-06-03T10:10:17",
+    "broker_source_file": "交割单_20260603_081745.xls",
     "broker_source_files": [
-      "交割单_20260601_075535.xls"
+      "交割单_20260603_081745.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-06-01",
-    "broker_realized_profit": 0.0,
-    "broker_unrealized_change": 0.0,
-    "broker_net_profit": 0.0,
+    "broker_realized_profit": -1205.18,
+    "broker_unrealized_change": 2209.11,
+    "broker_net_profit": 1003.93,
     "broker_buys": [],
-    "broker_sells": [],
-    "broker_day_trades": [],
+    "broker_sells": [
+      {
+        "code": "001234",
+        "name": "泰慕士",
+        "quantity": 400,
+        "price": 25.3,
+        "source": "broker_xls",
+        "trade_time": "﻿10:02:40",
+        "realized_profit": -1205.18
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "001234",
+        "name": "泰慕士",
+        "event": "sell",
+        "quantity": 400,
+        "price": 25.3,
+        "settlement_amount": 10109.93,
+        "realized_profit": -1205.18,
+        "trade_time": "﻿10:02:40"
+      }
+    ],
     "broker_closed_positions": []
   },
   "position_operations_today": [],
@@ -1958,7 +1979,7 @@
     "notes": []
   },
   "sell_events_today": [],
-  "broker_summary_synced_at": "2026-06-01T15:10:14",
+  "broker_summary_synced_at": "2026-06-03T10:10:17",
   "holdings_watchlist": [
     {
       "code": "000967",
@@ -2000,10 +2021,10 @@
     {
       "code": "001234",
       "name": "泰慕士",
-      "hold_shares": 900,
+      "hold_shares": 500,
       "cost_price": 28.2878,
-      "close_price": 23.94,
-      "unrealized_profit": -3913.0,
+      "close_price": 24.94,
+      "unrealized_profit": -1673.89,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -2022,8 +2043,8 @@
       "name": "嘉环科技",
       "hold_shares": 1000,
       "cost_price": 19.8032,
-      "close_price": 16.92,
-      "unrealized_profit": -2883.2,
+      "close_price": 16.89,
+      "unrealized_profit": -2913.2,
       "tags": "持仓",
       "source": "broker_xls"
     }
@@ -2031,9 +2052,9 @@
   "holdings_broker_as_of": "2026-06-01",
   "account_pnl_broker": {
     "as_of": "2026-06-01",
-    "cash_available": 305.74,
-    "market_value": 156806.0,
-    "total_assets": 157111.74,
+    "cash_available": 10415.67,
+    "market_value": 147700.0,
+    "total_assets": 158115.67,
     "position_count": 3,
     "source": "broker_xls"
   },

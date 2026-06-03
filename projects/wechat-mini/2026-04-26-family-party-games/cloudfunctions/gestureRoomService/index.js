@@ -1,5 +1,5 @@
 const cloud = require('wx-server-sdk')
-const jp = require('../roomService/joinPlayerPatch')
+const jp = require('./joinPlayerPatch')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
@@ -153,7 +153,8 @@ async function createRoom(event) {
     updatedAt: Date.now()
   }
 
-  const rid = (await db.collection(ROOMS).add({ data: room })).id
+  const addRes = await db.collection(ROOMS).add({ data: room })
+  const rid = addRes.id || addRes._id
 
   const player = {
     roomId: rid,

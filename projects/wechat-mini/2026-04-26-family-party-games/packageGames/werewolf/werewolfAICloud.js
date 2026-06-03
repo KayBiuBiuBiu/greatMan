@@ -1,9 +1,9 @@
 /**
- * AI 主持云函数 werewolfAIService
+ * AI 主持云函数 werewolfAIService（仅狼人杀分包使用，勿放主包 utils）
  */
 let configEnv
 try {
-  const cfg = require('../cloud-env.js')
+  const cfg = require('../../cloud-env.js')
   configEnv = (cfg && cfg.envId) || ''
 } catch (e) {
   configEnv = ''
