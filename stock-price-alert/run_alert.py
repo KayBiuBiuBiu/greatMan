@@ -8905,9 +8905,42 @@ def main() -> int:
     first_round = True
     last_empty_watch_log_mono = 0.0
     poll_rounds_done = 0
+    _last_config_mtime = args.config.stat().st_mtime if args.config.exists() else 0
 
     try:
         while True:
+            # 检查 config 是否有变更，若有则热加载
+            try:
+                current_mtime = args.config.stat().st_mtime if args.config.exists() else 0
+                if current_mtime > _last_config_mtime:
+                    _emit_main_line(
+                        f"[配置] 检测到 config.json 变更，热加载中...",
+                        event="config_hot_reload_start",
+                    )
+                    try:
+                        from config_version_manager import ConfigVersionManager
+                        new_cfg = merge_full_config(config_path=args.config)
+
+                        # 验证新配置
+                        from config_validate import validate_merged_config_or_exit
+                        validate_merged_config_or_exit(new_cfg, args.config, verbose=False)
+
+                        cfg.update(new_cfg)
+                        _last_config_mtime = current_mtime
+                        _emit_main_line(
+                            "[配置] ✅ 配置已热加载，新参数已生效",
+                            event="config_hot_reload_success",
+                        )
+                    except Exception as e:
+                        _emit_main_line(
+                            f"[配置] ❌ 配置热加载失败: {e}，继续使用旧配置",
+                            event="config_hot_reload_fail",
+                            level=logging.WARNING,
+                        )
+                        _last_config_mtime = current_mtime  # 防止重复加载
+            except Exception as e:
+                logger.warning(f"配置热加载异常: {e}")
+
             while True:
                 try:
                     line = cmd_queue.get_nowait()

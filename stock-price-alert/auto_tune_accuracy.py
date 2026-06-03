@@ -703,8 +703,44 @@ def main() -> int:
         print("🔍 dry-run 模式：未写入配置。")
         return 0
 
-    backup_path = save_config(config_path, cfg)
-    print(f"💾 已备份原配置: {backup_path}")
+    # 使用版本管理器记录参数变更
+    try:
+        from config_version_manager import ConfigVersionManager, ParameterChange
+
+        vm = ConfigVersionManager(config_path)
+
+        # 转换 Change 对象为 ParameterChange
+        param_changes = [
+            ParameterChange(
+                param_path=c.path,
+                old_value=c.old,
+                new_value=c.new,
+                reason=c.reason,
+                performance_metric=f"hit_rate: {c.hit_rate:.0%} (n={c.samples})" if c.hit_rate else None,
+            )
+            for c in changes
+        ]
+
+        reason = f"自动调参: {args.days}天回测"
+        success, msg = vm.apply_parameter_changes(
+            param_changes,
+            reason=reason,
+            source="auto_tune",
+            dry_run=False,
+        )
+
+        if success:
+            print(f"💾 {msg}")
+        else:
+            print(f"❌ {msg}")
+            return 1
+
+    except ImportError:
+        # 版本管理器不可用时降级为旧逻辑
+        backup_path = save_config(config_path, cfg)
+        print(f"💾 已备份原配置: {backup_path}")
+        print(f"✅ 已写回配置: {config_path}")
+
     print(f"✅ 已写回配置: {config_path}")
     maybe_send_email(
         enabled=bool(args.email),

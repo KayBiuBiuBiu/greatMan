@@ -1,0 +1,828 @@
+{
+  "version_id": "v20260603_205137",
+  "timestamp": "2026-06-03T20:51:37.794908",
+  "source": "auto_tune",
+  "changes": [
+    {
+      "param_path": "drawdown_alert.warn_1_ratio",
+      "old_value": -0.06,
+      "new_value": -0.07,
+      "reason": "测试版本管理",
+      "performance_metric": "hit_rate: 95% (n=299)"
+    }
+  ],
+  "reason": "测试自动调参集成",
+  "config_snapshot": {
+    "poll_interval_seconds": 30,
+    "trading_closed_interval": 60,
+    "alert_cooldown_minutes": 5,
+    "alert_price_buffer": 0.02,
+    "run_only_in_trading_hours": true,
+    "performance": {
+      "kline_cache_ttl_sec": 900,
+      "sector_kline_cache_ttl_sec": 3600,
+      "index_kline_cache_ttl_sec": 600,
+      "fetch_minute_kline_today": false,
+      "minute_kline_max_bars": 256,
+      "minute_kline_cache_ttl_sec": 120,
+      "minute_kline_max_per_round": 0,
+      "minute_kline_am_session_only": false,
+      "log_poll_segment_ms": true,
+      "async_minute_kline": {
+        "enabled": false,
+        "refresh_sec": 60,
+        "max_bars": 240
+      },
+      "enable_parallel_fetch": true,
+      "fetch_max_workers": 4,
+      "fetch_max_concurrency": 4,
+      "request_min_interval_sec": 0,
+      "hub_poll_start_offset_sec": 3,
+      "safe_get_jitter_sec_min": 0.25,
+      "safe_get_jitter_sec_max": 1.2,
+      "http_domain_bucket_rps": 0,
+      "http_domain_bucket_hosts": [],
+      "process_watch_max_workers": 1,
+      "name_prewarm_max_workers": 4,
+      "hub_warm_timeout_sec": 12,
+      "hub_warm_min_fraction": 0.85
+    },
+    "monitoring": {
+      "watchlist_only": false,
+      "skip_startup_daily_select": false
+    },
+    "ml_forward4": {
+      "enabled": false,
+      "model_path": "data/ml_forward4_nb.json",
+      "min_bars_infer": 80,
+      "select_gate_enabled": false,
+      "select_min_up_prob_quality": 0.42,
+      "select_min_up_prob_watch": 0.36,
+      "select_strict_no_prob": false,
+      "select_adaptive_by_mood": {
+        "enabled": true,
+        "strong_bull": {
+          "select_min_up_prob_quality": 0.38,
+          "select_min_up_prob_watch": 0.32
+        },
+        "range": {},
+        "weak_bear": {
+          "select_min_up_prob_quality": 0.52,
+          "select_min_up_prob_watch": 0.44
+        }
+      },
+      "sector_strength": {
+        "enabled": false,
+        "lookback_days": 5,
+        "outperform_threshold": 0.012,
+        "quality_adjust": -0.02,
+        "watch_adjust": -0.02,
+        "index_benchmark_ts_code": "000001.SH",
+        "clamp_min": 0.1,
+        "clamp_max": 0.9
+      }
+    },
+    "notifications": {
+      "aggregate_interval_alerts": true,
+      "aggregate_max_items": 20,
+      "aggregate_trend_alerts": true,
+      "aggregate_trend_max_items": 15,
+      "remote_channel": "both",
+      "wecom_webhook": {
+        "enabled": true,
+        "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ebb26e81-7710-4bf9-aa93-7478f5452813",
+        "msgtype": "markdown"
+      }
+    },
+    "quant_selector": {
+      "score_min_quality": 6.0,
+      "score_min_watch": 5.0,
+      "profit_1y_min": 0.0,
+      "win_1y_min": 50.0,
+      "profit_3y_floor": -8.0,
+      "exclude_star_board": true,
+      "sw_l1_pool": {
+        "enabled": true,
+        "picks_per_industry": 10,
+        "max_stocks": 100,
+        "min_score": null,
+        "strength_tiers_enabled": false,
+        "strength_lookback_days": 5,
+        "use_relative_to_index": true,
+        "strength_benchmark_ts_code": "000001.SH",
+        "strength_fetch_sleep_sec": 0.06,
+        "top_third_picks": 2,
+        "mid_third_picks": 1,
+        "bottom_third_max_picks": 1,
+        "bottom_tier_min_score": null,
+        "bottom_tier_min_score_delta": 0.5,
+        "unmapped_strength_tier": "bottom"
+      },
+      "cluster_pool": {
+        "enabled": true,
+        "after_sw_l1": true,
+        "n_clusters": 12,
+        "picks_per_cluster": 2,
+        "max_stocks": 100,
+        "min_score": null,
+        "random_state": null,
+        "features": [
+          "volatility_20d",
+          "momentum_20d",
+          "momentum_5d",
+          "volume_ratio_5_20",
+          "range_pct_20d"
+        ]
+      },
+      "use_tushare_for_daily": true,
+      "tushare_rt_k_enabled": true,
+      "use_stock_basic_cache_universe": true,
+      "per_stock_sleep_sec": 0.0,
+      "daily_select_max_workers": 10,
+      "enable_financial_factors": true,
+      "enable_margin_factors": true,
+      "enable_top_inst_factors": true,
+      "enable_moneyflow_factors": true,
+      "enable_industry_moneyflow_factors": true,
+      "enable_hot_stock_factors": true,
+      "enable_hot_concept_factors": true,
+      "hot_concept_top_n": 5,
+      "enable_broker_recommend_factors": true,
+      "factor_intraday_refresh_enabled": true,
+      "factor_refresh_interval_sec": 600,
+      "hot_stock_intraday_refresh_enabled": true,
+      "hot_stock_refresh_interval_sec": 1800,
+      "factor_weights": {
+        "trend": 3.0,
+        "box_position": 2.0,
+        "volatility": 1.5,
+        "volume_ratio": 1.5,
+        "roe_min": 0.08,
+        "revenue_yoy_min": 0.1,
+        "margin_change_pct_threshold": 0.03,
+        "inst_buy_net_threshold": 1000000.0,
+        "moneyflow_individual_threshold1": 50000000.0,
+        "moneyflow_individual_threshold2": 200000000.0,
+        "moneyflow_individual_bonus1": 1.0,
+        "moneyflow_individual_bonus2": 2.0,
+        "moneyflow_industry_threshold1": 500000000.0,
+        "moneyflow_industry_threshold2": 2000000000.0,
+        "moneyflow_industry_bonus1": 1.0,
+        "moneyflow_industry_bonus2": 2.0,
+        "hot_stock_bonus": 1.0,
+        "hot_stock_extra_bonus": 1.0,
+        "hot_concept_bonus": 1.0,
+        "broker_recommend_bonus1": 1.0,
+        "broker_recommend_bonus2": 2.0,
+        "broker_recommend_count1": 2,
+        "broker_recommend_count2": 5,
+        "max_bonus": 3.0
+      },
+      "use_sqlite_cache": true,
+      "max_stale_calendar_days": 2,
+      "afternoon_repeat_boost": {
+        "enabled": false,
+        "lookback_calendar_days": 15,
+        "points_per_distinct_day": 0.08,
+        "max_bonus": 0.35,
+        "state_path": "data/afternoon_repeat_hits.json",
+        "retain_calendar_days": 45
+      },
+      "picks_history_snapshot": {
+        "enabled": true,
+        "dir": "data/picks_history"
+      },
+      "select_candidate_filters": {
+        "enabled": true,
+        "range_lookback_days": 20,
+        "range_position_max": 0.7,
+        "strategy_sell_score_max": 70,
+        "skip_if_has_position_tag": true
+      }
+    },
+    "strategy_signal": {
+      "min_score_by_strategy": {
+        "ma_dip": 67.0,
+        "box_breakout": 72.0,
+        "range_arbitrage": 68.0
+      }
+    },
+    "strategy_buy_filter": {
+      "enabled": true,
+      "min_volume_ratio": 1.0,
+      "block_weak_bear": false,
+      "use_intraday_position_filter": true,
+      "min_intraday_position": 0.2,
+      "max_intraday_position": 0.9,
+      "require_basic_quality": true,
+      "basic_quality_roe_min": 0.1,
+      "basic_quality_pe_max": 30.0,
+      "sector_buy_cross_check": {
+        "enabled": false,
+        "mode": "vote",
+        "min_evaluated_dims": 2,
+        "min_pass_votes": 2,
+        "pass_weighted_threshold": 0.5,
+        "weights": {
+          "sector_rs_vs_index": 1.0,
+          "sector_above_ma20": 1.0,
+          "stock_vs_sector_rs": 1.0
+        },
+        "sector_rs_vs_index_margin": -0.003,
+        "ma20_tolerance": 0.002,
+        "stock_vs_sector_max_lag": 0.02,
+        "require_sector_bk": true
+      },
+      "adaptive_by_mood": {
+        "enabled": true,
+        "strong_bull": {
+          "min_intraday_position": 0.25,
+          "max_intraday_position": 0.88
+        },
+        "range": {},
+        "weak_bear": {
+          "min_intraday_position": 0.3,
+          "max_intraday_position": 0.88,
+          "min_volume_ratio": 1.1,
+          "sector_buy_cross_check": {
+            "min_pass_votes": 2,
+            "min_evaluated_dims": 2
+          }
+        }
+      }
+    },
+    "position_suggestion": {
+      "enabled": true,
+      "rules": {
+        "sell": {
+          "profit_to_take": 0.15,
+          "profit_break_ma5": true,
+          "loss_stop": -0.08,
+          "loss_below_ma20_and_ma60": true,
+          "bearish_prob_threshold": 0.7,
+          "box_high_threshold": 0.85,
+          "volume_ratio_low": 0.8,
+          "market_weak_bear_sell": true,
+          "margin_retreat_enabled": true,
+          "margin_retreat_threshold": -0.2
+        },
+        "add": {
+          "loss_min": -0.2,
+          "loss_max": -0.05,
+          "require_above_ma20": true,
+          "box_low_threshold": 0.4,
+          "min_volume_ratio": 0.8,
+          "forbid_market_weak_bear": true,
+          "add_amount_tier1": 6000,
+          "add_amount_tier2": 9000,
+          "loss_tier2": -0.15
+        }
+      }
+    },
+    "scan_pool_max": 0,
+    "daily_pick_count": 6,
+    "dip_display_filter": {
+      "enabled": true,
+      "max_change_pct": 6.0,
+      "max_intraday_position": 0.9
+    },
+    "afternoon_refresh": {
+      "enabled": true,
+      "trigger_time": "11:35",
+      "max_picks": 30,
+      "poll_during_lunch": true,
+      "min_chg_pct": 0.15,
+      "max_chg_pct": 10.0,
+      "min_vol_ratio": 0.55,
+      "max_intraday_position": 0.93,
+      "use_akshare_volume": true,
+      "pm_use_afternoon_quality_pool": false
+    },
+    "midday_ops": {
+      "enabled": true,
+      "poll_during_lunch": true,
+      "run_refresh_after_hhmm": "11:35",
+      "max_intraday_position": 0.85,
+      "precompute_up_pct": 2.0,
+      "precompute_down_pct": 2.0,
+      "liquidity_warn_equiv_30m_wan": 2000.0,
+      "liquidity_use_akshare_spot": false
+    },
+    "capital": {
+      "total": 528166,
+      "max_total_position_ratio": 0.5,
+      "max_single_stock_ratio": 0.3
+    },
+    "buy_rule": {
+      "base_position": 1000,
+      "add_1_ratio": -0.03,
+      "add_1_money": 800,
+      "add_2_ratio": -0.06,
+      "add_2_money": 700,
+      "forbid_add_ratio": -0.08
+    },
+    "risk_rule": {
+      "stop_loss_ratio": -0.05,
+      "take_profit_short": 0.05,
+      "take_profit_wave": 0.1
+    },
+    "drawdown_alert": {
+      "enabled": true,
+      "warn_1_ratio": -0.07,
+      "warn_2_ratio": -0.06,
+      "warn_3_ratio": -0.1,
+      "alert_ignore_codes": []
+    },
+    "trend_slippage_alert": {
+      "enabled": true,
+      "require_resolved_bk": false,
+      "min_pillars_weak": 1,
+      "stock_min_weak_dims": 1,
+      "sector_min_weak_dims": 2,
+      "index_weak_mult_max": 0.99,
+      "index_5d_ret_weak": -0.008,
+      "volume_spike_vs_ma20": 1.85,
+      "near_high_20_ratio": 0.88,
+      "atr_tiers": {
+        "enabled": true,
+        "method": "wilder",
+        "lookback": 20,
+        "tiers": [
+          {
+            "max_close_atr_pct": 2.0,
+            "stock_min_weak_dims": 2,
+            "sector_min_weak_dims": 2,
+            "min_pillars_weak": 2
+          },
+          {
+            "max_close_atr_pct": 4.0,
+            "stock_min_weak_dims": 2,
+            "sector_min_weak_dims": 2,
+            "min_pillars_weak": 2
+          },
+          {
+            "max_close_atr_pct": null,
+            "stock_min_weak_dims": 3,
+            "sector_min_weak_dims": 3,
+            "min_pillars_weak": 2
+          }
+        ]
+      },
+      "verbose_trend_alert": true,
+      "min_price": 0,
+      "min_float_mv_yi": 0,
+      "min_volume_ratio": 0.2,
+      "alert_ignore_codes": [],
+      "require_consecutive_trade_days": 1,
+      "dynamic_adaptive": {
+        "enabled": true,
+        "ma_period": 20,
+        "bull_min_pillars": 3,
+        "bear_min_pillars": 2,
+        "volume_ratio_active": 1.2,
+        "use_volume_filter": false,
+        "use_mood_three_tier": true,
+        "strong_bull_min_pillars": 4,
+        "range_min_pillars": 3,
+        "weak_bear_min_pillars": 2,
+        "rsi_period": 14,
+        "rsi_strong_bull_min": 56,
+        "rsi_weak_bear_max": 44,
+        "bb_period": 20,
+        "bb_width_min_for_strong": 0.012,
+        "sector_rs_enabled": false,
+        "sector_rs_ret_days": 20,
+        "sector_rs_outperform_pct": 0.005,
+        "sector_rs_underperform_pct": -0.005,
+        "sector_rs_strong_delta": 1,
+        "sector_rs_weak_delta": -1
+      }
+    },
+    "sector_index_overrides": {},
+    "auto_tune": {
+      "feedback_fp_lookback_days": 90,
+      "take_profit_semantics_auto": true,
+      "take_profit_semantics_min_samples": 25,
+      "take_profit_hr_switch_to_legacy": 0.15,
+      "take_profit_hr_switch_to_correctness": 0.72,
+      "hit_eval_grid_enabled": true,
+      "hit_eval_grid_window_days": 30,
+      "hit_eval_grid_buy_hit_r1_above_pct": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0
+      ],
+      "hit_eval_grid_min_strategy_scored": 10,
+      "hit_eval_optimize_pause": false,
+      "hit_eval_param_locks": []
+    },
+    "kline_store": {
+      "enabled": true,
+      "db_path": "data/daily_klines.db",
+      "fresh_hours_after_sync": 36,
+      "divergence_warn_price_pct": null,
+      "sync_skip_min_bars": 50,
+      "sync_max_stale_calendar_days": 2,
+      "sync_fetch_lmt": 1020,
+      "sync_target_bars": 800,
+      "use_indicator_last": false
+    },
+    "alert_log": {
+      "enabled": true,
+      "share_kline_db": true,
+      "db_path": "data/alert_events.db",
+      "bearish_hit_threshold_pct_1d": -2,
+      "bearish_hit_threshold_pct_3d": -2.5,
+      "bearish_hit_threshold_pct_5d": -3,
+      "position_suggestion_eval": {
+        "sell_hit_r5_below_pct": -0.5,
+        "sell_miss_r5_above_pct": 1.5,
+        "add_hit_r5_above_pct": 0.5,
+        "add_miss_r5_below_pct": -2.0,
+        "hold_hit_abs_r5_below_pct": 3.0,
+        "hold_miss_abs_r5_above_pct": 6.0
+      },
+      "strategy_hit_eval": {
+        "buy_hit_r5_above_pct": 0.0,
+        "sell_hit_r5_below_pct": 0.0,
+        "buy_hit_r1_above_pct": 0.0,
+        "sell_hit_r1_below_pct": 0.0
+      },
+      "risk_stop_take_eval": {
+        "take_profit_hit_r1_above_pct": 0.5,
+        "take_profit_hit_for_correctness": 1.0
+      }
+    },
+    "ml_filter": {
+      "enabled": true,
+      "model_path": "data/ml_bearish_nb.json",
+      "apply_to_alert_types": [
+        "trend_slip"
+      ],
+      "bearish_prob_threshold": 0.6,
+      "kline_rf_enabled": false,
+      "kline_rf_db_path": "data/baostock_full.db",
+      "kline_rf_table": "daily_klines",
+      "kline_rf_model_path": "models/kline_rf.pkl",
+      "kline_rf_suppress_below": 0.3,
+      "suppress_combo": "any",
+      "external_flow_features_enabled": false,
+      "external_flow_days": 10,
+      "external_flow_north_max_lag_days": 120,
+      "external_flow_warn_stale_north": false,
+      "watch_ml_reference_enabled": false,
+      "reference_line_include_position_hint": false
+    },
+    "ops_automation": {
+      "enabled": true,
+      "preopen_enabled": true,
+      "preopen_cutoff_hhmm": "09:20",
+      "after_close_enabled": true,
+      "after_close_hhmm": "15:10",
+      "friday_weekly_enabled": true,
+      "backtest_since_days": 7,
+      "auto_tune_apply": true,
+      "auto_tune_email": true,
+      "param_optimization_enabled": false,
+      "auto_tune_selector_filters": {
+        "enabled": true,
+        "run_on": "daily",
+        "min_snapshot_files": 20,
+        "horizon": 5,
+        "min_grid_eligible_samples": 15,
+        "min_best_filtered_samples": 20,
+        "range_min": 0.5,
+        "range_max": 0.85,
+        "range_step": 0.05,
+        "sell_min": 50.0,
+        "sell_max": 85.0,
+        "sell_step": 5.0,
+        "range_only": false,
+        "require_range_pos": true,
+        "max_range_delta": 0.1,
+        "max_sell_score_delta": 15,
+        "skip_write_if_exceeds_delta": true,
+        "apply": true,
+        "notify": true,
+        "history_dir": null,
+        "keep_config_backups": 5,
+        "include_reject": false,
+        "no_quality": false,
+        "no_watch": false,
+        "log_history_comparison": true,
+        "notify_history_comparison": false,
+        "rollback_guard_enabled": false,
+        "rollback_eval_delay_calendar_days": 3,
+        "rollback_min_eval_samples": 12,
+        "rollback_mean_ret_drop": 0.004,
+        "rollback_notify": true,
+        "rollback_notify_on_accept": false
+      },
+      "watchlist_liquidity_prune": {
+        "enabled": false,
+        "lookback_days": 20,
+        "min_avg_amount_wan": 5000.0,
+        "consecutive_days_below": 5,
+        "state_path": "data/liquidity_prune_state.json",
+        "log_path": "data/watchlist_liquidity_prune.log",
+        "notify": false
+      },
+      "ml_train_weekly": true,
+      "ml_train_days": 180,
+      "ml_train_min_samples": 18,
+      "self_health_enabled": true,
+      "self_health_kline_max_lag_calendar_days": 1,
+      "self_health_pending_alerts_min": 200,
+      "self_health_sector_cache_ttl_mult": 2,
+      "friday_kline_rf_train_enabled": false,
+      "incremental_nb_after_close": false,
+      "incremental_nb_days": 30,
+      "incremental_nb_min_samples": 12,
+      "friday_buy_filter_digest_enabled": true,
+      "buy_filter_digest_forward_days": 5,
+      "buy_filter_digest_max_events": 200,
+      "ml_forward4_train_weekly": true,
+      "ml_forward4_train_min_samples": 2000,
+      "ml_forward4_train_max_secids": 0,
+      "ml_forward4_train_min_bars": 120,
+      "daily_summary_enabled": true,
+      "daily_summary_email_enabled": false,
+      "broker_daily_report_email_enabled": true,
+      "broker_sync_to_summary_enabled": true,
+      "broker_sync_adopt_signals_enabled": true,
+      "broker_sync_overwrite_profit": true,
+      "broker_signal_match_days": 5,
+      "broker_xls_use_latest_only": true,
+      "broker_sync_align_holdings": true,
+      "broker_sync_on_startup_enabled": true,
+      "broker_sync_startup_lookback_days": 3,
+      "broker_sync_after_close_enabled": true,
+      "weekly_broker_report_enabled": true,
+      "weekly_broker_report_hhmm": "09:30",
+      "weekly_broker_report_email_enabled": true,
+      "broker_period_report_enabled": true,
+      "broker_period_report_email_enabled": true,
+      "broker_period_report_catchup_days": 5,
+      "pnl_period_report_enabled": false,
+      "pnl_period_report_email_enabled": false,
+      "pnl_period_report_catchup_days": 5,
+      "self_improve_operation_feedback": {
+        "enabled": true,
+        "evaluate_days": 30,
+        "adjust_step": 2,
+        "max_change": 10,
+        "improve_threshold_pct": 2.0,
+        "degrade_threshold_pct": -1.0,
+        "eval_n_days": 5,
+        "min_samples": 5,
+        "match_window_minutes": 10,
+        "run_on": "weekly_friday",
+        "min_score_floor": 50.0,
+        "min_score_ceiling": 90.0,
+        "broker_signal_match_days": 5
+      },
+      "self_improve_from_summary_enabled": true,
+      "self_improve_lookback_days": 5,
+      "self_improve_blend_weight": 0.25,
+      "self_improve_use_trade_profit": true,
+      "self_improve_trade_weight": 0.2,
+      "self_improve_trade_scale_yuan": 5000.0,
+      "watchlist_auto_replenish": {
+        "enabled": false,
+        "min_watchlist_count": 50,
+        "target_count": 50,
+        "max_add_per_run": 15,
+        "min_quality_score": 6.5,
+        "min_watch_score": 6.0,
+        "note": "自动补充(优质/观察)",
+        "notify": false
+      }
+    },
+    "email_command_bot": {
+      "enabled": false,
+      "use_shared_mail_config": true,
+      "imap_server": "",
+      "imap_port": 993,
+      "imap_username": "",
+      "imap_password": "",
+      "imap_folder": "INBOX",
+      "trusted_senders": [],
+      "poll_interval_sec": 45,
+      "mark_seen": true,
+      "auto_backtest_on_take_profit_hit_change": false
+    },
+    "realtime_hub": {
+      "enabled": true,
+      "poll_interval_sec": 5,
+      "ws_enabled": false,
+      "ws_transport": "",
+      "ws_url": "",
+      "ws_reconnect_sec": 5,
+      "ws_ping_interval_sec": 30,
+      "em_sse_url": "",
+      "em_sse_fields": "",
+      "em_sse_slots": 4,
+      "em_sse_burst_sec": 12,
+      "em_sse_read_timeout_sec": 60
+    },
+    "sector_em": {
+      "api_hosts": [],
+      "industry_clist_fs": [],
+      "cache_filename": "sector_index_cache.json",
+      "industry_map_ttl_sec": 3600
+    },
+    "scan_rule": {
+      "min_price": 5,
+      "max_price": 32,
+      "min_amount": 5000,
+      "min_daily_amount_wan": 6500,
+      "min_float_mv_yi": 28,
+      "max_float_mv_yi": 750,
+      "full_scan_interval_days": 3,
+      "max_turnover": 15,
+      "watchlist_note": "选股池写入"
+    },
+    "scan_meta": {
+      "last_full_scan_iso": null,
+      "last_scan_pool_count": 0
+    },
+    "macro_risk": {
+      "index_mood_mult_override": 0,
+      "index_list": [
+        "000001.SH",
+        "000300.SH",
+        "399006.SZ"
+      ]
+    },
+    "sources": {
+      "ssl_verify": false,
+      "ssl_ca_bundle": null,
+      "quote": {
+        "live_sources": [
+          "sina",
+          "qq",
+          "xueqiu"
+        ]
+      },
+      "tushare": {
+        "enabled": true,
+        "token": "9645c09dc622a29b59f0ad40b45c7844e2cf411eca1fb1a69c7dd745",
+        "pro_dataapi_base": "https://api.tushare.pro/dataapi",
+        "dataapi_connect_retries": 6,
+        "dataapi_retry_base_delay_sec": 0.6,
+        "stock_rt_k_enabled": true,
+        "stock_rt_k_fallback": true,
+        "sh_index_free_fallback": false,
+        "sw_enabled": true,
+        "daily_max_per_minute": 500,
+        "adj_factor_max_per_minute": 200,
+        "sw_daily_max_per_minute": 200,
+        "sw_daily_bulk_enabled": false,
+        "sw_daily_bulk_max_bars": 120,
+        "stock_basic_cache_path": "data/stock_basic_cache.json",
+        "stock_to_sw_path": "data/stock_to_sw.json",
+        "financial_cache_db_path": "data/financial_factors.db"
+      },
+      "quote_ut": "fa5fd1943c7b386f172d6893dbfba10b"
+    },
+    "data_health": {
+      "enabled": true,
+      "host_consecutive_fail_threshold": 10,
+      "backoff_cap_sec": 6,
+      "backoff_base_sec": 0.25,
+      "full_outage_consecutive_notify_threshold": 0,
+      "full_outage_email_enabled": false,
+      "recovery_notify_enabled": true,
+      "suppress_trend_rounds_after_full_outage": 0,
+      "heartbeat_path": "logs/data_heartbeat.json",
+      "heartbeat_interval_sec": 180
+    },
+    "logging": {
+      "enabled": true,
+      "file": "logs/run_alert.jsonl",
+      "max_bytes": 5000000,
+      "backup_count": 3,
+      "level": "INFO",
+      "console_mirror": false
+    },
+    "watchlist": [
+      {
+        "name": "盛屯矿业",
+        "code": "600711",
+        "market": "sh",
+        "enabled": true,
+        "cost_price": 12.4061,
+        "hold_shares": 8400,
+        "alert_mode": "breach",
+        "alert_below": null,
+        "alert_above": null,
+        "note": "券商持仓同步 2026-06-03（截图）",
+        "tags": "持仓",
+        "industry": ""
+      },
+      {
+        "name": "陆家嘴",
+        "code": "600663",
+        "market": "sh",
+        "enabled": true,
+        "cost_price": 7.1274,
+        "hold_shares": 700,
+        "alert_mode": "breach",
+        "alert_below": null,
+        "alert_above": null,
+        "note": "券商持仓同步 2026-06-03（截图）",
+        "tags": "持仓",
+        "industry": ""
+      },
+      {
+        "name": "永鼎股份",
+        "code": "600105",
+        "market": "sh",
+        "enabled": true,
+        "cost_price": 51.9915,
+        "hold_shares": 100,
+        "alert_mode": "breach",
+        "alert_below": null,
+        "alert_above": null,
+        "note": "券商持仓同步 2026-06-03（截图）",
+        "tags": "持仓",
+        "industry": ""
+      },
+      {
+        "name": "华天科技",
+        "code": "002185",
+        "market": "sz",
+        "enabled": true,
+        "cost_price": 19.217,
+        "hold_shares": 300,
+        "alert_mode": "breach",
+        "alert_below": null,
+        "alert_above": null,
+        "note": "券商持仓同步 2026-06-03（截图）",
+        "tags": "持仓",
+        "industry": ""
+      },
+      {
+        "name": "泰慕士",
+        "code": "001234",
+        "market": "sz",
+        "enabled": true,
+        "cost_price": 30.6981,
+        "hold_shares": 500,
+        "alert_mode": "breach",
+        "alert_below": null,
+        "alert_above": null,
+        "note": "券商持仓同步 2026-06-03（截图）",
+        "tags": "持仓",
+        "industry": ""
+      },
+      {
+        "name": "嘉环科技",
+        "code": "603206",
+        "market": "sh",
+        "enabled": true,
+        "cost_price": 19.7432,
+        "hold_shares": 1000,
+        "alert_mode": "breach",
+        "alert_below": null,
+        "alert_above": null,
+        "note": "券商持仓同步 2026-06-03（截图）",
+        "tags": "持仓",
+        "industry": ""
+      }
+    ],
+    "display": {
+      "hot_sector_quality_enabled": true,
+      "hot_sector_lookback_days": 5,
+      "hot_sector_top_fraction": 0.3,
+      "hot_sector_max_stocks": 10,
+      "hot_sector_index_benchmark_ts_code": "000001.SH",
+      "hot_sector_use_realtime": true,
+      "hot_sector_realtime_refresh_sec": 60,
+      "show_factor_summary": true,
+      "show_factor_comment": true,
+      "simplify_factor_text": true,
+      "show_moneyflow_in_factor": true,
+      "show_industry_moneyflow_in_factor": true,
+      "show_hot_stock_in_factor": true,
+      "show_hot_concept_in_factor": true,
+      "show_broker_recommend_in_factor": true,
+      "show_hot_stock_list": false,
+      "hot_stock_list_top_n": 10,
+      "show_hot_stock_quality": true,
+      "hot_stock_display_count": 10,
+      "hot_stock_top_n": 50,
+      "hot_stock_quality_section_order": "after_quality",
+      "quality_stock_filters": {
+        "enabled": true,
+        "min_change_pct": -2.0,
+        "max_change_pct": 5.0,
+        "max_intraday_position": 0.7,
+        "min_volume_ratio": 1.0,
+        "require_buy_signal": false
+      }
+    }
+  }
+}
