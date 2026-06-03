@@ -7207,6 +7207,68 @@ def _maybe_run_ops_automation(
             if bool(oa.get("auto_tune_email", True)):
                 tune_cmd.append("--email")
             _run_local_script(tune_cmd, event="after_close_auto_tune")
+
+            # 【新增】参数锁定、审批、回滚监控集成
+            try:
+                from param_lock_policy import ParamLockPolicy
+                from param_approval_mail import ParamApprovalMail
+                from auto_rollback_monitor import maybe_run_auto_rollback_monitor
+                from config_version_manager import ConfigVersionManager
+
+                # 1. 参数锁定检查
+                lock_policy = ParamLockPolicy(config_path)
+
+                # 2. 邮件审批流程（如果启用）
+                approval_cfg = oa.get("approval_mail", {})
+                if approval_cfg.get("enabled", True):
+                    mail = ParamApprovalMail(config_path)
+                    _emit_main_line(
+                        "[自动化] ✉️ 邮件审批系统已启用（参数变更将生成审批邮件）",
+                        event="after_close_approval_mail_enabled",
+                    )
+
+                # 3. 自动回滚监控启动（24h 监听性能）
+                rollback_cfg = oa.get("auto_rollback", {})
+                if rollback_cfg.get("enabled", True):
+                    # 从版本管理器获取最新版本
+                    vm = ConfigVersionManager(config_path)
+                    versions = vm.get_version_history(limit=1)
+                    current_version_id = versions[0]["version_id"] if versions else "unknown"
+
+                    # 从 daily_summary 读取当前性能指标
+                    summary_file = config_path.parent / "data" / "daily_summary.json"
+                    current_metrics = {"hit_rate": 0.5}
+                    if summary_file.exists():
+                        try:
+                            with open(summary_file, 'r', encoding='utf-8') as f:
+                                summary = json.load(f)
+                            # 简化：使用买卖比例作为命中率
+                            trades = summary.get('trades', {})
+                            buys = len(trades.get('buys', []))
+                            sells = len(trades.get('sells', []))
+                            if buys > 0:
+                                current_metrics['hit_rate'] = sells / buys
+                        except Exception:
+                            pass
+
+                    maybe_run_auto_rollback_monitor(
+                        cfg=cfg,
+                        config_path=config_path,
+                        version_id=current_version_id,
+                        current_metrics=current_metrics,
+                    )
+                    _emit_main_line(
+                        f"[自动化] 🔄 自动回滚监控已启动（版本: {current_version_id}, 24h 监听性能异常）",
+                        event="after_close_auto_rollback_monitor_enabled",
+                    )
+
+            except Exception as exc:
+                _emit_main_line(
+                    f"[自动化] 新反馈循环集成异常: {exc}",
+                    event="after_close_feedback_loop_fail",
+                    level=logging.WARNING,
+                )
+
             if bool(oa.get("param_optimization_enabled", False)):
                 _emit_main_line(
                     "[自动化] 参数优化分析开始：分析历史picks找最优参数组合",
