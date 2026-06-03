@@ -705,6 +705,20 @@ def _sell_kind_label_cn(kind: str) -> str:
     }.get(k, k or "卖出")
 
 
+def _preload_modules_for_parallelism():
+    """预加载所有IO任务需要的模块，避免线程中的首次导入延迟。
+
+    在 ThreadPoolExecutor 中，线程启动时做首次 import 会有显著延迟。
+    提前导入这些模块能让并行任务更快启动。
+    """
+    try:
+        from account_pnl_daily import build_account_pnl_summary
+        from alert_log_store import resolve_alert_db_path
+        return True
+    except Exception:
+        return False
+
+
 def build_daily_summary(
     *,
     cfg: dict[str, Any],
@@ -713,6 +727,9 @@ def build_daily_summary(
     root: Path,
     now: datetime,
 ) -> dict[str, Any]:
+    # 预加载模块，提升后续并行任务的启动速度
+    _preload_modules_for_parallelism()
+
     day_iso = now.strftime("%Y-%m-%d")
     picks_path = config_path.parent / "daily_picks.json"
     afternoon_path = config_path.parent / "afternoon_picks.json"

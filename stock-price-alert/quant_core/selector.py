@@ -9,6 +9,7 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -725,6 +726,18 @@ def load_df(code: str, *, lookback: int = 60, cfg: dict[str, Any] | None = None)
     except Exception:
         pass
     return None
+
+
+@lru_cache(maxsize=300)
+def _load_df_cached(code: str, lookback: int = 60) -> pd.DataFrame | None:
+    """LRU缓存版本的K线加载 - 用于选股并发场景。
+
+    在选股中，同一只股票会被多次加载（评分、回测1年、3年、5年）。
+    LRU缓存可以避免重复调用load_df，显著提升选股性能。
+
+    缓存容量300只，自动清理最久未使用的数据。
+    """
+    return load_df(code, lookback=lookback, cfg=None)
 
 
 def get_real_score(
@@ -1574,7 +1587,8 @@ def _eval_one_daily_select_stock(
     held_codes: frozenset[str] | None = None,
 ) -> tuple[str, dict[str, Any]]:
     """单只：拉 K 线、打分、回测、分类。返回 (bucket, row)，bucket 为 优质股/观察股/淘汰股。"""
-    df = load_df(code, lookback=lookback, cfg=cfg)
+    # 使用 LRU 缓存版本自动缓存同一轮选股中的重复访问
+    df = _load_df_cached(code, lookback=lookback)
     score = get_real_score(code, df=df, cfg=cfg)
     cdir = cfg.get("__selector_config_parent__") if isinstance(cfg, dict) else None
     if cdir:
@@ -1924,31 +1938,42 @@ def run_daily_selector(
             prog_lock = threading.Lock()
             done_ctr = 0
 
-            def _worker(ic: tuple[int, str]) -> tuple[int, str, dict[str, Any]]:
-                idx, code = ic
-                b, r = _eval_one_daily_select_stock(
-                    code,
-                    cfg=cfg_sel if isinstance(cfg_sel, dict) else {},
-                    name_map=name_map,
-                    code_to_sw=code_to_sw,
-                    th=th,
-                    lookback=lookback_sel,
-                    per_stock_sleep_sec=per_sleep,
-                    sector_excess_frac_by_code=sector_excess_frac_by_code,
-                    held_codes=held_sel_codes,
-                )
-                return idx, b, r
+            # 批处理：分组提交任务，每组内并行，组间序列
+            # 这样可以减少一次性创建的任务数，避免任务队列堆积
+            batch_size = max(20, min(100, workers * 5))
+            n_batches = (n_total + batch_size - 1) // batch_size
 
-            with ThreadPoolExecutor(max_workers=workers) as ex:
-                futures = [ex.submit(_worker, (i, c)) for i, c in enumerate(test_list)]
-                for fut in as_completed(futures):
-                    idx, bucket, row = fut.result()
-                    results.append((idx, bucket, row))
-                    with prog_lock:
-                        done_ctr += 1
-                        dn = done_ctr
-                    if dn == 1 or dn % prog_every == 0 or dn == n_total:
-                        _progress_line(dn)
+            for batch_idx in range(n_batches):
+                batch_start = batch_idx * batch_size
+                batch_end = min(batch_start + batch_size, n_total)
+                batch_codes = [(i, test_list[i]) for i in range(batch_start, batch_end)]
+
+                def _worker(ic: tuple[int, str]) -> tuple[int, str, dict[str, Any]]:
+                    idx, code = ic
+                    b, r = _eval_one_daily_select_stock(
+                        code,
+                        cfg=cfg_sel if isinstance(cfg_sel, dict) else {},
+                        name_map=name_map,
+                        code_to_sw=code_to_sw,
+                        th=th,
+                        lookback=lookback_sel,
+                        per_stock_sleep_sec=per_sleep,
+                        sector_excess_frac_by_code=sector_excess_frac_by_code,
+                        held_codes=held_sel_codes,
+                    )
+                    return idx, b, r
+
+                with ThreadPoolExecutor(max_workers=workers) as ex:
+                    batch_futures = [ex.submit(_worker, ic) for ic in batch_codes]
+                    for fut in as_completed(batch_futures):
+                        idx, bucket, row = fut.result()
+                        results.append((idx, bucket, row))
+                        with prog_lock:
+                            done_ctr += 1
+                            dn = done_ctr
+                        if dn == 1 or dn % prog_every == 0 or dn == n_total:
+                            _progress_line(dn)
+
             results.sort(key=lambda t: t[0])
             for _idx, bucket, row in results:
                 if bucket == "优质股":

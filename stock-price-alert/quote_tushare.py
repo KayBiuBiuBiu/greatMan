@@ -64,19 +64,55 @@ _SW_DAILY_BULK_CACHE: dict[tuple[str, str], pd.DataFrame | None] = {}
 _SW_DAILY_BULK_RATE_LIMITED = False
 
 
+class _SlidingWindowRateLimiter:
+    """统一的滑动窗口限流器，支持多个独立的限流通道."""
+    def __init__(self, max_per_minute: int, window_sec: float = 60.0):
+        self.max_per_minute = max(1, max_per_minute)
+        self.window_sec = window_sec
+        self.lock = threading.Lock()
+        self.timestamps: deque[float] = deque()
+
+    def acquire(self) -> None:
+        """阻塞直到获得一个令牌."""
+        if self.max_per_minute <= 0:
+            return
+        while True:
+            with self.lock:
+                now = time.monotonic()
+                # 清除过期的时间戳
+                while self.timestamps and now - self.timestamps[0] >= self.window_sec:
+                    self.timestamps.popleft()
+                # 检查是否还有配额
+                if len(self.timestamps) < self.max_per_minute:
+                    self.timestamps.append(now)
+                    return
+                # 计算需要等待的时间
+                wait_s = self.window_sec - (now - self.timestamps[0]) + 0.02
+            time.sleep(max(wait_s, 0.05))
+
+    def reset(self) -> None:
+        """重置计数器."""
+        with self.lock:
+            self.timestamps.clear()
+
+
+# 统一限流器实例（替代原有的 3 个独立限流器）
+_TUSHARE_DAILY_LIMITER = _SlidingWindowRateLimiter(500)
+_TUSHARE_ADJ_FACTOR_LIMITER = _SlidingWindowRateLimiter(180)
+_TUSHARE_SW_DAILY_LIMITER = _SlidingWindowRateLimiter(50)
+
+
+
 def _reset_daily_rate_window() -> None:
-    with _daily_rate_lock:
-        _daily_rate_mono.clear()
+    _TUSHARE_DAILY_LIMITER.reset()
 
 
 def _reset_adj_factor_rate_window() -> None:
-    with _adj_factor_rate_lock:
-        _adj_factor_rate_mono.clear()
+    _TUSHARE_ADJ_FACTOR_LIMITER.reset()
 
 
 def _reset_sw_daily_rate_window() -> None:
-    with _sw_daily_rate_lock:
-        _sw_daily_rate_mono.clear()
+    _TUSHARE_SW_DAILY_LIMITER.reset()
 
 
 def _reset_sw_daily_bulk_cache() -> None:
@@ -98,20 +134,9 @@ def _acquire_sw_daily_slot() -> None:
         lim = int(_CFG.get("sw_daily_max_per_minute", _DEFAULT_SW_DAILY_MAX_PER_MIN) or 0)
     except (TypeError, ValueError):
         lim = _DEFAULT_SW_DAILY_MAX_PER_MIN
-    if lim <= 0:
-        return
     lim = max(1, min(500, lim))
-    window = 60.0
-    while True:
-        with _sw_daily_rate_lock:
-            now = time.monotonic()
-            while _sw_daily_rate_mono and now - _sw_daily_rate_mono[0] >= window:
-                _sw_daily_rate_mono.popleft()
-            if len(_sw_daily_rate_mono) < lim:
-                _sw_daily_rate_mono.append(now)
-                return
-            wait_s = window - (now - _sw_daily_rate_mono[0]) + 0.02
-        time.sleep(max(wait_s, 0.05))
+    _TUSHARE_SW_DAILY_LIMITER.max_per_minute = lim
+    _TUSHARE_SW_DAILY_LIMITER.acquire()
 
 
 def _acquire_tushare_adj_factor_slot() -> None:
@@ -128,20 +153,9 @@ def _acquire_tushare_adj_factor_slot() -> None:
         )
     except (TypeError, ValueError):
         lim = _DEFAULT_ADJ_FACTOR_MAX_PER_MIN
-    if lim <= 0:
-        return
     lim = max(30, min(200, lim))
-    window = 60.0
-    while True:
-        with _adj_factor_rate_lock:
-            now = time.monotonic()
-            while _adj_factor_rate_mono and now - _adj_factor_rate_mono[0] >= window:
-                _adj_factor_rate_mono.popleft()
-            if len(_adj_factor_rate_mono) < lim:
-                _adj_factor_rate_mono.append(now)
-                return
-            wait_s = window - (now - _adj_factor_rate_mono[0]) + 0.02
-        time.sleep(max(wait_s, 0.05))
+    _TUSHARE_ADJ_FACTOR_LIMITER.max_per_minute = lim
+    _TUSHARE_ADJ_FACTOR_LIMITER.acquire()
 
 
 def _acquire_tushare_daily_slot() -> None:
@@ -156,20 +170,9 @@ def _acquire_tushare_daily_slot() -> None:
         lim = int(_CFG.get("daily_max_per_minute", _DEFAULT_DAILY_MAX_PER_MIN) or 0)
     except (TypeError, ValueError):
         lim = _DEFAULT_DAILY_MAX_PER_MIN
-    if lim <= 0:
-        return
     lim = max(30, min(500, lim))
-    window = 60.0
-    while True:
-        with _daily_rate_lock:
-            now = time.monotonic()
-            while _daily_rate_mono and now - _daily_rate_mono[0] >= window:
-                _daily_rate_mono.popleft()
-            if len(_daily_rate_mono) < lim:
-                _daily_rate_mono.append(now)
-                return
-            wait_s = window - (now - _daily_rate_mono[0]) + 0.02
-        time.sleep(max(wait_s, 0.05))
+    _TUSHARE_DAILY_LIMITER.max_per_minute = lim
+    _TUSHARE_DAILY_LIMITER.acquire()
 
 
 def _resolve_tushare_dataapi_base(sources: dict[str, Any] | None) -> str:
@@ -240,8 +243,23 @@ def _tushare_transient_api_msg(msg: str) -> bool:
         "reset by peer",
         "Broken pipe",
         "broken pipe",
+        "codec can't decode",
+        "decompressing data",
+        "invalid distance too far back",
+        "ContentDecodingError",
     )
     return any(x in s for x in needles)
+
+
+def _is_transient_tushare_response_exc(exc: BaseException) -> bool:
+    """响应体损坏/非 JSON（gzip 解压失败、编码错误等）视为瞬时故障。"""
+    import zlib
+
+    from requests.exceptions import ContentDecodingError
+
+    if isinstance(exc, (UnicodeDecodeError, ContentDecodingError, zlib.error)):
+        return True
+    return _tushare_transient_api_msg(str(exc))
 
 
 def _is_transient_tushare_network_exc(exc: BaseException) -> bool:
@@ -403,8 +421,11 @@ def _tushare_query_patched(self: Any, api_name: str, fields: str = "", **kwargs:
                         _backoff(attempt)
                     continue
                 try:
-                    result = json.loads(res.text)
-                except json.JSONDecodeError as je:
+                    if hasattr(res, "json"):
+                        result = res.json()
+                    else:
+                        result = json.loads(getattr(res, "text", "") or "")
+                except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as je:
                     last_exc = je
                     if attempt + 1 < retries:
                         _backoff(attempt)
@@ -426,12 +447,14 @@ def _tushare_query_patched(self: Any, api_name: str, fields: str = "", **kwargs:
                 last_exc = exc
                 if attempt + 1 < retries:
                     _backoff(attempt)
-            except (json.JSONDecodeError, KeyError, ValueError) as exc:
+            except (json.JSONDecodeError, KeyError, ValueError, UnicodeDecodeError) as exc:
                 last_exc = exc
                 if attempt + 1 < retries:
                     _backoff(attempt)
             except Exception as exc:
-                if _is_transient_tushare_network_exc(exc):
+                if _is_transient_tushare_network_exc(exc) or _is_transient_tushare_response_exc(
+                    exc
+                ):
                     last_exc = exc
                     if attempt + 1 < retries:
                         _backoff(attempt)
