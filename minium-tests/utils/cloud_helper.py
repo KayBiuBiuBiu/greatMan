@@ -177,6 +177,27 @@ class CloudHelper:
                     return len(arr)
         return 0
 
+    def _lobby_member_count_line(self, player_count, min_players=2):
+        n = int(player_count or 0)
+        return f"当前 {n} 人（至少 {min_players} 人可开始）"
+
+    def _apply_draw_view_fallback(self, page_obj, snap, room_id):
+        players = snap.get("publicPlayers") if isinstance(snap.get("publicPlayers"), list) else []
+        n = len(players) or self.count_players_in_view(snap)
+        payload = {
+            "view": snap,
+            "state": {"publicPlayers": players, "status": snap.get("roomStatus") or "waiting"},
+            "memberCountLine": self._lobby_member_count_line(n),
+            "inWaiting": True,
+            "canStart": bool(snap.get("isHost")) and n >= 2,
+        }
+        if room_id:
+            payload["roomId"] = str(room_id)
+        try:
+            page_obj.try_call_page_method("setData", payload)
+        except Exception as exc:
+            self.log(f"push_view_to_page(drawGuess) setData fallback failed: {exc}")
+
     def push_view_to_page(self, page_obj, game_key, room_id):
         if not self.enabled or not room_id:
             return {}
@@ -189,6 +210,8 @@ class CloudHelper:
                 page_obj.try_call_page_method("applyTestSyncSnapshot", snap)
         except Exception as exc:
             self.log(f"push_view_to_page({game_key}) skipped: {exc}")
+            if game_key == "drawGuess":
+                self._apply_draw_view_fallback(page_obj, snap, room_id)
         page_obj.sleep(1.2)
         return view
 

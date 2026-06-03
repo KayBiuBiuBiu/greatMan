@@ -98,13 +98,16 @@ class TestMemberDisplayFormat(BaseMiniTest):
         page = DrawPage(self)
 
         # 创建房间
-        info = page.create_room(cloud=self.cloud, difficulty="简单")
+        info = page.create_room(cloud=self.cloud)
         room_id = info.get("roomId")
         self.assertTrue(room_id, "drawGuess roomId not created")
 
         # 加入2个玩家
         seed = self._seed(page.game_key, info, count=2)
         self.cloud.wait_for_cloud_settle(1)
+
+        # 刷新大厅 UI（seed 后必须刷新才能获取新人数）
+        page.refresh_lobby(cloud=self.cloud, room_id=room_id)
 
         # 验证成员显示格式
         member_count_line = page.data_value("memberCountLine")

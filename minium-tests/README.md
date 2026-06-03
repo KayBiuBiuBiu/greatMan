@@ -1,5 +1,8 @@
 # 家庭聚会助手 Minium 自动化测试
 
+> **Coding Plan** → 先读 **[CODING_PLAN.md](./CODING_PLAN.md)**（改完怎么交给 Agent 测）。  
+> **Agent 跑测** → **[MINIUM_AGENT_HANDOFF.md](./MINIUM_AGENT_HANDOFF.md)**。
+
 ## 手动配置
 
 1. 确认 `config.json` 中的 `project_path` 指向小程序目录。

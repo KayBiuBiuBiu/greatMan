@@ -256,11 +256,15 @@ Page({
   /** 已停用增量 appendStroke；笔画在抬笔时 saveCanvasToCloud 全量同步 */
   _pushStrokeToCloud () {},
   onManualSync () {
-    if (!this.data.isMeDrawer || !this.data.isDrawingMode) {
-      return
+    if (this.data.isMeDrawer && this.data.isDrawingMode) {
+      // 绘画者：立即同步当前笔画
+      this.saveCanvasToCloud()
+      wx.showToast({ title: '已同步', icon: 'success' })
+    } else if (!this.data.isMeDrawer && this.data.inDrawingPhase) {
+      // 观看者：重新同步画布
+      this._refreshRoomState()
+      wx.showToast({ title: '已重新同步', icon: 'success' })
     }
-    this.saveCanvasToCloud()
-    wx.showToast({ title: '已同步', icon: 'success' })
   },
   _onGameStateCanvas (data) {
     if (!data) {
@@ -401,10 +405,18 @@ Page({
     wx.createSelectorQuery()
       .in(this)
       .select('#cvs2')
-      .boundingClientRect()
+      .fields({ node: true, size: true, rect: true })
       .exec((res) => {
         if (res && res[0]) {
-          this._canvasRect = res[0]
+          const rect = res[0]
+          this._canvasRect = {
+            left: rect.left || 0,
+            top: rect.top || 0,
+            width: rect.width || 280,
+            height: rect.height || 400,
+            right: (rect.left || 0) + (rect.width || 280),
+            bottom: (rect.top || 0) + (rect.height || 400)
+          }
         }
         if (cb) {
           cb()
@@ -413,19 +425,22 @@ Page({
   },
   _touchXY (t0) {
     const r = this._canvasRect
-    if (!t0) {
+    if (!t0 || !r) {
       return null
     }
-    if (r && t0.clientX != null && t0.clientY != null) {
-      return {
-        x: t0.clientX - r.left,
-        y: t0.clientY - r.top
-      }
+
+    let x = 0, y = 0
+    if (t0.clientX != null && t0.clientY != null) {
+      x = t0.clientX - (r.left || 0)
+      y = t0.clientY - (r.top || 0)
+    } else if (t0.x != null && t0.y != null) {
+      x = t0.x
+      y = t0.y
+    } else {
+      return null
     }
-    if (t0.x != null && t0.y != null) {
-      return { x: t0.x, y: t0.y }
-    }
-    return null
+
+    return { x, y }
   },
   _tryAutoEnterDrawingMode (role, st) {
     const s = st || this.data.state || {}
@@ -514,7 +529,9 @@ Page({
     }
   },
   onLoad (q) {
-    if (!isDrawGuessEnabled()) {
+    const roomIdFromQuery = (q && q.roomId) ? String(q.roomId) : ''
+    // 带 roomId 深链 / Minium 进房：不因首页开关跳走
+    if (!isDrawGuessEnabled() && !roomIdFromQuery) {
       wx.showToast({ title: '你画我猜暂未开放', icon: 'none' })
       setTimeout(function () {
         wx.reLaunch({ url: '/pages/index/index' })
@@ -664,10 +681,12 @@ Page({
       this._storeMyOpenId(v.myOpenId)
     }
     const patch = { view: v }
+    // 优先用云端 view 的玩家列表（Minium 下 state 常为空）
+    const players = mergePublicPlayers(v.publicPlayers, st.publicPlayers)
     this._patchRoomUi(patch, {
-      state: st,
+      state: Object.assign({}, st, { publicPlayers: players }),
       view: v,
-      players: mergePublicPlayers(st.publicPlayers, v.publicPlayers)
+      players: players
     })
     Object.assign(patch, this._computeDrawRole(st, v))
     refreshAiUnlockPage(this)
@@ -997,7 +1016,19 @@ Page({
   doEndG () {
     callDraw(
       { action: 'endGame', roomId: this.data.roomId },
-      { onOk: () => { this.loadView() } }
+      {
+        onOk: () => {
+          // 完整清理绘画状态
+          this._exitDrawingMode(true)
+          this.clearLocalCanvas()
+          this._allPaths = []
+          this._curPath = null
+          this._cseq = 0
+          this._canvasReadySeq = -1
+          this._canvasDataSig = ''
+          this.loadView()
+        }
+      }
     )
   },
   doSubmitGuess () {
@@ -1318,14 +1349,19 @@ Page({
       return
     }
     const seq = s.canvasSeq | 0
-    if (this._canvasReadySeq === seq && this._cvs) {
+    const isDrawing = this.data.isDrawingMode && this.data.isMeDrawer
+
+    // 避免重复初始化：只有当序列变化或开始绘画时才初始化
+    if (this._canvasReadySeq === seq && this._cvs && !isDrawing) {
       const st = this.data.state
       if (st) {
         this._onGameStateCanvas(st)
       }
       return
     }
-    setTimeout(() => this.initCanvas2d(0), 200)
+
+    // 立即初始化，不延迟
+    this.initCanvas2d(0)
   },
   initCanvas2d (retry) {
     if (!wx.createSelectorQuery) {
@@ -1397,7 +1433,17 @@ Page({
       this._allPaths.push(this._curPath)
     }
     this._curPath = null
-    this.saveCanvasToCloud()
+    this._debouncedSaveCanvas()
+  },
+
+  _debouncedSaveCanvas () {
+    if (this._saveCanvasTimer) {
+      clearTimeout(this._saveCanvasTimer)
+    }
+    this._saveCanvasTimer = setTimeout(() => {
+      this.saveCanvasToCloud()
+      this._saveCanvasTimer = null
+    }, 200)
   },
   touchCommon (e, isStart) {
     const s = this.data.state
