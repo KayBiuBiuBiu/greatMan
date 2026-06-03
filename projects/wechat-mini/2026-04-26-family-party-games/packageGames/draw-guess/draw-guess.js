@@ -166,6 +166,7 @@ Page({
   _curPath: null,
   _canvasPollTimer: null,
   _canvasDataSig: '',
+  _lastCanvasDataVer: -1,
   _replayedSeq: -1,
   _manualExitDraw: false,
   _autoEnteringDraw: false,
@@ -328,7 +329,7 @@ Page({
         return
       }
       page._refreshRoomState()
-    }, 1000)
+    }, 500)
   },
   stopCanvasPoll () {
     if (this._canvasPollTimer) {
@@ -690,6 +691,14 @@ Page({
     })
     Object.assign(patch, this._computeDrawRole(st, v))
     refreshAiUnlockPage(this)
+    // 同步 Canvas 数据给猜者看（drawing 阶段）
+    if (v.gameState && v.gameState.canvasData && v.phase === 'drawing' && !v.isDrawer) {
+      const cver = (v.gameState.canvasDataVer | 0)
+      if (cver !== this._lastCanvasDataVer) {
+        this._lastCanvasDataVer = cver
+        this.redrawCanvas(v.gameState.canvasData, cver)
+      }
+    }
     this.setData(patch, () => {
       this.tryAutoReveal()
       this.setupTicker()
@@ -1026,6 +1035,7 @@ Page({
           this._cseq = 0
           this._canvasReadySeq = -1
           this._canvasDataSig = ''
+          this._lastCanvasDataVer = -1
           this.loadView()
         }
       }
@@ -1173,6 +1183,7 @@ Page({
       this._cseq = seq
       this._canvasReadySeq = -1
       this._canvasDataSig = ''
+      this._lastCanvasDataVer = -1
       this._allPaths = []
       this._curPath = null
       this._pendingCanvasPaths = null

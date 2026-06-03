@@ -1118,5 +1118,11 @@ async function getView (roomId, openId) {
   if (isDrawer && g.phase === 'drawing' && wt) {
     view.painterWord = wt
   }
+  if (g.phase === 'drawing') {
+    view.gameState = {
+      canvasData: canvasDataForPub(g.canvasData),
+      canvasDataVer: g.canvasDataVer | 0
+    }
+  }
   return view
 }
