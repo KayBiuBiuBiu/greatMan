@@ -223,6 +223,7 @@ from quote_eastmoney import (
 from sector_em import (
     clear_round_cache as sector_clear_round_cache,
     format_sector_console_line,
+    format_global_context_line,
     resolve_sector_bk,
 )
 from risk_control import RiskManager
@@ -7206,6 +7207,21 @@ def _maybe_run_ops_automation(
             if bool(oa.get("auto_tune_email", True)):
                 tune_cmd.append("--email")
             _run_local_script(tune_cmd, event="after_close_auto_tune")
+            if bool(oa.get("param_optimization_enabled", False)):
+                _emit_main_line(
+                    "[自动化] 参数优化分析开始：分析历史picks找最优参数组合",
+                    event="after_close_param_optimization_start",
+                )
+                _run_local_script(
+                    [
+                        py,
+                        str(ROOT / "param_optimization_analysis.py"),
+                        "-c",
+                        str(config_path),
+                        "--quick-test",
+                    ],
+                    event="after_close_param_optimization",
+                )
             if bool(oa.get("incremental_nb_after_close", False)):
                 inc_days = max(7, int(oa.get("incremental_nb_days", 30) or 30))
                 inc_min = max(6, int(oa.get("incremental_nb_min_samples", 12) or 12))
@@ -7528,6 +7544,15 @@ def process_watch_pack(
             code=code,
             rk=rk,
         )
+        # 全球背景显示
+        global_ctx_line = format_global_context_line(code)
+        if global_ctx_line:
+            _emit_watch_line(
+                global_ctx_line,
+                event="watch_global_context",
+                code=code,
+                rk=rk,
+            )
         if buy_mail_bucket == "热股精选" and isinstance(quality_pick_row, dict):
             _emit_hot_stock_quality_reason_lines(
                 quality_pick_row,
@@ -7583,6 +7608,15 @@ def process_watch_pack(
         code=code,
         rk=rk,
     )
+    # 全球背景显示
+    global_ctx_line = format_global_context_line(code)
+    if global_ctx_line:
+        _emit_watch_line(
+            global_ctx_line,
+            event="watch_global_context",
+            code=code,
+            rk=rk,
+        )
     if buy_mail_bucket == "热股精选" and isinstance(quality_pick_row, dict):
         _emit_hot_stock_quality_reason_lines(
             quality_pick_row,

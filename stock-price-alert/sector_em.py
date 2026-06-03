@@ -291,6 +291,27 @@ def format_sector_console_line(
     return f"      └ 板块：{sw}"
 
 
+def format_global_context_line(code6: str) -> str:
+    """
+    控制台全球背景行：美股 + 伦铜。
+
+    返回格式：
+      └ 🌍 美股对标↑+2.3% | 📦 伦铜↓-1.0% | 💚 很强势，加仓
+    若无数据则返回空字符串。
+    """
+    try:
+        from global_context_display import get_stock_global_context
+
+        ctx = get_stock_global_context(code6)
+        if ctx and ctx.get("display_line"):
+            return f"      └ {ctx['display_line']}"
+    except Exception:
+        logging.getLogger(__name__).debug(
+            "全球背景显示异常 %s", code6, exc_info=True
+        )
+    return ""
+
+
 def persist_resolved_sw(code6: str, sw_ts: str, cfg: dict[str, Any], root: Path) -> None:
     """将解析到的申万代码写入 sector_index_cache 便于离线复用。"""
     c = str(code6).strip().zfill(6)
