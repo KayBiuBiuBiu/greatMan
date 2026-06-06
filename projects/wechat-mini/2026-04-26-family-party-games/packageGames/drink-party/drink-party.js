@@ -526,11 +526,22 @@ Page({
     this._playRingAlert(res.drinkSips | 0)
   },
   _showLotteryForAll(targetNick) {
-    // 确保没有重复打开
-    if (this.data.showLotteryScroll) {
-      return
+    const my = this._my || (this.data.myOpenId || '')
+    const targetOid = (this.data.state && this.data.state.result && this.data.state.result.targetOpenId) || this.data.state?.targetOpenId
+
+    // 只有被抽中的用户才能看到第一个弹窗
+    if (targetOid === my) {
+      // 被抽中用户：显示第一个弹窗
+      this.setData({
+        showChooseSips: true,
+        targetUserNick: targetNick
+      })
+    } else {
+      // 其他用户：直接显示第二个弹窗
+      if (!this.data.showLotteryScroll) {
+        this._openLotteryScroll(targetNick)
+      }
     }
-    this._openLotteryScroll(targetNick)
   },
   _storeMyOpenId(oid) {
     const o = String(oid || '').trim()
