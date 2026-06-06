@@ -500,7 +500,7 @@ Page({
     }
     this._playAudioFile({ volume: 1 })
 
-    // 显示第一个选择弹窗
+    // 显示第一个选择弹窗（只有被抽中的用户看到）
     this.setData({
       showChooseSips: true,
       targetUserNick: targetNick
@@ -524,24 +524,6 @@ Page({
     }
     this._ringAlertKey = key
     this._playRingAlert(res.drinkSips | 0)
-  },
-  _showLotteryForAll(targetNick) {
-    const my = this._my || (this.data.myOpenId || '')
-    const targetOid = (this.data.state && this.data.state.result && this.data.state.result.targetOpenId) || this.data.state?.targetOpenId
-
-    // 只有被抽中的用户才能看到第一个弹窗
-    if (targetOid === my) {
-      // 被抽中用户：显示第一个弹窗
-      this.setData({
-        showChooseSips: true,
-        targetUserNick: targetNick
-      })
-    } else {
-      // 其他用户：直接显示第二个弹窗
-      if (!this.data.showLotteryScroll) {
-        this._openLotteryScroll(targetNick)
-      }
-    }
   },
   _storeMyOpenId(oid) {
     const o = String(oid || '').trim()
@@ -754,10 +736,6 @@ Page({
         this._skipLegacyVoteIfNeeded(d)
       }
       this._onRingerMaybe(d, my, rPh)
-      // 在 result 阶段为所有用户显示第二个弹窗
-      if (rPh === 'result' && targetOid && norm.targetNick) {
-        this._showLotteryForAll(norm.targetNick)
-      }
       if (rPh === 'countdown') {
         this._startCountdownTimer()
         const endAt = ts(d && d.countdownEndsAt)
@@ -1133,7 +1111,11 @@ Page({
     this.setData({ showChooseSips: false })
     // 为所有用户显示第二个弹窗
     setTimeout(() => {
-      this._openLotteryScroll(this.data.targetUserNick)
+      this._broadcastLottery(this.data.targetUserNick)
     }, 300)
+  },
+  _broadcastLottery(targetNick) {
+    // 为所有用户显示第二个弹窗
+    this._openLotteryScroll(targetNick)
   }
 })

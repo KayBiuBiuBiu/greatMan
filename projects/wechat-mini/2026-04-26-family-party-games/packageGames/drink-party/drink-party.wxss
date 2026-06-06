@@ -372,12 +372,16 @@
 .dp-choose-btn {
   flex: 1;
   min-height: 64rpx;
+  height: 64rpx;
   border-radius: 10rpx;
   font-size: 24rpx;
   font-weight: 600;
   border: none;
   padding: 0;
-  line-height: 1;
+  line-height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dp-choose-btn.btn-secondary {
