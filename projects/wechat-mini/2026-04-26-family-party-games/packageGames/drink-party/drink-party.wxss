@@ -333,21 +333,28 @@
 .dp-lottery-modal {
   background: white;
   border-radius: 20rpx;
-  padding: 24rpx;
-  width: 90%;
-  max-width: 550rpx;
+  padding: 32rpx 28rpx;
+  width: 88%;
+  max-width: 520rpx;
   box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 20rpx;
+}
+
+.dp-lottery-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-brand);
 }
 
 .dp-lottery-scroll-line {
   position: relative;
-  height: 80rpx;
+  height: 72rpx;
   background: linear-gradient(135deg, #fff5e6, #fff9f0);
   border: 2rpx solid var(--color-brand);
-  border-radius: 16rpx;
+  border-radius: 12rpx;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -356,7 +363,7 @@
 }
 
 .dp-lottery-text {
-  font-size: 36rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: var(--color-brand);
   text-align: center;
@@ -385,10 +392,11 @@
 
 .dp-lottery-confirm {
   width: 100%;
-  min-height: 80rpx;
+  min-height: 72rpx;
   border-radius: 12rpx;
   font-size: 28rpx;
   font-weight: 600;
   background: linear-gradient(135deg, var(--color-brand), #ff8c1a);
   color: white;
+  border: none;
 }

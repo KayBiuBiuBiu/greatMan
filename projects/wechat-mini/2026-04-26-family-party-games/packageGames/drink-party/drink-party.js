@@ -222,7 +222,7 @@ Page({
     lotteryOptions: [],
     lotteryIndex: 0,
     lotteryAnimating: false,
-    selectedLotteryOption: '',
+    targetUserNick: '',
     selectedLotterySips: 0
   },
   _w: null,
@@ -472,27 +472,33 @@ Page({
     const my = this._my || (this.data.myOpenId || '')
     const targetOid =
       (st.result && st.result.targetOpenId) || st.targetOpenId || ''
-    if (!my || !targetOid || targetOid !== my) {
+    const targetNick =
+      (st.result && st.result.targetNick) || st.targetNick || '响铃者'
+    if (!my || !targetOid) {
       return
     }
-    this.setData({ ringFlash: true })
-    setTimeout(() => {
-      this.setData({ ringFlash: false })
-    }, 1000)
-    try {
-      if (wx.vibrateLong) {
-        wx.vibrateLong()
-      }
-    } catch (e) {
+
+    // 所有人都看到弹窗
+    const isRinger = targetOid === my
+    if (isRinger) {
+      this.setData({ ringFlash: true })
+      setTimeout(() => {
+        this.setData({ ringFlash: false })
+      }, 1000)
       try {
-        wx.vibrateShort({ type: 'heavy' })
-      } catch (e2) {}
+        if (wx.vibrateLong) {
+          wx.vibrateLong()
+        }
+      } catch (e) {
+        try {
+          wx.vibrateShort({ type: 'heavy' })
+        } catch (e2) {}
+      }
+      this._playAudioFile({ volume: 1 })
     }
-    this._playAudioFile({ volume: 1 })
-    wx.showToast({ title: '你被抽中了！', icon: 'none', duration: 1500 })
-    setTimeout(() => {
-      this._openLotteryScroll()
-    }, 600)
+
+    // 所有人都弹出转盘
+    this._openLotteryScroll(targetNick)
   },
   _onRingerMaybe(d, my, rPh) {
     if (rPh !== 'result' || !d || !my) {
@@ -1027,7 +1033,7 @@ Page({
       publicLog: st.publicLog || [st.result]
     })
   },
-  _openLotteryScroll() {
+  _openLotteryScroll(targetNick) {
     const options = [
       '自己喝',
       '左右两边各喝',
@@ -1043,7 +1049,8 @@ Page({
       lotteryOptions: options,
       lotteryIndex: 0,
       lotteryAnimating: true,
-      selectedLotterySips: randomSips
+      selectedLotterySips: randomSips,
+      targetUserNick: targetNick
     })
     setTimeout(() => this._startLotteryScroll(), 300)
   },

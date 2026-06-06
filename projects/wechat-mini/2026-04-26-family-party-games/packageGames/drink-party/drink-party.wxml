@@ -133,6 +133,7 @@
 <!-- 抽奖文字单行滚动 -->
 <view class="dp-lottery-mask" wx:if="{{showLotteryScroll}}" bindtap="">
   <view class="dp-lottery-modal" catchTap>
+    <view class="dp-lottery-title">「{{targetUserNick}}」的惩罚</view>
     <view class="dp-lottery-scroll-line">
       <text class="dp-lottery-text {{lotteryAnimating ? 'animating' : ''}}">
         {{lotteryOptions[lotteryIndex]}} {{selectedLotterySips}} 口
