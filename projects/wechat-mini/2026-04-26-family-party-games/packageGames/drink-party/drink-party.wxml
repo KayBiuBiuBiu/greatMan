@@ -130,7 +130,19 @@
   bind:timeline="onAiShareTimeline"
 />
 
-<!-- 抽奖文字单行滚动 -->
+<!-- 第一个弹窗：选择口数方式（只有被抽中的用户看到） -->
+<view class="dp-choose-mask" wx:if="{{showChooseSips}}" bindtap="">
+  <view class="dp-choose-modal" catchTap>
+    <view class="dp-choose-title">「{{targetUserNick}}」被抽中了！</view>
+    <view class="dp-choose-subtitle">选择你的惩罚方式</view>
+    <view class="dp-choose-actions">
+      <button class="btn btn-secondary dp-choose-btn" bindtap="onChooseRandomSips">1-20口随机</button>
+      <button class="btn btn-primary dp-choose-btn" bindtap="onChooseLottery">试试手气</button>
+    </view>
+  </view>
+</view>
+
+<!-- 第二个弹窗：文字滚动（所有人看到） -->
 <view class="dp-lottery-mask" wx:if="{{showLotteryScroll}}" bindtap="">
   <view class="dp-lottery-modal" catchTap>
     <view class="dp-lottery-title">「{{targetUserNick}}」的惩罚</view>

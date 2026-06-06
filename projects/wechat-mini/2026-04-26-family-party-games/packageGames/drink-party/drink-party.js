@@ -218,11 +218,12 @@ Page({
     inCountdown: false,
     countdownSec: 0,
     memberPulseDuration: 400,
+    showChooseSips: false,
+    targetUserNick: '',
     showLotteryScroll: false,
     lotteryOptions: [],
     lotteryIndex: 0,
     lotteryAnimating: false,
-    targetUserNick: '',
     selectedLotterySips: 0
   },
   _w: null,
@@ -478,27 +479,32 @@ Page({
       return
     }
 
-    // 所有人都看到弹窗
-    const isRinger = targetOid === my
-    if (isRinger) {
-      this.setData({ ringFlash: true })
-      setTimeout(() => {
-        this.setData({ ringFlash: false })
-      }, 1000)
-      try {
-        if (wx.vibrateLong) {
-          wx.vibrateLong()
-        }
-      } catch (e) {
-        try {
-          wx.vibrateShort({ type: 'heavy' })
-        } catch (e2) {}
-      }
-      this._playAudioFile({ volume: 1 })
+    // 只有被抽中的用户才能看到
+    if (targetOid !== my) {
+      return
     }
 
-    // 所有人都弹出转盘
-    this._openLotteryScroll(targetNick)
+    // 被抽中用户的触觉反馈
+    this.setData({ ringFlash: true })
+    setTimeout(() => {
+      this.setData({ ringFlash: false })
+    }, 1000)
+    try {
+      if (wx.vibrateLong) {
+        wx.vibrateLong()
+      }
+    } catch (e) {
+      try {
+        wx.vibrateShort({ type: 'heavy' })
+      } catch (e2) {}
+    }
+    this._playAudioFile({ volume: 1 })
+
+    // 显示第一个选择弹窗
+    this.setData({
+      showChooseSips: true,
+      targetUserNick: targetNick
+    })
   },
   _onRingerMaybe(d, my, rPh) {
     if (rPh !== 'result' || !d || !my) {
@@ -1086,9 +1092,24 @@ Page({
     const resultText = option + ' ' + sips + ' 口'
 
     this.setData({
-      showLotteryScroll: false,
-      selectedLotteryOption: resultText
+      showLotteryScroll: false
     })
-    wx.showToast({ title: '已确认：' + resultText, icon: 'none', duration: 2000 })
+    wx.showToast({ title: '已确认：' + resultText, icon: 'none', duration: 1500 })
+  },
+  onChooseRandomSips() {
+    // 1-20 的随机口数
+    const randomSips = 1 + Math.floor(Math.random() * 20)
+    this.setData({ showChooseSips: false })
+    wx.showToast({
+      title: '你要喝 ' + randomSips + ' 口！',
+      icon: 'none',
+      duration: 2000
+    })
+  },
+  onChooseLottery() {
+    this.setData({ showChooseSips: false })
+    setTimeout(() => {
+      this._openLotteryScroll(this.data.targetUserNick)
+    }, 300)
   }
 })

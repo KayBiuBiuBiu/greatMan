@@ -316,6 +316,71 @@
   display: inline-block;
 }
 
+/* ---------- 第一个弹窗：选择口数方式 ---------- */
+.dp-choose-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dp-choose-modal {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx 28rpx;
+  width: 88%;
+  max-width: 520rpx;
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  text-align: center;
+}
+
+.dp-choose-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--color-brand);
+  line-height: 1.4;
+}
+
+.dp-choose-subtitle {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.dp-choose-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 8rpx;
+}
+
+.dp-choose-btn {
+  flex: 1;
+  min-height: 72rpx;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.dp-choose-btn.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.dp-choose-btn.btn-primary {
+  background: linear-gradient(135deg, var(--color-brand), #ff8c1a);
+  color: white;
+}
+
 /* ---------- 单行抽奖滚动 ---------- */
 .dp-lottery-mask {
   position: fixed;
