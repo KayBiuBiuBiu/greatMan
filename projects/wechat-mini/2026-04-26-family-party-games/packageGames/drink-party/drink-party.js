@@ -169,13 +169,16 @@ function enrichDrinkDisplayPlayers(list, state, page) {
   )
   return base.map((p) => {
     let readyLabel = p.readyLabel
+    let lotteryResult = ''
     const sips = (d.result && d.result.drinkSips) | 0
     if (ph === 'result' && targetOid && p.openId === targetOid) {
       readyLabel = sips > 0 ? '喝 ' + sips + ' 口' : '本机响了'
+      // 显示抽奖结果和口数
+      lotteryResult = '喝 ' + sips + ' 口'
     } else if (ph === 'waiting' && starterOpenId && p.openId === starterOpenId) {
       readyLabel = '主持本轮'
     }
-    return Object.assign({}, p, { readyLabel })
+    return Object.assign({}, p, { readyLabel, lotteryResult })
   })
 }
 Page({
@@ -218,7 +221,9 @@ Page({
     showLotteryScroll: false,
     lotteryOptions: [],
     lotteryIndex: 0,
-    lotteryAnimating: false
+    lotteryAnimating: false,
+    selectedLotteryOption: '',
+    selectedLotterySips: 0
   },
   _w: null,
   _tcd: null,
@@ -1024,17 +1029,21 @@ Page({
   },
   _openLotteryScroll() {
     const options = [
-      '自己喝 1-10 口',
-      '左右两边各喝 1-10 口',
-      '喂异性喝 1-10 口',
-      '指定一人喝 1-10 口',
+      '自己喝',
+      '左右两边各喝',
+      '喂异性喝',
+      '指定一人喝',
       '除了自己其余都喝'
     ]
+    // 生成 1-10 的随机口数
+    const randomSips = 1 + Math.floor(Math.random() * 10)
+
     this.setData({
       showLotteryScroll: true,
       lotteryOptions: options,
       lotteryIndex: 0,
-      lotteryAnimating: true
+      lotteryAnimating: true,
+      selectedLotterySips: randomSips
     })
     setTimeout(() => this._startLotteryScroll(), 300)
   },
@@ -1064,18 +1073,15 @@ Page({
     }
     scroll()
   },
-  onLotteryScroll() {
-    if (!this.data.lotteryAnimating) {
-      this.setData({ lotteryAnimating: true })
-      this._startLotteryScroll()
-    }
-  },
-  onLotteryClose() {
-    this.setData({ showLotteryScroll: false })
-  },
   onLotteryConfirm() {
     const option = this.data.lotteryOptions[this.data.lotteryIndex]
-    this.setData({ showLotteryScroll: false })
-    wx.showToast({ title: '已抽中：' + option, icon: 'none', duration: 2000 })
+    const sips = this.data.selectedLotterySips
+    const resultText = option + ' ' + sips + ' 口'
+
+    this.setData({
+      showLotteryScroll: false,
+      selectedLotteryOption: resultText
+    })
+    wx.showToast({ title: '已确认：' + resultText, icon: 'none', duration: 2000 })
   }
 })
