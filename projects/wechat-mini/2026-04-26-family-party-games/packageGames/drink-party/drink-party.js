@@ -215,10 +215,10 @@ Page({
     inCountdown: false,
     countdownSec: 0,
     memberPulseDuration: 400,
-    showRoulette: false,
-    rouletteOptions: [],
-    rouletteSelected: -1,
-    rouletteAnimating: false
+    showLotteryScroll: false,
+    lotteryOptions: [],
+    lotteryIndex: 0,
+    lotteryAnimating: false
   },
   _w: null,
   _tcd: null,
@@ -484,12 +484,10 @@ Page({
       } catch (e2) {}
     }
     this._playAudioFile({ volume: 1 })
-    const sips = drinkSips | 0 || this.data.drinkSips | 0
-    const tip = sips > 0 ? '你被抽中了！请选择一个抽奖项' : '你被抽中了！'
-    wx.showToast({ title: tip, icon: 'none', duration: 3000 })
+    wx.showToast({ title: '你被抽中了！', icon: 'none', duration: 1500 })
     setTimeout(() => {
-      this._openRouletteModal()
-    }, 800)
+      this._openLotteryScroll()
+    }, 600)
   },
   _onRingerMaybe(d, my, rPh) {
     if (rPh !== 'result' || !d || !my) {
@@ -1024,64 +1022,60 @@ Page({
       publicLog: st.publicLog || [st.result]
     })
   },
-  _openRouletteModal() {
+  _openLotteryScroll() {
     const options = [
-      { label: '自己喝 1-10 口', value: 'self' },
-      { label: '左右两边各喝 1-10 口', value: 'sides' },
-      { label: '喂异性喝 1-10 口', value: 'opposite' },
-      { label: '指定一人喝 1-10 口', value: 'designate' },
-      { label: '除了自己其余都喝', value: 'others' }
+      '自己喝 1-10 口',
+      '左右两边各喝 1-10 口',
+      '喂异性喝 1-10 口',
+      '指定一人喝 1-10 口',
+      '除了自己其余都喝'
     ]
     this.setData({
-      showRoulette: true,
-      rouletteOptions: options,
-      rouletteSelected: -1,
-      rouletteAnimating: false
+      showLotteryScroll: true,
+      lotteryOptions: options,
+      lotteryIndex: 0,
+      lotteryAnimating: true
     })
+    setTimeout(() => this._startLotteryScroll(), 300)
   },
-  _startRouletteAnimation() {
-    if (this.data.rouletteAnimating) return
-    this.setData({ rouletteAnimating: true })
+  _startLotteryScroll() {
+    if (!this.data.lotteryAnimating) return
 
     let iteration = 0
-    const optionCount = this.data.rouletteOptions.length
+    const optionCount = this.data.lotteryOptions.length
 
-    const tick = () => {
+    const scroll = () => {
       iteration++
       const idx = iteration % optionCount
-      this.setData({ rouletteSelected: idx })
+      this.setData({ lotteryIndex: idx })
 
-      // 越来越慢：快速转，然后逐渐减速
-      let nextDelay = 30
-      if (iteration > 12) {
-        nextDelay = Math.min(400, 30 + (iteration - 12) * 15)
+      // 越来越慢：快速滚动，然后逐渐减速
+      let nextDelay = 50
+      if (iteration > 10) {
+        nextDelay = Math.min(500, 50 + (iteration - 10) * 20)
       }
 
-      // 转够久后停止
-      if (iteration <= 28) {
-        setTimeout(tick, nextDelay)
+      // 滚动够久后停止
+      if (iteration <= 30) {
+        setTimeout(scroll, nextDelay)
       } else {
-        this.setData({ rouletteAnimating: false })
+        this.setData({ lotteryAnimating: false })
       }
     }
-    tick()
+    scroll()
   },
-  onRouletteTap() {
-    if (!this.data.rouletteAnimating) {
-      this._startRouletteAnimation()
+  onLotteryScroll() {
+    if (!this.data.lotteryAnimating) {
+      this.setData({ lotteryAnimating: true })
+      this._startLotteryScroll()
     }
   },
-  onRouletteClose() {
-    this.setData({ showRoulette: false })
+  onLotteryClose() {
+    this.setData({ showLotteryScroll: false })
   },
-  onRouletteConfirm() {
-    const selected = this.data.rouletteSelected
-    if (selected < 0) {
-      wx.showToast({ title: '请先点击转盘', icon: 'none' })
-      return
-    }
-    const option = this.data.rouletteOptions[selected]
-    this.setData({ showRoulette: false })
-    wx.showToast({ title: '已选择：' + option.label, icon: 'none' })
+  onLotteryConfirm() {
+    const option = this.data.lotteryOptions[this.data.lotteryIndex]
+    this.setData({ showLotteryScroll: false })
+    wx.showToast({ title: '已抽中：' + option, icon: 'none', duration: 2000 })
   }
 })

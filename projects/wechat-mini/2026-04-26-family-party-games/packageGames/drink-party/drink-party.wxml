@@ -129,25 +129,28 @@
   bind:timeline="onAiShareTimeline"
 />
 
-<!-- 趣味抽签转盘 -->
-<view class="dp-roulette-mask" wx:if="{{showRoulette}}" bindtap="onRouletteClose">
-  <view class="dp-roulette-modal" catchTap>
-    <view class="dp-roulette-title">选择你的抽奖项</view>
-    <view class="dp-roulette-wheel" bindtap="onRouletteTap">
-      <view
-        class="dp-roulette-item {{index === rouletteSelected ? 'active' : ''}}"
-        wx:for="{{rouletteOptions}}"
-        wx:for-item="opt"
-        wx:for-index="index"
-      >
-        {{opt.label}}
+<!-- 抽奖文字滚动 -->
+<view class="dp-lottery-mask" wx:if="{{showLotteryScroll}}" bindtap="onLotteryClose">
+  <view class="dp-lottery-modal" catchTap>
+    <view class="dp-lottery-title">转 转 转 !</view>
+    <view class="dp-lottery-scroll-container">
+      <view class="dp-lottery-scroll-wrap">
+        <view
+          class="dp-lottery-item {{index === lotteryIndex ? 'active' : ''}}"
+          wx:for="{{lotteryOptions}}"
+          wx:for-item="opt"
+          wx:for-index="index"
+        >
+          {{opt}}
+        </view>
       </view>
-      <view class="dp-roulette-indicator"></view>
     </view>
-    <view class="dp-roulette-hint">{{rouletteAnimating ? '转盘转动中...' : '点击开始转盘'}}</view>
-    <view class="dp-roulette-actions">
-      <button class="btn btn-secondary" bindtap="onRouletteClose">取消</button>
-      <button class="btn btn-primary" bindtap="onRouletteConfirm" disabled="{{rouletteSelected < 0}}">确认</button>
+    <view class="dp-lottery-indicator"></view>
+    <view class="dp-lottery-hint">{{lotteryAnimating ? '滚动中...' : '点击开始'}}</view>
+    <view class="dp-lottery-actions">
+      <button class="btn btn-secondary" bindtap="onLotteryClose">取消</button>
+      <button class="btn btn-primary" bindtap="onLotteryScroll" disabled="{{lotteryAnimating}}">{{lotteryAnimating ? '转中...' : '开始转'}}</button>
+      <button class="btn btn-primary" bindtap="onLotteryConfirm" disabled="{{lotteryAnimating}}">确认</button>
     </view>
   </view>
 </view>
