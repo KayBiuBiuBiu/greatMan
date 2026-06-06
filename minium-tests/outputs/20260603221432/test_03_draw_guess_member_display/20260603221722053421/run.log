@@ -1,0 +1,37 @@
+[I 2026-06-03 22:17:22,054 minium minitest#432 _miniSetUp] =========Current case: test_03_draw_guess_member_display=========
+[I 2026-06-03 22:17:22,054 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_member_display_format, case info: TestMemberDisplayFormat.test_03_draw_guess_member_display
+[I 2026-06-03 22:17:22,054 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-03 22:17:22,054 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-03 22:17:22,054 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-03 22:17:22,054 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-03 22:17:22,054 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-03 22:17:22,055 minium minitest#897 capture] capture setup.png
+[I 2026-06-03 22:17:22,109 minium minitest#487 _miniSetUp] =========case: test_03_draw_guess_member_display start=========
+[I 2026-06-03 22:17:22,109 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-03 22:17:22,111 minium.Conn0272 connection#668 __on_message] [34914214-302c-48c9-9c5c-b7f1a9a09e47]: wx.cloud.callFunction not exists
+[I 2026-06-03 22:17:25,416 minium.App4304 app#950 relaunch] ReLaunch: /packageGames/draw-guess/draw-guess?roomId=3fda1b3e6a20377500059cee1ad77d2e&roomCode=999185
+[I 2026-06-03 22:17:26,270 minium.App4304 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/draw-guess/draw-guess', 'query': {'roomId': '3fda1b3e6a20377500059cee1ad77d2e', 'roomCode': '999185'}, 'openType': 'reLaunch', 'timeStamp': 1780496246265, 'webviewId': 5, 'routeEventId': '', 'renderer': 'webview'}, 1780496246266]}
+[I 2026-06-03 22:17:26,272 minium.Conn0272 connection#704 _handle_async_msg] received async msg: b4f025ad-5971-4fbb-a702-fdc5caae175d
+[I 2026-06-03 22:17:28,816 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-03 22:17:30,822 minium.App4304 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 22:17:30,823 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603221432/test_03_draw_guess_member_display/20260603221722053421/images/assertTrue-success.png not exists
+[E 2026-06-03 22:17:30,832 minium.Conn0272 connection#668 __on_message] [e44ef5db-f1cc-4fda-8052-75b61b28e5de]: wx.cloud.callFunction not exists
+[E 2026-06-03 22:17:35,052 minium.Conn0272 connection#668 __on_message] [b89b7e85-35ac-4845-85fa-a84784f871b3]: wx.cloud.callFunction not exists
+[I 2026-06-03 22:17:39,173 minium minitest#897 capture] capture assertIsNotNone-success.png
+[W 2026-06-03 22:17:41,175 minium.App4304 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 22:17:41,175 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603221432/test_03_draw_guess_member_display/20260603221722053421/images/assertIsNotNone-success.png not exists
+[I 2026-06-03 22:17:41,181 minium minitest#897 capture] capture assertNotIn-success.png
+[W 2026-06-03 22:17:43,184 minium.App4304 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 22:17:43,186 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603221432/test_03_draw_guess_member_display/20260603221722053421/images/assertNotIn-success.png not exists
+[I 2026-06-03 22:17:43,194 minium minitest#897 capture] capture assertIn-success.png
+[W 2026-06-03 22:17:45,201 minium.App4304 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 22:17:45,202 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603221432/test_03_draw_guess_member_display/20260603221722053421/images/assertIn-success.png not exists
+[I 2026-06-03 22:17:45,204 minium minitest#897 capture] capture assertIn-success.png
+[W 2026-06-03 22:17:47,206 minium.App4304 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 22:17:47,206 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603221432/test_03_draw_guess_member_display/20260603221722053421/images/assertIn-success.png not exists
+[I 2026-06-03 22:17:47,206 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-03 22:17:47,206 minium minitest#897 capture] capture teardown.png
+[W 2026-06-03 22:17:49,208 minium.App4304 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 22:17:49,210 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603221432/test_03_draw_guess_member_display/20260603221722053421/images/teardown.png not exists
+[I 2026-06-03 22:17:49,210 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-03 22:17:49,211 minium basenative#63 wrapper] call BaseNative.get_start_up end 

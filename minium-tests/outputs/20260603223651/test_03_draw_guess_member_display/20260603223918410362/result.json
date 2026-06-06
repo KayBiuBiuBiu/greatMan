@@ -1,0 +1,206 @@
+{
+    "case_name": "test_03_draw_guess_member_display",
+    "run_time": "20260603 22:39:18",
+    "test_type": "TestMemberDisplayFormat",
+    "case_doc": "\u9a8c\u8bc1\u4f60\u753b\u6211\u731c\u6210\u5458\u663e\u793a\u4e3a'\u5f53\u524dX\u4eba'",
+    "success": true,
+    "failures": "",
+    "errors": "",
+    "start_timestamp": 1780497558.473862,
+    "is_failure": false,
+    "is_error": false,
+    "module": ".Users.haha.greatMan.minium-tests.testcases.test_member_display_format",
+    "package": "testcases",
+    "failed_line_num": -1,
+    "device": {
+        "system_info": {
+            "brand": "devtools",
+            "model": "iPhone 12/13 (Pro)",
+            "system": "iOS 10.0.1",
+            "platform": "devtools",
+            "benchmarkLevel": -1,
+            "pixelRatio": 3,
+            "screenWidth": 390,
+            "screenHeight": 844,
+            "windowWidth": 390,
+            "windowHeight": 753,
+            "statusBarHeight": 47,
+            "safeArea": {
+                "top": 47,
+                "left": 0,
+                "right": 390,
+                "bottom": 810,
+                "width": 390,
+                "height": 763
+            },
+            "language": "zh_CN",
+            "version": "8.0.5",
+            "fontSizeSetting": 16,
+            "SDKVersion": "3.15.2",
+            "host": {
+                "env": "WeChat"
+            },
+            "enableDebug": false,
+            "mode": "default",
+            "deviceOrientation": "portrait",
+            "bluetoothEnabled": true,
+            "locationEnabled": true,
+            "wifiEnabled": true,
+            "albumAuthorized": true,
+            "cameraAuthorized": true,
+            "locationAuthorized": true,
+            "microphoneAuthorized": true,
+            "notificationAuthorized": true,
+            "notificationAlertAuthorized": true,
+            "notificationBadgeAuthorized": true,
+            "notificationSoundAuthorized": true,
+            "phoneCalendarAuthorized": true,
+            "bluetoothAuthorized": true,
+            "locationReducedAccuracy": true,
+            "devicePixelRatio": 3
+        }
+    },
+    "log_filename": "run.log",
+    "error_type": "",
+    "error_value": "",
+    "error_extra_info": "",
+    "error_stages": [],
+    "screen_info": [
+        {
+            "name": "setup",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/setup.png",
+            "ts": 1780497558,
+            "datetime": "2026-06-03 22:39:18",
+            "use_region": false
+        },
+        {
+            "name": "assertTrue-success",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/assertTrue-success.png",
+            "ts": 1780497564,
+            "datetime": "2026-06-03 22:39:24",
+            "use_region": false
+        },
+        {
+            "name": "assertIsNotNone-success",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/assertIsNotNone-success.png",
+            "ts": 1780497573,
+            "datetime": "2026-06-03 22:39:33",
+            "use_region": false
+        },
+        {
+            "name": "assertNotIn-success",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/assertNotIn-success.png",
+            "ts": 1780497573,
+            "datetime": "2026-06-03 22:39:33",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/assertIn-success.png",
+            "ts": 1780497573,
+            "datetime": "2026-06-03 22:39:33",
+            "use_region": false
+        },
+        {
+            "name": "assertIn-success",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/assertIn-success_223933538205.png",
+            "ts": 1780497573,
+            "datetime": "2026-06-03 22:39:33",
+            "use_region": false
+        },
+        {
+            "name": "teardown",
+            "url": "/packageGames/draw-guess/draw-guess",
+            "path": "images/teardown.png",
+            "ts": 1780497573,
+            "datetime": "2026-06-03 22:39:33",
+            "use_region": false
+        }
+    ],
+    "step_info": [],
+    "check_list": [],
+    "assert_list": [
+        {
+            "name": "assertTrue",
+            "ret": true,
+            "msg": null,
+            "img": "assertTrue-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIsNotNone",
+            "ret": true,
+            "msg": null,
+            "img": "assertIsNotNone-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertNotIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertNotIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        },
+        {
+            "name": "assertIn",
+            "ret": true,
+            "msg": null,
+            "img": "assertIn-success",
+            "wxml": ""
+        }
+    ],
+    "autofix_info": [],
+    "perf_data": "{\"startup\": 0, \"avg_cpu\": 0, \"max_cpu\": 0, \"cpu_data_list\": [], \"avg_mem\": 0, \"max_mem\": 0, \"mem_data_list\": [], \"avg_fps\": 0, \"min_fps_rt\": 0, \"fps_data_list\": [], \"fps_time_series_list\": [], \"cpu_time_series_list\": [], \"mem_time_series_list\": []}",
+    "weapp_log_path": "weapp.log",
+    "request_log_path": "request.log",
+    "stop_timestamp": 1780497573.798916,
+    "appId": "",
+    "appName": "",
+    "source": {
+        "code": [
+            "    def test_03_draw_guess_member_display(self):\n",
+            "        \"\"\"\u9a8c\u8bc1\u4f60\u753b\u6211\u731c\u6210\u5458\u663e\u793a\u4e3a'\u5f53\u524dX\u4eba'\"\"\"\n",
+            "        page = DrawPage(self)\n",
+            "\n",
+            "        # \u521b\u5efa\u623f\u95f4\n",
+            "        info = page.create_room(cloud=self.cloud)\n",
+            "        room_id = info.get(\"roomId\")\n",
+            "        self.assertTrue(room_id, \"drawGuess roomId not created\")\n",
+            "\n",
+            "        # \u52a0\u51652\u4e2a\u73a9\u5bb6\n",
+            "        seed = self._seed(page.game_key, info, count=2)\n",
+            "        self.cloud.wait_for_cloud_settle(1)\n",
+            "\n",
+            "        # \u5237\u65b0\u5927\u5385 UI\uff08seed \u540e\u5fc5\u987b\u5237\u65b0\u624d\u80fd\u83b7\u53d6\u65b0\u4eba\u6570\uff09\n",
+            "        page.refresh_lobby(cloud=self.cloud, room_id=room_id)\n",
+            "\n",
+            "        # \u9a8c\u8bc1\u6210\u5458\u663e\u793a\u683c\u5f0f\n",
+            "        member_count_line = page.data_value(\"memberCountLine\")\n",
+            "        self.assertIsNotNone(member_count_line, \"memberCountLine should exist\")\n",
+            "        print(f\"[\u2713] drawGuess memberCountLine: {member_count_line}\")\n",
+            "\n",
+            "        # \u9a8c\u8bc1\u683c\u5f0f\u4e3a\"\u5f53\u524dX\u4eba\"\uff08\u4e0d\u5305\u542b\"/\"\uff09\n",
+            "        self.assertNotIn('/', member_count_line,\n",
+            "                        f\"memberCountLine should not contain '/', got: {member_count_line}\")\n",
+            "        self.assertIn('\u5f53\u524d', member_count_line,\n",
+            "                     f\"memberCountLine should contain '\u5f53\u524d', got: {member_count_line}\")\n",
+            "        self.assertIn('\u4eba', member_count_line,\n",
+            "                     f\"memberCountLine should contain '\u4eba', got: {member_count_line}\")\n"
+        ],
+        "start": 96
+    },
+    "filename": "result.json"
+}

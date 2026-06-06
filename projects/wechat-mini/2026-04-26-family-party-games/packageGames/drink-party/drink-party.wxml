@@ -73,8 +73,7 @@
       </view>
       <view class="rg-member-list">
         <view
-          class="rg-member-item {{(inCountdown || (state && state.phase === 'countdown')) ? 'dp-member-pulse' : ''}}"
-          style="{{(inCountdown || (state && state.phase === 'countdown')) ? 'animation-duration:' + memberPulseDuration + 'ms;' : ''}}"
+          class="rg-member-item"
           wx:for="{{displayPlayers}}"
           wx:for-item="p"
           wx:key="openId"
@@ -129,3 +128,26 @@
   bind:close="onCloseAiShareModal"
   bind:timeline="onAiShareTimeline"
 />
+
+<!-- 趣味抽签转盘 -->
+<view class="dp-roulette-mask" wx:if="{{showRoulette}}" bindtap="onRouletteClose">
+  <view class="dp-roulette-modal" catchTap>
+    <view class="dp-roulette-title">选择你的抽奖项</view>
+    <view class="dp-roulette-wheel" bindtap="onRouletteTap">
+      <view
+        class="dp-roulette-item {{index === rouletteSelected ? 'active' : ''}}"
+        wx:for="{{rouletteOptions}}"
+        wx:for-item="opt"
+        wx:for-index="index"
+      >
+        {{opt.label}}
+      </view>
+      <view class="dp-roulette-indicator"></view>
+    </view>
+    <view class="dp-roulette-hint">{{rouletteAnimating ? '转盘转动中...' : '点击开始转盘'}}</view>
+    <view class="dp-roulette-actions">
+      <button class="btn btn-secondary" bindtap="onRouletteClose">取消</button>
+      <button class="btn btn-primary" bindtap="onRouletteConfirm" disabled="{{rouletteSelected < 0}}">确认</button>
+    </view>
+  </view>
+</view>

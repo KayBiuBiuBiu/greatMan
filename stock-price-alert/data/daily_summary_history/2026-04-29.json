@@ -2,13 +2,13 @@
   "schema_version": 1,
   "date": "2026-04-29",
   "generated_at": "2026-05-18T19:03:56",
-  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "broker_summary_synced_at": "2026-06-03T22:52:06",
   "trades": {
     "source": "broker_xls",
-    "broker_synced_at": "2026-05-18T19:08:05",
-    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_synced_at": "2026-06-03T22:52:06",
+    "broker_source_file": "交割单_20260603_225130.xls",
     "broker_source_files": [
-      "交割单_20260518_184214.xls"
+      "交割单_20260603_225130.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-04-29",
@@ -80,6 +80,82 @@
     "net_profit": -58.0,
     "notes": [
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "unrealized_positions": [
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "hold_shares": 300,
+        "cost_price": 10.4167,
+        "close_price": 10.25,
+        "float_pnl_est": -50.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000762",
+        "name": "西藏矿业",
+        "hold_shares": 100,
+        "cost_price": 38.98,
+        "close_price": 38.9,
+        "float_pnl_est": -8.0,
+        "source": "broker_xls"
+      }
     ]
-  }
+  },
+  "holdings": [
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 300,
+      "cost_price": 10.4167,
+      "close_price": 10.25,
+      "unrealized_profit": -50.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000762",
+      "name": "西藏矿业",
+      "hold_shares": 100,
+      "cost_price": 38.98,
+      "close_price": 38.9,
+      "unrealized_profit": -8.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 300,
+      "cost_price": 10.4167,
+      "close_price": 10.25,
+      "unrealized_profit": -50.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000762",
+      "name": "西藏矿业",
+      "hold_shares": 100,
+      "cost_price": 38.98,
+      "close_price": 38.9,
+      "unrealized_profit": -8.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-04-29",
+  "account_pnl_broker": {
+    "as_of": "2026-04-29",
+    "cash_available": 107057.3,
+    "market_value": 6965.0,
+    "total_assets": 114022.3,
+    "position_count": 2,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
 }

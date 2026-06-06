@@ -2,13 +2,13 @@
   "schema_version": 1,
   "date": "2026-04-30",
   "generated_at": "2026-05-18T19:03:56",
-  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "broker_summary_synced_at": "2026-06-03T22:52:06",
   "trades": {
     "source": "broker_xls",
-    "broker_synced_at": "2026-05-18T19:08:05",
-    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_synced_at": "2026-06-03T22:52:06",
+    "broker_source_file": "交割单_20260603_225130.xls",
     "broker_source_files": [
-      "交割单_20260518_184214.xls"
+      "交割单_20260603_225130.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-04-30",
@@ -217,6 +217,256 @@
     "net_profit": -86.99,
     "notes": [
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "unrealized_positions": [
+      {
+        "code": "000155",
+        "name": "川能动力",
+        "hold_shares": 100,
+        "cost_price": 17.66,
+        "close_price": 17.42,
+        "float_pnl_est": -24.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "hold_shares": 500,
+        "cost_price": 10.25,
+        "close_price": 9.89,
+        "float_pnl_est": -180.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000546",
+        "name": "金圆股份",
+        "hold_shares": 300,
+        "cost_price": 7.6167,
+        "close_price": 7.72,
+        "float_pnl_est": 31.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000767",
+        "name": "晋控电力",
+        "hold_shares": 600,
+        "cost_price": 3.8383,
+        "close_price": 3.78,
+        "float_pnl_est": -35.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000811",
+        "name": "冰轮环境",
+        "hold_shares": 100,
+        "cost_price": 24.9,
+        "close_price": 24.95,
+        "float_pnl_est": 5.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "001258",
+        "name": "立新能源",
+        "hold_shares": 300,
+        "cost_price": 8.9867,
+        "close_price": 9.01,
+        "float_pnl_est": 7.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "hold_shares": 300,
+        "cost_price": 9.0167,
+        "close_price": 8.95,
+        "float_pnl_est": -20.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002176",
+        "name": "江特电机",
+        "hold_shares": 100,
+        "cost_price": 16.11,
+        "close_price": 16.05,
+        "float_pnl_est": -6.0,
+        "source": "broker_xls"
+      }
     ]
-  }
+  },
+  "holdings": [
+    {
+      "code": "000155",
+      "name": "川能动力",
+      "hold_shares": 100,
+      "cost_price": 17.66,
+      "close_price": 17.42,
+      "unrealized_profit": -24.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 500,
+      "cost_price": 10.25,
+      "close_price": 9.89,
+      "unrealized_profit": -180.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000546",
+      "name": "金圆股份",
+      "hold_shares": 300,
+      "cost_price": 7.6167,
+      "close_price": 7.72,
+      "unrealized_profit": 31.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000767",
+      "name": "晋控电力",
+      "hold_shares": 600,
+      "cost_price": 3.8383,
+      "close_price": 3.78,
+      "unrealized_profit": -35.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000811",
+      "name": "冰轮环境",
+      "hold_shares": 100,
+      "cost_price": 24.9,
+      "close_price": 24.95,
+      "unrealized_profit": 5.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "001258",
+      "name": "立新能源",
+      "hold_shares": 300,
+      "cost_price": 8.9867,
+      "close_price": 9.01,
+      "unrealized_profit": 7.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002091",
+      "name": "江苏国泰",
+      "hold_shares": 300,
+      "cost_price": 9.0167,
+      "close_price": 8.95,
+      "unrealized_profit": -20.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002176",
+      "name": "江特电机",
+      "hold_shares": 100,
+      "cost_price": 16.11,
+      "close_price": 16.05,
+      "unrealized_profit": -6.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "000155",
+      "name": "川能动力",
+      "hold_shares": 100,
+      "cost_price": 17.66,
+      "close_price": 17.42,
+      "unrealized_profit": -24.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 500,
+      "cost_price": 10.25,
+      "close_price": 9.89,
+      "unrealized_profit": -180.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000546",
+      "name": "金圆股份",
+      "hold_shares": 300,
+      "cost_price": 7.6167,
+      "close_price": 7.72,
+      "unrealized_profit": 31.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000767",
+      "name": "晋控电力",
+      "hold_shares": 600,
+      "cost_price": 3.8383,
+      "close_price": 3.78,
+      "unrealized_profit": -35.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000811",
+      "name": "冰轮环境",
+      "hold_shares": 100,
+      "cost_price": 24.9,
+      "close_price": 24.95,
+      "unrealized_profit": 5.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "001258",
+      "name": "立新能源",
+      "hold_shares": 300,
+      "cost_price": 8.9867,
+      "close_price": 9.01,
+      "unrealized_profit": 7.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002091",
+      "name": "江苏国泰",
+      "hold_shares": 300,
+      "cost_price": 9.0167,
+      "close_price": 8.95,
+      "unrealized_profit": -20.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002176",
+      "name": "江特电机",
+      "hold_shares": 100,
+      "cost_price": 16.11,
+      "close_price": 16.05,
+      "unrealized_profit": -6.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-04-30",
+  "account_pnl_broker": {
+    "as_of": "2026-04-30",
+    "cash_available": 93176.31,
+    "market_value": 20759.0,
+    "total_assets": 113935.31,
+    "position_count": 8,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
 }

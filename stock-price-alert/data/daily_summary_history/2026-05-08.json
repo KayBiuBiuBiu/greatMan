@@ -2,13 +2,13 @@
   "schema_version": 1,
   "date": "2026-05-08",
   "generated_at": "2026-05-18T19:03:56",
-  "broker_summary_synced_at": "2026-05-18T19:08:05",
+  "broker_summary_synced_at": "2026-06-03T22:52:06",
   "trades": {
     "source": "broker_xls",
-    "broker_synced_at": "2026-05-18T19:08:05",
-    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_synced_at": "2026-06-03T22:52:06",
+    "broker_source_file": "交割单_20260603_225130.xls",
     "broker_source_files": [
-      "交割单_20260518_184214.xls"
+      "交割单_20260603_225130.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-05-08",
@@ -301,6 +301,198 @@
     "net_profit": 625.34,
     "notes": [
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "unrealized_positions": [
+      {
+        "code": "000007",
+        "name": "全新好",
+        "hold_shares": 200,
+        "cost_price": 16.865,
+        "close_price": 17.21,
+        "float_pnl_est": 69.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000537",
+        "name": "绿发电力",
+        "hold_shares": 600,
+        "cost_price": 10.3383,
+        "close_price": 10.72,
+        "float_pnl_est": 229.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "000820",
+        "name": "*ST节能",
+        "hold_shares": 900,
+        "cost_price": 3.8678,
+        "close_price": 3.82,
+        "float_pnl_est": -43.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002091",
+        "name": "江苏国泰",
+        "hold_shares": 200,
+        "cost_price": 9.045,
+        "close_price": 9.79,
+        "float_pnl_est": 149.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002386",
+        "name": "天原股份",
+        "hold_shares": 500,
+        "cost_price": 6.66,
+        "close_price": 6.68,
+        "float_pnl_est": 10.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002913",
+        "name": "奥士康",
+        "hold_shares": 100,
+        "cost_price": 57.45,
+        "close_price": 58.45,
+        "float_pnl_est": 100.0,
+        "source": "broker_xls"
+      }
     ]
-  }
+  },
+  "holdings": [
+    {
+      "code": "000007",
+      "name": "全新好",
+      "hold_shares": 200,
+      "cost_price": 16.865,
+      "close_price": 17.21,
+      "unrealized_profit": 69.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 600,
+      "cost_price": 10.3383,
+      "close_price": 10.72,
+      "unrealized_profit": 229.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000820",
+      "name": "*ST节能",
+      "hold_shares": 900,
+      "cost_price": 3.8678,
+      "close_price": 3.82,
+      "unrealized_profit": -43.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002091",
+      "name": "江苏国泰",
+      "hold_shares": 200,
+      "cost_price": 9.045,
+      "close_price": 9.79,
+      "unrealized_profit": 149.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 500,
+      "cost_price": 6.66,
+      "close_price": 6.68,
+      "unrealized_profit": 10.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002913",
+      "name": "奥士康",
+      "hold_shares": 100,
+      "cost_price": 57.45,
+      "close_price": 58.45,
+      "unrealized_profit": 100.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "000007",
+      "name": "全新好",
+      "hold_shares": 200,
+      "cost_price": 16.865,
+      "close_price": 17.21,
+      "unrealized_profit": 69.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 600,
+      "cost_price": 10.3383,
+      "close_price": 10.72,
+      "unrealized_profit": 229.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000820",
+      "name": "*ST节能",
+      "hold_shares": 900,
+      "cost_price": 3.8678,
+      "close_price": 3.82,
+      "unrealized_profit": -43.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002091",
+      "name": "江苏国泰",
+      "hold_shares": 200,
+      "cost_price": 9.045,
+      "close_price": 9.79,
+      "unrealized_profit": 149.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 500,
+      "cost_price": 6.66,
+      "close_price": 6.68,
+      "unrealized_profit": 10.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002913",
+      "name": "奥士康",
+      "hold_shares": 100,
+      "cost_price": 57.45,
+      "close_price": 58.45,
+      "unrealized_profit": 100.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-05-08",
+  "account_pnl_broker": {
+    "as_of": "2026-05-08",
+    "cash_available": 126905.77,
+    "market_value": 24455.0,
+    "total_assets": 151360.77,
+    "position_count": 6,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
 }

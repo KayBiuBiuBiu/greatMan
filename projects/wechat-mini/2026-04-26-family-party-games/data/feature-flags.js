@@ -1,7 +1,7 @@
 /**
  * 互动功能开关（改 false 即从首页与入口关闭）
  */
-const DRAW_GUESS_ENABLED = false
+const DRAW_GUESS_ENABLED = true
 
 /** 身份推理（秘密身份推理聚会版） */
 const WEREWOLF_ENABLED = true
@@ -26,6 +26,7 @@ const HOME_ENABLED_TITLES = new Set([
   '谁是卧底',
   '海龟汤',
   '你比划我猜',
+  '你画我猜轮流传词版',
   '贴头猜词',
   '不要做挑战',
   '秘密身份推理（聚会版）',

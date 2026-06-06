@@ -5,6 +5,26 @@
 
 ---
 
+## 交付文档索引 + PR 当前状态
+
+| 文档 | 用途 |
+|------|------|
+| **本文** [`DRAW_GUESS_PR_DELIVERY.md`](DRAW_GUESS_PR_DELIVERY.md) | §给 Coding Plan — Agent 终验回执；PR 末尾粘贴模板 |
+| [`minium-tests/CODING_PLAN.md`](minium-tests/CODING_PLAN.md) | Coding Plan × Agent 分工；你画我猜完整闭环（A–D） |
+| [`minium-tests/MINIUM_AGENT_HANDOFF.md`](minium-tests/MINIUM_AGENT_HANDOFF.md) | Agent 跑测命令、环境、报告模板 |
+
+**PR 当前状态（2026-06-03）：**
+
+| 阶段 | 状态 |
+|------|------|
+| Coding Plan 交付 A–D | ✅ 已合并 |
+| Agent 跑 `suite_draw_guess.json` | ✅ **3/3 PASS** |
+| 下一步 | **PR 可合并**（无需再跑 Minium） |
+
+> 说明：「**可以交给 Agent 跑 Minium 了**」是 Coding Plan 交付时的开关语；**本 PR 已过该阶段**。请用下文 §PR 末尾可直接粘贴（Agent 终验通过）。
+
+---
+
 ## 给 Coding Plan — Agent 终验回执（可直接转述）
 
 > **结论：A–D 已全部生效，PR 可合并，无需再改代码。**
@@ -160,7 +180,9 @@ def _apply_draw_view_fallback(self, page_obj, snap, room_id):
 
 ---
 
-## Minium 验收 → 交给 Agent（模板）
+## Minium 验收 → 交给 Agent（历史模板，本 PR 已测过）
+
+> 仅在新 PR / 新改动时使用；**本 PR 请用下一节「Agent 终验通过」**。
 
 ```markdown
 ## Minium 验收 → 交给 Agent
@@ -196,4 +218,4 @@ def _apply_draw_view_fallback(self, page_obj, snap, room_id):
 
 ---
 
-**✅ 完整闭环已验证，可提交 PR**
+**✅ Agent 终验 3/3 PASS — PR 可合并**（2026-06-03）

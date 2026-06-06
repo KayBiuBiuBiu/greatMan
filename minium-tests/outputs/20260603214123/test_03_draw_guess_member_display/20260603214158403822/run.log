@@ -1,0 +1,16 @@
+[I 2026-06-03 21:41:58,406 minium minitest#432 _miniSetUp] =========Current case: test_03_draw_guess_member_display=========
+[I 2026-06-03 21:41:58,406 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_member_display_format, case info: TestMemberDisplayFormat.test_03_draw_guess_member_display
+[I 2026-06-03 21:41:58,406 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-03 21:41:58,406 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-03 21:41:58,406 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-03 21:41:58,406 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-03 21:41:58,406 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-03 21:41:58,409 minium minitest#897 capture] capture setup.png
+[I 2026-06-03 21:41:58,575 minium minitest#487 _miniSetUp] =========case: test_03_draw_guess_member_display start=========
+[I 2026-06-03 21:41:58,575 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-03 21:41:58,579 minium.Conn5696 connection#668 __on_message] [9863b0e9-25f3-4681-b0b3-1e7666088964]: wx.cloud.callFunction not exists
+[I 2026-06-03 21:42:06,872 minium.App6288 app#950 relaunch] ReLaunch: /packageGames/draw-guess/draw-guess?roomId=55e1d1ad6a202f2e000580650035db4c&roomCode=293138
+[I 2026-06-03 21:42:08,520 minium.App6288 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/draw-guess/draw-guess', 'query': {'roomId': '55e1d1ad6a202f2e000580650035db4c', 'roomCode': '293138'}, 'openType': 'reLaunch', 'timeStamp': 1780494128489, 'webviewId': 2, 'routeEventId': '2_1780494128428', 'renderer': 'webview'}, 1780494128490]}
+[I 2026-06-03 21:42:08,520 minium.Conn5696 connection#704 _handle_async_msg] received async msg: d5e271b9-721e-4f87-abb5-6e30c9530944
+[E 2026-06-03 21:42:13,629 minium.Conn5696 connection#668 __on_message] [0d22694a-2722-401e-ad43-3dbbd14fdc1a]: CreateListFromArrayLike called on non-object
+[I 2026-06-03 21:42:14,614 minium.App6288 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'pages/index/index', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780494134609, 'webviewId': 4, 'routeEventId': '4_1780494134035', 'renderer': 'webview'}, 1780494134610]}

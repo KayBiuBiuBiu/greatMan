@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a0f2e" />
+  <title>聚会抽奖</title>
+  <style>
+    :root {
+      --bg0: #12091f;
+      --bg1: #1f1235;
+      --text: #f7f2ff;
+      --muted: #b8a8d4;
+      --accent: #ff6b6b;
+      --accent2: #ffd166;
+      --accent3: #6ee7b7;
+      --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255, 107, 107, 0.3), transparent),
+        linear-gradient(160deg, var(--bg0), var(--bg1));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px 32px;
+    }
+
+    h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; }
+
+    .board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: min(100%, 340px);
+      margin-bottom: 20px;
+    }
+
+    .prize-card {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s, opacity 0.3s;
+      transform: translateY(0) scale(1);
+    }
+
+    .prize-card .badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+    }
+
+    .prize-card .emoji {
+      font-size: 2.8rem;
+      line-height: 1;
+      margin: 8px 0 6px;
+      transition: transform 0.12s;
+    }
+
+    .prize-card .name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    /* 抽奖中：当前高亮卡片跳动 */
+    .prize-card.lit {
+      border-color: var(--accent2);
+      box-shadow: 0 0 28px rgba(255, 209, 102, 0.45);
+      z-index: 2;
+      animation: cardJump 0.18s ease-out;
+    }
+
+    .prize-card.lit .emoji {
+      animation: emojiJump 0.18s ease-out;
+    }
+
+    @keyframes cardJump {
+      0%   { transform: translateY(0) scale(1); }
+      40%  { transform: translateY(-18px) scale(1.08); }
+      100% { transform: translateY(-8px) scale(1.04); }
+    }
+
+    @keyframes emojiJump {
+      0%   { transform: scale(1) rotate(0deg); }
+      40%  { transform: scale(1.25) rotate(-8deg); }
+      100% { transform: scale(1.1) rotate(0deg); }
+    }
+
+    /* 全部在跳（开场） */
+    .board.shuffling .prize-card:not(.done) {
+      animation: allShake 0.15s ease-in-out infinite alternate;
+    }
+
+    .board.shuffling .prize-card:not(.done):nth-child(1) { animation-delay: 0ms; }
+    .board.shuffling .prize-card:not(.done):nth-child(2) { animation-delay: 40ms; }
+    .board.shuffling .prize-card:not(.done):nth-child(3) { animation-delay: 80ms; }
+    .board.shuffling .prize-card:not(.done):nth-child(4) { animation-delay: 120ms; }
+
+    @keyframes allShake {
+      from { transform: translateY(0) scale(1); }
+      to   { transform: translateY(-10px) scale(1.03); }
+    }
+
+    /* 中奖 */
+    .prize-card.winner {
+      border-color: var(--accent3);
+      background: rgba(110, 231, 183, 0.12);
+      box-shadow: 0 0 40px rgba(110, 231, 183, 0.5);
+      transform: translateY(-10px) scale(1.1);
+      animation: winPulse 0.6s ease-out;
+      z-index: 3;
+    }
+
+    .prize-card.winner .emoji {
+      animation: winEmoji 0.6s ease-out;
+    }
+
+    @keyframes winPulse {
+      0%   { transform: translateY(0) scale(1); }
+      50%  { transform: translateY(-24px) scale(1.18); }
+      100% { transform: translateY(-10px) scale(1.1); }
+    }
+
+    @keyframes winEmoji {
+      0%   { transform: scale(1) rotate(0); }
+      30%  { transform: scale(1.5) rotate(12deg); }
+      60%  { transform: scale(1.2) rotate(-6deg); }
+      100% { transform: scale(1.15) rotate(0); }
+    }
+
+    /* 已抽过 */
+    .prize-card.done {
+      opacity: 0.35;
+      transform: scale(0.92);
+      pointer-events: none;
+    }
+
+    .prize-card.done::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent3);
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 16px;
+    }
+
+    .result {
+      text-align: center;
+      min-height: 1.6rem;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+      color: var(--accent3);
+      font-weight: 800;
+    }
+
+    .btn-draw {
+      width: min(100%, 280px);
+      padding: 20px 32px;
+      border: none;
+      border-radius: 999px;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #ff8e53);
+      box-shadow: 0 12px 36px rgba(255, 107, 107, 0.45);
+      cursor: pointer;
+      transition: transform 0.12s, opacity 0.12s;
+    }
+
+    .btn-draw:active:not(:disabled) { transform: scale(0.96); }
+    .btn-draw:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-reset {
+      margin-top: 14px;
+      padding: 10px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    canvas#confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <h1>🎉 抽奖</h1>
+
+  <div class="board" id="board"></div>
+
+  <p class="result" id="result">&nbsp;</p>
+  <button type="button" class="btn-draw" id="btnDraw">抽奖</button>
+  <button type="button" class="btn-reset" id="btnReset" hidden>再来一轮</button>
+
+  <script>
+    (function () {
+      var PRIZES = [
+        { id: 0, level: "四等奖", name: "2个月将神卡", emoji: "🎴" },
+        { id: 1, level: "三等奖", name: "一瓶香槟", emoji: "🍾" },
+        { id: 2, level: "二等奖", name: "一顿晚饭", emoji: "🍽️" },
+        { id: 3, level: "一等奖", name: "一顿夜宵", emoji: "🍜" }
+      ];
+
+      var spinning = false;
+      var drawn = [];
+      var pool = PRIZES.slice();
+      var cards = {};
+
+      var el = {
+        board: document.getElementById("board"),
+        result: document.getElementById("result"),
+        btnDraw: document.getElementById("btnDraw"),
+        btnReset: document.getElementById("btnReset"),
+        confetti: document.getElementById("confetti")
+      };
+
+      function buildBoard() {
+        el.board.innerHTML = "";
+        cards = {};
+        PRIZES.forEach(function (p) {
+          var card = document.createElement("div");
+          card.className = "prize-card";
+          card.dataset.id = p.id;
+          card.innerHTML =
+            "<span class=\"badge\">" + p.level + "</span>" +
+            "<span class=\"emoji\">" + p.emoji + "</span>" +
+            "<span class=\"name\">" + p.name + "</span>";
+          el.board.appendChild(card);
+          cards[p.id] = card;
+        });
+        syncDone();
+      }
+
+      function availableIds() {
+        return pool.map(function (p) { return p.id; });
+      }
+
+      function clearLit() {
+        PRIZES.forEach(function (p) {
+          cards[p.id].classList.remove("lit");
+        });
+      }
+
+      function syncDone() {
+        PRIZES.forEach(function (p) {
+          var c = cards[p.id];
+          c.classList.remove("lit", "winner");
+          if (drawn.indexOf(p.id) >= 0) c.classList.add("done");
+          else c.classList.remove("done");
+        });
+      }
+
+      function fireConfetti() {
+        var c = el.confetti;
+        var ctx = c.getContext("2d");
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        var parts = [];
+        var colors = ["#ff6b6b", "#ffd166", "#6ee7b7", "#a78bfa", "#fff"];
+        for (var i = 0; i < 120; i++) {
+          parts.push({
+            x: Math.random() * c.width,
+            y: -20,
+            r: 4 + Math.random() * 6,
+            vx: (Math.random() - 0.5) * 5,
+            vy: 2 + Math.random() * 5,
+            rot: Math.random() * Math.PI,
+            vr: (Math.random() - 0.5) * 0.25,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+        var frame = 0;
+        (function draw() {
+          ctx.clearRect(0, 0, c.width, c.height);
+          parts.forEach(function (pt) {
+            pt.x += pt.vx; pt.y += pt.vy; pt.rot += pt.vr;
+            ctx.save();
+            ctx.translate(pt.x, pt.y);
+            ctx.rotate(pt.rot);
+            ctx.fillStyle = pt.color;
+            ctx.fillRect(-pt.r / 2, -pt.r / 2, pt.r, pt.r);
+            ctx.restore();
+          });
+          if (++frame < 90) requestAnimationFrame(draw);
+          else ctx.clearRect(0, 0, c.width, c.height);
+        })();
+      }
+
+      function pickPrize() {
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      function spin() {
+        if (spinning || !pool.length) return;
+        spinning = true;
+        el.btnDraw.disabled = true;
+        el.result.textContent = "奖品跳动中…";
+
+        var target = pickPrize();
+        var avail = availableIds();
+        var ticks = 0;
+        var maxTicks = 28 + Math.floor(Math.random() * 12);
+        var delay = 80;
+        var lastId = -1;
+
+        el.board.classList.add("shuffling");
+        clearLit();
+        PRIZES.forEach(function (p) { cards[p.id].classList.remove("winner"); });
+
+        function tick() {
+          ticks++;
+          clearLit();
+
+          /* 从剩余奖品里随机高亮一个，卡片会跳 */
+          var pickId;
+          do {
+            pickId = avail[Math.floor(Math.random() * avail.length)];
+          } while (pickId === lastId && avail.length > 1);
+          lastId = pickId;
+
+          var card = cards[pickId];
+          card.classList.remove("lit");
+          void card.offsetWidth;
+          card.classList.add("lit");
+
+          if (ticks >= maxTicks) {
+            el.board.classList.remove("shuffling");
+            clearLit();
+
+            var winCard = cards[target.id];
+            winCard.classList.add("winner");
+            el.result.textContent = "🎊 " + target.level + "：" + target.name;
+
+            setTimeout(function () {
+              drawn.push(target.id);
+              pool = pool.filter(function (p) { return p.id !== target.id; });
+              winCard.classList.remove("winner");
+              syncDone();
+              fireConfetti();
+              spinning = false;
+              if (pool.length) {
+                el.btnDraw.disabled = false;
+                el.result.textContent = "再点一次继续抽";
+              } else {
+                el.result.textContent = "全部抽完啦 🎉";
+                el.btnReset.hidden = false;
+              }
+            }, 900);
+            return;
+          }
+
+          if (ticks > maxTicks - 6) delay += 35;
+          else if (ticks > maxTicks - 12) delay += 15;
+          else if (ticks > 5) el.board.classList.remove("shuffling");
+
+          setTimeout(tick, delay);
+        }
+
+        setTimeout(tick, 200);
+      }
+
+      function reset() {
+        drawn = [];
+        pool = PRIZES.slice();
+        el.result.textContent = "";
+        el.btnReset.hidden = true;
+        el.btnDraw.disabled = false;
+        el.board.classList.remove("shuffling");
+        syncDone();
+      }
+
+      el.btnDraw.addEventListener("click", spin);
+      el.btnReset.addEventListener("click", reset);
+
+      window.addEventListener("resize", function () {
+        el.confetti.width = window.innerWidth;
+        el.confetti.height = window.innerHeight;
+      });
+
+      buildBoard();
+    })();
+  </script>
+</body>
+</html>

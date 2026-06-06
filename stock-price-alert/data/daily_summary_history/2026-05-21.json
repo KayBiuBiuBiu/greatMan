@@ -14,6 +14,46 @@
       "source": "broker_xls"
     },
     {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.2878,
+      "close_price": 25.33,
+      "unrealized_profit": -2662.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002237",
+      "name": "恒邦股份",
+      "hold_shares": 1200,
+      "cost_price": 16.3275,
+      "close_price": 13.9,
+      "unrealized_profit": -2913.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6,
+      "close_price": 6.07,
+      "unrealized_profit": -530.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "300798",
+      "name": "锦鸡股份",
+      "hold_shares": 800,
+      "cost_price": 10.6125,
+      "close_price": 8.7,
+      "unrealized_profit": -1530.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
       "code": "301149",
       "name": "隆华新材",
       "hold_shares": 400,
@@ -26,10 +66,10 @@
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 4600,
-      "cost_price": 12.3814,
+      "hold_shares": 6700,
+      "cost_price": 12.5206,
       "close_price": 11.95,
-      "unrealized_profit": -1984.26,
+      "unrealized_profit": -3823.29,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -1586,9 +1626,9 @@
     "sells": [],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": 0.0,
-    "unrealized_profit": -3370.36,
-    "net_profit": -3370.36,
+    "realized_profit": -860.79,
+    "unrealized_profit": -4822.19,
+    "net_profit": -5682.98,
     "unrealized_positions": [
       {
         "code": "000967",
@@ -1597,6 +1637,42 @@
         "cost_price": 13.2125,
         "close_price": 12.05,
         "float_pnl_est": -465.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "001234",
+        "name": "泰慕士",
+        "hold_shares": 900,
+        "cost_price": 28.2878,
+        "close_price": 25.33,
+        "float_pnl_est": -2662.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002237",
+        "name": "恒邦股份",
+        "hold_shares": 1200,
+        "cost_price": 16.3275,
+        "close_price": 13.9,
+        "float_pnl_est": -2913.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002386",
+        "name": "天原股份",
+        "hold_shares": 1000,
+        "cost_price": 6.6,
+        "close_price": 6.07,
+        "float_pnl_est": -530.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "300798",
+        "name": "锦鸡股份",
+        "hold_shares": 800,
+        "cost_price": 10.6125,
+        "close_price": 8.7,
+        "float_pnl_est": -1530.0,
         "source": "broker_xls"
       },
       {
@@ -1611,10 +1687,10 @@
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 4600,
-        "cost_price": 12.3814,
+        "hold_shares": 6700,
+        "cost_price": 12.5206,
         "close_price": 11.95,
-        "float_pnl_est": -1984.26,
+        "float_pnl_est": -3823.29,
         "source": "broker_xls"
       },
       {
@@ -1642,16 +1718,16 @@
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
     ],
     "source": "broker_xls",
-    "broker_synced_at": "2026-05-26T09:24:56",
-    "broker_source_file": "交割单_20260526_003647.xls",
+    "broker_synced_at": "2026-06-03T22:52:06",
+    "broker_source_file": "交割单_20260603_225130.xls",
     "broker_source_files": [
-      "交割单_20260526_003647.xls"
+      "交割单_20260603_225130.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-05-21",
-    "broker_realized_profit": 0.0,
-    "broker_unrealized_change": -3370.36,
-    "broker_net_profit": -3370.36,
+    "broker_realized_profit": -860.79,
+    "broker_unrealized_change": -4822.19,
+    "broker_net_profit": -5682.98,
     "broker_buys": [
       {
         "code": "603007",
@@ -1678,7 +1754,17 @@
         "trade_time": "﻿13:00:15"
       }
     ],
-    "broker_sells": [],
+    "broker_sells": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 2300,
+        "price": 12.46,
+        "source": "broker_xls",
+        "trade_time": "﻿11:15:50",
+        "realized_profit": -860.79
+      }
+    ],
     "broker_day_trades": [
       {
         "code": "603007",
@@ -1689,6 +1775,16 @@
         "settlement_amount": -5115.05,
         "realized_profit": 0.0,
         "trade_time": "﻿10:23:17"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "sell",
+        "quantity": 2300,
+        "price": 12.46,
+        "settlement_amount": 28638.38,
+        "realized_profit": -860.79,
+        "trade_time": "﻿11:15:50"
       },
       {
         "code": "603717",
@@ -1806,7 +1902,7 @@
     "notes": []
   },
   "sell_events_today": [],
-  "broker_summary_synced_at": "2026-05-26T09:24:56",
+  "broker_summary_synced_at": "2026-06-03T22:52:06",
   "holdings_watchlist": [
     {
       "code": "000967",
@@ -1877,6 +1973,46 @@
       "source": "broker_xls"
     },
     {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 900,
+      "cost_price": 28.2878,
+      "close_price": 25.33,
+      "unrealized_profit": -2662.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002237",
+      "name": "恒邦股份",
+      "hold_shares": 1200,
+      "cost_price": 16.3275,
+      "close_price": 13.9,
+      "unrealized_profit": -2913.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6,
+      "close_price": 6.07,
+      "unrealized_profit": -530.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "300798",
+      "name": "锦鸡股份",
+      "hold_shares": 800,
+      "cost_price": 10.6125,
+      "close_price": 8.7,
+      "unrealized_profit": -1530.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
       "code": "301149",
       "name": "隆华新材",
       "hold_shares": 400,
@@ -1889,10 +2025,10 @@
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 4600,
-      "cost_price": 12.3814,
+      "hold_shares": 6700,
+      "cost_price": 12.5206,
       "close_price": 11.95,
-      "unrealized_profit": -1984.26,
+      "unrealized_profit": -3823.29,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -1921,9 +2057,9 @@
   "account_pnl_broker": {
     "as_of": "2026-05-21",
     "cash_available": 1297.13,
-    "market_value": 79366.0,
-    "total_assets": 80663.13,
-    "position_count": 5,
+    "market_value": 156968.0,
+    "total_assets": 158265.13,
+    "position_count": 9,
     "source": "broker_xls"
   },
   "holdings_notes": [

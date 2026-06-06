@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "date": "2026-03-19",
+  "generated_at": "2026-06-03T22:52:05",
+  "broker_summary_synced_at": "2026-06-03T22:52:05",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-06-03T22:52:05",
+    "broker_source_file": "交割单_20260603_225130.xls",
+    "broker_source_files": [
+      "交割单_20260603_225130.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-03-19",
+    "broker_realized_profit": 0.0,
+    "broker_unrealized_change": 16.89,
+    "broker_net_profit": 16.89,
+    "broker_buys": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 300,
+        "price": 11.82,
+        "source": "broker_xls",
+        "trade_time": "﻿14:49:11"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 600,
+        "price": 11.82,
+        "source": "broker_xls",
+        "trade_time": "﻿14:55:53"
+      }
+    ],
+    "broker_sells": [],
+    "broker_day_trades": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 300,
+        "price": 11.82,
+        "settlement_amount": -3551.04,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:49:11"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 600,
+        "price": 11.82,
+        "settlement_amount": -7097.07,
+        "realized_profit": 0.0,
+        "trade_time": "﻿14:55:53"
+      }
+    ],
+    "broker_closed_positions": [],
+    "realized_profit": 0.0,
+    "unrealized_profit": 16.89,
+    "net_profit": 16.89,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "unrealized_positions": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "hold_shares": 900,
+        "cost_price": 11.8312,
+        "close_price": 11.85,
+        "float_pnl_est": 16.89,
+        "source": "broker_xls"
+      }
+    ]
+  },
+  "holdings": [
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 900,
+      "cost_price": 11.8312,
+      "close_price": 11.85,
+      "unrealized_profit": 16.89,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 900,
+      "cost_price": 11.8312,
+      "close_price": 11.85,
+      "unrealized_profit": 16.89,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-03-19",
+  "account_pnl_broker": {
+    "as_of": "2026-03-19",
+    "cash_available": 103076.28,
+    "market_value": 10665.0,
+    "total_assets": 113741.28,
+    "position_count": 1,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
+}

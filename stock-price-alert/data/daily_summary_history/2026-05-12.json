@@ -7,43 +7,61 @@
       "code": "000537",
       "name": "绿发电力",
       "hold_shares": 300,
-      "cost_price": 9.7991,
-      "tags": "持仓"
+      "cost_price": 10.3383,
+      "close_price": 11.19,
+      "unrealized_profit": 255.5,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "000546",
       "name": "金圆股份",
       "hold_shares": 700,
-      "cost_price": 7.3973,
-      "tags": "持仓"
+      "cost_price": 7.3971,
+      "close_price": 7.39,
+      "unrealized_profit": -5.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "002386",
       "name": "天原股份",
       "hold_shares": 1000,
-      "cost_price": 6.6001,
-      "tags": "持仓"
+      "cost_price": 6.6,
+      "close_price": 6.57,
+      "unrealized_profit": -30.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "002576",
       "name": "通达动力",
       "hold_shares": 300,
-      "cost_price": 19.227,
-      "tags": "持仓"
+      "cost_price": 19.2267,
+      "close_price": 19.17,
+      "unrealized_profit": -17.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "300687",
       "name": "赛意信息",
       "hold_shares": 200,
-      "cost_price": 30.1955,
-      "tags": "持仓"
+      "cost_price": 30.195,
+      "close_price": 31.79,
+      "unrealized_profit": 319.0,
+      "tags": "持仓",
+      "source": "broker_xls"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 4900,
-      "cost_price": 13.485,
-      "tags": "持仓"
+      "hold_shares": 700,
+      "cost_price": 14.2773,
+      "close_price": 14.18,
+      "unrealized_profit": -68.1,
+      "tags": "持仓",
+      "source": "broker_xls"
     }
   ],
   "signals_today": [
@@ -1718,37 +1736,55 @@
         "code": "000537",
         "name": "绿发电力",
         "hold_shares": 300,
-        "float_pnl_est": 315.27
+        "cost_price": 10.3383,
+        "close_price": 11.19,
+        "float_pnl_est": 255.5,
+        "source": "broker_xls"
       },
       {
         "code": "000546",
         "name": "金圆股份",
         "hold_shares": 700,
-        "float_pnl_est": 267.89
+        "cost_price": 7.3971,
+        "close_price": 7.39,
+        "float_pnl_est": -5.0,
+        "source": "broker_xls"
       },
       {
         "code": "002386",
         "name": "天原股份",
         "hold_shares": 1000,
-        "float_pnl_est": -80.1
+        "cost_price": 6.6,
+        "close_price": 6.57,
+        "float_pnl_est": -30.0,
+        "source": "broker_xls"
       },
       {
         "code": "002576",
         "name": "通达动力",
         "hold_shares": 300,
-        "float_pnl_est": -17.1
+        "cost_price": 19.2267,
+        "close_price": 19.17,
+        "float_pnl_est": -17.0,
+        "source": "broker_xls"
       },
       {
         "code": "300687",
         "name": "赛意信息",
         "hold_shares": 200,
-        "float_pnl_est": 0.9
+        "cost_price": 30.195,
+        "close_price": 31.79,
+        "float_pnl_est": 319.0,
+        "source": "broker_xls"
       },
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 4900,
-        "float_pnl_est": 4581.5
+        "hold_shares": 700,
+        "cost_price": 14.2773,
+        "close_price": 14.18,
+        "float_pnl_est": -68.1,
+        "source": "broker_xls"
       }
     ],
     "notes": [
@@ -1758,10 +1794,10 @@
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
     ],
     "source": "broker_xls",
-    "broker_synced_at": "2026-05-18T19:08:05",
-    "broker_source_file": "交割单_20260518_184214.xls",
+    "broker_synced_at": "2026-06-03T22:52:06",
+    "broker_source_file": "交割单_20260603_225130.xls",
     "broker_source_files": [
-      "交割单_20260518_184214.xls"
+      "交割单_20260603_225130.xls"
     ],
     "broker_report_json": null,
     "broker_day": "2026-05-12",
@@ -1951,5 +1987,123 @@
     "ledger_events": [],
     "notes": []
   },
-  "broker_summary_synced_at": "2026-05-18T19:08:05"
+  "broker_summary_synced_at": "2026-06-03T22:52:06",
+  "holdings_watchlist": [
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 300,
+      "cost_price": 9.7991,
+      "tags": "持仓"
+    },
+    {
+      "code": "000546",
+      "name": "金圆股份",
+      "hold_shares": 700,
+      "cost_price": 7.3973,
+      "tags": "持仓"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6001,
+      "tags": "持仓"
+    },
+    {
+      "code": "002576",
+      "name": "通达动力",
+      "hold_shares": 300,
+      "cost_price": 19.227,
+      "tags": "持仓"
+    },
+    {
+      "code": "300687",
+      "name": "赛意信息",
+      "hold_shares": 200,
+      "cost_price": 30.1955,
+      "tags": "持仓"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 4900,
+      "cost_price": 13.485,
+      "tags": "持仓"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "000537",
+      "name": "绿发电力",
+      "hold_shares": 300,
+      "cost_price": 10.3383,
+      "close_price": 11.19,
+      "unrealized_profit": 255.5,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "000546",
+      "name": "金圆股份",
+      "hold_shares": 700,
+      "cost_price": 7.3971,
+      "close_price": 7.39,
+      "unrealized_profit": -5.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002386",
+      "name": "天原股份",
+      "hold_shares": 1000,
+      "cost_price": 6.6,
+      "close_price": 6.57,
+      "unrealized_profit": -30.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002576",
+      "name": "通达动力",
+      "hold_shares": 300,
+      "cost_price": 19.2267,
+      "close_price": 19.17,
+      "unrealized_profit": -17.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "300687",
+      "name": "赛意信息",
+      "hold_shares": 200,
+      "cost_price": 30.195,
+      "close_price": 31.79,
+      "unrealized_profit": 319.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 700,
+      "cost_price": 14.2773,
+      "close_price": 14.18,
+      "unrealized_profit": -68.1,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-05-12",
+  "account_pnl_broker": {
+    "as_of": "2026-05-12",
+    "cash_available": 125802.37,
+    "market_value": 37135.0,
+    "total_assets": 162937.37,
+    "position_count": 6,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
 }

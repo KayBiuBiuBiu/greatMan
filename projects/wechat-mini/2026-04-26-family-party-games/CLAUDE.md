@@ -2,6 +2,8 @@
 
 本文档为微信小程序「家庭聚会助手」的开发指南。
 
+> **Coding Plan 与 Agent 测 Minium**：改代码前/改完后读 [`minium-tests/CODING_PLAN.md`](../../minium-tests/CODING_PLAN.md)。
+
 ## 项目概述
 
 一个原生微信小程序，为线下同场家庭/亲友聚会提供**互动游戏和辅助工具**。核心特性：

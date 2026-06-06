@@ -2,7 +2,75 @@
 
 > **日期**: 2026-06-03  
 > **功能**: 你画我猜 Canvas 双端实时同步（A 端画笔 → B 端实时看）  
-> **状态**: Minium 自动化验收通过，Canvas 实时性需手测
+> **状态**: Minium 自动化验收通过，Canvas 实时性需手测  
+> **协作说明**: [`minium-tests/CODING_PLAN.md`](minium-tests/CODING_PLAN.md) · memberCountLine 闭环见 [`DRAW_GUESS_PR_DELIVERY.md`](DRAW_GUESS_PR_DELIVERY.md)
+
+---
+
+## 给 Coding Plan — 怎么跟 Coding Plan 说（用户复制粘贴）
+
+### 一句话（推荐）
+
+```
+Canvas 实时同步 Agent 已回归 suite_draw_guess.json：3/3 PASS，memberCountLine 无退化。详见 CANVAS_SYNC_DELIVERY.md §给 Coding Plan。PR 可合并；Canvas 双端延迟请你按文档手测。
+```
+
+### 稍完整版
+
+```
+Canvas 实时同步改动 Agent 已跑 Minium：
+- suite：minium-tests/suite_draw_guess.json
+- 结果：3/3 PASS，无 FAIL/ERROR
+- memberCountLine 仍正常（当前 X 人）
+- Minium 测不了 A/B 双端画笔实时性，请你按 CANVAS_SYNC_DELIVERY.md 手测清单验证延迟 <1s
+- 云函数 drawRoomService 若改 getView，请确认已部署
+- 详情：仓库根目录 CANVAS_SYNC_DELIVERY.md
+PR 可合并。
+```
+
+### Agent 终验结论（给 Coding Plan 看）
+
+| 项 | 结论 |
+|----|------|
+| Minium `suite_draw_guess.json` | ✅ **3/3 PASS** |
+| memberCountLine 是否退化 | ✅ 无（例：`当前 3 人（至少 2 人可开始）`） |
+| Canvas 实时同步（双端） | ⚠️ **Minium 不覆盖**，需 Coding Plan / 用户手测 |
+| PR | ✅ **可合并**（自动化回归已通过） |
+
+**Coding Plan 还需做的：**
+
+1. 确认 **drawRoomService** 已部署（getView 含 `gameState.canvasData`）
+2. 微信开发者工具 **Cmd+B** 编译分包 `draw-guess`
+3. 按本文 §Canvas 双端实时性 → **建议手测清单** 做两台手机验证（不阻塞 PR 合并）
+
+**不必再做的：**
+
+- 不必为通过 Minium 再改 `_patchViewFromSync` / memberCountLine（已回归通过）
+- 不必让用户手跑 `minitest`（Agent 已跑）
+
+**交付文档索引：**
+
+| 文档 | 用途 |
+|------|------|
+| **本文** [`CANVAS_SYNC_DELIVERY.md`](CANVAS_SYNC_DELIVERY.md) | Canvas 同步改动 + Agent 回归 + 手测清单 |
+| [`DRAW_GUESS_PR_DELIVERY.md`](DRAW_GUESS_PR_DELIVERY.md) | memberCountLine A–D 闭环 |
+| [`minium-tests/CODING_PLAN.md`](minium-tests/CODING_PLAN.md) | Coding Plan × Agent 分工 |
+
+### PR 末尾可粘贴（Agent 已验收）
+
+```markdown
+## Minium 回归 → Agent 已通过（Canvas 实时同步）
+
+- 游戏：你画我猜
+- suite：`minium-tests/suite_draw_guess.json`
+- Agent 结果：✅ 3/3 PASS（2026-06-03）
+- 改动：getView 返回 canvasData · _patchViewFromSync 猜者重绘 · 500ms 轮询 · 版本号去重
+- memberCountLine：无退化
+- 手测：Canvas A→B 实时性见 `CANVAS_SYNC_DELIVERY.md`（Minium 不覆盖）
+- 报告：`minium-tests/outputs/report.html`
+
+**结论：PR 可合并**
+```
 
 ---
 
@@ -21,7 +89,7 @@
 
 ## Agent 回归结果
 
-### Minium 自动化验收 ✅ 3/3 PASS
+### Minium 自动化验收 ✅ 3/3 PASS（最新复验 2026-06-03）
 
 ```bash
 cd /Users/haha/greatMan/minium-tests
@@ -34,11 +102,14 @@ minitest -m testcases -c config.json -s suite_draw_guess.json -g
 |------|------|------|
 | `test_03_draw_guess_core_flow` | ✅ PASS | 游戏流程无退化 |
 | `test_13_draw_guess_insufficient_players` | ✅ PASS | 人数校验正常 |
-| `test_03_draw_guess_member_display` | ✅ PASS | memberCountLine: "当前 3 人（至少 2 人可开始）" |
+| `test_03_draw_guess_member_display` | ✅ PASS | memberCountLine: `当前 3 人（至少 2 人可开始）` |
 
-- **汇总**: `failed num:0, error num:0`
-- **无退化**: Canvas 同步改后 memberCountLine 仍正常（回归通过）
+- **汇总**: `case num:2/1, failed num:0, error num:0`（共 3 条）
+- **无退化**: Canvas 同步改后 memberCountLine 仍正常
+- **已知 skip**: `canvas stroke skipped`（Minium 未进绘画 UI，不阻塞 suite）
 - **报告**: `minium-tests/outputs/report.html`
+
+**Coding Plan 转 Agent 验收标准**：✅ 已满足（回归无 FAIL/ERROR；Canvas 实时性仍须手测）
 
 ---
 

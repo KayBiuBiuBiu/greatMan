@@ -16,9 +16,10 @@
 
 ---
 
-## 你画我猜 Minium 闭环（2026-06-03）✅ 已通过
+## 你画我猜 Minium 闭环（2026-06-03）✅ Agent 终验通过
 
-> **状态：Agent 已验收 3/3 PASS。** 下文记录 Coding Plan 初修 + Agent 补修，供后续同类问题对照。
+> **PR 状态：可合并**（Agent 已跑 `suite_draw_guess.json` → **3/3 PASS**）。  
+> 交付文档：[`DRAW_GUESS_PR_DELIVERY.md`](../DRAW_GUESS_PR_DELIVERY.md) · 本文 · [`MINIUM_AGENT_HANDOFF.md`](./MINIUM_AGENT_HANDOFF.md)
 
 ### 验收结果（最终）
 
@@ -164,6 +165,7 @@ Agent 终验 3/3 PASS，见 DRAW_GUESS_PR_DELIVERY.md，PR 可合并。
 |------|------------|----------|
 | 全游戏回归 | `suite.json` | test_all_games + mystery + member_display |
 | 你画我猜 | `suite_draw_guess.json` | test_03 / test_13 + member_display |
+| 你画我猜 Canvas 同步 | 同上 + [`CANVAS_SYNC_DELIVERY.md`](../CANVAS_SYNC_DELIVERY.md) | 回归 3/3；双端实时性手测 |
 | 你比划我猜 | （项目内）`make minium` → `tests/test_gesture_final.py` | 见 `LOCAL_TEST_GUIDE.md` |
 
 新增游戏：复制 `suite_draw_guess.json` 改 `case_list`，并在上表加一行。
@@ -185,6 +187,20 @@ Agent 终验 3/3 PASS，见 DRAW_GUESS_PR_DELIVERY.md，PR 可合并。
 
 ```
 Coding Plan 改完了，按 minium-tests/CODING_PLAN.md 验收小节跑 Minium，suite 是 suite_xxx.json。
+```
+
+## 用户转给 Coding Plan 的一句话（Agent 测完后）
+
+**memberCountLine 闭环：**
+
+```
+Agent 终验 3/3 PASS，PR 可合并。见 DRAW_GUESS_PR_DELIVERY.md §给 Coding Plan。
+```
+
+**Canvas 实时同步回归：**
+
+```
+Canvas 同步 Agent 回归 3/3 PASS，memberCountLine 无退化，PR 可合并。Canvas 双端延迟请你手测，见 CANVAS_SYNC_DELIVERY.md §给 Coding Plan。
 ```
 
 ---

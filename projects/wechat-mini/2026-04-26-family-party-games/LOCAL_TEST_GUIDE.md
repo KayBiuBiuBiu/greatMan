@@ -1,5 +1,7 @@
 # 你比划我猜 - 本地 Minium 测试使用说明
 
+> **与 Coding Plan 分工**：Coding Plan 改代码；Agent 跑 Minium 见 [`minium-tests/MINIUM_AGENT_HANDOFF.md`](../../../minium-tests/MINIUM_AGENT_HANDOFF.md)。
+
 ## 🎯 快速开始
 
 你现在已经有了完整的测试脚本，可以在本地直接运行！

@@ -1,0 +1,70 @@
+[I 2026-06-03 21:52:57,309 minium minitest#432 _miniSetUp] =========Current case: test_03_draw_guess_member_display=========
+[I 2026-06-03 21:52:57,309 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_member_display_format, case info: TestMemberDisplayFormat.test_03_draw_guess_member_display
+[I 2026-06-03 21:52:57,309 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-03 21:52:57,309 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-03 21:52:57,309 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-03 21:52:57,309 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-03 21:52:57,310 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-03 21:52:57,310 minium minitest#897 capture] capture setup.png
+[W 2026-06-03 21:52:59,310 minium.App8880 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 21:52:59,311 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603214948/test_03_draw_guess_member_display/20260603215257308659/images/setup.png not exists
+[I 2026-06-03 21:52:59,311 minium minitest#487 _miniSetUp] =========case: test_03_draw_guess_member_display start=========
+[I 2026-06-03 21:52:59,311 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-03 21:52:59,322 minium.Conn4848 connection#668 __on_message] [0a5ed06c-76a4-4810-b009-f4ee5fd3d29b]: wx.cloud.callFunction not exists
+[I 2026-06-03 21:53:02,624 minium.App8880 app#950 relaunch] ReLaunch: /packageGames/draw-guess/draw-guess?roomId=3fda1b3e6a2031be00054c332ba9b61c&roomCode=297778
+[I 2026-06-03 21:53:03,823 minium.App8880 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/draw-guess/draw-guess', 'query': {'roomId': '3fda1b3e6a2031be00054c332ba9b61c', 'roomCode': '297778'}, 'openType': 'reLaunch', 'timeStamp': 1780494783820, 'webviewId': 6, 'routeEventId': '6_1780494783156', 'renderer': 'webview'}, 1780494783820]}
+[I 2026-06-03 21:53:03,823 minium.Conn4848 connection#704 _handle_async_msg] received async msg: c4fcc394-6ea7-415b-ae9b-5613e241e502
+[I 2026-06-03 21:53:05,225 minium.App8880 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'pages/index/index', 'query': {}, 'openType': 'reLaunch', 'timeStamp': 1780494785223, 'webviewId': 7, 'routeEventId': '7_1780494784645', 'renderer': 'webview'}, 1780494785224]}
+[E 2026-06-03 21:53:06,361 minium.Conn4848 connection#668 __on_message] [2c37477d-e120-4597-b4c3-22b6c5841c07]: page.afterHasRoomId not exists
+[I 2026-06-03 21:53:07,396 minium minitest#897 capture] capture assertTrue-success.png
+[W 2026-06-03 21:53:09,400 minium.App8880 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 21:53:09,401 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603214948/test_03_draw_guess_member_display/20260603215257308659/images/assertTrue-success.png not exists
+[E 2026-06-03 21:53:09,410 minium.Conn4848 connection#668 __on_message] [9b3f04eb-000e-4e9c-b165-3f5181bb2650]: wx.cloud.callFunction not exists
+[E 2026-06-03 21:53:13,896 minium assertbase#62 hook_assert] unexpectedly None : memberCountLine should exist
+[I 2026-06-03 21:53:13,903 minium minitest#897 capture] capture assertIsNotNone-failed.png
+[W 2026-06-03 21:53:15,908 minium.App8880 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 21:53:15,909 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603214948/test_03_draw_guess_member_display/20260603215257308659/images/assertIsNotNone-failed.png not exists
+[I 2026-06-03 21:53:15,909 minium page#716 _get_elements_by_css] try to get elements: page
+[I 2026-06-03 21:53:15,921 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.CustomElement object at 0x103056120>]
+[E 2026-06-03 21:53:15,959 minium minitest#793 _callTestMethod] test exception
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_member_display_format.py", line 111, in test_03_draw_guess_member_display
+    self.assertIsNotNone(member_count_line, "memberCountLine should exist")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 1309, in assertIsNotNone
+    self.fail(self._formatMessage(msg, standardMsg))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/unittest/case.py", line 732, in fail
+    raise self.failureException(msg)
+AssertionError: unexpectedly None : memberCountLine should exist
+[I 2026-06-03 21:53:15,961 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-03 21:53:15,963 minium minitest#897 capture] capture teardown.png
+[W 2026-06-03 21:53:17,968 minium.App8880 app#682 screen_shot] 截图指令响应失败, 可能因为开发者工具不在前台导致
+[W 2026-06-03 21:53:17,968 minium minitest#929 capture] /Users/haha/greatMan/minium-tests/outputs/20260603214948/test_03_draw_guess_member_display/20260603215257308659/images/teardown.png not exists
+[I 2026-06-03 21:53:17,969 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-03 21:53:17,969 minium basenative#63 wrapper] call BaseNative.get_start_up end 
+[E 2026-06-03 21:53:17,970 minium assertbase#390 _get_stack_info] <bound method TestMemberDisplayFormat.test_03_draw_guess_member_display of <testcases.test_member_display_format.TestMemberDisplayFormat testMethod=test_03_draw_guess_member_display>>
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 43, in testPartExecutor
+    yield
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/libs/unittest/case.py", line 125, in run
+    self._callTestMethod(testMethod)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/minitest.py", line 789, in _callTestMethod
+    method()
+    ~~~~~~^^
+  File "/Users/haha/greatMan/minium-tests/testcases/test_member_display_format.py", line 111, in test_03_draw_guess_member_display
+    self.assertIsNotNone(member_count_line, "memberCountLine should exist")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.13/site-packages/minium/framework/assertbase.py", line 60, in hook_assert
+    return src(self, *args, **kwargs)
+AssertionError: unexpectedly None : memberCountLine should exist
+[W 2026-06-03 21:53:17,971 minium assertbase#354 _log_info_when_error] config: {'debug': False, 'base_dir': '/Users/haha/greatMan/minium-tests', 'platform': 'ide', 'app': 'wx', 'debug_mode': 'info', 'close_ide': False, 'auto_capture': 'auto', 'check_mp_foreground': True, 'auto_relaunch': False, 'device_desire': {}, 'account_info': {}, 'report_usage': True, 'remote_connect_timeout': 180, 'request_timeout': 20, 'use_push': True, 'full_reset': False, 'outputs': './outputs', 'enable_app_log': False, 'enable_network_panel': False, 'project_path': '/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games', 'dev_tool_path': '/Applications/wechatwebdevtools.app/Contents/MacOS/cli', 'test_port': 9420, 'mock_native_modal': {}, 'mock_request': [], 'auto_authorize': False, 'audits': None, 'teardown_snapshot': False, 'mock_images_dir': '', 'mock_images': {}, 'need_perf': False, 'appid': None, 'enable_h5': True, 'autofix': False, 'tcb_cli': 'npx -p @cloudbase/cli@3.4.0 tcb', 'cloud_env_id': 'cloud1-d9g01no7m292bc511-d5e875d', 'report': {'enabled': True, 'path': './outputs/report.html'}, 'test_settings': {'fail_fast': False, 'default_timeout': 12, 'page_stable_seconds': 1, 'use_cloud_test_hooks': True, 'manual_multi_instance': False, 'virtual_player_prefix': 'Minium玩家', 'room_code_lengths': {'default': 6, 'truthDareRoom': 4}, 'mystery_min_players': 3, 'mystery_insufficient_players': 2}, 'manual_fields': {'dev_tool_path': '如果本机路径不存在，请改成微信开发者工具 CLI 的实际路径', 'use_cloud_test_hooks': '如果你在云函数里增加 __testSeedPlayers / __testAdvanceRound 等测试 action，可改为 true'}, 'framework_capture': True, 'error_capture': False, 'assert_capture': True, 'create_time': '20260603214948', 'case_output': './outputs/20260603214948/test_03_draw_guess_member_display/20260603215257308659'}
+[W 2026-06-03 21:53:17,971 minium assertbase#355 _log_info_when_error] build info: {'version': '1.6.0', 'revision': '33ce5b50b34ec18c51c054a7cc1bdfb3ab0a451b', 'branch': 'master', 'update_at': '2024-10-09 21:08:56'}
+[W 2026-06-03 21:53:17,971 minium minitest#1029 _log_info_when_error] mini: 基础库3.15.2, 开发者工具2.01.2510290
+[W 2026-06-03 21:53:17,971 minium minitest#1031 _log_info_when_error] native: <minium.native.wx_native.idenative.IdeNative object at 0x103056ba0>

@@ -1,0 +1,37 @@
+[I 2026-06-03 22:29:21,998 minium minitest#432 _miniSetUp] =========Current case: test_03_draw_guess_core_flow=========
+[I 2026-06-03 22:29:21,998 minium minitest#435 _miniSetUp] package info: .Users.haha.greatMan.minium-tests.testcases.test_all_games, case info: TestAllGames.test_03_draw_guess_core_flow
+[I 2026-06-03 22:29:21,999 minium basenative#59 wrapper] call BaseNative.check_connection
+[I 2026-06-03 22:29:21,999 minium basenative#63 wrapper] call BaseNative.check_connection end True
+[I 2026-06-03 22:29:21,999 minium basenative#59 wrapper] call BaseNative.back_to_miniprogram
+[I 2026-06-03 22:29:21,999 minium basenative#794 back_to_miniprogram] try back_to_miniprogram 3
+[I 2026-06-03 22:29:21,999 minium basenative#63 wrapper] call BaseNative.back_to_miniprogram end 
+[I 2026-06-03 22:29:21,999 minium minitest#897 capture] capture setup.png
+[I 2026-06-03 22:29:35,464 minium minitest#487 _miniSetUp] =========case: test_03_draw_guess_core_flow start=========
+[I 2026-06-03 22:29:35,464 minium minitest#788 _callTestMethod] call test method
+[E 2026-06-03 22:29:35,468 minium.Conn4528 connection#668 __on_message] [f642eef7-0117-4374-ac83-a89031862ae1]: wx.cloud.callFunction not exists
+[I 2026-06-03 22:29:47,082 minium.App4352 app#950 relaunch] ReLaunch: /packageGames/draw-guess/draw-guess?roomId=bf757c4c6a203a5a002dcdf739dcd3d7&roomCode=536839
+[E 2026-06-03 22:30:01,923 minium.Conn4528 connection#668 __on_message] [68b24788-70bc-4c64-8ffd-61cdef08cb51]: timeout
+[I 2026-06-03 22:30:01,925 minium.Conn4528 connection#704 _handle_async_msg] received async msg: 68b24788-70bc-4c64-8ffd-61cdef08cb51
+[W 2026-06-03 22:30:01,927 minium.App4352 app#1172 _change_route_async] 可能因频繁调用reLaunch导致timeout
+[I 2026-06-03 22:30:03,287 minium.App4352 app#1226 _on_route_changed] Route changed, {'name': 'onAppRouteDone', 'args': [{'path': 'packageGames/draw-guess/draw-guess', 'query': {'roomId': 'bf757c4c6a203a5a002dcdf739dcd3d7', 'roomCode': '536839'}, 'openType': 'reLaunch', 'timeStamp': 1780497003229, 'webviewId': 2, 'routeEventId': '2_1780497001922', 'renderer': 'webview'}, 1780497003230]}
+[W 2026-06-03 22:30:03,288 minium.App4352 app#1178 _change_route_async] wait route done and return the same page
+[I 2026-06-03 22:30:05,884 minium minitest#897 capture] capture assertTrue-success.png
+[E 2026-06-03 22:30:06,018 minium.Conn4528 connection#668 __on_message] [76b7018f-41aa-42d1-8597-e2985f21629c]: wx.cloud.callFunction not exists
+[E 2026-06-03 22:30:11,551 minium.Conn4528 connection#668 __on_message] [b8dcd3c2-3aa7-4916-8f18-1b5fb22d5d23]: wx.cloud.callFunction not exists
+[I 2026-06-03 22:30:15,820 minium page#716 _get_elements_by_css] try to get elements: button
+[I 2026-06-03 22:30:15,828 minium page#749 _get_elements_by_css] find elements success: [<minium.miniprogram.base_driver.element.BaseElement object at 0x103d29160>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103b9a0d0>, <minium.miniprogram.base_driver.element.BaseElement object at 0x103b9a350>]
+[E 2026-06-03 22:30:17,947 minium.Conn4528 connection#668 __on_message] [e56a1c2d-d24b-49f6-b146-7ff4c53cdf9d]: wx.cloud.callFunction not exists
+[E 2026-06-03 22:30:22,875 minium.Conn4528 connection#668 __on_message] [10c57217-6ea2-4423-bfcb-2c84db6a72af]: wx.cloud.callFunction not exists
+[I 2026-06-03 22:30:26,289 minium minitest#897 capture] capture assertTrue-success_223026289012.png
+[E 2026-06-03 22:30:26,427 minium.Conn4528 connection#668 __on_message] [07e2bf57-407d-4d7e-a7fb-a53f60ef94e4]: wx.cloud.callFunction not exists
+[E 2026-06-03 22:30:29,294 minium.Conn4528 connection#668 __on_message] [869c0c9b-df7a-4406-97ca-aad7262910ae]: wx.cloud.callFunction not exists
+[E 2026-06-03 22:30:32,336 minium.Conn4528 connection#668 __on_message] [02416c89-0d5d-49e6-9ce1-f4a508908a4f]: wx.cloud.callFunction not exists
+[I 2026-06-03 22:30:38,037 minium minitest#897 capture] capture assertTrue-success_223038037250.png
+[I 2026-06-03 22:30:38,180 minium page#716 _get_elements_by_css] try to get elements: canvas
+[W 2026-06-03 22:30:40,206 minium page#747 _get_elements_by_css] Could not found any element 'canvas' you need
+[I 2026-06-03 22:30:40,206 minium page#716 _get_elements_by_css] try to get elements: input
+[W 2026-06-03 22:30:51,309 minium page#747 _get_elements_by_css] Could not found any element 'input' you need
+[I 2026-06-03 22:30:51,309 minium minitest#796 _callTestMethod] end test method
+[I 2026-06-03 22:30:51,310 minium minitest#897 capture] capture teardown.png
+[I 2026-06-03 22:30:51,440 minium basenative#59 wrapper] call BaseNative.get_start_up
+[I 2026-06-03 22:30:51,440 minium basenative#63 wrapper] call BaseNative.get_start_up end 

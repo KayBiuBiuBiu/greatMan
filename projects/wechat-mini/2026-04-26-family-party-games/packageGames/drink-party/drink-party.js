@@ -214,7 +214,11 @@ Page({
     ringFlash: false,
     inCountdown: false,
     countdownSec: 0,
-    memberPulseDuration: 400
+    memberPulseDuration: 400,
+    showRoulette: false,
+    rouletteOptions: [],
+    rouletteSelected: -1,
+    rouletteAnimating: false
   },
   _w: null,
   _tcd: null,
@@ -261,12 +265,10 @@ Page({
   },
   _buildCountdownUiPatch(stateOpt) {
     const left = this._countdownSecLeft(stateOpt)
-    const pulseMs = this._memberPulseDurationMs(stateOpt)
     const st = stateOpt || this.data.state || {}
     return {
       inCountdown: left > 0 || st.phase === 'countdown',
       countdownSec: left,
-      memberPulseDuration: pulseMs,
       phaseHint:
         left > 0 ? '抽签中 · ' + left + ' 秒后揭晓' : '即将揭晓…',
       displayPlayers: enrichDrinkDisplayPlayers(st.publicPlayers || [], st, this)
@@ -483,8 +485,11 @@ Page({
     }
     this._playAudioFile({ volume: 1 })
     const sips = drinkSips | 0 || this.data.drinkSips | 0
-    const tip = sips > 0 ? '你的手机响了！喝 ' + sips + ' 口饮料' : '你的手机响了'
+    const tip = sips > 0 ? '你被抽中了！请选择一个抽奖项' : '你被抽中了！'
     wx.showToast({ title: tip, icon: 'none', duration: 3000 })
+    setTimeout(() => {
+      this._openRouletteModal()
+    }, 800)
   },
   _onRingerMaybe(d, my, rPh) {
     if (rPh !== 'result' || !d || !my) {
@@ -1018,5 +1023,65 @@ Page({
       gameName: '趣味抽签',
       publicLog: st.publicLog || [st.result]
     })
+  },
+  _openRouletteModal() {
+    const options = [
+      { label: '自己喝 1-10 口', value: 'self' },
+      { label: '左右两边各喝 1-10 口', value: 'sides' },
+      { label: '喂异性喝 1-10 口', value: 'opposite' },
+      { label: '指定一人喝 1-10 口', value: 'designate' },
+      { label: '除了自己其余都喝', value: 'others' }
+    ]
+    this.setData({
+      showRoulette: true,
+      rouletteOptions: options,
+      rouletteSelected: -1,
+      rouletteAnimating: false
+    })
+  },
+  _startRouletteAnimation() {
+    if (this.data.rouletteAnimating) return
+    this.setData({ rouletteAnimating: true })
+
+    let iteration = 0
+    const optionCount = this.data.rouletteOptions.length
+
+    const tick = () => {
+      iteration++
+      const idx = iteration % optionCount
+      this.setData({ rouletteSelected: idx })
+
+      // 越来越慢：快速转，然后逐渐减速
+      let nextDelay = 30
+      if (iteration > 12) {
+        nextDelay = Math.min(400, 30 + (iteration - 12) * 15)
+      }
+
+      // 转够久后停止
+      if (iteration <= 28) {
+        setTimeout(tick, nextDelay)
+      } else {
+        this.setData({ rouletteAnimating: false })
+      }
+    }
+    tick()
+  },
+  onRouletteTap() {
+    if (!this.data.rouletteAnimating) {
+      this._startRouletteAnimation()
+    }
+  },
+  onRouletteClose() {
+    this.setData({ showRoulette: false })
+  },
+  onRouletteConfirm() {
+    const selected = this.data.rouletteSelected
+    if (selected < 0) {
+      wx.showToast({ title: '请先点击转盘', icon: 'none' })
+      return
+    }
+    const option = this.data.rouletteOptions[selected]
+    this.setData({ showRoulette: false })
+    wx.showToast({ title: '已选择：' + option.label, icon: 'none' })
   }
 })

@@ -1,0 +1,26 @@
+---
+description: 家庭聚会小程序 — Coding Plan 改代码，Agent 跑 Minium
+globs: minium-tests/**,projects/wechat-mini/**
+alwaysApply: false
+---
+
+# 家庭聚会小程序 × Minium 分工
+
+**Coding Plan 先看：`minium-tests/CODING_PLAN.md`**（改完怎么交付、验收模板、suite 表）。
+
+**Agent 跑测看：`minium-tests/MINIUM_AGENT_HANDOFF.md`**（开 IDE、命令、报告模板）。
+
+## Coding Plan 改完必做
+
+1. 按 `CODING_PLAN.md` 在 PR/文档末尾写「Minium 验收 → 交给 Agent」
+2. 最后一行写：**可以交给 Agent 跑 Minium 了**
+3. 需要自动化点击的控件加 `data-testid`
+
+## Agent 最小跑测
+
+```bash
+CLI="/Applications/wechatwebdevtools.app/Contents/MacOS/cli"
+PROJECT="/Users/haha/greatMan/projects/wechat-mini/2026-04-26-family-party-games"
+"$CLI" open --project "$PROJECT" && "$CLI" auto --project "$PROJECT" --auto-port 9420
+cd /Users/haha/greatMan/minium-tests && minitest -m testcases -c config.json -s suite_xxx.json -g
+```
