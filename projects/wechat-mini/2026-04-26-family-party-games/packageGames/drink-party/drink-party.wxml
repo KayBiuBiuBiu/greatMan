@@ -151,6 +151,6 @@
         {{lotteryOptions[lotteryIndex]}} {{selectedLotterySips}} 口
       </text>
     </view>
-    <button class="btn btn-primary dp-lottery-confirm" bindtap="onLotteryConfirm" disabled="{{lotteryAnimating}}">确认</button>
+    <button class="btn btn-primary dp-lottery-confirm" bindtap="onLotteryConfirm" disabled="{{lotteryAnimating}}">关闭</button>
   </view>
 </view>
