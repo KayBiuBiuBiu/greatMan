@@ -136,7 +136,7 @@
     <view class="dp-choose-title">「{{targetUserNick}}」被抽中了！</view>
     <view class="dp-choose-subtitle">选择你的命运</view>
     <view class="dp-choose-actions">
-      <button class="btn btn-secondary dp-choose-btn" bindtap="onChooseRandomSips">1-20口随机</button>
+      <button class="btn btn-secondary dp-choose-btn" bindtap="onChooseRandomSips">{{randomSips20}}口随机</button>
       <button class="btn btn-primary dp-choose-btn" bindtap="onChooseLottery">试试手气</button>
     </view>
   </view>

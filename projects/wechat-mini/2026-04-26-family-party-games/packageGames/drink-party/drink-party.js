@@ -220,6 +220,7 @@ Page({
     memberPulseDuration: 400,
     showChooseSips: false,
     targetUserNick: '',
+    randomSips20: 0,
     showLotteryScroll: false,
     lotteryOptions: [],
     lotteryIndex: 0,
@@ -501,10 +502,14 @@ Page({
     }
     this._playAudioFile({ volume: 1 })
 
+    // 生成 1-20 的随机口数
+    const randomSips = 1 + Math.floor(Math.random() * 20)
+
     // 显示第一个选择弹窗（只有被抽中的用户看到）
     this.setData({
       showChooseSips: true,
-      targetUserNick: targetNick
+      targetUserNick: targetNick,
+      randomSips20: randomSips
     })
   },
   _onRingerMaybe(d, my, rPh) {
@@ -737,9 +742,12 @@ Page({
         this._skipLegacyVoteIfNeeded(d)
       }
       this._onRingerMaybe(d, my, rPh)
-      // 在 result 阶段检查是否需要显示第二个弹窗（非抽中用户）
-      if (rPh === 'result' && targetOid && norm.targetNick && !iAmRinger) {
-        this._checkAndShowLottery(rDisp, norm.targetNick)
+      // 在 result 阶段为所有非抽中用户显示第二个弹窗
+      if (rPh === 'result' && targetOid && norm.targetNick) {
+        if (!iAmRinger) {
+          // 非抽中用户：在轮询时检查是否需要显示第二个弹窗
+          this._checkAndShowLottery(rDisp, norm.targetNick)
+        }
       }
       if (rPh === 'countdown') {
         this._startCountdownTimer()
@@ -1103,8 +1111,8 @@ Page({
     wx.showToast({ title: '已确认：' + resultText, icon: 'none', duration: 1500 })
   },
   onChooseRandomSips() {
-    // 1-20 的随机口数
-    const randomSips = 1 + Math.floor(Math.random() * 20)
+    // 使用已生成的随机口数
+    const randomSips = this.data.randomSips20
     this.setData({ showChooseSips: false })
     wx.showToast({
       title: '你要喝 ' + randomSips + ' 口！',
