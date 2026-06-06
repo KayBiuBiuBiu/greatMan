@@ -237,6 +237,7 @@ Page({
   _countdownShownAt: 0,
   _cdRound: 0,
   _countdownEndOverride: 0,
+  _lotteryShownForRound: -1,
   _countdownEndAt(stateOpt) {
     const st = stateOpt || this.data.state
     if (st && st.phase === 'countdown') {
@@ -736,6 +737,10 @@ Page({
         this._skipLegacyVoteIfNeeded(d)
       }
       this._onRingerMaybe(d, my, rPh)
+      // 在 result 阶段检查是否需要显示第二个弹窗（非抽中用户）
+      if (rPh === 'result' && targetOid && norm.targetNick && !iAmRinger) {
+        this._checkAndShowLottery(rDisp, norm.targetNick)
+      }
       if (rPh === 'countdown') {
         this._startCountdownTimer()
         const endAt = ts(d && d.countdownEndsAt)
@@ -975,6 +980,7 @@ Page({
           const nextR = (r.currentRound | 0) || (base.currentRound | 0) + 1
           const endsAt = ts(r.countdownEndsAt) || Date.now() + COUNTDOWN_UI_MS
           this._ringAlertKey = ''
+          this._lotteryShownForRound = -1
           this._beginCountdown(nextR, endsAt)
           const optimistic = Object.assign({}, base, {
             phase: 'countdown',
@@ -1109,10 +1115,37 @@ Page({
   onChooseLottery() {
     // 关闭第一个弹窗
     this.setData({ showChooseSips: false })
-    // 为所有用户显示第二个弹窗
-    setTimeout(() => {
-      this._broadcastLottery(this.data.targetUserNick)
-    }, 300)
+    // 立即为当前用户显示第二个弹窗
+    this._openLotteryScroll(this.data.targetUserNick)
+    // 调用云函数通知所有其他用户
+    this._notifyLotteryStart()
+  },
+  _notifyLotteryStart() {
+    if (!this.data.roomId || !wx.cloud) {
+      return
+    }
+    callDrink(
+      { action: 'startLottery', roomId: this.data.roomId },
+      {
+        silent: true,
+        onOk: () => {
+          // 云函数处理成功
+        },
+        onError: () => {
+          // 如果云函数失败，也没关系，当前用户已经显示了弹窗
+        }
+      }
+    )
+  },
+  _checkAndShowLottery(roundId, targetNick) {
+    // 检查这一轮是否已经显示过第二个弹窗
+    if (this._lotteryShownForRound === roundId) {
+      return
+    }
+    // 标记这一轮已显示
+    this._lotteryShownForRound = roundId
+    // 显示第二个弹窗
+    this._openLotteryScroll(targetNick)
   },
   _broadcastLottery(targetNick) {
     // 为所有用户显示第二个弹窗
