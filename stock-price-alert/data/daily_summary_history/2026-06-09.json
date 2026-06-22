@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "date": "2026-06-04",
-  "generated_at": "2026-06-04T15:10:15",
+  "date": "2026-06-09",
+  "generated_at": "2026-06-09T15:10:27",
   "holdings": [
     {
       "code": "001234",
       "name": "泰慕士",
       "hold_shares": 500,
       "cost_price": 28.2878,
-      "close_price": 23.38,
-      "unrealized_profit": -2453.89,
+      "close_price": 22.64,
+      "unrealized_profit": -2823.89,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -18,8 +18,8 @@
       "name": "华天科技",
       "hold_shares": 300,
       "cost_price": 19.2167,
-      "close_price": 19.24,
-      "unrealized_profit": 7.0,
+      "close_price": 16.8,
+      "unrealized_profit": -725.0,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -28,18 +28,18 @@
       "name": "陆家嘴",
       "hold_shares": 700,
       "cost_price": 7.1272,
-      "close_price": 7.06,
-      "unrealized_profit": -47.05,
+      "close_price": 6.83,
+      "unrealized_profit": -208.05,
       "tags": "持仓",
       "source": "broker_xls"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 5700,
-      "cost_price": 12.2229,
-      "close_price": 12.18,
-      "unrealized_profit": -244.77,
+      "hold_shares": 19000,
+      "cost_price": 11.9308,
+      "close_price": 11.09,
+      "unrealized_profit": -15974.3,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -48,8 +48,8 @@
       "name": "嘉环科技",
       "hold_shares": 1000,
       "cost_price": 19.8032,
-      "close_price": 15.13,
-      "unrealized_profit": -4673.2,
+      "close_price": 17.0,
+      "unrealized_profit": -2803.2,
       "tags": "持仓",
       "source": "broker_xls"
     }
@@ -57,1120 +57,1222 @@
   "signals_today": [
     {
       "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T15:00:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T15:00:07"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:54:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:54:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:49:35"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:49:35"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:44:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:44:14"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:38:56"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:38:55"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T14:36:01"
-    },
-    {
-      "alert_type": "position_suggestion",
-      "code": "002600",
-      "summary": "卖出｜大盘走弱+个股破均线",
-      "fired_iso": "2026-06-04T14:34:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:33:41"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:33:40"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:28:22"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:28:22"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T14:24:20"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:23:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:23:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:17:52"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:17:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:12:35"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:12:35"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600105",
-      "summary": "🟡 短线赚得差不多了，可先卖一部分把利润锁住",
-      "fired_iso": "2026-06-04T14:11:59"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:07:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:07:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600105",
-      "summary": "🟡 短线赚得差不多了，可先卖一部分把利润锁住",
-      "fired_iso": "2026-06-04T14:04:23"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:02:01"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T14:01:59"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T13:57:18"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:56:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:56:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:51:25"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:51:22"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:46:04"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:46:03"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:40:47"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:40:46"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600105",
-      "summary": "🟡 短线赚得差不多了，可先卖一部分把利润锁住",
-      "fired_iso": "2026-06-04T13:40:11"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:35:30"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:35:30"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600105",
-      "summary": "🟡 短线赚得差不多了，可先卖一部分把利润锁住",
-      "fired_iso": "2026-06-04T13:33:45"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:30:13"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:30:12"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:24:53"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600105",
-      "summary": "🟡 短线赚得差不多了，可先卖一部分把利润锁住",
-      "fired_iso": "2026-06-04T13:24:53"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:24:53"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "600105",
-      "summary": "🟡 短线赚得差不多了，可先卖一部分把利润锁住",
-      "fired_iso": "2026-06-04T13:19:37"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:19:36"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:19:36"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:14:23"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:14:23"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T13:10:16"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:09:04"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:09:04"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T13:04:58"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:03:49"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T13:03:48"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:58:34"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:58:34"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:58:33"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:53:22"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:53:22"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:53:22"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:48:13"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:48:12"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:48:11"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:43:01"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:43:00"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:43:00"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:37:51"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:37:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:37:51"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:32:40"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:32:40"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:32:39"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:27:27"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:27:27"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:27:26"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:22:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:22:16"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:22:16"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:17:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:17:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:17:07"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:11:55"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:11:55"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:11:54"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:06:44"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:06:43"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:06:43"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T12:01:32"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:01:32"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T12:01:31"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:56:19"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:56:19"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:56:17"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:51:04"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:51:04"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:51:03"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:45:51"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:45:50"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:45:49"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:40:37"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:40:36"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:40:36"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:35:24"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:35:24"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:35:23"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:29:58"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:29:57"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:29:57"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:24:44"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:24:44"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:24:43"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:19:24"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:19:24"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:19:23"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:14:09"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:14:09"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:14:06"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:08:48"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:08:47"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:08:47"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:03:31"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T11:03:31"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T11:03:31"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:58:10"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:58:09"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:58:09"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:52:47"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:52:47"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:52:46"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:47:30"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:47:30"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:47:30"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:42:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:42:07"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:42:06"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:36:50"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:36:50"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:36:50"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:31:28"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:31:27"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:31:27"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:26:07"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:26:07"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:26:06"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:20:47"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:20:47"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:20:44"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:15:24"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:15:23"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:15:20"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:10:03"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:10:02"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:10:00"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:04:42"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T10:04:41"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T10:04:41"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:59:21"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:59:21"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:59:20"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:58:44"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:58:41"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:58:39"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:53:34"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:53:32"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:53:31"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:48:13"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:48:10"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:48:08"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:42:55"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:42:51"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:42:51"
-    },
-    {
-      "alert_type": "strategy",
-      "code": "600105",
-      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:37:23"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:37:21"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:37:20"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "001234",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:32:17"
-    },
-    {
-      "alert_type": "position_suggestion",
-      "code": "603206",
-      "summary": "卖出｜趋势走坏，止损",
-      "fired_iso": "2026-06-04T09:32:16"
-    },
-    {
-      "alert_type": "risk_stop_take",
-      "code": "603206",
-      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
-      "fired_iso": "2026-06-04T09:32:16"
-    },
-    {
-      "alert_type": "position_suggestion",
-      "code": "001234",
-      "summary": "卖出｜趋势走坏，止损",
-      "fired_iso": "2026-06-04T09:32:16"
-    },
-    {
-      "alert_type": "position_suggestion",
       "code": "600711",
-      "summary": "卖出｜大盘走弱+个股破均线",
-      "fired_iso": "2026-06-04T09:32:14"
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:59:09"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:59:09"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:59:09"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:59:07"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:56:13"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:55:36"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:53:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:53:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:53:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:53:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:50:52"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:50:18"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:48:33"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:48:33"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:48:32"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:48:30"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:45:35"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:45:00"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:43:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:43:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:43:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:43:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:40:16"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:39:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:37:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:37:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:37:55"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:37:55"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T14:36:10"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:35:01"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:34:26"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:32:37"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:32:36"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:32:36"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:32:36"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T14:30:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:29:41"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:29:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:27:21"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:27:20"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:27:20"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:27:18"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T14:25:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:24:23"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:23:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:22:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:22:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:22:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:22:00"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T14:20:16"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:19:04"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:18:28"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:16:44"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:16:44"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:16:43"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:16:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:13:47"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:13:13"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:11:25"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:11:25"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:11:25"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:11:25"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:08:31"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:07:53"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:06:10"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:06:09"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:06:09"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:06:07"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:03:12"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T14:02:38"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T14:00:52"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:00:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:00:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:00:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T14:00:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:57:52"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:57:17"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:55:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:55:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:55:33"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:55:31"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:54:57"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:52:36"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:52:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:50:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:50:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:50:14"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:50:14"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:49:39"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:47:18"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:46:42"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:44:58"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:44:58"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:44:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:44:56"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:44:22"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:42:01"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:41:26"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:39:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:39:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:39:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:39:40"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:39:06"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:36:44"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:36:09"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:34:27"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:34:27"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:34:25"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:34:25"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:33:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:31:27"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:30:51"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:29:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:29:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:29:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:29:04"
     },
     {
       "alert_type": "strategy",
       "code": "600105",
       "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
-      "fired_iso": "2026-06-04T09:32:10"
+      "fired_iso": "2026-06-09T13:28:29"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:28:29"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:26:07"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:25:31"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:23:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:23:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:23:47"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:23:46"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:23:11"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:23:10"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:20:47"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:20:13"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:18:18"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:18:18"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:18:17"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:18:17"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:17:43"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:17:43"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "301577",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:15:58"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:15:24"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:14:48"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:13:06"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:13:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:13:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:13:04"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:12:28"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:12:28"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "301577",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:10:44"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:10:08"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:09:30"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:07:45"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:07:44"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:07:44"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:07:44"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:07:10"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:07:10"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:04:52"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T13:04:16"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:02:34"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:02:33"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:02:33"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T13:02:32"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:01:57"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T13:01:56"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:59:35"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T12:59:01"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:57:17"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:57:16"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:57:16"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:57:16"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:56:41"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:56:41"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:54:23"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T12:53:47"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:52:05"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:52:04"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:52:03"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:52:03"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:51:28"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:51:27"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:49:09"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T12:48:35"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:46:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:46:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:46:50"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:46:50"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:46:16"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:46:16"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:43:56"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T12:43:22"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:41:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:41:40"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:41:38"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:41:38"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:41:03"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:41:02"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600663",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:38:45"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "603206",
+      "summary": "【卖出信号】 均线走弱、价格在均线下方，先控风险、可考虑减仓（参考分 55.0）",
+      "fired_iso": "2026-06-09T12:38:11"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "603206",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:36:26"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "001234",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:36:26"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "600711",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:36:25"
+    },
+    {
+      "alert_type": "risk_stop_take",
+      "code": "002185",
+      "summary": "🔴 已跌到约定的硬性止损线附近，该止损就止损，别硬扛",
+      "fired_iso": "2026-06-09T12:36:25"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "600105",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:35:52"
+    },
+    {
+      "alert_type": "strategy",
+      "code": "601699",
+      "summary": "【卖出信号】 股价处在区间偏上，按震荡思路可以先减一点、落袋为安（参考分 72.0）",
+      "fired_iso": "2026-06-09T12:35:52"
     }
   ],
   "daily_picks_quality": [
     {
-      "code": "300560",
-      "name": "中富通",
-      "score": 10.0,
+      "code": "600105",
+      "name": "永鼎股份",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301238",
-      "name": "瑞泰新材",
-      "score": 10.0,
+      "code": "600498",
+      "name": "烽火通信",
+      "score": 9.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600596",
+      "name": "新安股份",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
@@ -1180,9 +1282,9 @@
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301565",
-      "name": "中仑新材",
-      "score": 9.2,
+      "code": "002579",
+      "name": "中京电子",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
@@ -1192,123 +1294,117 @@
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002156",
-      "name": "通富微电",
+      "code": "300826",
+      "name": "测绘股份",
+      "score": 9.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "001896",
+      "name": "豫能控股",
       "score": 8.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "600105",
-      "name": "永鼎股份",
+      "code": "002938",
+      "name": "鹏鼎控股",
       "score": 8.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002745",
-      "name": "木林森",
-      "score": 8.6,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300219",
-      "name": "鸿利智汇",
-      "score": 8.6,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300504",
-      "name": "天邑股份",
-      "score": 8.6,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "002185",
-      "name": "华天科技",
+      "code": "603330",
+      "name": "天洋新材",
       "score": 8.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "001308",
-      "name": "康冠科技",
+      "code": "301577",
+      "name": "美信科技",
       "score": 8.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "001259",
-      "name": "利仁科技",
+      "code": "300410",
+      "name": "正业科技",
+      "score": 8.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "605580",
+      "name": "恒盛能源",
+      "score": 8.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600578",
+      "name": "京能电力",
       "score": 7.9,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "000636",
+      "name": "风华高科",
+      "score": 7.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600863",
+      "name": "华能蒙电",
+      "score": 7.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "601699",
+      "name": "潞安环能",
+      "score": 7.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600121",
+      "name": "郑州煤电",
+      "score": 7.1,
       "reason_head": "因子与回测双重达标"
     },
     {
       "code": "300291",
       "name": "百纳千成",
-      "score": 7.9,
+      "score": 6.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "600584",
-      "name": "长电科技",
-      "score": 7.9,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300956",
-      "name": "英力股份",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "000027",
-      "name": "深圳能源",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603527",
-      "name": "众源新材",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300649",
-      "name": "杭州园林",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603661",
-      "name": "恒林股份",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603206",
-      "name": "嘉环科技",
-      "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603767",
-      "name": "中马传动",
-      "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603115",
-      "name": "海星股份",
-      "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300560",
-      "name": "中富通",
-      "score": 10.0,
+      "code": "301439",
+      "name": "泓淋电力",
+      "score": 6.9,
       "reason_head": "因子与回测双重达标"
     },
     {
       "code": "301238",
       "name": "瑞泰新材",
-      "score": 10.0,
+      "score": 6.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "300069",
+      "name": "金利华电",
+      "score": 6.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600105",
+      "name": "永鼎股份",
+      "score": 9.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600498",
+      "name": "烽火通信",
+      "score": 9.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600596",
+      "name": "新安股份",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
@@ -1318,9 +1414,9 @@
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "301565",
-      "name": "中仑新材",
-      "score": 9.2,
+      "code": "002579",
+      "name": "中京电子",
+      "score": 9.4,
       "reason_head": "因子与回测双重达标"
     },
     {
@@ -1330,125 +1426,137 @@
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002156",
-      "name": "通富微电",
+      "code": "300826",
+      "name": "测绘股份",
+      "score": 9.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "001896",
+      "name": "豫能控股",
       "score": 8.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "600105",
-      "name": "永鼎股份",
+      "code": "002938",
+      "name": "鹏鼎控股",
       "score": 8.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "002745",
-      "name": "木林森",
-      "score": 8.6,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300219",
-      "name": "鸿利智汇",
-      "score": 8.6,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300504",
-      "name": "天邑股份",
-      "score": 8.6,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "002185",
-      "name": "华天科技",
+      "code": "603330",
+      "name": "天洋新材",
       "score": 8.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "001308",
-      "name": "康冠科技",
+      "code": "301577",
+      "name": "美信科技",
       "score": 8.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "001259",
-      "name": "利仁科技",
+      "code": "300410",
+      "name": "正业科技",
+      "score": 8.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "605580",
+      "name": "恒盛能源",
+      "score": 8.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600578",
+      "name": "京能电力",
       "score": 7.9,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "000636",
+      "name": "风华高科",
+      "score": 7.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600863",
+      "name": "华能蒙电",
+      "score": 7.4,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "601699",
+      "name": "潞安环能",
+      "score": 7.2,
+      "reason_head": "因子与回测双重达标"
+    },
+    {
+      "code": "600121",
+      "name": "郑州煤电",
+      "score": 7.1,
       "reason_head": "因子与回测双重达标"
     },
     {
       "code": "300291",
       "name": "百纳千成",
-      "score": 7.9,
+      "score": 6.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "600584",
-      "name": "长电科技",
-      "score": 7.9,
+      "code": "301439",
+      "name": "泓淋电力",
+      "score": 6.9,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "300956",
-      "name": "英力股份",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "000027",
-      "name": "深圳能源",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603527",
-      "name": "众源新材",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "300649",
-      "name": "杭州园林",
-      "score": 7.2,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603661",
-      "name": "恒林股份",
-      "score": 7.1,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603206",
-      "name": "嘉环科技",
+      "code": "301238",
+      "name": "瑞泰新材",
       "score": 6.4,
       "reason_head": "因子与回测双重达标"
     },
     {
-      "code": "603767",
-      "name": "中马传动",
-      "score": 6.4,
-      "reason_head": "因子与回测双重达标"
-    },
-    {
-      "code": "603115",
-      "name": "海星股份",
-      "score": 6.4,
+      "code": "300069",
+      "name": "金利华电",
+      "score": 6.2,
       "reason_head": "因子与回测双重达标"
     }
   ],
   "daily_picks_watch": [
     {
-      "code": "000716",
-      "name": "黑芝麻",
+      "code": "600487",
+      "name": "亨通光电",
+      "score": 8.9,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "600776",
+      "name": "东方通信",
+      "score": 8.6,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "301418",
+      "name": "协昌科技",
       "score": 7.2,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "603989",
-      "name": "艾华集团",
+      "code": "300802",
+      "name": "矩子科技",
       "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "600188",
+      "name": "兖矿能源",
+      "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000620",
+      "name": "盈新发展",
+      "score": 6.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
@@ -1458,117 +1566,117 @@
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "600020",
-      "name": "中原高速",
-      "score": 6.6,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002916",
-      "name": "深南电路",
+      "code": "605555",
+      "name": "德昌股份",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002741",
-      "name": "光华科技",
+      "code": "600906",
+      "name": "财达证券",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "603138",
-      "name": "海量数据",
+      "code": "300414",
+      "name": "中光防雷",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "600123",
+      "name": "兰花科创",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "601518",
+      "name": "吉林高速",
       "score": 6.1,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300283",
-      "name": "温州宏丰",
+      "code": "605589",
+      "name": "圣泉集团",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002475",
-      "name": "立讯精密",
+      "code": "603158",
+      "name": "腾龙股份",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300323",
-      "name": "华灿光电",
+      "code": "300757",
+      "name": "罗博特科",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "600226",
-      "name": "亨通股份",
+      "code": "301021",
+      "name": "英诺激光",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "003019",
-      "name": "宸展光电",
+      "code": "300001",
+      "name": "特锐德",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "301041",
-      "name": "金百泽",
+      "code": "002957",
+      "name": "科瑞技术",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300398",
-      "name": "飞凯材料",
+      "code": "300162",
+      "name": "雷曼光电",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000021",
-      "name": "深科技",
+      "code": "605318",
+      "name": "法狮龙",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "600791",
-      "name": "京能置业",
-      "score": 5.9,
+      "code": "600487",
+      "name": "亨通光电",
+      "score": 8.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002364",
-      "name": "中恒电气",
-      "score": 5.9,
+      "code": "600776",
+      "name": "东方通信",
+      "score": 8.6,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002733",
-      "name": "雄韬股份",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "603389",
-      "name": "*ST亚振",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "301626",
-      "name": "苏州天脉",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "000716",
-      "name": "黑芝麻",
+      "code": "301418",
+      "name": "协昌科技",
       "score": 7.2,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "603989",
-      "name": "艾华集团",
+      "code": "300802",
+      "name": "矩子科技",
       "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "600188",
+      "name": "兖矿能源",
+      "score": 7.2,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "000620",
+      "name": "盈新发展",
+      "score": 6.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
@@ -1578,137 +1686,112 @@
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "600020",
-      "name": "中原高速",
-      "score": 6.6,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002916",
-      "name": "深南电路",
+      "code": "605555",
+      "name": "德昌股份",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002741",
-      "name": "光华科技",
+      "code": "600906",
+      "name": "财达证券",
       "score": 6.4,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "603138",
-      "name": "海量数据",
+      "code": "300414",
+      "name": "中光防雷",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "600123",
+      "name": "兰花科创",
+      "score": 6.4,
+      "reason_head": "基本达标，建议继续跟踪"
+    },
+    {
+      "code": "601518",
+      "name": "吉林高速",
       "score": 6.1,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300283",
-      "name": "温州宏丰",
+      "code": "605589",
+      "name": "圣泉集团",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "002475",
-      "name": "立讯精密",
+      "code": "603158",
+      "name": "腾龙股份",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300323",
-      "name": "华灿光电",
+      "code": "300757",
+      "name": "罗博特科",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "600226",
-      "name": "亨通股份",
+      "code": "301021",
+      "name": "英诺激光",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "003019",
-      "name": "宸展光电",
+      "code": "300001",
+      "name": "特锐德",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "301041",
-      "name": "金百泽",
+      "code": "002957",
+      "name": "科瑞技术",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "300398",
-      "name": "飞凯材料",
+      "code": "300162",
+      "name": "雷曼光电",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     },
     {
-      "code": "000021",
-      "name": "深科技",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "600791",
-      "name": "京能置业",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002364",
-      "name": "中恒电气",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "002733",
-      "name": "雄韬股份",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "603389",
-      "name": "*ST亚振",
-      "score": 5.9,
-      "reason_head": "基本达标，建议继续跟踪"
-    },
-    {
-      "code": "301626",
-      "name": "苏州天脉",
+      "code": "605318",
+      "name": "法狮龙",
       "score": 5.9,
       "reason_head": "基本达标，建议继续跟踪"
     }
   ],
   "console_quality_codes_eod": [
-    "000027",
-    "001259",
-    "001308",
-    "002156",
-    "002185",
+    "000636",
+    "001896",
     "002491",
-    "002745",
-    "300219",
+    "002579",
+    "002938",
+    "300069",
     "300291",
-    "300504",
-    "300560",
-    "300649",
-    "300956",
+    "300410",
+    "300826",
     "301238",
-    "301565",
+    "301439",
+    "301577",
     "600105",
+    "600121",
     "600322",
-    "600584",
-    "603115",
-    "603206",
-    "603527",
-    "603661",
-    "603767"
+    "600498",
+    "600578",
+    "600596",
+    "600863",
+    "601699",
+    "603330",
+    "605580"
   ],
   "dip_pick_codes_eod": [],
   "afternoon_opportunities": [],
   "backtest_weekly_json": {
-    "updated_rows": 4968,
+    "updated_rows": 5480,
     "by_alert_type": {
       "drawdown": {
         "n": 299,
@@ -1719,28 +1802,28 @@
         "avg_ret_5d": -0.09562018789102487
       },
       "position_suggestion": {
-        "n": 67,
-        "n_hit_scored": 35,
-        "hit_rate": 0.9428571428571428,
-        "avg_ret_1d": -0.01997027497160138,
-        "avg_ret_3d": -0.05087906038602031,
-        "avg_ret_5d": -0.07107811721939945
+        "n": 77,
+        "n_hit_scored": 40,
+        "hit_rate": 0.95,
+        "avg_ret_1d": -0.02044066880752276,
+        "avg_ret_3d": -0.04997914193189422,
+        "avg_ret_5d": -0.06816929301533205
       },
       "risk_stop_take": {
-        "n": 5146,
-        "n_hit_scored": 4814,
-        "hit_rate": 0.7062733693394266,
-        "avg_ret_1d": -0.013298706338633427,
-        "avg_ret_3d": -0.03679019964875121,
-        "avg_ret_5d": -0.06954686203086341
+        "n": 5842,
+        "n_hit_scored": 5340,
+        "hit_rate": 0.7232209737827715,
+        "avg_ret_1d": -0.014022309891043375,
+        "avg_ret_3d": -0.036366072485574226,
+        "avg_ret_5d": -0.0667515499508695
       },
       "strategy": {
-        "n": 4218,
-        "n_hit_scored": 3218,
-        "hit_rate": 0.5220633934120572,
-        "avg_ret_1d": 0.0037354212935723848,
-        "avg_ret_3d": -0.0016454149416805005,
-        "avg_ret_5d": -0.020354174693110145
+        "n": 4469,
+        "n_hit_scored": 3349,
+        "hit_rate": 0.5335921170498656,
+        "avg_ret_1d": 0.0062320224271408065,
+        "avg_ret_3d": 0.0008934008913087585,
+        "avg_ret_5d": -0.021746674352283037
       },
       "trend_slip": {
         "n": 25,
@@ -1756,36 +1839,27 @@
   "health": {
     "notes": [],
     "kline_db_path": "/Users/haha/greatMan/stock-price-alert/data/daily_klines.db",
-    "kline_db_mtime_iso": "2026-06-04T15:10:22",
+    "kline_db_mtime_iso": "2026-06-09T15:10:34",
     "heartbeat_path": "/Users/haha/greatMan/stock-price-alert/logs/data_heartbeat.json",
     "heartbeat": {},
-    "picks_history_snapshot_count": 21
+    "picks_history_snapshot_count": 24
   },
   "trades": {
-    "buys": [
-      {
-        "time": "2026-06-04 14:34:16",
-        "code": "002600",
-        "name": "领益智造",
-        "hold_shares": 100,
-        "cost_price": 15.0,
-        "note": null
-      }
-    ],
+    "buys": [],
     "sells": [],
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
-    "realized_profit": 27.66,
-    "unrealized_profit": -3168.51,
-    "net_profit": -3140.85,
+    "realized_profit": 0.0,
+    "unrealized_profit": 0.0,
+    "net_profit": 0.0,
     "unrealized_positions": [
       {
         "code": "001234",
         "name": "泰慕士",
         "hold_shares": 500,
         "cost_price": 28.2878,
-        "close_price": 23.38,
-        "float_pnl_est": -2453.89,
+        "close_price": 22.64,
+        "float_pnl_est": -2823.89,
         "source": "broker_xls"
       },
       {
@@ -1793,8 +1867,8 @@
         "name": "华天科技",
         "hold_shares": 300,
         "cost_price": 19.2167,
-        "close_price": 19.24,
-        "float_pnl_est": 7.0,
+        "close_price": 16.8,
+        "float_pnl_est": -725.0,
         "source": "broker_xls"
       },
       {
@@ -1802,17 +1876,17 @@
         "name": "陆家嘴",
         "hold_shares": 700,
         "cost_price": 7.1272,
-        "close_price": 7.06,
-        "float_pnl_est": -47.05,
+        "close_price": 6.83,
+        "float_pnl_est": -208.05,
         "source": "broker_xls"
       },
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 5700,
-        "cost_price": 12.2229,
-        "close_price": 12.18,
-        "float_pnl_est": -244.77,
+        "hold_shares": 19000,
+        "cost_price": 11.9308,
+        "close_price": 11.09,
+        "float_pnl_est": -15974.3,
         "source": "broker_xls"
       },
       {
@@ -1820,8 +1894,8 @@
         "name": "嘉环科技",
         "hold_shares": 1000,
         "cost_price": 19.8032,
-        "close_price": 15.13,
-        "float_pnl_est": -4673.2,
+        "close_price": 17.0,
+        "float_pnl_est": -2803.2,
         "source": "broker_xls"
       }
     ],
@@ -1831,222 +1905,85 @@
       "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
     ],
     "source": "broker_xls",
-    "broker_synced_at": "2026-06-12T08:21:25",
+    "broker_synced_at": "2026-06-09T15:10:36",
     "broker_source_file": "交割单_20260609_074022.xls",
     "broker_source_files": [
       "交割单_20260609_074022.xls"
     ],
     "broker_report_json": null,
-    "broker_day": "2026-06-04",
-    "broker_realized_profit": 27.66,
-    "broker_unrealized_change": -3168.51,
-    "broker_net_profit": -3140.85,
-    "broker_buys": [
-      {
-        "code": "600711",
-        "name": "盛屯矿业",
-        "quantity": 1700,
-        "price": 12.2,
-        "source": "broker_xls",
-        "trade_time": "﻿09:34:39"
-      },
-      {
-        "code": "600711",
-        "name": "盛屯矿业",
-        "quantity": 3400,
-        "price": 12.12,
-        "source": "broker_xls",
-        "trade_time": "﻿14:21:46"
-      }
-    ],
-    "broker_sells": [
-      {
-        "code": "600105",
-        "name": "永鼎股份",
-        "quantity": 100,
-        "price": 54.0,
-        "source": "broker_xls",
-        "trade_time": "﻿13:01:08",
-        "realized_profit": 193.2
-      },
-      {
-        "code": "600711",
-        "name": "盛屯矿业",
-        "quantity": 4100,
-        "price": 12.19,
-        "source": "broker_xls",
-        "trade_time": "﻿14:51:51",
-        "realized_profit": -165.54
-      }
-    ],
-    "broker_day_trades": [
-      {
-        "code": "600711",
-        "name": "盛屯矿业",
-        "event": "buy",
-        "quantity": 1700,
-        "price": 12.2,
-        "settlement_amount": -20745.21,
-        "realized_profit": 0.0,
-        "trade_time": "﻿09:34:39"
-      },
-      {
-        "code": "600105",
-        "name": "永鼎股份",
-        "event": "sell",
-        "quantity": 100,
-        "price": 54.0,
-        "settlement_amount": 5392.25,
-        "realized_profit": 193.2,
-        "trade_time": "﻿13:01:08"
-      },
-      {
-        "code": "600711",
-        "name": "盛屯矿业",
-        "event": "buy",
-        "quantity": 3400,
-        "price": 12.12,
-        "settlement_amount": -41213.41,
-        "realized_profit": 0.0,
-        "trade_time": "﻿14:21:46"
-      },
-      {
-        "code": "600711",
-        "name": "盛屯矿业",
-        "event": "sell",
-        "quantity": 4100,
-        "price": 12.19,
-        "settlement_amount": 49948.52,
-        "realized_profit": -165.54,
-        "trade_time": "﻿14:51:51"
-      }
-    ],
-    "broker_closed_positions": [
-      {
-        "code": "600105",
-        "name": "永鼎股份",
-        "shares": 100,
-        "avg_sell_price": 53.9225,
-        "realized_profit": 193.2,
-        "last_settle_date": "2026-06-04"
-      }
-    ]
+    "broker_day": "2026-06-09",
+    "broker_realized_profit": 0.0,
+    "broker_unrealized_change": 0.0,
+    "broker_net_profit": 0.0,
+    "broker_buys": [],
+    "broker_sells": [],
+    "broker_day_trades": [],
+    "broker_closed_positions": []
   },
-  "position_operations_today": [
-    {
-      "time": "2026-06-04 14:34:16",
-      "kind": "buy",
-      "label": "买入",
-      "code": "002600",
-      "name": "领益智造",
-      "hold_shares": 100,
-      "cost_price": 15.0,
-      "cmd_shares": 100,
-      "cmd_cost": 15.0
-    }
-  ],
+  "position_operations_today": [],
   "account_pnl": {
-    "as_of": "2026-06-04",
+    "as_of": "2026-06-09",
     "positions": [
       {
         "code": "001234",
         "name": "泰慕士",
         "hold_shares": 500,
         "avg_cost": 30.6981,
-        "last_close": 23.69,
+        "last_close": 22.64,
         "last_close_basis": "raw",
-        "daily_pnl_est": -150.0,
-        "float_pnl_est": -3504.05
+        "daily_pnl_est": -375.0,
+        "float_pnl_est": -4029.05
       },
       {
         "code": "002185",
         "name": "华天科技",
         "hold_shares": 300,
-        "avg_cost": 19.217,
-        "last_close": 19.16,
+        "avg_cost": 19.2167,
+        "last_close": 16.8,
         "last_close_basis": "raw",
-        "daily_pnl_est": 249.0,
-        "float_pnl_est": -17.1
-      },
-      {
-        "code": "002600",
-        "name": "领益智造",
-        "hold_shares": 100,
-        "avg_cost": 15.0,
-        "last_close": 14.86,
-        "last_close_basis": "raw",
-        "daily_pnl_est": 19.0,
-        "float_pnl_est": -14.0
-      },
-      {
-        "code": "600105",
-        "name": "永鼎股份",
-        "hold_shares": 100,
-        "avg_cost": 51.9915,
-        "last_close": 51.92,
-        "last_close_basis": "raw",
-        "daily_pnl_est": 230.0,
-        "float_pnl_est": -7.15
+        "daily_pnl_est": -384.0,
+        "float_pnl_est": -725.01
       },
       {
         "code": "600663",
         "name": "陆家嘴",
         "hold_shares": 700,
-        "avg_cost": 7.1274,
-        "last_close": 7.17,
+        "avg_cost": 7.1272,
+        "last_close": 6.83,
         "last_close_basis": "raw",
-        "daily_pnl_est": -70.0,
-        "float_pnl_est": 29.82
+        "daily_pnl_est": -133.0,
+        "float_pnl_est": -208.04
       },
       {
         "code": "600711",
         "name": "盛屯矿业",
-        "hold_shares": 8400,
-        "avg_cost": 12.4061,
-        "last_close": 12.75,
+        "hold_shares": 20000,
+        "avg_cost": 12.1301,
+        "last_close": 11.09,
         "last_close_basis": "raw",
-        "daily_pnl_est": 1176.0,
-        "float_pnl_est": 2888.76
+        "daily_pnl_est": -16200.0,
+        "float_pnl_est": -20802.0
       },
       {
         "code": "603206",
         "name": "嘉环科技",
         "hold_shares": 1000,
         "avg_cost": 19.7432,
-        "last_close": 15.76,
+        "last_close": 17.0,
         "last_close_basis": "raw",
-        "daily_pnl_est": -530.0,
-        "float_pnl_est": -3983.2
+        "daily_pnl_est": 1550.0,
+        "float_pnl_est": -2743.2
       }
     ],
     "realized_today": 0.0,
-    "daily_float_change_est": 924.0,
-    "unrealized_total_est": -4606.92,
-    "account_today_change_est": 924.0,
-    "ledger_events": [
-      {
-        "id": 43,
-        "ts": "2026-06-04 14:34:16",
-        "day_iso": "2026-06-04",
-        "kind": "buy",
-        "code": "002600",
-        "name": "领益智造",
-        "shares_before": null,
-        "shares_after": 100,
-        "avg_cost_before": null,
-        "avg_cost_after": 15.0,
-        "qty_traded": 100,
-        "exec_price": 15.0,
-        "realized_pnl": 0.0,
-        "note": "开仓或覆盖无有效旧成本",
-        "op_type": "buy",
-        "related_signal_id": null
-      }
-    ],
+    "daily_float_change_est": -15542.0,
+    "unrealized_total_est": -28507.3,
+    "account_today_change_est": -15542.0,
+    "ledger_events": [],
     "notes": []
   },
   "sell_events_today": [],
-  "broker_summary_synced_at": "2026-06-12T08:21:25",
+  "broker_summary_synced_at": "2026-06-09T15:10:36",
   "holdings_watchlist": [
     {
       "code": "001234",
@@ -2059,35 +1996,21 @@
       "code": "002185",
       "name": "华天科技",
       "hold_shares": 300,
-      "cost_price": 19.217,
-      "tags": "持仓"
-    },
-    {
-      "code": "002600",
-      "name": "领益智造",
-      "hold_shares": 100,
-      "cost_price": 15.0,
-      "tags": "持仓"
-    },
-    {
-      "code": "600105",
-      "name": "永鼎股份",
-      "hold_shares": 100,
-      "cost_price": 51.9915,
+      "cost_price": 19.2167,
       "tags": "持仓"
     },
     {
       "code": "600663",
       "name": "陆家嘴",
       "hold_shares": 700,
-      "cost_price": 7.1274,
+      "cost_price": 7.1272,
       "tags": "持仓"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 8400,
-      "cost_price": 12.4061,
+      "hold_shares": 20000,
+      "cost_price": 12.1301,
       "tags": "持仓"
     },
     {
@@ -2104,8 +2027,8 @@
       "name": "泰慕士",
       "hold_shares": 500,
       "cost_price": 28.2878,
-      "close_price": 23.38,
-      "unrealized_profit": -2453.89,
+      "close_price": 22.64,
+      "unrealized_profit": -2823.89,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -2114,8 +2037,8 @@
       "name": "华天科技",
       "hold_shares": 300,
       "cost_price": 19.2167,
-      "close_price": 19.24,
-      "unrealized_profit": 7.0,
+      "close_price": 16.8,
+      "unrealized_profit": -725.0,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -2124,18 +2047,18 @@
       "name": "陆家嘴",
       "hold_shares": 700,
       "cost_price": 7.1272,
-      "close_price": 7.06,
-      "unrealized_profit": -47.05,
+      "close_price": 6.83,
+      "unrealized_profit": -208.05,
       "tags": "持仓",
       "source": "broker_xls"
     },
     {
       "code": "600711",
       "name": "盛屯矿业",
-      "hold_shares": 5700,
-      "cost_price": 12.2229,
-      "close_price": 12.18,
-      "unrealized_profit": -244.77,
+      "hold_shares": 19000,
+      "cost_price": 11.9308,
+      "close_price": 11.09,
+      "unrealized_profit": -15974.3,
       "tags": "持仓",
       "source": "broker_xls"
     },
@@ -2144,18 +2067,18 @@
       "name": "嘉环科技",
       "hold_shares": 1000,
       "cost_price": 19.8032,
-      "close_price": 15.13,
-      "unrealized_profit": -4673.2,
+      "close_price": 17.0,
+      "unrealized_profit": -2803.2,
       "tags": "持仓",
       "source": "broker_xls"
     }
   ],
-  "holdings_broker_as_of": "2026-06-04",
+  "holdings_broker_as_of": "2026-06-09",
   "account_pnl_broker": {
-    "as_of": "2026-06-04",
-    "cash_available": 370984.46,
-    "market_value": 106960.0,
-    "total_assets": 477944.46,
+    "as_of": "2026-06-09",
+    "cash_available": 214137.63,
+    "market_value": 248851.0,
+    "total_assets": 462988.63,
     "position_count": 5,
     "source": "broker_xls"
   },

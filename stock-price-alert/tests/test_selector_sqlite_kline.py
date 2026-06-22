@@ -115,9 +115,52 @@ def test_load_df_stale_sqlite_falls_through_to_pro_bar(
     assert called, "stale SQLite should fall back to pro_bar"
 
 
-def test_sqlite_last_bar_fresh_boundary() -> None:
-    from datetime import timedelta
+def test_read_ohlcv_tail_rows_partial_min_rows(tmp_path: Path) -> None:
+    from kline_store import read_ohlcv_tail_rows
 
+    db = tmp_path / "partial.db"
+    _seed_db(db, secid="1.600711", n_bars=120)
+    tail = read_ohlcv_tail_rows(db, "1.600711", lmt=1340, min_rows=80)
+    assert tail is not None
+    assert len(tail) == 120
+
+
+def test_load_df_cached_uses_selector_run_cfg_sqlite(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    db = tmp_path / "run.db"
+    _seed_db(db, secid="1.600711", n_bars=80)
+
+    cfg = {
+        "sources": {"quote_ut": "ea", "tushare": {"enabled": True, "token": "x"}},
+        "kline_store": {"enabled": True, "db_path": str(db)},
+        "quant_selector": {
+            "use_tushare_for_daily": True,
+            "use_sqlite_cache": True,
+            "max_stale_calendar_days": 2,
+            "tushare_rt_k_enabled": False,
+        },
+    }
+
+    def _no_pro_bar(*_a, **_k):
+        raise AssertionError("fetch_stock_kline_rows_pro_bar should not be called")
+
+    monkeypatch.setattr(
+        "quote_tushare.fetch_stock_kline_rows_pro_bar",
+        _no_pro_bar,
+    )
+
+    selector._begin_selector_kline_run(cfg)
+    try:
+        selector._load_df_cached.cache_clear()
+        df = selector._load_df_cached("600711", lookback=60)
+        assert df is not None
+        assert len(df) >= 30
+    finally:
+        selector._end_selector_kline_run()
+
+
+def test_sqlite_last_bar_fresh_boundary() -> None:
     today = date.today()
     assert selector._sqlite_last_bar_fresh(today.isoformat(), 2) is True
     assert selector._sqlite_last_bar_fresh((today - timedelta(days=2)).isoformat(), 2) is True

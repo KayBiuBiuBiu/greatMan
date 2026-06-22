@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-22T09:32:07",
+  "source_file": "交割单_20260618_061025.xls",
+  "source_files": [
+    "交割单_20260618_061025.xls"
+  ],
+  "period": "weekly",
+  "period_range": {
+    "start": "2026-06-15",
+    "end": "2026-06-19",
+    "as_of": "2026-06-22"
+  },
+  "week": {
+    "start": "2026-06-15",
+    "end": "2026-06-19",
+    "as_of": "2026-06-22"
+  },
+  "ledger_meta": {
+    "rows_parsed": 151,
+    "last_cash_balance": 116543.33,
+    "last_cash_date": "2026-06-17"
+  },
+  "closed_positions": [
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "shares": 500,
+      "avg_sell_price": 22.7586,
+      "realized_profit": -2764.59,
+      "last_settle_date": "2026-06-15"
+    },
+    {
+      "code": "002185",
+      "name": "华天科技",
+      "shares": 300,
+      "avg_sell_price": 17.5246,
+      "realized_profit": -507.63,
+      "last_settle_date": "2026-06-16"
+    },
+    {
+      "code": "600378",
+      "name": "昊华科技",
+      "shares": 400,
+      "avg_sell_price": 61.7585,
+      "realized_profit": 2097.17,
+      "last_settle_date": "2026-06-17"
+    }
+  ],
+  "holdings": [
+    {
+      "code": "002407",
+      "name": "多氟多",
+      "hold_shares": 500,
+      "cost_price": 38.247,
+      "close_price": 38.78,
+      "unrealized_profit": 266.5
+    },
+    {
+      "code": "002600",
+      "name": "领益智造",
+      "hold_shares": 100,
+      "cost_price": 15.46,
+      "close_price": 16.82,
+      "unrealized_profit": 136.0
+    },
+    {
+      "code": "301217",
+      "name": "铜冠铜箔",
+      "hold_shares": 100,
+      "cost_price": 178.05,
+      "close_price": 200.0,
+      "unrealized_profit": 2195.0
+    },
+    {
+      "code": "600663",
+      "name": "陆家嘴",
+      "hold_shares": 700,
+      "cost_price": 7.1272,
+      "close_price": 6.58,
+      "unrealized_profit": -383.05
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 23900,
+      "cost_price": 13.0512,
+      "close_price": 12.83,
+      "unrealized_profit": -5287.35
+    },
+    {
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 18.97,
+      "unrealized_profit": -833.2
+    }
+  ],
+  "totals": {
+    "realized_profit_period": -935.59,
+    "realized_profit_week": -935.59,
+    "unrealized_period_start": 372.87,
+    "unrealized_period_end": -3906.1,
+    "unrealized_week_start": 372.87,
+    "unrealized_week_end": -3906.1,
+    "unrealized_change": -4278.97,
+    "cash_available": 116543.33,
+    "market_value": 371285.0,
+    "total_assets": 487828.33
+  },
+  "warnings": [],
+  "ledger_trade_dates": [
+    "2026-03-19",
+    "2026-03-25",
+    "2026-04-29",
+    "2026-04-30",
+    "2026-05-06",
+    "2026-05-07",
+    "2026-05-08",
+    "2026-05-11",
+    "2026-05-12",
+    "2026-05-13",
+    "2026-05-14",
+    "2026-05-15",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-08",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17"
+  ]
+}

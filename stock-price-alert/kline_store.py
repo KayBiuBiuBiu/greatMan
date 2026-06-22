@@ -242,13 +242,17 @@ def read_ohlcv_tail_rows(
     secid: str,
     *,
     lmt: int,
+    min_rows: int | None = None,
 ) -> list[tuple[str, float, float, float, float, float]] | None:
     """
     最近 lmt 根日 K，(trade_date YYYY-MM-DD, open, high, low, close, volume) 按日期升序。
     与 sync_daily_klines 写入的口径一致（Tushare pro_bar 前复权经 fetch_kline_rows_unified）。
-    不足 lmt 根则返回 None。
+    默认不足 lmt 根则返回 None；min_rows 可放宽（返回已有尾部，条数可少于 lmt）。
     """
     eff = max(40, int(lmt))
+    min_need = max(40, int(min_rows)) if min_rows is not None else eff
+    if min_need > eff:
+        min_need = eff
     if not db_path.is_file():
         return None
     sid = str(secid).strip()
@@ -267,7 +271,7 @@ def read_ohlcv_tail_rows(
             ).fetchall()
         finally:
             conn.close()
-    if len(rows) < eff:
+    if len(rows) < min_need:
         return None
     out: list[tuple[str, float, float, float, float, float]] = []
     for r in reversed(rows):

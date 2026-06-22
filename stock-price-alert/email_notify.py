@@ -202,6 +202,19 @@ def send_sell_signal_email(
     return send_email_alert(subject, body, app_cfg=app_cfg)
 
 
+def send_wecom_only_alert(
+    subject: str,
+    content: str,
+    *,
+    app_cfg: dict[str, Any] | None = None,
+) -> bool:
+    """仅发企业微信机器人（不受 remote_channel 限制）。"""
+    _, wc_url, wc_msgtype, wc_en = _remote_notify_settings(app_cfg)
+    if not wc_en or not wc_url:
+        return False
+    return send_wecom_robot_message(wc_url, wc_msgtype, subject, content)
+
+
 if __name__ == "__main__":
     import sys
 

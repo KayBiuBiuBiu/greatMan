@@ -1873,8 +1873,8 @@
     "sell_monitor_pauses": [],
     "hold_watch_only": [],
     "realized_profit": 0.0,
-    "unrealized_profit": 8685.03,
-    "net_profit": 8685.03,
+    "unrealized_profit": 0.0,
+    "net_profit": 0.0,
     "unrealized_positions": [
       {
         "code": "002407",
@@ -1933,8 +1933,24 @@
     ],
     "notes": [
       "浮盈估：trade_date≤总结日 的最近收盘；优先 Tushare daily（不复权），否则本地日K前复权（与券商绝对金额可能偏差）。",
-      "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。流水见 data/position_ledger.db。"
-    ]
+      "减仓清仓已实现=当日台账 reduce/close/unhold_settle 等卖出侧 realized_pnl 之和（不含 hold/buy/add）。buy/add=开仓或加仓；reduce / sell 代码 整数股数=减仓结算；sell 代码（无股数）或 unhold=清仓删配置并结算；pause=仅暂停监控。流水见 data/position_ledger.db。",
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "source": "broker_xls",
+    "broker_synced_at": "2026-06-18T15:10:34",
+    "broker_source_file": "交割单_20260618_061025.xls",
+    "broker_source_files": [
+      "交割单_20260618_061025.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-06-18",
+    "broker_realized_profit": 0.0,
+    "broker_unrealized_change": 0.0,
+    "broker_net_profit": 0.0,
+    "broker_buys": [],
+    "broker_sells": [],
+    "broker_day_trades": [],
+    "broker_closed_positions": []
   },
   "position_operations_today": [],
   "account_pnl": {
@@ -2009,6 +2025,51 @@
     "notes": []
   },
   "sell_events_today": [],
+  "broker_summary_synced_at": "2026-06-18T15:10:34",
+  "holdings_watchlist": [
+    {
+      "code": "002407",
+      "name": "多氟多",
+      "hold_shares": 500,
+      "cost_price": 37.7681,
+      "tags": "持仓"
+    },
+    {
+      "code": "002600",
+      "name": "领益智造",
+      "hold_shares": 100,
+      "cost_price": 15.46,
+      "tags": "持仓"
+    },
+    {
+      "code": "301217",
+      "name": "铜冠铜箔",
+      "hold_shares": 100,
+      "cost_price": 178.05,
+      "tags": "持仓"
+    },
+    {
+      "code": "600663",
+      "name": "陆家嘴",
+      "hold_shares": 700,
+      "cost_price": 7.0672,
+      "tags": "持仓"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 27600,
+      "cost_price": 12.7268,
+      "tags": "持仓"
+    },
+    {
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.7432,
+      "tags": "持仓"
+    }
+  ],
   "holdings_broker": [
     {
       "code": "002407",
@@ -2072,5 +2133,15 @@
     }
   ],
   "holdings_broker_as_of": "2026-06-18",
-  "broker_summary_synced_at": "2026-06-18T15:10:34"
+  "account_pnl_broker": {
+    "as_of": "2026-06-18",
+    "cash_available": 116543.33,
+    "market_value": 374122.0,
+    "total_assets": 490665.33,
+    "position_count": 6,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ]
 }

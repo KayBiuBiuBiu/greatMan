@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-15T09:31:47",
+  "source_file": "交割单_20260615_071321.xls",
+  "source_files": [
+    "交割单_20260615_071321.xls"
+  ],
+  "period": "weekly",
+  "period_range": {
+    "start": "2026-06-08",
+    "end": "2026-06-12",
+    "as_of": "2026-06-15"
+  },
+  "week": {
+    "start": "2026-06-08",
+    "end": "2026-06-12",
+    "as_of": "2026-06-15"
+  },
+  "ledger_meta": {
+    "rows_parsed": 138,
+    "last_cash_balance": 373140.21,
+    "last_cash_date": "2026-06-12"
+  },
+  "closed_positions": [],
+  "holdings": [
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 500,
+      "cost_price": 28.2878,
+      "close_price": 22.66,
+      "unrealized_profit": -2813.89
+    },
+    {
+      "code": "002185",
+      "name": "华天科技",
+      "hold_shares": 300,
+      "cost_price": 19.2167,
+      "close_price": 16.06,
+      "unrealized_profit": -947.0
+    },
+    {
+      "code": "002407",
+      "name": "多氟多",
+      "hold_shares": 300,
+      "cost_price": 38.5167,
+      "close_price": 39.67,
+      "unrealized_profit": 346.0
+    },
+    {
+      "code": "600663",
+      "name": "陆家嘴",
+      "hold_shares": 700,
+      "cost_price": 7.1272,
+      "close_price": 6.65,
+      "unrealized_profit": -334.05
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 5300,
+      "cost_price": 11.9308,
+      "close_price": 13.0,
+      "unrealized_profit": 5667.01
+    },
+    {
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 18.3,
+      "unrealized_profit": -1503.2
+    }
+  ],
+  "totals": {
+    "realized_profit_period": 7121.67,
+    "realized_profit_week": 7121.67,
+    "unrealized_period_start": -9423.13,
+    "unrealized_period_end": 414.87,
+    "unrealized_week_start": -9423.13,
+    "unrealized_week_end": 414.87,
+    "unrealized_change": 9838.0,
+    "cash_available": 373140.21,
+    "market_value": 119904.0,
+    "total_assets": 493044.21
+  },
+  "warnings": [],
+  "ledger_trade_dates": [
+    "2026-03-19",
+    "2026-03-25",
+    "2026-04-29",
+    "2026-04-30",
+    "2026-05-06",
+    "2026-05-07",
+    "2026-05-08",
+    "2026-05-11",
+    "2026-05-12",
+    "2026-05-13",
+    "2026-05-14",
+    "2026-05-15",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-08",
+    "2026-06-11",
+    "2026-06-12"
+  ]
+}

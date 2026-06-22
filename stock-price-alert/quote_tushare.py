@@ -2652,13 +2652,27 @@ def fetch_stock_kline_rows_pro_bar(
         return None
     want = max(40, int(lmt))
     start_s, end_s = _date_window_for_bars(want)
+    pro = _get_pro()
+    if pro is None:
+        return None
     try:
+        import io
+        from contextlib import redirect_stdout
+
         import tushare as ts
 
         _acquire_tushare_adj_factor_slot()
         _acquire_tushare_daily_slot()
         ts.set_token(_resolved_token())
-        df = ts.pro_bar(ts_code=ts_code, adj="qfq", start_date=start_s, end_date=end_s)
+        with redirect_stdout(io.StringIO()):
+            df = ts.pro_bar(
+                ts_code=ts_code,
+                adj="qfq",
+                start_date=start_s,
+                end_date=end_s,
+                api=pro,
+                retry_count=1,
+            )
     except Exception:
         return None
     if df is None or getattr(df, "empty", True):

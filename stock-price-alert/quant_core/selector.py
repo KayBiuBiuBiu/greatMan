@@ -5,6 +5,7 @@ import baostock as bs
 import json
 import logging
 import random
+import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -33,6 +34,19 @@ from sw_member_cache import load_stock_to_sw_map
 _BS_LOGIN_OK = False
 # Baostock / AkShare 非线程安全；仅在使用这些回退路径时串行化
 _FALLBACK_KLINE_LOCK = threading.Lock()
+_SELECTOR_RUN_CFG: dict[str, Any] | None = None
+
+
+def _begin_selector_kline_run(cfg: dict[str, Any] | None) -> None:
+    global _SELECTOR_RUN_CFG
+    _SELECTOR_RUN_CFG = cfg if isinstance(cfg, dict) else None
+    _load_df_cached.cache_clear()
+
+
+def _end_selector_kline_run() -> None:
+    global _SELECTOR_RUN_CFG
+    _SELECTOR_RUN_CFG = None
+    _load_df_cached.cache_clear()
 
 
 def _project_root() -> Path:
@@ -670,10 +684,20 @@ def load_df(code: str, *, lookback: int = 60, cfg: dict[str, Any] | None = None)
                     if dbp is not None:
                         last_dt = read_last_trade_date_for_secid(dbp, secid)
                         if last_dt and _sqlite_last_bar_fresh(last_dt, max_stale):
-                            rows = read_ohlcv_tail_rows(dbp, secid, lmt=want)
+                            rows = read_ohlcv_tail_rows(
+                                dbp,
+                                secid,
+                                lmt=want,
+                                min_rows=max(80, min(want, 252 + 70)),
+                            )
                             if rows:
-                                if bool(qs.get("tushare_rt_k_enabled", True)) and stock_rt_k_enabled():
-                                    rows = merge_stock_rows_with_rt_k(secid, rows, ut=ut)
+                                rt_on = bool(
+                                    qs.get("tushare_rt_k_enabled", True)
+                                ) and stock_rt_k_enabled()
+                                if rt_on and want <= 400:
+                                    rows = merge_stock_rows_with_rt_k(
+                                        secid, rows, ut=ut
+                                    )
                                 df = _tushare_ohlcv_rows_to_df(rows)
                                 if df is not None:
                                     df = df.tail(max(lookback, 60)).copy()
@@ -682,7 +706,8 @@ def load_df(code: str, *, lookback: int = 60, cfg: dict[str, Any] | None = None)
 
                 rows = fetch_stock_kline_rows_pro_bar(secid, want)
                 if rows:
-                    if bool(qs.get("tushare_rt_k_enabled", True)) and stock_rt_k_enabled():
+                    rt_on = bool(qs.get("tushare_rt_k_enabled", True)) and stock_rt_k_enabled()
+                    if rt_on and want <= 400:
                         rows = merge_stock_rows_with_rt_k(secid, rows, ut=ut)
                     df = _tushare_ohlcv_rows_to_df(rows)
                     if df is not None:
@@ -692,28 +717,29 @@ def load_df(code: str, *, lookback: int = 60, cfg: dict[str, Any] | None = None)
         except Exception:
             pass
 
-    try:
-        if _ensure_bs_login():
-            with _FALLBACK_KLINE_LOCK:
-                code_prefix = "sh." + code if code.startswith("6") else "sz." + code
-                rs = bs.query_history_k_data_plus(
-                    code=code_prefix,
-                    start_date="2018-01-01",
-                    fields="date,close,high,low,volume",
-                    frequency="d",
-                    adjustflag="3",
-                )
-                rows = []
-                while (rs.error_code == "0") and rs.next():
-                    rows.append(rs.get_row_data())
-                df = pd.DataFrame(rows, columns=rs.fields if rows else [])
-                df = _normalize_kline_df(df)
-                if df is not None:
-                    df = df.tail(max(lookback, 60)).copy()
-                    if len(df) >= 30:
-                        return df
-    except Exception:
-        pass
+    if not use_ts:
+        try:
+            if _ensure_bs_login():
+                with _FALLBACK_KLINE_LOCK:
+                    code_prefix = "sh." + code if code.startswith("6") else "sz." + code
+                    rs = bs.query_history_k_data_plus(
+                        code=code_prefix,
+                        start_date="2018-01-01",
+                        fields="date,close,high,low,volume",
+                        frequency="d",
+                        adjustflag="3",
+                    )
+                    rows = []
+                    while (rs.error_code == "0") and rs.next():
+                        rows.append(rs.get_row_data())
+                    df = pd.DataFrame(rows, columns=rs.fields if rows else [])
+                    df = _normalize_kline_df(df)
+                    if df is not None:
+                        df = df.tail(max(lookback, 60)).copy()
+                        if len(df) >= 30:
+                            return df
+        except Exception:
+            pass
 
     try:
         with _FALLBACK_KLINE_LOCK:
@@ -728,16 +754,10 @@ def load_df(code: str, *, lookback: int = 60, cfg: dict[str, Any] | None = None)
     return None
 
 
-@lru_cache(maxsize=300)
+@lru_cache(maxsize=8192)
 def _load_df_cached(code: str, lookback: int = 60) -> pd.DataFrame | None:
-    """LRU缓存版本的K线加载 - 用于选股并发场景。
-
-    在选股中，同一只股票会被多次加载（评分、回测1年、3年、5年）。
-    LRU缓存可以避免重复调用load_df，显著提升选股性能。
-
-    缓存容量300只，自动清理最久未使用的数据。
-    """
-    return load_df(code, lookback=lookback, cfg=None)
+    """LRU 缓存 load_df；须配合 _begin_selector_kline_run(cfg) 注入 config。"""
+    return load_df(code, lookback=lookback, cfg=_SELECTOR_RUN_CFG)
 
 
 def get_real_score(
@@ -1711,6 +1731,27 @@ def run_daily_selector(
     else:
         cfg_sel = cfg_in
 
+    _begin_selector_kline_run(cfg_sel)
+    try:
+        return _run_daily_selector_body(
+            cfg_sel,
+            limit=limit,
+            top_n_per_strategy=top_n_per_strategy,
+            mf4_resolved=mf4_resolved,
+            mood_tier_sel=mood_tier_sel,
+        )
+    finally:
+        _end_selector_kline_run()
+
+
+def _run_daily_selector_body(
+    cfg_sel: dict[str, Any],
+    *,
+    limit=250,
+    top_n_per_strategy=30,
+    mf4_resolved=None,
+    mood_tier_sel=None,
+):
     stock_list, name_map, universe_src = _load_universe_codes_and_names(cfg_sel)
     _pre_kcb = len(stock_list)
     stock_list = _filter_out_star_board_if_requested(stock_list, cfg_sel)
@@ -1899,16 +1940,96 @@ def run_daily_selector(
     n_total = len(test_list)
     prog_every = max(50, min(200, n_total // 20 or 50))
     t0 = time.monotonic()
+    prog_lock = threading.Lock()
+    progress_state = {"done": 0}
+
+    try:
+        from tqdm import tqdm
+    except ImportError:
+        tqdm = None  # type: ignore[misc, assignment]
+
+    use_bar = bool(th.get("progress_bar", True)) and tqdm is not None
+    pbar: Any = None
+    heartbeat_stop: threading.Event | None = None
+    heartbeat_th: threading.Thread | None = None
+
+    def _emit_line(msg: str) -> None:
+        if pbar is not None:
+            tqdm.write(msg)
+        else:
+            print(msg, flush=True)
+
+    def _should_log_progress(done: int) -> bool:
+        if done >= n_total:
+            return True
+        if done <= 10:
+            return True
+        if done <= 50 and done % 5 == 0:
+            return True
+        return done % prog_every == 0
 
     def _progress_line(done: int) -> None:
         elapsed = time.monotonic() - t0
         rate = done / elapsed if elapsed > 0 else 0.0
         eta = (n_total - done) / rate if rate > 0 else 0.0
-        print(
+        _emit_line(
             f"   … 选股进度 {done}/{n_total}（约 {rate:.1f} 只/秒，"
-            f"剩余约 {eta / 60:.1f} 分钟）",
-            flush=True,
+            f"剩余约 {eta / 60:.1f} 分钟）"
         )
+
+    if use_bar:
+        pbar = tqdm(
+            total=n_total,
+            desc="选股",
+            unit="只",
+            dynamic_ncols=True,
+            mininterval=0.3,
+            smoothing=0.05,
+        )
+        _emit_line(f"   … 共 {n_total} 只（下方进度条显示速率与 ETA）")
+    else:
+        _emit_line(
+            f"   … 开始拉取 K 线（共 {n_total} 只；每 10 秒刷新状态，"
+            f"本地库命中会更快）"
+        )
+
+        def _heartbeat_loop() -> None:
+            while heartbeat_stop is not None and not heartbeat_stop.wait(10.0):
+                with prog_lock:
+                    done = int(progress_state["done"])
+                if done >= n_total:
+                    break
+                elapsed = time.monotonic() - t0
+                if done <= 0:
+                    _emit_line(
+                        f"   … 选股进行中 0/{n_total}（已运行 {elapsed:.0f} 秒，"
+                        f"正在拉取首批 K 线…）"
+                    )
+                else:
+                    rate = done / elapsed if elapsed > 0 else 0.0
+                    eta = (n_total - done) / rate if rate > 0 else 0.0
+                    _emit_line(
+                        f"   … 选股进行中 {done}/{n_total}（约 {rate:.1f} 只/秒，"
+                        f"剩余约 {eta / 60:.1f} 分钟）"
+                    )
+
+        heartbeat_stop = threading.Event()
+        heartbeat_th = threading.Thread(
+            target=_heartbeat_loop,
+            name="selector-progress-heartbeat",
+            daemon=True,
+        )
+        heartbeat_th.start()
+
+    def _tick_progress(n: int = 1) -> None:
+        if pbar is not None:
+            pbar.update(n)
+            return
+        with prog_lock:
+            progress_state["done"] += n
+            done = int(progress_state["done"])
+        if _should_log_progress(done):
+            _progress_line(done)
 
     try:
         if workers <= 1:
@@ -1930,13 +2051,9 @@ def run_daily_selector(
                     watch.append(row)
                 else:
                     reject.append(row)
-                done = i + 1
-                if done == 1 or done % prog_every == 0 or done == n_total:
-                    _progress_line(done)
+                _tick_progress(1)
         else:
             results: list[tuple[int, str, dict[str, Any]]] = []
-            prog_lock = threading.Lock()
-            done_ctr = 0
 
             # 批处理：分组提交任务，每组内并行，组间序列
             # 这样可以减少一次性创建的任务数，避免任务队列堆积
@@ -1947,6 +2064,15 @@ def run_daily_selector(
                 batch_start = batch_idx * batch_size
                 batch_end = min(batch_start + batch_size, n_total)
                 batch_codes = [(i, test_list[i]) for i in range(batch_start, batch_end)]
+                if pbar is None and (
+                    batch_idx == 0
+                    or batch_idx == n_batches - 1
+                    or (batch_idx + 1) % 10 == 0
+                ):
+                    _emit_line(
+                        f"   … 批次 {batch_idx + 1}/{n_batches}："
+                        f"第 {batch_start + 1}–{batch_end} 只"
+                    )
 
                 def _worker(ic: tuple[int, str]) -> tuple[int, str, dict[str, Any]]:
                     idx, code = ic
@@ -1968,11 +2094,7 @@ def run_daily_selector(
                     for fut in as_completed(batch_futures):
                         idx, bucket, row = fut.result()
                         results.append((idx, bucket, row))
-                        with prog_lock:
-                            done_ctr += 1
-                            dn = done_ctr
-                        if dn == 1 or dn % prog_every == 0 or dn == n_total:
-                            _progress_line(dn)
+                        _tick_progress(1)
 
             results.sort(key=lambda t: t[0])
             for _idx, bucket, row in results:
@@ -1983,7 +2105,27 @@ def run_daily_selector(
                 else:
                     reject.append(row)
     finally:
+        if heartbeat_stop is not None:
+            heartbeat_stop.set()
+            if heartbeat_th is not None:
+                heartbeat_th.join(timeout=0.5)
+        if pbar is not None:
+            pbar.close()
+        if use_bar and tqdm is not None:
+            tqdm.write("")
+        sys.stdout.flush()
+        sys.stderr.flush()
         _safe_bs_logout()
+
+    def _post_status(msg: str) -> None:
+        line = f"   … {msg}"
+        if use_bar and tqdm is not None:
+            tqdm.write(line)
+        else:
+            print(line, flush=True)
+
+    print(flush=True)
+    _post_status("全市场扫描 100% 完成，正在汇总优质/观察股（约 1～3 分钟）…")
 
     _cp = th.get("cluster_pool") if isinstance(th.get("cluster_pool"), dict) else {}
     _cluster_on = bool(_cp.get("enabled"))
@@ -1992,10 +2134,14 @@ def run_daily_selector(
     cfg_d = cfg_sel if isinstance(cfg_sel, dict) else None
 
     if _cluster_on and not _cluster_after_sw:
+        _post_status("技术特征 K-means 聚类（优质股预筛）…")
         quality, cluster_stats = cluster_pick_quality_rows(
             quality, qs=th, cfg=cfg_d
         )
 
+    _post_status(
+        f"申万一级行业去重（候选优质 {len(quality)} 只）…"
+    )
     quality, sw_l1_stats = diversify_quality_by_sw_l1(
         quality,
         qs=th,
@@ -2004,6 +2150,7 @@ def run_daily_selector(
     )
 
     if _cluster_on and _cluster_after_sw:
+        _post_status("技术特征 K-means 聚类（行业去重后）…")
         quality, cluster_stats = cluster_pick_quality_rows(
             quality, qs=th, cfg=cfg_d
         )
@@ -2092,7 +2239,11 @@ def run_daily_selector(
         )
 
     watch = sorted(watch, key=_score_sort_key)[: max(top_n_per_strategy, 20)]
+    _post_status(f"排序观察/淘汰列表（淘汰 {len(reject)} 只）…")
     reject = sorted(reject, key=_score_sort_key)
+    _post_status(
+        f"汇总完成：优质 {len(quality)}｜观察 {len(watch)}｜淘汰 {len(reject)}"
+    )
 
     try:
         _ms_out = int(th.get("max_stale_calendar_days", 2) or 2)

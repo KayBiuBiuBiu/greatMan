@@ -85,6 +85,7 @@
     "use_stock_basic_cache_universe": true,
     "per_stock_sleep_sec": 0,
     "daily_select_max_workers": 6,
+    "progress_bar": true,
     "enable_financial_factors": true,
     "enable_margin_factors": true,
     "enable_top_inst_factors": true,
@@ -385,6 +386,10 @@
       "enabled": true,
       "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY",
       "msgtype": "text"
+    },
+    "hot_fire_wecom_alert": {
+      "enabled": true,
+      "min_fires": 2
     }
   },
   "kline_store": {

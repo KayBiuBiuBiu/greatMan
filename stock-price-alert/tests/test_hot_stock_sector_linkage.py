@@ -131,3 +131,102 @@ def test_emit_hot_stock_list_section_enabled(tmp_path: Path, monkeypatch) -> Non
     )
     assert any("【热股榜机会】" in x for x in lines)
     assert any("热股#1" in x and "600519" in x for x in lines)
+
+
+def test_stock_fire_marker_details_count(tmp_path: Path, monkeypatch) -> None:
+    import quote_tushare as qt
+    import run_alert as ra
+
+    _configure_tmp_cache(tmp_path)
+    monkeypatch.setattr(qt, "is_hot_stock", lambda code, **kw: True)
+    monkeypatch.setattr(
+        qt, "hot_concept_factor_label", lambda code, **kw: "🔥概念"
+    )
+    monkeypatch.setattr(
+        ra, "stock_is_dual_hot_resonance", lambda code, cfg, **kw: True
+    )
+    cfg = {
+        "display": {
+            "show_hot_stock_in_factor": True,
+            "show_hot_concept_in_factor": True,
+        },
+        "quant_selector": {
+            "enable_hot_stock_factors": True,
+            "enable_hot_concept_factors": True,
+        },
+    }
+    count, parts = ra.stock_fire_marker_details("600519", cfg)
+    assert count == 4
+    assert "热股榜" in parts
+    assert "热门概念" in parts
+    assert "双热点共振" in parts
+
+
+def test_maybe_notify_hot_fire_wecom_sends(tmp_path: Path, monkeypatch) -> None:
+    import run_alert as ra
+
+    sent: list[tuple[str, str]] = []
+
+    def _fake_send(subject: str, body: str, *, app_cfg=None) -> bool:
+        sent.append((subject, body))
+        return True
+
+    monkeypatch.setattr(ra, "stock_fire_marker_details", lambda *a, **k: (3, ["热股榜", "双热点共振"]))
+    monkeypatch.setattr(ra, "channel_cooldown_ok", lambda *a, **k: True)
+    monkeypatch.setattr(ra, "send_wecom_only_alert", _fake_send)
+    monkeypatch.setattr(ra, "_emit_watch_line", lambda *a, **k: None)
+
+    class _Args:
+        no_notify = False
+
+    cfg = {
+        "notifications": {
+            "hot_fire_wecom_alert": {"enabled": True, "min_fires": 2},
+            "wecom_webhook": {"enabled": True, "webhook_url": "http://x"},
+        }
+    }
+    state: dict = {}
+    ra._maybe_notify_hot_fire_wecom(
+        code="301217",
+        cfg=cfg,
+        args=_Args(),
+        state=state,
+        rk="sz.301217",
+        bucket="持仓",
+        cooldown_min=5.0,
+        now_ts=1000.0,
+        disp_name="铜冠铜箔",
+        now_price=185.6,
+        chg_pct=4.17,
+    )
+    assert len(sent) == 1
+    assert "3🔥" in sent[0][0]
+    assert "3🔥" in sent[0][1]
+    assert "热股榜" in sent[0][1]
+    assert state["hot_fire_sz.301217"] == 1000.0
+
+
+def test_maybe_notify_hot_fire_skips_below_min(tmp_path: Path, monkeypatch) -> None:
+    import run_alert as ra
+
+    monkeypatch.setattr(ra, "stock_fire_marker_details", lambda *a, **k: (1, ["热股榜"]))
+    monkeypatch.setattr(
+        ra,
+        "send_wecom_only_alert",
+        lambda *a, **k: (_ for _ in ()).throw(AssertionError("should not send")),
+    )
+
+    class _Args:
+        no_notify = False
+
+    ra._maybe_notify_hot_fire_wecom(
+        code="600519",
+        cfg={"notifications": {"hot_fire_wecom_alert": {"min_fires": 2}}},
+        args=_Args(),
+        state={},
+        rk="sh.600519",
+        bucket="优质",
+        cooldown_min=5.0,
+        now_ts=1.0,
+        disp_name="茅台",
+    )

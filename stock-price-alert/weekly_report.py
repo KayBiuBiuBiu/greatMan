@@ -452,7 +452,7 @@ def parse_ledger_from_df(
 
         if kind == "sell":
             if pos.shares <= 0:
-                _LOG.warning("卖出但无持仓 %s %s", code, row["settle_date"])
+                _LOG.debug("卖出但无持仓 %s %s", code, row["settle_date"])
                 continue
             sell_qty = min(qty, pos.shares)
             avg = pos.cost_total / pos.shares

@@ -82,7 +82,7 @@ def _emit_watch_line(
     skipped_by_filter: str | None = None,
 ) -> None:
     with _watch_stdout_lock:
-        print(rendered)
+        print(rendered, flush=True)
     try:
         from app_logging import record_alert_event
 
@@ -133,7 +133,7 @@ def _emit_main_line(
     duration_ms: float | None = None,
     level: int = logging.INFO,
 ) -> None:
-    print(rendered)
+    print(rendered, flush=True)
     try:
         from app_logging import record_alert_event
 
@@ -200,6 +200,7 @@ from email_notify import (
     send_buy_signal_email,
     send_email_alert,
     send_sell_signal_email,
+    send_wecom_only_alert,
 )
 from alert_log_store import apply_feedback_to_latest_alert
 from email_command_bot import fetch_email_bot_actions
@@ -560,6 +561,11 @@ DEFAULT_NOTIFICATIONS = {
         "webhook_url": "",
         # text 与 curl 一致、兼容性最好；markdown 支持 <font color="warning"> 等
         "msgtype": "text",
+    },
+    # ≥ min_fires 个 🔥 时仅推企业微信（热股榜/热门概念/双热点共振，与终端因子行一致）
+    "hot_fire_wecom_alert": {
+        "enabled": True,
+        "min_fires": 2,
     },
 }
 DEFAULT_LOGGING = {
@@ -1867,6 +1873,11 @@ def merge_full_config(raw: dict[str, Any]) -> dict[str, Any]:
     if isinstance(_wc_u, dict):
         _wc_def.update(_wc_u)
     nt_m["wecom_webhook"] = _wc_def
+    _hf_def = dict(DEFAULT_NOTIFICATIONS.get("hot_fire_wecom_alert") or {})
+    _hf_u = nt_m.get("hot_fire_wecom_alert")
+    if isinstance(_hf_u, dict):
+        _hf_def.update(_hf_u)
+    nt_m["hot_fire_wecom_alert"] = _hf_def
     cfg["notifications"] = nt_m
     cfg.setdefault("alert_log", {})
     if not isinstance(cfg["alert_log"], dict):
@@ -2643,6 +2654,126 @@ def stock_is_dual_hot_resonance(
     _root = root or ROOT
     sw = str(_load_stock_to_sw_l1_map(_root).get(c6) or "").strip().upper()
     return bool(sw.endswith(".SI") and sw in hot_sw)
+
+
+def stock_fire_marker_details(
+    code: str,
+    cfg: dict[str, Any],
+    *,
+    root: Path | None = None,
+    state: dict[str, Any] | None = None,
+    picks_path: Path | None = None,
+) -> tuple[int, list[str]]:
+    """
+    统计终端因子行中的 🔥 个数及文字构成（与 _format_stock_factor_summary 一致）。
+    热股榜 +1｜🔥概念 +1｜双热点共振 +2。
+    """
+    c6 = normalize_stock_code(code)
+    if not c6:
+        return 0, []
+    qs = cfg.get("quant_selector") if isinstance(cfg.get("quant_selector"), dict) else {}
+    disp = cfg.get("display") if isinstance(cfg.get("display"), dict) else {}
+    count = 0
+    parts: list[str] = []
+    if bool(qs.get("enable_hot_stock_factors", True)) and bool(
+        disp.get("show_hot_stock_in_factor", True)
+    ):
+        try:
+            from quote_tushare import is_hot_stock
+
+            if is_hot_stock(c6, cache_only=True):
+                count += 1
+                parts.append("热股榜")
+        except Exception:
+            pass
+    if bool(qs.get("enable_hot_concept_factors", True)) and bool(
+        disp.get("show_hot_concept_in_factor", True)
+    ):
+        try:
+            from quote_tushare import hot_concept_factor_label
+
+            lbl = hot_concept_factor_label(c6, cache_only=True)
+            if lbl == "🔥概念":
+                count += 1
+                parts.append("热门概念")
+        except Exception:
+            pass
+    if stock_is_dual_hot_resonance(
+        c6, cfg, root=root, state=state, picks_path=picks_path
+    ):
+        count += 2
+        parts.append("双热点共振")
+    return count, parts
+
+
+def _hot_fire_wecom_alert_cfg(cfg: dict[str, Any]) -> tuple[bool, int]:
+    nt = cfg.get("notifications") if isinstance(cfg.get("notifications"), dict) else {}
+    box = nt.get("hot_fire_wecom_alert") if isinstance(nt, dict) else None
+    if isinstance(box, dict):
+        enabled = bool(box.get("enabled", True))
+        try:
+            min_fires = int(box.get("min_fires", 2) or 2)
+        except (TypeError, ValueError):
+            min_fires = 2
+        return enabled, max(1, min_fires)
+    return True, 2
+
+
+def _maybe_notify_hot_fire_wecom(
+    *,
+    code: str,
+    cfg: dict[str, Any],
+    args: Any,
+    state: dict[str, Any],
+    rk: str | None,
+    bucket: str | None,
+    cooldown_min: float,
+    now_ts: float,
+    disp_name: str,
+    now_price: float | None = None,
+    chg_pct: float | None = None,
+    picks_path: Path | None = None,
+) -> None:
+    """🔥 个数 ≥ 阈值时仅发企业微信，正文说明几🔥及构成。"""
+    if args.no_notify:
+        return
+    if str(bucket or "") not in {"持仓", "优质", "热门", "热股精选"}:
+        return
+    enabled, min_fires = _hot_fire_wecom_alert_cfg(cfg)
+    if not enabled:
+        return
+    count, parts = stock_fire_marker_details(
+        code,
+        cfg,
+        state=state,
+        picks_path=picks_path or (ROOT / "daily_picks.json"),
+    )
+    if count < min_fires:
+        return
+    ck = f"hot_fire_{rk or normalize_stock_code(code)}"
+    if not channel_cooldown_ok(state, ck, cooldown_min, now_ts):
+        return
+    detail = "、".join(parts) if parts else "—"
+    subject = f"【热点{count}🔥】{code} {disp_name}"
+    lines = [
+        f"{count}🔥 {'🔥' * count}",
+        f"{code} {disp_name}｜{bucket or '监控'}",
+        f"构成：{detail}",
+    ]
+    if now_price is not None and now_price > 0:
+        px = f"现价 {now_price:.2f}"
+        if chg_pct is not None:
+            px += f"｜当日 {chg_pct:+.2f}%"
+        lines.append(px)
+    body = "\n".join(lines)
+    if send_wecom_only_alert(subject, body, app_cfg=cfg):
+        state[ck] = now_ts
+        _emit_watch_line(
+            f"      └ 【企微】已推送热点 {count}🔥（{detail}）",
+            event="watch_hot_fire_wecom_sent",
+            code=code,
+            rk=rk,
+        )
 
 
 def _daily_picks_quality_rows_in_order(picks_path: Path) -> list[dict[str, Any]]:
@@ -5465,6 +5596,10 @@ def _run_auto_daily_select(args: Any) -> int:
         config_parent=args.config.parent,
     )
     out_path = args.config.parent / "daily_picks.json"
+    _emit_cli_subcmd_line(
+        f"[主流程] 正在写入 {out_path.name}（约 1MB，请稍候）…",
+        event="cli_daily_select_writing",
+    )
     save_daily_selector_result(out, out_path)
     _maybe_snapshot_daily_picks_json(cfg, out_path)
     _emit_cli_subcmd_line(
@@ -7634,6 +7769,18 @@ def process_watch_pack(
             state=state,
             picks_path=ROOT / "daily_picks.json",
         )
+        _maybe_notify_hot_fire_wecom(
+            code=code,
+            cfg=cfg,
+            args=args,
+            state=state,
+            rk=rk,
+            bucket=buy_mail_bucket,
+            cooldown_min=cooldown_min,
+            now_ts=now_ts,
+            disp_name=disp_name,
+            picks_path=ROOT / "daily_picks.json",
+        )
         if afternoon_metrics_row:
             _emit_afternoon_opportunity_metrics_line(
                 afternoon_metrics_row, code=code, rk=rk
@@ -7694,6 +7841,20 @@ def process_watch_pack(
         rk=rk,
         bucket=buy_mail_bucket,
         state=state,
+        picks_path=ROOT / "daily_picks.json",
+    )
+    _maybe_notify_hot_fire_wecom(
+        code=code,
+        cfg=cfg,
+        args=args,
+        state=state,
+        rk=rk,
+        bucket=buy_mail_bucket,
+        cooldown_min=cooldown_min,
+        now_ts=now_ts,
+        disp_name=disp_name,
+        now_price=now_price,
+        chg_pct=dp_show if chg_color is not None else None,
         picks_path=ROOT / "daily_picks.json",
     )
     if afternoon_metrics_row:
@@ -8955,6 +9116,12 @@ def main() -> int:
             "[命令] hold/buy/add/…｜非 TTY 请加 --stdin-commands 或 STOCK_ALERT_STDIN_COMMANDS=1",
             event="cli_runtime_commands_hint",
         )
+        if run_only and not is_trading_session():
+            _emit_cli_subcmd_line(
+                f"[监控] 当前休市，进程正常运行中；每 {closed_iv}s 检查一次，"
+                f"9:30 开盘后自动轮询行情",
+                event="cli_monitor_waiting_market_open",
+            )
     else:
         oa0 = cfg.get("ops_automation") or {}
         _emit_cli_subcmd_line(
@@ -8980,8 +9147,9 @@ def main() -> int:
                         event="config_hot_reload_start",
                     )
                     try:
-                        from config_version_manager import ConfigVersionManager
-                        new_cfg = merge_full_config(config_path=args.config)
+                        new_cfg = merge_full_config(
+                            json.loads(args.config.read_text(encoding="utf-8"))
+                        )
 
                         # 验证新配置
                         from config_validate import validate_merged_config_or_exit

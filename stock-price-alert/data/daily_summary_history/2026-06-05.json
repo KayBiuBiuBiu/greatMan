@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "date": "2026-06-05",
+  "generated_at": "2026-06-08T08:09:20",
+  "broker_summary_synced_at": "2026-06-12T08:21:26",
+  "trades": {
+    "source": "broker_xls",
+    "broker_synced_at": "2026-06-12T08:21:26",
+    "broker_source_file": "交割单_20260609_074022.xls",
+    "broker_source_files": [
+      "交割单_20260609_074022.xls"
+    ],
+    "broker_report_json": null,
+    "broker_day": "2026-06-05",
+    "broker_realized_profit": 166.71,
+    "broker_unrealized_change": -2011.23,
+    "broker_net_profit": -1844.52,
+    "broker_buys": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 20000,
+        "price": 11.98,
+        "source": "broker_xls",
+        "trade_time": "﻿09:32:51"
+      }
+    ],
+    "broker_sells": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "quantity": 9400,
+        "price": 12.06,
+        "source": "broker_xls",
+        "trade_time": "﻿09:36:26",
+        "realized_profit": 166.71
+      }
+    ],
+    "broker_day_trades": [
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "buy",
+        "quantity": 20000,
+        "price": 11.98,
+        "settlement_amount": -239626.36,
+        "realized_profit": 0.0,
+        "trade_time": "﻿09:32:51"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "event": "sell",
+        "quantity": 9400,
+        "price": 12.06,
+        "settlement_amount": 113294.84,
+        "realized_profit": 166.71,
+        "trade_time": "﻿09:36:26"
+      }
+    ],
+    "broker_closed_positions": [],
+    "realized_profit": 166.71,
+    "unrealized_profit": -2011.23,
+    "net_profit": -1844.52,
+    "notes": [
+      "broker_xls 已回灌 net/realized（供 self_improve_use_trade_profit）"
+    ],
+    "unrealized_positions": [
+      {
+        "code": "001234",
+        "name": "泰慕士",
+        "hold_shares": 500,
+        "cost_price": 28.2878,
+        "close_price": 23.39,
+        "float_pnl_est": -2448.89,
+        "source": "broker_xls"
+      },
+      {
+        "code": "002185",
+        "name": "华天科技",
+        "hold_shares": 300,
+        "cost_price": 19.2167,
+        "close_price": 18.06,
+        "float_pnl_est": -347.0,
+        "source": "broker_xls"
+      },
+      {
+        "code": "600663",
+        "name": "陆家嘴",
+        "hold_shares": 700,
+        "cost_price": 7.1272,
+        "close_price": 7.02,
+        "float_pnl_est": -75.05,
+        "source": "broker_xls"
+      },
+      {
+        "code": "600711",
+        "name": "盛屯矿业",
+        "hold_shares": 16300,
+        "cost_price": 12.0349,
+        "close_price": 11.9,
+        "float_pnl_est": -2198.99,
+        "source": "broker_xls"
+      },
+      {
+        "code": "603206",
+        "name": "嘉环科技",
+        "hold_shares": 1000,
+        "cost_price": 19.8032,
+        "close_price": 15.45,
+        "float_pnl_est": -4353.2,
+        "source": "broker_xls"
+      }
+    ]
+  },
+  "holdings": [
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 500,
+      "cost_price": 28.2878,
+      "close_price": 23.39,
+      "unrealized_profit": -2448.89,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002185",
+      "name": "华天科技",
+      "hold_shares": 300,
+      "cost_price": 19.2167,
+      "close_price": 18.06,
+      "unrealized_profit": -347.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600663",
+      "name": "陆家嘴",
+      "hold_shares": 700,
+      "cost_price": 7.1272,
+      "close_price": 7.02,
+      "unrealized_profit": -75.05,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 16300,
+      "cost_price": 12.0349,
+      "close_price": 11.9,
+      "unrealized_profit": -2198.99,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 15.45,
+      "unrealized_profit": -4353.2,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker": [
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 500,
+      "cost_price": 28.2878,
+      "close_price": 23.39,
+      "unrealized_profit": -2448.89,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002185",
+      "name": "华天科技",
+      "hold_shares": 300,
+      "cost_price": 19.2167,
+      "close_price": 18.06,
+      "unrealized_profit": -347.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600663",
+      "name": "陆家嘴",
+      "hold_shares": 700,
+      "cost_price": 7.1272,
+      "close_price": 7.02,
+      "unrealized_profit": -75.05,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 16300,
+      "cost_price": 12.0349,
+      "close_price": 11.9,
+      "unrealized_profit": -2198.99,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 15.45,
+      "unrealized_profit": -4353.2,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ],
+  "holdings_broker_as_of": "2026-06-05",
+  "account_pnl_broker": {
+    "as_of": "2026-06-05",
+    "cash_available": 244652.94,
+    "market_value": 231447.0,
+    "total_assets": 476099.94,
+    "position_count": 5,
+    "source": "broker_xls"
+  },
+  "holdings_notes": [
+    "holdings 已与交割单日终持仓对齐（股数/成本来自流水）"
+  ],
+  "holdings_watchlist": [
+    {
+      "code": "001234",
+      "name": "泰慕士",
+      "hold_shares": 500,
+      "cost_price": 28.2878,
+      "close_price": 23.39,
+      "unrealized_profit": -2448.89,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "002185",
+      "name": "华天科技",
+      "hold_shares": 300,
+      "cost_price": 19.2167,
+      "close_price": 18.08,
+      "unrealized_profit": -341.0,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600663",
+      "name": "陆家嘴",
+      "hold_shares": 700,
+      "cost_price": 7.1272,
+      "close_price": 7.02,
+      "unrealized_profit": -75.05,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "600711",
+      "name": "盛屯矿业",
+      "hold_shares": 16300,
+      "cost_price": 12.0349,
+      "close_price": 11.9,
+      "unrealized_profit": -2198.99,
+      "tags": "持仓",
+      "source": "broker_xls"
+    },
+    {
+      "code": "603206",
+      "name": "嘉环科技",
+      "hold_shares": 1000,
+      "cost_price": 19.8032,
+      "close_price": 15.45,
+      "unrealized_profit": -4353.2,
+      "tags": "持仓",
+      "source": "broker_xls"
+    }
+  ]
+}
